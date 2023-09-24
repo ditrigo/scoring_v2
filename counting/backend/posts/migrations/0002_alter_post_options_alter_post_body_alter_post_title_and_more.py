@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('comment', models.TextField(verbose_name='comment')),
-                ('status', models.CharField(max_length=20, validators=[posts.models.status_validator], verbose_name='status')),
+                ('status', models.CharField(max_length=20, verbose_name='status')),
                 ('created_dt', models.DateTimeField(auto_now_add=True, verbose_name='created')),
                 ('updated_dt', models.DateTimeField(blank=True, null=True, verbose_name='updated')),
                 ('post_id', models.ForeignKey(on_delete=django.db.models.deletion.RESTRICT, to='posts.post', verbose_name='Post ID')),

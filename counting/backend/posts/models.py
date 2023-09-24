@@ -20,12 +20,12 @@ class Post(models.Model):
         return f"Post {self.title}"
 
 
-def status_validator(status):
-    if status not in ["open", "closed", "in progress"]:
-        raise ValidationError(
-            gettext_lazy('%(status)s is wrong Post status'),  # generating exception messages
-            params = {'status': status},
-        )
+# def status_validator(status):
+#     if status not in ["open", "closed", "in progress"]:
+#         raise ValidationError(
+#             gettext_lazy('%(status)s is wrong Post status'),  # generating exception messages
+#             params = {'status': status},
+#         )
     
 
 
@@ -36,12 +36,19 @@ class PostComment(models.Model):
         verbose_name = 'comment'
         verbose_name_plural = 'comments'
 
+
+    statuses = (("open", "opened"),
+                ("close", "closed"),
+                ("in progress", "in progressed"))
+    
+
     post_id = models.ForeignKey(Post, on_delete=models.RESTRICT, verbose_name='Post ID')
     comment = models.TextField(verbose_name='comment')
-    status = models.CharField(max_length=20, verbose_name='status', validators=[status_validator])
+    status = models.CharField(max_length=20, verbose_name='status', choices=statuses)  # or use validators=[status_validator] to validate
     created_dt = models.DateTimeField(verbose_name='created', auto_now_add=True)
     updated_dt = models.DateTimeField(verbose_name='updated', blank=True, null=True)
 
+    
     def save(self, *args, **kwargs):
         self.updated_dt = datetime.now()
         super().save(*args, **kwargs)
