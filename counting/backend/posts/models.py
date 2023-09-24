@@ -19,15 +19,7 @@ class Post(models.Model):
     def __str__(self):
         return f"Post {self.title}"
 
-
-# def status_validator(status):
-#     if status not in ["open", "closed", "in progress"]:
-#         raise ValidationError(
-#             gettext_lazy('%(status)s is wrong Post status'),  # generating exception messages
-#             params = {'status': status},
-#         )
     
-
 
 class PostComment(models.Model):
 
