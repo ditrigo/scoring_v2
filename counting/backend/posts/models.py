@@ -3,6 +3,10 @@ from django.utils.translation import gettext_lazy
 from django.core.exceptions import ValidationError
 from datetime import datetime
 
+from pygments import highlight
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters.html import HtmlFormatter
+
 
 # Create your models here.
 
@@ -15,8 +19,9 @@ class Post(models.Model):
 
     title = models.TextField(verbose_name='Posts title')
     body = models.TextField(verbose_name='Posts text')
-    created_dt = models.DateTimeField(verbose_name="post created", auto_now_add=True)
-    updated_dt = models.DateTimeField(verbose_name="post updated", blank=True, null=True)
+    created_dt = models.DateTimeField(verbose_name='post created', auto_now_add=True)
+    updated_dt = models.DateTimeField(verbose_name='post updated', blank=True, null=True)
+    owner = models.ForeignKey('auth.User', related_name='posts', verbose_name='author', on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Post {self.title}"
@@ -45,6 +50,7 @@ class PostComment(models.Model):
     status = models.CharField(max_length=20, verbose_name='status', choices=statuses)  # or use validators=[status_validator] to validate
     created_dt = models.DateTimeField(verbose_name='created', auto_now_add=True)
     updated_dt = models.DateTimeField(verbose_name='updated', blank=True, null=True)
+    owner = models.ForeignKey('auth.User', verbose_name='author', on_delete=models.RESTRICT)
 
     
     def save(self, *args, **kwargs):
