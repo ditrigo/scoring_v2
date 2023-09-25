@@ -15,9 +15,15 @@ class Post(models.Model):
 
     title = models.TextField(verbose_name='Posts title')
     body = models.TextField(verbose_name='Posts text')
+    created_dt = models.DateTimeField(verbose_name="post created", auto_now_add=True)
+    updated_dt = models.DateTimeField(verbose_name="post updated", blank=True, null=True)
 
     def __str__(self):
         return f"Post {self.title}"
+    
+    def save(self, *args, **kwargs):
+        self.updated_dt = datetime.now()
+        super().save(*args, **kwargs)
 
     
 
@@ -44,6 +50,3 @@ class PostComment(models.Model):
     def save(self, *args, **kwargs):
         self.updated_dt = datetime.now()
         super().save(*args, **kwargs)
-
-
-

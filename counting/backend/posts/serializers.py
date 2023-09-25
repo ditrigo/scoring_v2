@@ -18,4 +18,5 @@ class PostSerializer(serializers.Serializer):
 
     title = serializers.CharField()
     body = serializers.CharField()
-    # if could be blank -     body = serializers.CharField(read_only=True)
+    created_dt = serializers.DateTimeField(read_only=True)
+    updated_dt = serializers.DateTimeField(read_only=True)

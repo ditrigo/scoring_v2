@@ -11,7 +11,7 @@ class PostAdmin(admin.ModelAdmin):
 
     search_fields = ('title', )  # searching field
     
-    list_display = ('id', 'title', 'body')  # attributes to display
+    list_display = ('id', 'title', 'body', 'created_dt', 'updated_dt')  # attributes to display
 
 
 class PostCommentAdmin(admin.ModelAdmin):

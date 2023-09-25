@@ -9,11 +9,12 @@ from .serializers import PostSerializer
 
 class PostAPIView(APIView):
     
-    def get(self, request):
-        lst = Post.objects.all()
-        return Response({'posts': PostSerializer(lst, many = True).data})
+    def get(self, request, format=None):
+        posts = Post.objects.all()
+        serializer = PostSerializer(posts, many=True)
+        return Response({'posts': serializer.data})
     
-    def post(self, request):
+    def post(self, request, format=None):
         serializer = PostSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -22,7 +23,6 @@ class PostAPIView(APIView):
             body = request.data['body'],
         )
         return Response({'post': PostSerializer(post_new).data})
-
 
 
 # class PostAPIView(generics.ListAPIView):
