@@ -24,7 +24,7 @@ class PostCommentAdmin(admin.ModelAdmin):
 
     search_fields = ('post_id__title', )
 
-    list_display = ('id', 'post_id', 'comment', 'status', 'created_dt', 'updated_dt')
+    list_display = ('id', 'post_id', 'comment', 'status', 'created_dt', 'updated_dt', 'owner')
 
     # selector to writing
     raw_id_fields = ('post_id', )
