@@ -92,7 +92,7 @@ class Counted_Att(models.Model):
         verbose_name_plural = 'counted_atts'
 
     uuid = models.TextField(verbose_name='UUID')
-    author = models.ForeignKey('auth.User', related_name='counted_att', verbose_name='author', on_delete=models.CASCADE)
+    author = models.ForeignKey('auth.User', related_name='counted_atts', verbose_name='author', on_delete=models.CASCADE)
     created_dt = models.DateTimeField(verbose_name='created', auto_now_add=True)
     updated_dt = models.DateTimeField(verbose_name='updated', blank=True, null=True)
     is_active = models.BooleanField(verbose_name='is active', blank=True, null=True)
@@ -114,7 +114,7 @@ class Counted_Att_Formula(models.Model):
         verbose_name_plural = 'counted_att_formulas'
 
     uuid = models.ForeignKey(Counted_Att, on_delete=models.RESTRICT, verbose_name='UUID')
-    author = models.ForeignKey('auth.User', related_name='counted_att_formula', verbose_name='author', on_delete=models.CASCADE)
+    author = models.ForeignKey('auth.User', related_name='counted_att_formulas', verbose_name='author', on_delete=models.CASCADE)
     created_dt = models.DateTimeField(verbose_name='created', auto_now_add=True)
     updated_dt = models.DateTimeField(verbose_name='updated', blank=True, null=True)
     is_active = models.BooleanField(verbose_name='is active', blank=True, null=True)
