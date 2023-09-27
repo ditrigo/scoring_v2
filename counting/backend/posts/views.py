@@ -6,8 +6,8 @@ from django.http import Http404
 from django.contrib.auth.models import User
 
 from .permissions import IsOwnerOrReadOnly
-from .models import Post
-from .serializers import PostSerializer, UserSerializer
+from .models import Post, Csv_Attribute, Counted_Att, Counted_Att_Formula
+from .serializers import PostSerializer, UserSerializer, Csv_AttributeSerializer, Counted_AttSerializer, Counted_Att_FormulaSerializer
 
 
 # -------------------------------------
@@ -20,7 +20,7 @@ class PostList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(author=self.request.user)
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -40,6 +40,59 @@ class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
+class Csv_AttributeList(generics.ListCreateAPIView):
+    queryset = Csv_Attribute.objects.all()
+    serializer_class = Csv_AttributeSerializer
+
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class Csv_AttributeDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Csv_Attribute.objects.all()
+    serializer_class = Csv_AttributeSerializer
+
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly]
+    
+
+class Counted_AttList(generics.ListCreateAPIView):
+    queryset = Counted_Att.objects.all()
+    serializer_class = Counted_AttSerializer
+
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class Counted_AttDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Counted_Att.objects.all()
+    serializer_class = Counted_AttSerializer
+
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly]
+
+
+class Counted_Att_FormulaList(generics.ListCreateAPIView):
+    queryset = Counted_Att_Formula.objects.all()
+    serializer_class = Counted_Att_FormulaSerializer
+
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class Counted_Att_FormulaDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Counted_Att_Formula.objects.all()
+    serializer_class = Counted_Att_FormulaSerializer
+
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly]
 
     
 # ------------------------------
