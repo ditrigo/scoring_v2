@@ -19,18 +19,15 @@ def lexer(contents):
         tokens.append(temp_str)
         items = []
 
-        pattern = r"\b\w+\s*[иили]+(\d+)"
-        pattern_cond = r"(?P<word>\w+)+(?P<sign>\s*[иили])+(?P<num>\d+)"
+        pattern = r"условие\((.*?),\d+,-\d+\)\)"
 
         for token in tokens:    
+            
             if re.match(r"[.а-яА-Я]+", token):
-                match = re.search(pattern, token)
-                if re.search(pattern, token):
-                    match_cond = re.match(pattern_cond, match.group(0))
-                    if match_cond:
-                        items.append(("word", match_cond.group('word')))
-                        items.append(("sign", match_cond.group('sign')))
-                        items.append(("num", match_cond.group('num')))
+                token = token.replace("условие(", "")
+                token = token.replace(" и ", " AND ")
+                token = token.replace(" или ", " OR ")
+                items.append(("word", token))
 
             elif re.match(r"[.-0-9]", token):
                 token = re.sub(r"[^0-9-]", "", token)
