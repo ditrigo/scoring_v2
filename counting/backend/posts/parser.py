@@ -21,12 +21,12 @@ def lexer(contents):
         tokens.append(temp_str)
         items = []
 
-        pattern = r"условие\("
+        pattern = r"\s*условие\s*\("
 
         for token in tokens:    
             
             if re.match(pattern, token):
-                token = token.replace("условие(", "")
+                token = re.sub(r"условие\s*\(", "", token)
                 token = token.replace(" и ", " AND ")
                 token = token.replace(" или ", " OR ")
                 items.append(("word", token))
@@ -58,10 +58,13 @@ def generate_sql_query(data):
 
             if item[0] == 'word':
             
+                if prev_type == 'number':
+                    sql_query += f"{tabs[:-1]}ELSE\n"
                 sql_query += f"{tabs}IF {item[1]} THEN\n"
                 prev_type = 'word'
                 end += f"{tabs}END IF;\n"
                 tabs += "\t"
+                
 
             elif item[0] == 'number':
                 if prev_type == 'number':
