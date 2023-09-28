@@ -21,29 +21,25 @@ def lexer(contents):
         tokens.append(temp_str)
         items = []
 
-        pattern = r"условие\((.*?),\d+,-\d+\)\)"
+        pattern = r"условие\("
 
         for token in tokens:    
             
-            if re.match(r"[.а-яА-Яa-zA-Z]+", token):
+            if re.match(pattern, token):
                 token = token.replace("условие(", "")
                 token = token.replace(" и ", " AND ")
                 token = token.replace(" или ", " OR ")
                 items.append(("word", token))
 
-            elif re.match(r"[.-0-9]", token):
-                token = re.sub(r"[^0-9-]", "", token)
+            else:
+                print(token)
+                token = re.sub(r"[^-0-9]", "", token)
+                print(token)
                 items.append(("number", token))
 
         nLines.append(items)
 
     return nLines
-
-
-def parse(str):
-    lines = lexer(str)
-
-    return lines
 
 
 def generate_sql_query(data):
@@ -81,9 +77,9 @@ def generate_sql_query(data):
     return sql_query
 
 
-def parser_back(str):
+def parser(str):
     
-    lst = parse(str)
+    lst = lexer(str)
     sql_query = generate_sql_query(lst)
 
     return sql_query

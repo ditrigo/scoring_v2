@@ -6,7 +6,7 @@ from datetime import datetime
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters.html import HtmlFormatter
-from .parser import parser_back
+from .parser import parser
 
 
 # Create your models here.
@@ -91,7 +91,7 @@ class Counted_Att(models.Model):
         verbose_name = 'counted_att'
         verbose_name_plural = 'counted_atts'
 
-    uuid = models.TextField(verbose_name='UUID')
+    uuid = models.ForeignKey(Csv_Attribute, on_delete=models.RESTRICT, verbose_name='UUID')
     author = models.ForeignKey('auth.User', related_name='counted_atts', verbose_name='author', on_delete=models.CASCADE)
     created_dt = models.DateTimeField(verbose_name='created', auto_now_add=True)
     updated_dt = models.DateTimeField(verbose_name='updated', blank=True, null=True)
@@ -113,7 +113,7 @@ class Counted_Att_Formula(models.Model):
         verbose_name = 'counted_att_formula'
         verbose_name_plural = 'counted_att_formulas'
 
-    uuid = models.ForeignKey(Counted_Att, on_delete=models.RESTRICT, verbose_name='UUID')
+    uuid = models.ForeignKey(Csv_Attribute, on_delete=models.RESTRICT, verbose_name='UUID')
     author = models.ForeignKey('auth.User', related_name='counted_att_formulas', verbose_name='author', on_delete=models.CASCADE)
     created_dt = models.DateTimeField(verbose_name='created', auto_now_add=True)
     updated_dt = models.DateTimeField(verbose_name='updated', blank=True, null=True)
@@ -129,6 +129,6 @@ class Counted_Att_Formula(models.Model):
     
     def save(self, *args, **kwargs):
         self.updated_dt = datetime.now()
-        self.att_formula_sql = parser_back(self.att_formula)
+        self.att_formula_sql = parser(self.att_formula)
         #self.result = Csv_Attribute.objects.raw(self.att_formula_sql)
         super().save(*args, **kwargs)
