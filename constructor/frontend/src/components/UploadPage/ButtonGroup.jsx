@@ -7,7 +7,7 @@ import '../../styles/App.css';
 const ButtonGroup = () => {
 
     const [open, setOPen] = useState(false);
-    const [attributes, setAttributes] = useState([])
+    const [attributes, setAttributes] = useState([]);
 
     const toggle = () => {
         setOPen(!open);
@@ -16,7 +16,7 @@ const ButtonGroup = () => {
     async function getfiles() {
         axios.get('http://127.0.0.1:8000/api/attributes/').then(
             res => {
-                // console.log(res.data)
+                console.log(res.data)
                 setAttributes(res.data)
 
             }).catch(e => {

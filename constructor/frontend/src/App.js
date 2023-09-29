@@ -10,6 +10,7 @@ function App() {
     return (
         <>
             {isAuth ? <MainPage /> : <StartPage setIsAuth={setIsAuth} />}
+            {/*setIsAuth={setIsAuth}  */}
         </>
     );
 }

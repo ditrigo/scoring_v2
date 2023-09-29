@@ -34,16 +34,9 @@ const StartPage = ({setIsAuth}) => {
                         <a href="#">Забыли пароль?</a>
                     </div>
                 </div>
-                <MyButton type="button"
+                <MyButton  type="button"
                     className="btn btn-primary btn-block mb-4"
-                    onClick={() => onLogin(email, password)}>Войти</MyButton>
-                {/* <button
-                    type="button"
-                    className="btn btn-primary btn-block mb-4"
-                    onClick={() => onLogin(email, password)}
-                >
-                    Войти
-                </button> */}
+                    onClick={() => onLogin(email, password)}> Войти </MyButton>
             </form>
         </div>
     )

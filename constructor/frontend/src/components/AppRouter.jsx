@@ -5,6 +5,7 @@ import Upload from '../pages/UploadPage';
 import PipelinePage from '../pages/PipelinePage';
 import CrmPage from '../pages/CrmPage';
 import Error from '../pages/Error';
+import StartPage from '../pages/StartPage';
 
 const AppRouter = () => {
     return (
@@ -15,6 +16,7 @@ const AppRouter = () => {
             <Route path="/pipeline" element={<PipelinePage />} />
             <Route path="/crm" element={<CrmPage />} />
             <Route path="/error" element={<Error />} />
+            <Route path="/login" element={<StartPage />}/>
             <Route
                 path="*"
                 element={<Navigate to="/error" replace />}
