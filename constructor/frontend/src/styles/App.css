@@ -51,15 +51,13 @@
   justify-content: center;
 }
 
-
 .btn-group {
   background-color: white;
 }
 
-/* .btn.col.btn-outline-primary {
-  background-color: lightgray;
-} */
-
+.table-responsive {
+  background-color: white;
+}
 
 
 
