@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import MyButton from './UI/MyButton/MyButton';
+import MyButton from '../UI/MyButton/MyButton';
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
 
-const UploadPage_ButtonGroup = () => {
+const ButtonGroup = () => {
 
     const [open, setOPen] = useState(false);
     const [files, setFiles] = useState([])
@@ -32,7 +32,7 @@ const UploadPage_ButtonGroup = () => {
             <div className='btns__group container text-center'>
                 <div className="row">
                     {/* <p className="d-inline-flex gap-5"> */}
-                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                    <div className="btn-group" role="group" aria-label="Basic outlined example">
                         <MyButton onClick={toggle}>Просмотр данных</MyButton>
                         <MyButton>Логирование</MyButton>
                         <MyButton>FAQ</MyButton>
@@ -69,4 +69,4 @@ const UploadPage_ButtonGroup = () => {
     );
 }
 
-export default UploadPage_ButtonGroup;
+export default ButtonGroup;

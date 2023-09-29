@@ -1,9 +1,13 @@
 from django.shortcuts import render
-from .models import Files
+from .models import *
 from rest_framework import viewsets
-from .serialiser import FilesSerialiser
+from .serialiser import *
 
 # Create your views here.
 class FilesViewSet(viewsets.ModelViewSet):
-    queryset = Files.objects.all()
-    serializer_class = FilesSerialiser
+    queryset = FileAttributes.objects.all()
+    serializer_class = FileAttributesSerialiser
+
+class CsvAttributesViewSet(viewsets.ModelViewSet):
+    queryset = CsvAttributes.objects.all()
+    serializer_class = CsvAttributesSerialiser

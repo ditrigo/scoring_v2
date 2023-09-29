@@ -1,5 +1,5 @@
 import React from 'react';
-import '../index.css';
+import '../../index.css';
 import { InboxOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import { message, Upload } from 'antd';
@@ -26,7 +26,7 @@ const props: UploadProps = {
   },
 };
 
-const UploadPage_UploadBlock: React.FC = () => (
+const UploadBlock: React.FC = () => (
   <Dragger {...props}>
     <p className="ant-upload-drag-icon">
       <InboxOutlined />
@@ -39,7 +39,7 @@ const UploadPage_UploadBlock: React.FC = () => (
   </Dragger>
 );
 
-export default UploadPage_UploadBlock;
+export default UploadBlock;
 
 
 

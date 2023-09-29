@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import UploadPage_UploadBlock from '../components/UploadPage_UploadBlock.tsx';
-import MyButton from '../components/UI/MyButton/MyButton.jsx';
-import UploadPage_ButtonGroup from '../components/UploadPage_ButtonGroup.jsx';
+import UploadPage_UploadBlock from '../components/UploadPage/UploadBlock.tsx';
+import UploadPage_ButtonGroup from '../components/UploadPage/ButtonGroup.jsx';
 
 function UploadPage() {
     const [filename, setFilename] = useState('')
@@ -29,30 +28,14 @@ function UploadPage() {
                 console.log(e)
             })
     }
-    
+
     return (
         <div className="App">
             {/* Поле загрузки данных */}
-            <UploadPage_UploadBlock />
+            <div style={{display: "flex", height: "350px", justifyContent: "center"}}>
+                <UploadPage_UploadBlock />
+            </div>
             <UploadPage_ButtonGroup />
-
-
-
-
-
-            {/* первый блок */}
-            {/* <div className='row'>
-                <div className='upload col-md-5'>
-                    
-                    <div className='upload__content'>
-                        <form>
-                            <input type="file" onChange={e => setFilename(e.target.files[0])} className="form-control" />
-                            <button type="button" onClick={postData} className="btn btn-primary float-left mt-2">Загрузить файл</button>
-                        </form>
-                    </div>
-                </div>
-            </div> */}
-            {/* конец первого блока  */}
 
             {/* второй блок  */}
             {/* <div>

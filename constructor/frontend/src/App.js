@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import './styles/App.css';
-import { BrowserRouter, Link, Navigate, Route, Router, Routes } from 'react-router-dom';
+import React, {useState} from 'react';
+import StartPage from "./pages/StartPage";
+import MainPage from "./pages/MainPage";
+
 import 'bootstrap/dist/css/bootstrap.css';
 
-import AppRouter from './components/AppRouter';
-import Navbar from './components/UI/Navbar/Navbar';
-
-
 function App() {
-  return (
-    <BrowserRouter>
-      <Navbar />
-      <AppRouter />
-    </BrowserRouter>
-  );
+    const [isAuth, setIsAuth] = useState(false)
+
+    return (
+        <>
+            {isAuth ? <MainPage /> : <StartPage setIsAuth={setIsAuth} />}
+        </>
+    );
 }
 
 export default App;
