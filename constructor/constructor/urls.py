@@ -6,6 +6,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from backend.views import *
 
 urlpatterns = [
     re_path(r'^admin/', admin.site.urls),
@@ -13,4 +14,5 @@ urlpatterns = [
     re_path(r'^api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     re_path(r'^api/', include('backend.urls')),
+    re_path(r'^api/logout/', LogoutViewSet.as_view(), name ='logout'),
 ]

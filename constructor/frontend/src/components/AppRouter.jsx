@@ -5,18 +5,20 @@ import Upload from '../pages/UploadPage';
 import PipelinePage from '../pages/PipelinePage';
 import CrmPage from '../pages/CrmPage';
 import Error from '../pages/Error';
-import StartPage from '../pages/StartPage';
+import LoginPage from '../pages/LoginPage';
+import Logout from '../pages/LogoutPage';
 
 const AppRouter = () => {
     return (
         <Routes>
-            <Route path="/" element={<Navigate to="/upload" replace />} />
+            <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/scoring" element={<ScoringPage />} />
             <Route path="/upload" element={<Upload />} />
             <Route path="/pipeline" element={<PipelinePage />} />
             <Route path="/crm" element={<CrmPage />} />
             <Route path="/error" element={<Error />} />
-            <Route path="/login" element={<StartPage />}/>
+            <Route path="/login" element={<LoginPage />}/> 
+            < Route path="/logout" element={<Logout />}/>
             <Route
                 path="*"
                 element={<Navigate to="/error" replace />}

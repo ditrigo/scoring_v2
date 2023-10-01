@@ -12,6 +12,7 @@ const Navbar = () => {
                         <Link to='/scoring' className="nav-link m-2">Модуль скоррингой модели</Link>
                         <Link to='/pipeline' className="nav-link m-2">Модуль выдачи результатов</Link>
                         <Link to='/crm' className="nav-link m-2">Модуль CRM</Link>
+                        <Link to='/logout' className="nav-link m-2">Выйти</Link>
                     </ul>
                 </div>
             </div>
