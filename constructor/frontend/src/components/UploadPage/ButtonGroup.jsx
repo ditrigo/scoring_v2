@@ -17,7 +17,7 @@ const ButtonGroup = () => {
         axios.get('http://127.0.0.1:8000/api/attributes/').then(
             res => {
                 console.log(res.data.data)
-                setAttributes(res.data)
+                setAttributes(res.data.data)
 
             }).catch(e => {
                 console.log(e)

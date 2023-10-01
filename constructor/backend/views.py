@@ -12,6 +12,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 
+# Uploaded files into DataBase
 @api_view(['GET', 'POST'])
 def FilesListViewSet(request):#(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -19,7 +20,7 @@ def FilesListViewSet(request):#(viewsets.ModelViewSet):
         data = []
         nextPage = 1
         previousPage = 1
-        files = FileAttributes.objects.all().order_by('-id')
+        files = FileAttributes.objects.all().order_by('id')
         page = request.GET.get('page', 1)
         paginator = Paginator(files, 10)
         try:
@@ -46,12 +47,49 @@ def FilesListViewSet(request):#(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 
-class CsvAttributesViewSet(viewsets.ModelViewSet):
+@api_view(['GET', 'POST'])
+def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    if request.method == 'GET':
+        data = []
+        nextPage = 1
+        previousPage = 1
+        attributes = CsvAttributes.objects.all().order_by('id')
+        page = request.GET.get('page', 1)
+        paginator = Paginator(attributes, 10)
+        try:
+            data = paginator.page(page)
+        except PageNotAnInteger:
+            data = paginator.page(1)
+        except EmptyPage:
+            data = paginator.page(paginator.num_pages)
 
-    queryset = CsvAttributes.objects.all()
-    serializer_class = CsvAttributesSerialiser
+        serializer = CsvAttributesSerialiser(data,context={'request': request}, many=True)
+        if data.has_next():
+            nextPage = data.next_page_number()
+        if data.has_previous():
+            previousPage = data.previous_page_number()
+
+        return Response({'data': serializer.data , 
+                         'count': paginator.count, 
+                         'numpages' : paginator.num_pages, 
+                         'nextlink': '/api/attributes/?page=' + str(nextPage), 
+                         'prevlink': '/api/attributes/?page=' + str(previousPage)})
+    elif request.method == 'POST':
+        serializer = CsvAttributesSerialiser
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class CsvAttributesViewSet(viewsets.ModelViewSet):
+
+#     queryset = CsvAttributes.objects.all()
+#     serializer_class = CsvAttributesSerialiser
 
 class LogoutViewSet(APIView):
     permission_classes = (IsAuthenticated,)
