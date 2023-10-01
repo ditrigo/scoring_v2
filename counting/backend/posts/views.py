@@ -1,8 +1,4 @@
-from rest_framework import generics, status, mixins, permissions
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.forms import model_to_dict
-from django.http import Http404
+from rest_framework import generics, permissions
 from django.contrib.auth.models import User
 
 from .permissions import IsOwnerOrReadOnly
@@ -10,10 +6,8 @@ from .models import Post, Csv_Attribute, Counted_Att, Counted_Att_Formula
 from .serializers import PostSerializer, UserSerializer, Csv_AttributeSerializer, Counted_AttSerializer, Counted_Att_FormulaSerializer
 
 
-# -------------------------------------
-# using Generics
-
 class PostList(generics.ListCreateAPIView):
+
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
@@ -24,6 +18,7 @@ class PostList(generics.ListCreateAPIView):
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
@@ -32,16 +27,19 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class UserList(generics.ListCreateAPIView):
+
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
 class UserDetail(generics.RetrieveAPIView):
+
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
 class Csv_AttributeList(generics.ListCreateAPIView):
+
     queryset = Csv_Attribute.objects.all()
     serializer_class = Csv_AttributeSerializer
 
@@ -52,6 +50,7 @@ class Csv_AttributeList(generics.ListCreateAPIView):
 
 
 class Csv_AttributeDetail(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = Csv_Attribute.objects.all()
     serializer_class = Csv_AttributeSerializer
 
@@ -60,6 +59,7 @@ class Csv_AttributeDetail(generics.RetrieveUpdateDestroyAPIView):
     
 
 class Counted_AttList(generics.ListCreateAPIView):
+
     queryset = Counted_Att.objects.all()
     serializer_class = Counted_AttSerializer
 
@@ -70,6 +70,7 @@ class Counted_AttList(generics.ListCreateAPIView):
 
 
 class Counted_AttDetail(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = Counted_Att.objects.all()
     serializer_class = Counted_AttSerializer
 
@@ -78,6 +79,7 @@ class Counted_AttDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class Counted_Att_FormulaList(generics.ListCreateAPIView):
+
     queryset = Counted_Att_Formula.objects.all()
     serializer_class = Counted_Att_FormulaSerializer
 
@@ -88,6 +90,7 @@ class Counted_Att_FormulaList(generics.ListCreateAPIView):
 
 
 class Counted_Att_FormulaDetail(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = Counted_Att_Formula.objects.all()
     serializer_class = Counted_Att_FormulaSerializer
 

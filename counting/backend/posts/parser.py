@@ -1,5 +1,4 @@
-﻿from sys import *
-import regex as re
+﻿import regex as re
 
 
 def lexer(contents):

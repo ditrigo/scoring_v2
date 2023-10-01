@@ -4,18 +4,6 @@ from django.contrib.auth.models import User
 from .models import Post, Csv_Attribute, Counted_Att, Counted_Att_Formula
 
 
-# class PostModel:
-#     def __init__(self, title, body)
-#         self.title = title
-#         self.body = body
-
-# class PostSerializer(serializers.ModelSerializer):
-
-    # class Meta:
-    #     model = Post
-    #     fields = ('id', 'title', 'body')
-
-
 class PostSerializer(serializers.Serializer):
 
     title = serializers.CharField()
@@ -27,14 +15,23 @@ class PostSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.ModelSerializer):
 
-    posts = serializers.PrimaryKeyRelatedField(many=True, queryset=Post.objects.all())
-    csv_attributes = serializers.PrimaryKeyRelatedField(many=True, queryset=Csv_Attribute.objects.all())
-    counted_atts = serializers.PrimaryKeyRelatedField(many=True, queryset=Counted_Att.objects.all())
-    counted_att_formulas = serializers.PrimaryKeyRelatedField(many=True, queryset=Counted_Att_Formula.objects.all())
+    posts = serializers.PrimaryKeyRelatedField(many=True, 
+                                               queryset=Post.objects.all())
+    csv_attributes = serializers.PrimaryKeyRelatedField(many=True,
+                                                        queryset=Csv_Attribute.objects.all())
+    counted_atts = serializers.PrimaryKeyRelatedField(many=True,
+                                                      queryset=Counted_Att.objects.all())
+    counted_att_formulas = serializers.PrimaryKeyRelatedField(many=True,
+                                                              queryset=Counted_Att_Formula.objects.all())
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'posts', 'csv_attributes', 'counted_atts', 'counted_att_formulas']
+        fields = ['id', 
+                  'username', 
+                  'posts', 
+                  'csv_attributes', 
+                  'counted_atts', 
+                  'counted_att_formulas']
 
 
 class Csv_AttributeSerializer(serializers.Serializer):

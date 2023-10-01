@@ -1,22 +1,22 @@
 from django.contrib import admin
 
-
-# Add models
-
 from .models import Post, PostComment, Csv_Attribute, Counted_Att, Counted_Att_Formula 
 
-# Model view in admin pannel
 
 class PostAdmin(admin.ModelAdmin):    
 
     search_fields = ('title', )  # searching field
     
-    list_display = ('id', 'title', 'body', 'created_dt', 'updated_dt', 'author')  # attributes to display
+    list_display = ('id', 
+                    'title', 
+                    'body', 
+                    'created_dt', 
+                    'updated_dt', 
+                    'author')
 
 
 class PostCommentAdmin(admin.ModelAdmin):
     
-    # getting from related tables
     def my_post(self, obj):
         return obj.post_id.title
 
@@ -24,7 +24,13 @@ class PostCommentAdmin(admin.ModelAdmin):
 
     search_fields = ('post_id__title', )
 
-    list_display = ('id', 'post_id', 'comment', 'status', 'created_dt', 'updated_dt', 'author')
+    list_display = ('id', 
+                    'post_id', 
+                    'comment', 
+                    'status', 
+                    'created_dt', 
+                    'updated_dt', 
+                    'author')
 
     # selector to writing
     #raw_id_fields = ('post_id', )
@@ -34,25 +40,46 @@ class Csv_AttributeAdmin(admin.ModelAdmin):
 
     search_fields = ('uuid', )
 
-    list_display = ('id', 'uuid', 'author', 'created_dt', 'updated_dt', 'company_name', 'report_d')
+    list_display = ('id', 
+                    'uuid', 
+                    'author', 
+                    'created_dt', 
+                    'updated_dt', 
+                    'company_name', 
+                    'report_d')
 
 
 class Counted_AttAdmin(admin.ModelAdmin):
 
     search_fields = ('uuid', )
 
-    list_display = ('id', 'uuid', 'author', 'created_dt', 'updated_dt', 'is_active', 'name_cntd_att')
+    list_display = ('id', 
+                    'uuid', 
+                    'author', 
+                    'created_dt', 
+                    'updated_dt', 
+                    'is_active', 
+                    'name_cntd_att')
 
 
 class Counted_Att_FormulaAdmin(admin.ModelAdmin):
     
     search_fields = ('uuid', )
 
-    list_display = ('id', 'uuid', 'author', 'created_dt', 'updated_dt', 'is_active', 'att_formula', 'att_formula_sql', 'description', 'nested_level', 'result')
+    list_display = ('id', 
+                    'uuid', 
+                    'author', 
+                    'created_dt', 
+                    'updated_dt', 
+                    'is_active', 
+                    'att_formula', 
+                    'att_formula_sql', 
+                    'description', 
+                    'cntd_att_id', 
+                    'nested_level', 
+                    'result')
 
 
-
-# Register models
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(PostComment, PostCommentAdmin)
