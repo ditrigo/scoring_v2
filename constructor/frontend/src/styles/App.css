@@ -59,6 +59,14 @@
   background-color: white;
 }
 
+.card-header-name {
+  margin-top: 16px;
+  margin-bottom: 0px;
+}
+
+.card {
+  background-color: white;
+}
 
 
 /* 

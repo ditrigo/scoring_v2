@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import UploadBlock from '../components/UploadPage/UploadBlock.tsx';
 import ButtonGroup from '../components/UploadPage/ButtonGroup.jsx';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/App.css';
-import axios from 'axios';
+
 
 
 function UploadPage() {

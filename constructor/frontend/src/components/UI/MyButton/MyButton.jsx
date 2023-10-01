@@ -5,7 +5,7 @@ const MyButton = ({ children, ...props }) => {
     return (
         <button
             {...props}
-            className="btn col btn-outline-primary float-left mt-3">
+            className="btn col btn-outline-primary float-end mt-3">
             {children}
         </button>
     );

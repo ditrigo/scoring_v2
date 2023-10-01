@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useEffect } from "react";
 import axios from "axios";
 
 
@@ -6,11 +6,13 @@ const LogoutPage = () => {
     useEffect(() => {
         (async () => {
             try {
-                const {data} = await axios.post('http://localhost:8000/api/logout/',{
-                    refresh_token:localStorage.getItem('refresh_token')
-                } ,{headers: {
-                    'Content-Type': 'application/json'
-                }}, {withCredentials: true});
+                const { data } = await axios.post('http://localhost:8000/api/logout/', {
+                    refresh_token: localStorage.getItem('refresh_token')
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }, { withCredentials: true });
 
                 console.log('logout', data)
                 localStorage.clear();

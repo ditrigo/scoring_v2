@@ -10,12 +10,12 @@ axios.interceptors.response.use(resp => resp, async error => {
 
         console.log(localStorage.getItem('refresh_token'))
         const response = await axios.post('http://localhost:8000/token/refresh/', {
-            refresh:localStorage.getItem('refresh_token')
+            refresh: localStorage.getItem('refresh_token')
         }, {
             headers: {
-              'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
             }
-          },{withCredentials: true});
+        }, { withCredentials: true });
 
         if (response.status === 200) {
             axios.defaults.headers.common['Authorization'] = `Bearer ${response.data['access']}`;
