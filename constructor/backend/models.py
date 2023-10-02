@@ -18,7 +18,7 @@ class FileAttributes(models.Model):
         verbose_name = "file_attribute"
 
     def __str__(self) -> str:
-        return self.filename
+        return self.author_id
 
 
 class CsvAttributes(models.Model):

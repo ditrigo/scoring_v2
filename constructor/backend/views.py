@@ -42,7 +42,7 @@ def FilesListViewSet(request):#(viewsets.ModelViewSet):
                          'nextlink': '/api/files/?page=' + str(nextPage), 
                          'prevlink': '/api/files/?page=' + str(previousPage)})
     elif request.method == 'POST':
-        serializer = FileAttributesSerialiser
+        serializer = FileAttributesSerialiser(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -79,7 +79,7 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
                          'nextlink': '/api/attributes/?page=' + str(nextPage), 
                          'prevlink': '/api/attributes/?page=' + str(previousPage)})
     elif request.method == 'POST':
-        serializer = CsvAttributesSerialiser
+        serializer = CsvAttributesSerialiser(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
