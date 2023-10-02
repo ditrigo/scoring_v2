@@ -1,14 +1,15 @@
+from django.urls import reverse
 from django.shortcuts import render
-from .models import *
-from rest_framework import viewsets
-from .serialiser import *
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import status
-from rest_framework.decorators import api_view
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from .serialiser import *
+from .models import *
 
 # Create your views here.
 
@@ -90,6 +91,46 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
 
 #     queryset = CsvAttributes.objects.all()
 #     serializer_class = CsvAttributesSerialiser
+
+
+@api_view(['GET', 'POST'])
+def CountedAttributesListViewSet(request):
+    permission_classes = (IsAuthenticated,)
+    data = None
+    paginator = None
+    serializer = CountedAttributesSerializer()
+    next_page = None
+    previous_page = None
+    
+    if request.method == 'GET':
+        attributes = CountedAttributes.objects.all().order_by('id')
+        paginator = Paginator(attributes, 10)
+        page = request.GET.get('page', 1)
+        try:
+            data = paginator.page(page)
+        except PageNotAnInteger:
+            data = paginator.page(1)
+        except EmptyPage:
+            data = paginator.page(paginator.num_pages)
+        
+        serializer = CountedAttributesSerializer(data, context={'request': request}, many=True)
+        next_page = paginator.next_page_number() if data.has_next() else None
+        previous_page = paginator.previous_page_number() if data.has_previous() else None
+        
+        return Response({
+            'data': serializer.data,
+            'count': paginator.count,
+            'numpages': paginator.num_pages,
+            'nextlink': '/api/attributes/?page=' + str(next_page), 
+            'prevlink': '/api/attributes/?page=' + str(previous_page)
+        })
+    
+    elif request.method == 'POST':
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 class LogoutViewSet(APIView):
     permission_classes = (IsAuthenticated,)
