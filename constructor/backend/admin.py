@@ -8,6 +8,10 @@ from .models import *
 class CsvAttributesResource(resources.ModelResource):
     class Meta:
         model = CsvAttributes
+        skip_unchanged = True
+        # import_id_fields  = ('id', 'inn', 'np_name')
+        import_id_fields  = ('inn', 'np_name')
+        # exclude = ('id', )
 
 # class CsvAttributesAdmin(ImportExportModelAdmin):
 #     resorce_classes = [CsvAttributes]

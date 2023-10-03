@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from import_export.formats.base_formats import CSV, XLSX
+from import_export.results import Result, RowResult
 from .serialiser import *
 from .models import *
 from .admin import *
@@ -99,26 +100,26 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
 
         result = csv_resource.import_data(
             dataset,
-            dry_run=True,
+            dry_run= False,
             collect_failed_rows=True,
             skip_unchanged = True,
-            report_skipped = True,
+            report_skipped = False,
             raise_errors=True,
         )
 
         if not result.has_validation_errors() or result.has_errors():
             result = csv_resource.import_data(
                 dataset, 
-                dry_run=False,
+                dry_run=True,
                 skip_unchanged = True, 
-                report_skipped = True,
+                report_skipped = False,
                 raise_errors=True,
             )
         else:
             raise ImportError("Import data failed", code="import_data_failed")
 
         return Response(
-            data={"message": "Import successed"}, status=status.HTTP_201_CREATED
+            data={"message": "Import successed",}, status=status.HTTP_201_CREATED
         )
 
         # serializer = CsvAttributesSerialiser(data=request.data)
