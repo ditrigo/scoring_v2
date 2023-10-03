@@ -12,6 +12,7 @@ from .serialiser import *
 from .models import *
 from .admin import *
 from tablib import Dataset
+from .exceptions import ExportError, ImportError
 
 EXPORT_FORMATS_DICT = {
     "csv": CSV.CONTENT_TYPE,
@@ -108,7 +109,8 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
         if not result.has_validation_errors() or result.has_errors():
             result = csv_resource.import_data(
                 dataset, 
-                dry_run=False, 
+                dry_run=False,
+                skip_unchanged = True, 
                 report_skipped = True,
                 raise_errors=True,
             )
