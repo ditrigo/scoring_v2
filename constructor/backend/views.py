@@ -7,13 +7,17 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from import_export.formats.base_formats import CSV, XLSX
 from .serialiser import *
 from .models import *
 from .admin import *
 from tablib import Dataset
 
-# Create your views here.
+EXPORT_FORMATS_DICT = {
+    "csv": CSV.CONTENT_TYPE,
+    "xlsx": XLSX.CONTENT_TYPE,
+}
+IMPORT_FORMATS_DICT = EXPORT_FORMATS_DICT
 
 # Uploaded files into DataBase
 @api_view(['GET', 'POST'])
@@ -82,20 +86,31 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
                          'prevlink': '/api/attributes/?page=' + str(previousPage)})
     elif request.method == 'POST':
         filename = request.FILES["filename"]
+        extension = filename.name.split(".")[-1].lower()
         dataset = Dataset()
-        dataset.load(filename.read(), format='xlsx')
+        
         csv_resource = CsvAttributesResource()
+
+        if extension in IMPORT_FORMATS_DICT:
+            dataset.load(filename.read(), format=extension)
+        else:
+            raise ImportError("Unsupport import format", code="unsupport_import_format")
 
         result = csv_resource.import_data(
             dataset,
-            dray_run=True,
+            dry_run=True,
             collect_failed_rows=True,
+            skip_unchanged = True,
+            report_skipped = True,
             raise_errors=True,
         )
 
         if not result.has_validation_errors() or result.has_errors():
             result = csv_resource.import_data(
-                dataset, dry_run=False, raise_errors=True
+                dataset, 
+                dry_run=False, 
+                report_skipped = True,
+                raise_errors=True,
             )
         else:
             raise ImportError("Import data failed", code="import_data_failed")
@@ -104,11 +119,6 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
             data={"message": "Import successed"}, status=status.HTTP_201_CREATED
         )
 
-
-        # for data in imported_data:
-        #     value= CsvAttributes(data[0],data[1],data[2],data[3],) # кол-во колонок в таблице, в нашем случае - 130
-        #     value.safe()
-        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
         # serializer = CsvAttributesSerialiser(data=request.data)
         # if serializer.is_valid():
         #     serializer.save()

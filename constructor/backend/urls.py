@@ -13,7 +13,6 @@ from .views import *
 urlpatterns = [
     # re_path('', include(router.urls)),
     re_path(r"^files/$", FilesListViewSet, name='files'),
-    # re_path(r"^attributes/$", CsvAttributesListViewSet, name='attributes'),
+    re_path(r"^attributes/$", CsvAttributesListViewSet, name='attributes'),
     re_path(r"^counted_attr/$", CountedAttributesListViewSet, name='attributes'),
-    re_path(r"^import_attributes/$", CsvAttributesListViewSet, name='attributes'),
 ]
