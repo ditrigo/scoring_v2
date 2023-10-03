@@ -117,7 +117,7 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
             )
         else:
             raise ImportError("Import data failed", code="import_data_failed")
-
+        #TODO Сделать репорт о пропущенных строках!
         return Response(
             data={"message": "Import successed",}, status=status.HTTP_201_CREATED
         )
