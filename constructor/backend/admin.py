@@ -1,16 +1,22 @@
 from django.contrib import admin
+from import_export import resources
 from import_export.admin import ImportExportActionModelAdmin, ImportExportModelAdmin
 
 from .models import *
 
-class CsvAttributesAdmin(ImportExportModelAdmin):
-    resorce_classes = [CsvAttributes]
-    list_display = ('id', 
-                    'uuid', 
-                    'inn',
-                    'created_date', 
-                    'np_name', 
-                    'report_date')
+
+class CsvAttributesResource(resources.ModelResource):
+    class Meta:
+        model = CsvAttributes
+
+# class CsvAttributesAdmin(ImportExportModelAdmin):
+#     resorce_classes = [CsvAttributes]
+#     list_display = ('id', 
+#                     'uuid', 
+#                     'inn',
+#                     'created_date', 
+#                     'np_name', 
+#                     'report_date')
 
 
 class CountedAttributesAdmin(admin.ModelAdmin):
@@ -42,7 +48,8 @@ class CountedAttrFormulaAdmin(admin.ModelAdmin):
 
 
 admin.site.register(FileAttributes)
-admin.site.register(CsvAttributes, CsvAttributesAdmin)
+admin.site.register(CsvAttributes)
+# admin.site.register(CsvAttributes, CsvAttributesAdmin)
 
 admin.site.register(MainCatalog)
 admin.site.register(MainCatalogFields)

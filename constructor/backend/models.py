@@ -205,6 +205,7 @@ class MainCatalogFields(models.Model):
     date_to = models.DateTimeField(null=True)
     filed_name = models.CharField(max_length=250, blank=True)
     description = models.CharField(max_length=250, blank=True)
+    origin = models.CharField(max_length=250, blank=True)
     active = models.BooleanField(default=False)
     main_catalog_id = models.ForeignKey(MainCatalog, 
                                         on_delete=models.CASCADE)

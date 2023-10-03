@@ -10,6 +10,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serialiser import *
 from .models import *
+from .admin import *
+from tablib import Dataset
 
 # Create your views here.
 
@@ -50,7 +52,6 @@ def FilesListViewSet(request):#(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-
 @api_view(['GET', 'POST'])
 def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -80,11 +81,39 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
                          'nextlink': '/api/attributes/?page=' + str(nextPage), 
                          'prevlink': '/api/attributes/?page=' + str(previousPage)})
     elif request.method == 'POST':
-        serializer = CsvAttributesSerialiser(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        filename = request.FILES["filename"]
+        dataset = Dataset()
+        dataset.load(filename.read(), format='xlsx')
+        csv_resource = CsvAttributesResource()
+
+        result = csv_resource.import_data(
+            dataset,
+            dray_run=True,
+            collect_failed_rows=True,
+            raise_errors=True,
+        )
+
+        if not result.has_validation_errors() or result.has_errors():
+            result = csv_resource.import_data(
+                dataset, dry_run=False, raise_errors=True
+            )
+        else:
+            raise ImportError("Import data failed", code="import_data_failed")
+
+        return Response(
+            data={"message": "Import successed"}, status=status.HTTP_201_CREATED
+        )
+
+
+        # for data in imported_data:
+        #     value= CsvAttributes(data[0],data[1],data[2],data[3],) # кол-во колонок в таблице, в нашем случае - 130
+        #     value.safe()
+        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # serializer = CsvAttributesSerialiser(data=request.data)
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class CsvAttributesViewSet(viewsets.ModelViewSet):
@@ -121,8 +150,8 @@ def CountedAttributesListViewSet(request):
             'data': serializer.data,
             'count': paginator.count,
             'numpages': paginator.num_pages,
-            'nextlink': '/api/attributes/?page=' + str(next_page), 
-            'prevlink': '/api/attributes/?page=' + str(previous_page)
+            'nextlink': '/api/counted_attr/?page=' + str(next_page), 
+            'prevlink': '/api/counted_attr/?page=' + str(previous_page)
         })
     
     elif request.method == 'POST':
