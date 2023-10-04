@@ -221,9 +221,6 @@ def CountedAttributesListViewSet(request):
 @api_view(['GET'])
 def ScoringModelListViewSet(request):
     if request.method == 'GET':
-        # score_model = ScoringModel.objects.all().order_by('id')
-        # serializer = ScoringModelSerializer(score_model, context={'request': request}, many=True)
-        # return Response({'data': serializer.data,})
         data = []
         nextPage = 1
         previousPage = 1
@@ -254,7 +251,7 @@ def ScoringModelDetailViewSet(request, pk):
     try:
         score_model_id = ScoringModel.objects.get(pk=pk)
     except ScoringModel.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_404_NOT_FOUND)   
     
     if request.method == 'GET':
         serializer = ScoringModelSerializer(score_model_id, context={'request': request})
