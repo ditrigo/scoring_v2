@@ -104,17 +104,21 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
             dataset,
             dry_run=True,
             collect_failed_rows=True,
-            skip_unchanged=True,
-            report_skipped=False,
+            # skip_unchanged=False,
+            # report_skipped=True,
             raise_errors=True,
-            skip_diff=True,
+            # skip_diff=True,
         )
 
         if not result.has_validation_errors() or result.has_errors():
             result = csv_resource.import_data(
                 dataset, 
                 dry_run=False,
+                collect_failed_rows=True,
+                # skip_unchanged=True,
+                # report_skipped=False,
                 raise_errors=True,
+                # skip_diff=True,
             )
         else:
             raise ImportError("Import data failed", code="import_data_failed")

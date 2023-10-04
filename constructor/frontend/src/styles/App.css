@@ -10,27 +10,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 }
  
 .App {
   width: 10000px;
   background-color: #F4F5F5;
+  
 } 
 
-.navbar {
-  height: 50px;
-  width: 10000px;
-  display: flex;
-  align-items: center;
-  padding: 0 15px;
-  background: #F4F5F5;
-  justify-content: left;
-  margin-bottom: 10px;
-}
-
 .row {
-  margin-top: 20px;
   background-color: white;
 }
 
@@ -59,14 +47,6 @@
   background-color: white;
 }
 
-.card-header-name {
-  margin-top: 16px;
-  margin-bottom: 0px;
-}
-
-.card {
-  background-color: white;
-}
 
 
 /* 

@@ -6,9 +6,17 @@ from .models import *
 
 
 class CsvAttributesResource(resources.ModelResource):
-    def before_save_instance(self, instance, using_transactions, dry_run):
-        # during 'confirm' step, dry_run is True
-        instance.dry_run = dry_run
+    # def before_save_instance(self, instance, using_transactions, dry_run):
+    #     # during 'confirm' step, dry_run is True
+    #     instance.dry_run = dry_run
+
+    # imported_names = set()
+
+    # def after_import_row(self, row, row_result, row_number=None, **kwargs):
+    #     self.imported_names.add(row.get("name"))
+
+    # def skip_row(self, instance, original):
+    #     return instance.name in self.imported_names
     
     # def import_data(self, *args, **kwargs):
     #     self.user = kwargs.get("user")
@@ -24,7 +32,6 @@ class CsvAttributesResource(resources.ModelResource):
         model = CsvAttributes
         skip_unchanged = True
         import_id_fields  = ('inn', 'np_name')
-        # use_bulk = True
 
 
 # class CsvAttributesAdmin(ImportExportModelAdmin):
