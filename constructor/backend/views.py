@@ -100,26 +100,32 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
 
         result = csv_resource.import_data(
             dataset,
-            dry_run= False,
+            dry_run=True,
             collect_failed_rows=True,
-            skip_unchanged = True,
-            report_skipped = False,
+            skip_unchanged=True,
+            report_skipped=False,
             raise_errors=True,
+            skip_diff=True,
         )
 
         if not result.has_validation_errors() or result.has_errors():
             result = csv_resource.import_data(
                 dataset, 
-                dry_run=True,
-                skip_unchanged = True, 
-                report_skipped = False,
+                dry_run=False,
                 raise_errors=True,
             )
         else:
             raise ImportError("Import data failed", code="import_data_failed")
         #TODO Сделать репорт о пропущенных строках!
         return Response(
-            data={"message": "Import successed",}, status=status.HTTP_201_CREATED
+            data={"message": "Import successed",
+                  "result_totals":f"{result.totals}",
+                  "result_total_rows":f"{result.total_rows}",
+                  "result_base_errors":f"{result.base_errors}", 
+                  "result_valid_rows":f"{result.valid_rows()}",
+                  "result_invalid_rows":f"{result.invalid_rows}",
+                  }, 
+                  status=status.HTTP_201_CREATED
         )
 
         # serializer = CsvAttributesSerialiser(data=request.data)

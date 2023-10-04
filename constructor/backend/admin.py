@@ -6,12 +6,26 @@ from .models import *
 
 
 class CsvAttributesResource(resources.ModelResource):
+    def before_save_instance(self, instance, using_transactions, dry_run):
+        # during 'confirm' step, dry_run is True
+        instance.dry_run = dry_run
+    
+    # def import_data(self, *args, **kwargs):
+    #     self.user = kwargs.get("user")
+    #     return super().import_data(*args, **kwargs)
+
+    # def skip_row(self, instance, original, row, import_validation_errors=None):
+    #     skip = self.count % 2 == 0
+    #     self.count += 1
+    #     return super().skip_row(instance, original, row,
+    #     import_validation_errors=import_validation_errors)
+
     class Meta:
         model = CsvAttributes
         skip_unchanged = True
-        # import_id_fields  = ('id', 'inn', 'np_name')
         import_id_fields  = ('inn', 'np_name')
-        # exclude = ('id', )
+        # use_bulk = True
+
 
 # class CsvAttributesAdmin(ImportExportModelAdmin):
 #     resorce_classes = [CsvAttributes]
