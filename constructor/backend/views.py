@@ -56,7 +56,7 @@ def FilesListViewSet(request):#(viewsets.ModelViewSet):
 @api_view(['GET', 'POST'])
 def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    
+
     EXPORT_FORMATS_DICT = {
         "csv": CSV.CONTENT_TYPE,
         "xlsx": XLSX.CONTENT_TYPE,
@@ -216,7 +216,61 @@ def CountedAttributesListViewSet(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def ScoringModelListViewSet(request):
+    if request.method == 'GET':
+        # score_model = ScoringModel.objects.all().order_by('id')
+        # serializer = ScoringModelSerializer(score_model, context={'request': request}, many=True)
+        # return Response({'data': serializer.data,})
+        data = []
+        nextPage = 1
+        previousPage = 1
+        score_model = ScoringModel.objects.all().order_by('id')
+        page = request.GET.get('page', 1)
+        paginator = Paginator(score_model, 10)
+        try:
+            data = paginator.page(page)
+        except PageNotAnInteger:
+            data = paginator.page(1)
+        except EmptyPage:
+            data = paginator.page(paginator.num_pages)
+
+        serializer = ScoringModelSerializer(data,context={'request': request}, many=True)
+        if data.has_next():
+            nextPage = data.next_page_number()
+        if data.has_previous():
+            previousPage = data.previous_page_number()
+
+        return Response({'data': serializer.data , 
+                         'count': paginator.count, 
+                         'numpages' : paginator.num_pages, 
+                         'nextlink': '/api/catalog_fields/?page=' + str(nextPage), 
+                         'prevlink': '/api/catalog_fields/?page=' + str(previousPage)})
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def ScoringModelDetailViewSet(request, pk):
+    try:
+        score_model_id = ScoringModel.objects.get(pk=pk)
+    except ScoringModel.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
     
+    if request.method == 'GET':
+        serializer = ScoringModelSerializer(score_model_id, context={'request': request})
+        return Response({'data': serializer.data,})
+    
+    elif request.method == 'PUT':
+        serializer = ScoringModelSerializer(score_model_id, data=request.data,context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE':
+        score_model_id.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class LogoutViewSet(APIView):
     permission_classes = (IsAuthenticated,)

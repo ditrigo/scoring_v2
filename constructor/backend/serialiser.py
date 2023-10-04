@@ -26,6 +26,12 @@ class MainCatalogFieldsSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ScoringModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ScoringModel
+        fields = "__all__"
+
+
 class CountedAttributesSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountedAttributes
