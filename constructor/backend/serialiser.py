@@ -14,13 +14,25 @@ class CsvAttributesSerialiser(serializers.ModelSerializer):
         # fields = "__all__"
 
 
-class CountedAttributesSerializer(serializers.ModelSerializer):
+class MainCatalogSerializer(serializers.ModelSerializer):
     class Meta:
         model = MainCatalog
         fields = "__all__"
 
 
-class CountedAttrFormulaSerializer(serializers.ModelSerializer):
+class MainCatalogFieldsSerializer(serializers.ModelSerializer):
     class Meta:
         model = MainCatalogFields
+        fields = "__all__"
+
+
+class CountedAttributesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CountedAttributes
+        fields = "__all__"
+
+
+class CountedAttrFormulaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CountedAttrFormula
         fields = "__all__"
