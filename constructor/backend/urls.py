@@ -14,5 +14,8 @@ urlpatterns = [
     # re_path('', include(router.urls)),
     re_path(r"^files/$", FilesListViewSet, name='files'),
     re_path(r"^attributes/$", CsvAttributesListViewSet, name='attributes'),
-    re_path(r"^counted_attr/$", CountedAttributesListViewSet, name='attributes'),
+    re_path(r"^counted_attributes/$", CountedAttributesListViewSet, name='counted_attributes'),
+    re_path(r"^catalog_fields/$", CatalogFieldsListViewSet, name='catalog_fields'),
+    re_path(r"^scoring_model/$", ScoringModelListViewSet, name='scoring_model'),
+    re_path(r"^scoring_model/(?P<pk>[0-9]+)$", ScoringModelDetailViewSet, name='scoring_model_detail'),
 ]
