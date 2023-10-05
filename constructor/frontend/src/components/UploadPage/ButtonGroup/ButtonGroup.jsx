@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import MyButton from '../UI/MyButton/MyButton';
+import MyButton from '../../UI/MyButton/MyButton';
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
-import '../../styles/App.css';
+import '../../../styles/App.css';
 
 const ButtonGroup = () => {
 

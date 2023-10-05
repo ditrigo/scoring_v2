@@ -1,6 +1,6 @@
 import React from 'react';
-import UploadBlock from '../components/UploadPage/UploadBlock.tsx';
-import ButtonGroup from '../components/UploadPage/ButtonGroup.jsx';
+import UploadBlock from '../components/UploadPage/UploadBlock/UploadBlock.tsx';
+import ButtonGroup from '../components/UploadPage/ButtonGroup/ButtonGroup.jsx';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/App.css';
 
