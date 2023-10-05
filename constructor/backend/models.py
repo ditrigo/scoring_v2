@@ -238,16 +238,7 @@ class ScoringModel(models.Model):
     status = models.CharField(max_length=2, 
                               choices=Status.choices,
                               default=Status.DRAFT)
-    
-    class Meta:
-        indexes = [
-            models.Index(fields=["status","created_date"])
-        ]
-        db_table  = "scoring_model"
-        verbose_name = "scoring_modele"
-
-    def __str__(self) -> str:
-        return f"{self.filed_name}"
+    description = models.CharField(max_length=250, blank=True)
 
     class Meta:
         indexes = [

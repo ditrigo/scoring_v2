@@ -222,7 +222,7 @@ def CountedAttributesListViewSet(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def ScoringModelListViewSet(request):
     if request.method == 'GET':
         data = []
@@ -249,6 +249,12 @@ def ScoringModelListViewSet(request):
                          'numpages' : paginator.num_pages, 
                          'nextlink': '/api/catalog_fields/?page=' + str(nextPage), 
                          'prevlink': '/api/catalog_fields/?page=' + str(previousPage)})
+    elif request.method == 'POST':
+        serializer = ScoringModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def ScoringModelDetailViewSet(request, pk):

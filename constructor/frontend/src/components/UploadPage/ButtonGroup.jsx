@@ -25,7 +25,6 @@ const ButtonGroup = () => {
     }
 
     useEffect(() => {
-        // console.log('useEFFECT')
         getfiles()
     }, [])
 
