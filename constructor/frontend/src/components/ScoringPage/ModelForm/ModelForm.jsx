@@ -15,6 +15,7 @@ const ModelForm = ({ create }) => {
       active: true,
     };
     create(newModel);
+
     setModel({ name_model: "", description: "" });
   };
 
@@ -33,6 +34,7 @@ const ModelForm = ({ create }) => {
         placeholder="Описание модели"
       />
       <MyButton onClick={addNewModel}>Создать модель</MyButton>
+      {/* addNewModel; get */}
     </form>
   );
 };

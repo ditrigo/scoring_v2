@@ -14,17 +14,13 @@ const ScoringPage = () => {
     axios
       .get("http://127.0.0.1:8000/api/scoring_model/")
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setModels(res.data.data);
       })
       .catch((e) => {
         console.log(e);
       });
   }
-
-  useEffect(() => {
-    getModels();
-  }, []);
 
   async function postModel(newModel) {
     axios
@@ -43,14 +39,32 @@ const ScoringPage = () => {
       });
   }
 
+  const deleteModel = (id) => {
+    axios
+      .delete(`http://127.0.0.1:8000/api/scoring_model/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    setModels(models.filter((item) => item.id !== id));
+  };
+
   const createModel = (newModel) => {
     setModels([...models, newModel]);
     postModel(newModel);
     setModal(false);
   };
 
+  useEffect(() => {
+    console.log("useEffect");
+    getModels();
+  }, []);
+
   return (
-    <div>
+    <div className="ScoringPage">
       <div className="container mt-5">
         <div className="row">
           <div className="col-md-12">
@@ -93,7 +107,10 @@ const ScoringPage = () => {
                             <MyButton>Редактировать</MyButton>
                           </td>
                           <td>
-                            <button className="btn btn-outline-danger">
+                            <button
+                              onClick={() => deleteModel(attribute.id)}
+                              className="btn btn-outline-danger"
+                            >
                               Удалить
                             </button>
                           </td>
@@ -111,7 +128,6 @@ const ScoringPage = () => {
       <MyModal visible={modal} setVisible={setModal}>
         <ModelForm create={createModel} />
       </MyModal>
-
     </div>
   );
 };

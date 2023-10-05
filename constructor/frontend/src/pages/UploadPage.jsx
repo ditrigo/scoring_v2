@@ -9,7 +9,7 @@ import '../styles/App.css';
 function UploadPage() {
 
     return (
-        <div className="App">
+        <div className="UploadPage">
             <div className="container">
                 <div className="row">
                     <div className="upload-block col-6 col-md-4">
