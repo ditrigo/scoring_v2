@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 
-import 'bootstrap/dist/css/bootstrap.css';
+import "bootstrap/dist/js/bootstrap.bundle.min";
 
 function App() {
     const [isAuth, setIsAuth] = useState(false)
 
     // useEffect(() => {
     //     if (localStorage.getItem('access_token') !== null) {
-    //        setIsAuth(true); 
+    //        setIsAuth(true);
     //      }
     //    }, [isAuth]);
 
     return (
-        // <>
-            
-        //     {isAuth ? <MainPage /> : <LoginPage />}
-        // </>
-        <MainPage />
+            <div className="App">
+                {/* {isAuth ? <MainPage /> : <LoginPage />} */}
+
+                <MainPage />
+            </div>
     );
 }
 

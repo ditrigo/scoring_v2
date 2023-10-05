@@ -2,62 +2,39 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #F4F5F5;
-  
+}
+#root {
+  height: 1000px;
+  background: #F4F5F5;
+}
+.upload-block,
+.btn-block,
+.btngroup {
+  background-color: white;
+  border-radius: 5%;
 }
 
-#root {
+.App {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  
+  height: 100%;
 }
- 
-.App {
-  width: 10000px;
-  background-color: #F4F5F5;
-} 
 
 .navbar {
   height: 50px;
-  width: 10000px;
   display: flex;
   align-items: center;
   padding: 0 15px;
-  background: #F4F5F5;
   justify-content: left;
   margin-bottom: 10px;
 }
 
-.row {
-  margin-top: 20px;
-  background-color: white;
-}
 
-.upload-block  {
-  background-color: white;
-  border: solid #F4F5F5;
-}
 
-.btn-block {
-  background-color: white;
-  border: solid #F4F5F5;
-  height: 500px;
-}
 
-.h4-info-area {
-  background-color: white;
-  display: flex;
-  justify-content: center;
-}
 
-.btn-group {
-  background-color: white;
-}
 
-.table-responsive {
-  background-color: white;
-}
+
 
 .card-header-name {
   margin-top: 16px;
@@ -69,7 +46,7 @@
 }
 
 
-/* 
+/*
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

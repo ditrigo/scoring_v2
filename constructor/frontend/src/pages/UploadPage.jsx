@@ -1,33 +1,28 @@
-import React from 'react';
-import UploadBlock from '../components/UploadPage/UploadBlock.tsx';
-import ButtonGroup from '../components/UploadPage/ButtonGroup.jsx';
+import React, {useEffect, useState} from 'react';
+import ContentGroup from '../components/UploadPage/ContentGroup.jsx';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/App.css';
-
-
+import UploadBlock from "../components/UploadPage/UploadBlock";
 
 function UploadPage() {
+    const [uploadedFiles, setUploadedFiles] = useState([{name: 123}])
+
+    const uploadHandler = (item) => {
+        setUploadedFiles([...uploadedFiles, item])
+    }
 
     return (
-        <div className="App">
-            <div className="container">
-                <div className="row">
-                    <div className="upload-block col-6 col-md-4">
-                        <div >
-                            <h4 className='h4-info-area'>Добавить файлы</h4>
-                        </div>
+        <div className="UploadPage">
+                <div className="d-flex justify-content-center flex-row">
+                    <div className="upload-block mx-3 p-4">
+                        <h4 className='text-center m-2'>Добавить файлы</h4>
                         {/* Поле загрузки данных */}
                         <div>
-                            <UploadBlock />
+                            <UploadBlock uploadedFiles={uploadedFiles} setUploadedFiles={uploadHandler} />
                         </div>
                     </div>
-                    <div className="btn-block col-12 col-md-8" >
-                        <div>
-                            <ButtonGroup />
-                        </div>
-                    </div>
+                    <ContentGroup uploadedFiles={uploadedFiles} setUploadedFiles={setUploadedFiles} />
                 </div>
-            </div>
         </div>
     );
 }

@@ -5,7 +5,7 @@ import AppRouter from "../components/AppRouter";
 import LoginPage from "./LoginPage";
 
 function MainPage() {
-    const [isAuth, setIsAuth] = useState(false)
+    const [isAuth, setIsAuth] = useState(true)
 
     useEffect(() => {
         if (localStorage.getItem('access_token') !== null) {
@@ -15,7 +15,7 @@ function MainPage() {
 
     return (
         <>
-            {isAuth ? 
+            {isAuth ?
             <BrowserRouter>
                 <Navbar />
                 <AppRouter />

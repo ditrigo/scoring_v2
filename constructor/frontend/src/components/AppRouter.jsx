@@ -17,8 +17,8 @@ const AppRouter = () => {
             <Route path="/pipeline" element={<PipelinePage />} />
             <Route path="/crm" element={<CrmPage />} />
             <Route path="/error" element={<Error />} />
-            <Route path="/login" element={<LoginPage />}/> 
-            < Route path="/logout" element={<Logout />}/>
+            <Route path="/login" element={<LoginPage />}/>
+            <Route path="/logout" element={<Logout />}/>
             <Route
                 path="*"
                 element={<Navigate to="/error" replace />}

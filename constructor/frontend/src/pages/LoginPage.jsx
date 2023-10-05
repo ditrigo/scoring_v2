@@ -4,7 +4,6 @@ import MyButton from '../components/UI/MyButton/MyButton';
 import 'bootstrap/dist/css/bootstrap.css';
 
 const LoginPage = ({ setIsAuth }) => {
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -24,7 +23,7 @@ const LoginPage = ({ setIsAuth }) => {
             },
                 { withCredentials: true });
 
-        // Initialize the access & refresh token in localstorage.      
+        // Initialize the access & refresh token in localstorage.
         localStorage.clear();
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
@@ -34,7 +33,7 @@ const LoginPage = ({ setIsAuth }) => {
     }
 
     return (
-        <div className="Auth-form-container">
+        <div className="d-flex justify-content-center">
             <form className="Auth-form" onSubmit={submit}>
                 <div className="Auth-form-content">
                     <h3 className="Auth-form-title">Войти</h3>
@@ -59,8 +58,9 @@ const LoginPage = ({ setIsAuth }) => {
                             onChange={e => setPassword(e.target.value)} />
                     </div>
                     <div className="d-grid gap-2 mt-3">
-                        <MyButton type="submit"
-                            className="btn btn-primary">Подтвердить</MyButton>
+                        <MyButton type="submit" className="btn btn-primary">
+                            Подтвердить
+                        </MyButton>
                     </div>
                 </div>
             </form>
