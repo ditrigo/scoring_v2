@@ -66,23 +66,23 @@ const Table = ({attributes, columns, setColumns, setAttributes }) => {
             </div>
             <table className="table text-left table-bordered mt-5">
                 <thead>
-                <tr>
-                    {columns
-                        ?.filter(e => e.isVisible)
-                        ?.map( column =>
-                            <th
-                                key={column.id}
-                                scope="col"
-                                onClick={
-                                    column.name
-                                    ? () => handleSort(column.name)
-                                    : undefined}
-                                {...{ role: column.path && "button" }}
-                            >
-                                {column.name} {renderSortArrow(sortType, column.name)}
-                            </th>
-                        )}
-                </tr>
+                    <tr>
+                        {columns
+                            ?.filter(e => e.isVisible)
+                            ?.map( column =>
+                                <th
+                                    key={column.id}
+                                    scope="col"
+                                    onClick={
+                                        column.name
+                                        ? () => handleSort(column.name)
+                                        : undefined}
+                                    {...{ role: column.path && "button" }}
+                                >
+                                    {column.name} {renderSortArrow(sortType, column.name)}
+                                </th>
+                            )}
+                    </tr>
                 </thead>
                 <tbody>
                 {attributes.map((file) => (

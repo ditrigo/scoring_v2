@@ -22,21 +22,20 @@ const ScoringPage = () => {
         getattributes()
     }, [])
 
+    function handleAddModel() {
+        
+    }
+
     return (
         <div className="App">
             <div className="container mt-5">
-                <div className="row">
                     <div className="col-md-12">
                         <div className="card">
                             {/* Блок хедера таблицы */}
-                            <div className="row card-header">
-                                <div className='card-header-name col-8'>
-                                    <h4 className='card-header-name'>
-                                        Скоринговые модели
-                                    </h4>
-                                </div>
-                                <div className='col-4'>
-                                    <MyButton>Добавить модель</MyButton>
+                            <div className="d-flex justify-content-between align-items-center px-5 py-3">
+                                <h3>Скоринговые модели</h3>
+                                <div>
+                                    <MyButton onClick={() => handleAddModel()}>Добавить модель</MyButton>
                                 </div>
                             </div>
 
@@ -45,8 +44,8 @@ const ScoringPage = () => {
                                 <table className='table table-striped'>
                                     <thead>
                                         <tr>
-                                            <th scope="col">id модели</th>
-                                            <th scope="col">Наименование модели</th>
+                                            <th>id модели</th>
+                                            <th>Наименование модели</th>
                                             <th>Автор</th>
                                             <th>Статус</th>
                                             <th>Дата изменения</th>
@@ -60,18 +59,15 @@ const ScoringPage = () => {
                                                 <tr key={index}>
                                                     <td>{attribute.id}</td>
                                                     <td>{attribute.created_date}</td>
-                                                
                                                 </tr>
                                             )
                                         })}
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
     );
 }

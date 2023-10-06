@@ -15,7 +15,7 @@ function UploadPage() {
         <div className="UploadPage">
                 <div className="d-flex justify-content-center flex-row">
                     <div className="upload-block mx-3 p-4">
-                        <h4 className='text-center m-2'>Добавить файлы</h4>
+                        <h4 className='text-center p-2'>Добавить файлы</h4>
                         {/* Поле загрузки данных */}
                         <div>
                             <UploadBlock uploadedFiles={uploadedFiles} setUploadedFiles={uploadHandler} />
