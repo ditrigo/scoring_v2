@@ -5,6 +5,7 @@ import MyButton from "../components/UI/MyButton/MyButton";
 import axios from "axios";
 import ModelForm from "../components/ScoringPage/ModelForm/ModelForm";
 import MyModal from "../components/ScoringPage/MyModal/MyModal";
+import { Link } from "react-router-dom";
 
 const ScoringPage = () => {
   const [models, setModels] = useState([]);
@@ -85,7 +86,7 @@ const ScoringPage = () => {
                 <table className="table table-striped">
                   <thead>
                     <tr>
-                      <th scope="col">id модели</th>
+                      {/* <th scope="col">id модели</th> */}
                       <th scope="col">Наименование модели</th>
                       <th>Автор</th>
                       <th>Статус</th>
@@ -98,13 +99,13 @@ const ScoringPage = () => {
                     {models.map((attribute, index) => {
                       return (
                         <tr key={index}>
-                          <td>{attribute.id}</td>
+                          {/* <td>{attribute.id}</td> */}
                           <td>{attribute.model_name}</td>
                           <td>{attribute.author_id}</td>
                           <td>{attribute.status}</td>
                           <td>{attribute.created_date}</td>
                           <td>
-                            <MyButton>Редактировать</MyButton>
+                            <Link to={`/scoring/${attribute.id}/edit`} className="btn btn-outline-primary">Редактировать</Link>
                           </td>
                           <td>
                             <button
