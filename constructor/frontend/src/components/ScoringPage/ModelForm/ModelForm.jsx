@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import MyButton from "../../UI/MyButton/MyButton";
 import MyInput from "../../UI/MyInput/MyInput";
 
-const ModelForm = ({ create }) => {
+const ModelForm = ({ create, status }) => {
   const [model, setModel] = useState({ model_name: "", description: "" });
 
   const addNewModel = (e) => {
@@ -34,7 +34,6 @@ const ModelForm = ({ create }) => {
         placeholder="Описание модели"
       />
       <MyButton onClick={addNewModel}>Создать модель</MyButton>
-      {/* addNewModel; get */}
     </form>
   );
 };

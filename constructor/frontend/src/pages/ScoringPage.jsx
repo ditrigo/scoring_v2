@@ -5,7 +5,7 @@ import MyButton from "../components/UI/MyButton/MyButton";
 import axios from "axios";
 import ModelForm from "../components/ScoringPage/ModelForm/ModelForm";
 import MyModal from "../components/ScoringPage/MyModal/MyModal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ScoringPage = () => {
   const [models, setModels] = useState([]);
@@ -96,20 +96,26 @@ const ScoringPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {models.map((attribute, index) => {
+                    {models.map((model, index) => {
                       return (
                         <tr key={index}>
                           {/* <td>{attribute.id}</td> */}
-                          <td>{attribute.model_name}</td>
-                          <td>{attribute.author_id}</td>
-                          <td>{attribute.status}</td>
-                          <td>{attribute.created_date}</td>
+                          <td>{model.model_name}</td>
+                          <td>{model.author_id}</td>
+                          <td>{model.status}</td>
+                          <td>{model.created_date}</td>
                           <td>
-                            <Link to={`/scoring/${attribute.id}/edit`} className="btn btn-outline-primary">Редактировать</Link>
+                            <Link to={`/scoring/${model.id}/edit`}
+                              state={{ models: model }}
+                            ><MyButton>
+                                Редактировать
+                              </MyButton>
+                            </Link>
+
                           </td>
                           <td>
                             <button
-                              onClick={() => deleteModel(attribute.id)}
+                              onClick={() => deleteModel(model.id)}
                               className="btn btn-outline-danger"
                             >
                               Удалить

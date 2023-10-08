@@ -7,7 +7,7 @@ import CrmPage from "../pages/CrmPage";
 import Error from "../pages/Error";
 // import LoginPage from "../pages/LoginPage";
 import Logout from "../pages/LogoutPage";
-import ScoringEdit from "../pages/ScoringEdit";
+import ScoringEditPage from "../pages/ScoringEditPage";
 
 const AppRouter = () => {
 
@@ -15,7 +15,7 @@ const AppRouter = () => {
     <Routes>
       <Route path="/" element={<Navigate to="/upload" replace />} />
       <Route path="/scoring" element={<ScoringPage />} />
-      <Route path="/scoring/:id/edit" element={<ScoringEdit /> }/>
+      <Route path="/scoring/:id/edit" element={<ScoringEditPage /> }/>
       <Route path="/upload" element={<Upload />} />
       <Route path="/pipeline" element={<PipelinePage />} />
       <Route path="/crm" element={<CrmPage />} />
