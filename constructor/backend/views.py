@@ -293,9 +293,9 @@ class LogoutViewSet(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        
-@api_view(['GET'])
-def CreateRelationViewSet(request):
+
+@api_view(['POST'])
+def CreateRelationScoreModelAndCountedAttributesViewSet(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         counted_attr_id = data.get('counted_attr_id')
