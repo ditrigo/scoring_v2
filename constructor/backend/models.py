@@ -232,7 +232,7 @@ class ScoringModel(models.Model):
                             editable = False,)
     author_id = models.CharField(max_length=125)
     created_date = models.DateTimeField("created_date", auto_now_add=True)
-    version = models.IntegerField()
+    version = models.IntegerField(blank=True)
     active = models.BooleanField(default=False)
     model_name = models.CharField(max_length=250, blank=True)
     status = models.CharField(max_length=2, 

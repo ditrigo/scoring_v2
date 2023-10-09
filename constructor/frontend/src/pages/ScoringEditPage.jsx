@@ -16,7 +16,6 @@ const ScoringEdit = () => {
     axios
       .get("http://127.0.0.1:8000/api/counted_attributes/")
       .then((res) => {
-        // console.log(res.data.data);
         setCountedAttributes(res.data.data);
       })
       .catch((e) => {
@@ -25,10 +24,20 @@ const ScoringEdit = () => {
   }
 
   useEffect(() => {
-    // console.log("useEffect ScoringEdit");
     getCountedAttributes();
-    // console.log("state.models.id = ", state.models.id)
   }, []);
+
+  async function changeModelStatusById() {
+    axios.put(`http://127.0.0.1:8000/api/scoring_model/${state.models.id}`, {
+        status: "AP",
+        author_id: "Den" // TODO CHANGE REAL SYSTEM USER. NOT HARD CODE !!
+    }).then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   async function postModelAndAttributes(newLinkModelAndAttributes) {
     axios
@@ -42,11 +51,13 @@ const ScoringEdit = () => {
       .catch(function (error) {
         console.log(error);
       });
+
+      changeModelStatusById();
   }
 
   return (
     <div>
-      <SearchBar attributes={countedAttributes} postlink={postModelAndAttributes}/>
+      <SearchBar attributes={countedAttributes} postLink={postModelAndAttributes}/>
     </div>
   );
 };

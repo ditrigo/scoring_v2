@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 
 
-const SearchBar = ({ attributes,  postlink }) => {
+const SearchBar = ({ attributes, postLink }) => {
 
     const [expanded, setExpanded] = useState(false);
     const [selections, setSelections] = useState([]);
@@ -18,19 +18,19 @@ const SearchBar = ({ attributes,  postlink }) => {
             setExpanded(false);
         }
     }
+
     const handleChange = event => {
         if (event.target.checked) {
             return setSelections([...selections, event.target.name])
         }
         const filtered = selections.filter(name => name !== event.target.name)
-        // postlink(selections);
         return setSelections(filtered);
     };
 
-    const handleSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Submitted. Values are submitted', selections)
-        postlink(selections);
+        postLink(selections);
     };
 
     return (
@@ -44,19 +44,20 @@ const SearchBar = ({ attributes,  postlink }) => {
                                 className={`font-semibold cursor-pointer ${expanded ? "up-arrow" : "down-arrow"}`}
                             >
                                 {selections.length
-                                    ? selections.map((name, i) => {
+                                    ? selections.map((name, i) => (
                                         <span key={i}>
                                             {i ? ", " : null}
                                             {name}
                                         </span>
-                                    }) 
+                                    ))
                                     : "Атрибуты не выбраны"}
                             </div>
                         </div>
                         {expanded && (
                             <div className="border-gray-200 border border-solid">
                                 {attributes.map((attribute, index) => (
-                                    <label className='custom-select custom-select-lg mb-3'  key={index}>
+
+                                    <label className='custom-select custom-select-lg mb-3' key={index}>
                                         <input
                                             type='checkbox'
                                             name={attribute.id}
@@ -65,7 +66,8 @@ const SearchBar = ({ attributes,  postlink }) => {
                                             className='m-3 cursor-pointer' />
                                         {attribute.name_counted_attr}
                                     </label>
-                                ))}
+                                    )
+                                )}
                             </div>
                         )}
                     </div>
