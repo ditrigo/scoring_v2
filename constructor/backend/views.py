@@ -14,6 +14,8 @@ from .models import *
 from .admin import *
 from tablib import Dataset
 from .exceptions import ExportError, ImportError
+import json
+from django.http import JsonResponse
 
 
 # Uploaded files into DataBase
@@ -290,3 +292,24 @@ class LogoutViewSet(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        
+@api_view(['GET'])
+def CreateRelationViewSet(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        counted_attr_id = data.get('counted_attr_id')
+        scoring_model_id = data.get('scoring_model_id')
+
+        counted_attr_ids = CountedAttributes.objects.get(id=counted_attr_id)
+        # scoring_model = ScoringModel.objects.get(id=scoring_model_id)
+
+        scoring_model = ScoringModel.objects.get(id=scoring_model_id)
+        for counted_attr_id in counted_attr_ids:
+            counted_attr = CountedAttributes.objects.get(id=counted_attr_id)
+
+        counted_attr.scoring_name.add(scoring_model)
+
+        return JsonResponse({'message': 'Relation created successfully'}, status=200)
+
+    return JsonResponse({'message': 'Invalid request method'}, status=400)

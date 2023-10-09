@@ -254,6 +254,15 @@ class ScoringModel(models.Model):
 
     def __str__(self) -> str:
         return f"{self.model_name}"
+    
+    def save(self):
+        if self.pk:
+            original_version = self.__class__.objects.get(pk=self.pk).version
+            if original_version == self.version:
+                self.version += 1
+        else:
+            self.version = 1
+        super().save()
 
 
 # class ScoringModelHistory(models.Model):
@@ -297,7 +306,7 @@ class CountedAttributes(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=False)
     name_counted_attr = models.CharField(max_length=125)
-    scoring_name = models.ManyToManyField(ScoringModel)
+    scoring_name = models.ManyToManyField(ScoringModel, blank=True)
 
     class Meta:
         indexes = [
