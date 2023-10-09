@@ -1,31 +1,35 @@
+
 import React from 'react';
 import UploadBlock from '../components/UploadPage/UploadBlock/UploadBlock.tsx';
 import ButtonGroup from '../components/UploadPage/ButtonGroup/ButtonGroup.jsx';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/App.css';
 
+
 function UploadPage() {
+    const [uploadedFiles, setUploadedFiles] = useState([{name: 123}])
+
+    const uploadHandler = (item) => {
+        setUploadedFiles([...uploadedFiles, item])
+    }
 
     return (
         <div className="UploadPage">
+
             <div className="container">
                 <div className="row">
                     <div className="upload-block col-6 col-md-4">
                         <div >
                             <h4 className='h4-info-area'>Добавить файлы</h4>
                         </div>
+
                         {/* Поле загрузки данных */}
                         <div>
-                            <UploadBlock />
+                            <UploadBlock uploadedFiles={uploadedFiles} setUploadedFiles={uploadHandler} />
                         </div>
                     </div>
-                    <div className="btn-block col-12 col-md-8" >
-                        <div>
-                            <ButtonGroup />
-                        </div>
-                    </div>
+                    <ContentGroup uploadedFiles={uploadedFiles} setUploadedFiles={setUploadedFiles} />
                 </div>
-            </div>
         </div>
     );
 }

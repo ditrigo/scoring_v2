@@ -1,3 +1,4 @@
+
 import React from 'react';
 // import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
@@ -10,13 +11,12 @@ function App() {
 
     // useEffect(() => {
     //     if (localStorage.getItem('access_token') !== null) {
-    //        setIsAuth(true); 
+    //        setIsAuth(true);
     //      }
     //    }, [isAuth]);
 
     return (
         // <>
-            
         //     {isAuth ? <MainPage /> : <LoginPage />}
         // </>
         // ROMA VERSION
