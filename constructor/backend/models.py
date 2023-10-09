@@ -255,14 +255,14 @@ class ScoringModel(models.Model):
     def __str__(self) -> str:
         return f"{self.model_name}"
     
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.pk:
             original_version = self.__class__.objects.get(pk=self.pk).version
             if original_version == self.version:
                 self.version += 1
         else:
             self.version = 1
-        super().save()
+        super(ScoringModel, self).save(*args, **kwargs)
 
 
 # class ScoringModelHistory(models.Model):

@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 
 
-const SearchBar = ({ attributes }) => {
+const SearchBar = ({ attributes,  postlink }) => {
 
     const [expanded, setExpanded] = useState(false);
     const [selections, setSelections] = useState([]);
@@ -22,33 +22,16 @@ const SearchBar = ({ attributes }) => {
         if (event.target.checked) {
             return setSelections([...selections, event.target.name])
         }
-
         const filtered = selections.filter(name => name !== event.target.name)
+        // postlink(selections);
         return setSelections(filtered);
     };
 
     const handleSubmit = e => {
         e.preventDefault();
-
         console.log('Submitted. Values are submitted', selections)
+        postlink(selections);
     };
-
-    async function postModelAndAttributes(newLinkModelAndAttributes) {
-        // axios
-        //   .post("http://127.0.0.1:8000/api/scoring_model/", {
-        //     author_id: newModel.author_id,
-        //     description: newModel.description,
-        //     model_name: newModel.model_name,
-        //     status: newModel.status,
-        //     version: newModel.version,
-        //   })
-        //   .then(function (response) {
-        //     console.log(response);
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error);
-        //   });
-      }
 
     return (
         <div className="w-full h-screen flex justify-center items-center">
@@ -87,15 +70,12 @@ const SearchBar = ({ attributes }) => {
                         )}
                     </div>
                     <div className="row">
-                        <MyButton type="submit">Утвердить</MyButton>
+                        <MyButton type="submit" onClick={handleSubmit}>Утвердить</MyButton>
                         <Link to={`/scoring`} className="btn btn-outline-secondary" type="submit">Выйти</Link>
                     </div>
                 </form>
             </div>
         </div>
-
-
-
     );
 };
 

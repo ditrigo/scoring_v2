@@ -297,19 +297,15 @@ class LogoutViewSet(APIView):
 @api_view(['POST'])
 def CreateRelationScoreModelAndCountedAttributesViewSet(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        counted_attr_id = data.get('counted_attr_id')
+        data = json.loads(request.body.decode('utf-8'))
+
+        counted_attr_ids = data.get('counted_attr_ids')
         scoring_model_id = data.get('scoring_model_id')
-
-        counted_attr_ids = CountedAttributes.objects.get(id=counted_attr_id)
-        # scoring_model = ScoringModel.objects.get(id=scoring_model_id)
-
         scoring_model = ScoringModel.objects.get(id=scoring_model_id)
+        
         for counted_attr_id in counted_attr_ids:
             counted_attr = CountedAttributes.objects.get(id=counted_attr_id)
-
-        counted_attr.scoring_name.add(scoring_model)
+            counted_attr.scoring_name.add(scoring_model)
 
         return JsonResponse({'message': 'Relation created successfully'}, status=200)
-
     return JsonResponse({'message': 'Invalid request method'}, status=400)

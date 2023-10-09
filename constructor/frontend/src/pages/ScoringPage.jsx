@@ -5,7 +5,7 @@ import MyButton from "../components/UI/MyButton/MyButton";
 import axios from "axios";
 import ModelForm from "../components/ScoringPage/ModelForm/ModelForm";
 import MyModal from "../components/ScoringPage/MyModal/MyModal";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ScoringPage = () => {
   const [models, setModels] = useState([]);
