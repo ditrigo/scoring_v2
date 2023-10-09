@@ -1,14 +1,27 @@
 from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportActionModelAdmin, ImportExportModelAdmin
-
+from simple_history.admin import SimpleHistoryAdmin
 from .models import *
 
 
 class CsvAttributesResource(resources.ModelResource):
-    def before_save_instance(self, instance, using_transactions, dry_run):
-        # during 'confirm' step, dry_run is True
-        instance.dry_run = dry_run
+    class Meta:
+        model = CsvAttributes
+        skip_unchanged = True
+        import_id_fields  = ('inn', 'np_name')
+    
+    # def before_save_instance(self, instance, using_transactions, dry_run):
+    #     # during 'confirm' step, dry_run is True
+    #     instance.dry_run = dry_run
+
+    # imported_names = set()
+
+    # def after_import_row(self, row, row_result, row_number=None, **kwargs):
+    #     self.imported_names.add(row.get("name"))
+
+    # def skip_row(self, instance, original):
+    #     return instance.name in self.imported_names
     
     # def import_data(self, *args, **kwargs):
     #     self.user = kwargs.get("user")
@@ -20,11 +33,7 @@ class CsvAttributesResource(resources.ModelResource):
     #     return super().skip_row(instance, original, row,
     #     import_validation_errors=import_validation_errors)
 
-    class Meta:
-        model = CsvAttributes
-        skip_unchanged = True
-        import_id_fields  = ('inn', 'np_name')
-        # use_bulk = True
+
 
 
 # class CsvAttributesAdmin(ImportExportModelAdmin):
@@ -72,8 +81,9 @@ admin.site.register(CsvAttributes)
 admin.site.register(MainCatalog)
 admin.site.register(MainCatalogFields)
 
-admin.site.register(ScoringModel)
-admin.site.register(ScoringModelHistory)
+admin.site.register(ScoringModel, SimpleHistoryAdmin)
+# admin.site.register(ScoringModelHistory)
+# register(ScoringModel)
 
 admin.site.register(CountedAttributes, CountedAttributesAdmin)
 admin.site.register(CountedAttrFormula, CountedAttrFormulaAdmin)

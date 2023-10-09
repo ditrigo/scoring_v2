@@ -1,8 +1,8 @@
 from django.db import models
 import uuid
-
+from simple_history.models import HistoricalRecords
 from .parser import parser
-
+from simple_history import register
 
 class FileAttributes(models.Model):
     id = models.AutoField(primary_key=True)
@@ -231,23 +231,19 @@ class ScoringModel(models.Model):
     uuid = models.UUIDField(default = uuid.uuid4, 
                             editable = False,)
     author_id = models.CharField(max_length=125)
-    created_date = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField("created_date", auto_now_add=True)
     version = models.IntegerField()
     active = models.BooleanField(default=False)
     model_name = models.CharField(max_length=250, blank=True)
     status = models.CharField(max_length=2, 
                               choices=Status.choices,
                               default=Status.DRAFT)
-    
-    class Meta:
-        indexes = [
-            models.Index(fields=["status","created_date"])
-        ]
-        db_table  = "scoring_model"
-        verbose_name = "scoring_modele"
-
-    def __str__(self) -> str:
-        return f"{self.filed_name}"
+    description = models.CharField(max_length=250, blank=True)
+    history = HistoricalRecords(
+         custom_model_name='ScoringModelHistory',
+         table_name='scoring_model_history',
+         inherit=True,
+    )
 
     class Meta:
         indexes = [
@@ -259,38 +255,47 @@ class ScoringModel(models.Model):
     def __str__(self) -> str:
         return f"{self.model_name}"
     
+    def save(self):
+        if self.pk:
+            original_version = self.__class__.objects.get(pk=self.pk).version
+            if original_version == self.version:
+                self.version += 1
+        else:
+            self.version = 1
+        super().save()
 
-class ScoringModelHistory(models.Model):
 
-    class Status(models.TextChoices):
-        DRAFT = 'DF', 'Draft'
-        APPROVED = 'AP', 'Approved'
+# class ScoringModelHistory(models.Model):
 
-    id = models.AutoField(primary_key=True)
-    uuid = models.UUIDField(default = uuid.uuid4, 
-                            editable = False,)
-    author_id = models.CharField(max_length=125)
-    created_date = models.DateTimeField(auto_now_add=True)
-    scoring_model_id = models.ForeignKey(ScoringModel, 
-                                         on_delete=models.CASCADE)
-    date_from = models.DateTimeField(null=True)
-    date_to = models.DateTimeField(null=True)
-    version = models.IntegerField()
-    active = models.BooleanField(default=False)
-    model_name = models.CharField(max_length=250, blank=True)
-    status = models.CharField(max_length=2, 
-                              choices=Status.choices,
-                              default=Status.DRAFT)
+#     class Status(models.TextChoices):
+#         DRAFT = 'DF', 'Draft'
+#         APPROVED = 'AP', 'Approved'
 
-    class Meta:
-        indexes = [
-            models.Index(fields=["status","created_date"])
-        ]
-        db_table  = "scoring_model_history"
-        verbose_name = "scoring_model_history"
+#     id = models.AutoField(primary_key=True)
+#     uuid = models.UUIDField(default = uuid.uuid4, 
+#                             editable = False,)
+#     author_id = models.CharField(max_length=125)
+#     created_date = models.DateTimeField(auto_now_add=True)
+#     scoring_model_id = models.ForeignKey(ScoringModel, 
+#                                          on_delete=models.CASCADE)
+#     date_from = models.DateTimeField(null=True)
+#     date_to = models.DateTimeField(null=True)
+#     version = models.IntegerField()
+#     active = models.BooleanField(default=False)
+#     model_name = models.CharField(max_length=250, blank=True)
+#     status = models.CharField(max_length=2, 
+#                               choices=Status.choices,
+#                               default=Status.DRAFT)
 
-    def __str__(self) -> str:
-        return f"{self.model_name}"
+#     class Meta:
+#         indexes = [
+#             models.Index(fields=["status","created_date"])
+#         ]
+#         db_table  = "scoring_model_history"
+#         verbose_name = "scoring_model_history"
+
+#     def __str__(self) -> str:
+#         return f"{self.model_name}"
     
 
 class CountedAttributes(models.Model):
@@ -301,7 +306,7 @@ class CountedAttributes(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=False)
     name_counted_attr = models.CharField(max_length=125)
-    scoring_name = models.ManyToManyField(ScoringModel)
+    scoring_name = models.ManyToManyField(ScoringModel, blank=True)
 
     class Meta:
         indexes = [
@@ -363,3 +368,5 @@ class InnRes(models.Model):
 
     def __str__(self) -> str:
         return f"{self.inn}"
+    
+    

@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+
+import React from 'react';
+// import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 
-import "bootstrap/dist/js/bootstrap.bundle.min";
+import 'bootstrap/dist/css/bootstrap.css';
+// import "bootstrap/dist/js/bootstrap.bundle.min";
 
 function App() {
-    const [isAuth, setIsAuth] = useState(false)
+    // const [isAuth, setIsAuth] = useState(false)
 
     // useEffect(() => {
     //     if (localStorage.getItem('access_token') !== null) {
@@ -13,11 +16,16 @@ function App() {
     //    }, [isAuth]);
 
     return (
-            <div className="App">
-                {/* {isAuth ? <MainPage /> : <LoginPage />} */}
+        // <>
+        //     {isAuth ? <MainPage /> : <LoginPage />}
+        // </>
+        // ROMA VERSION
+        // <div className="App">
+        //     <MainPage />
+        // </div>
+        // ROMA VERSION
 
-                <MainPage />
-            </div>
+        <MainPage />
     );
 }
 

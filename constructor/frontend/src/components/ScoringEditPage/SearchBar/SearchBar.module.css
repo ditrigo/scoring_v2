@@ -1,0 +1,19 @@
+.up-arrow:after {
+    display: inline-block;
+    content: " ";
+    margin-left: 4px;
+    margin-bottom: 4px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid black;
+}
+
+.down-arrow:after {
+    display: inline-block;
+    content: " ";
+    margin-left: 4px;
+    margin-bottom: 4px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid black;
+}

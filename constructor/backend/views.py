@@ -14,6 +14,8 @@ from .models import *
 from .admin import *
 from tablib import Dataset
 from .exceptions import ExportError, ImportError
+import json
+from django.http import JsonResponse
 
 
 # Uploaded files into DataBase
@@ -104,17 +106,21 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
             dataset,
             dry_run=True,
             collect_failed_rows=True,
-            skip_unchanged=True,
-            report_skipped=False,
+            # skip_unchanged=False,
+            # report_skipped=True,
             raise_errors=True,
-            skip_diff=True,
+            # skip_diff=True,
         )
 
         if not result.has_validation_errors() or result.has_errors():
             result = csv_resource.import_data(
                 dataset, 
                 dry_run=False,
+                collect_failed_rows=True,
+                # skip_unchanged=True,
+                # report_skipped=False,
                 raise_errors=True,
+                # skip_diff=True,
             )
         else:
             raise ImportError("Import data failed", code="import_data_failed")
@@ -218,12 +224,9 @@ def CountedAttributesListViewSet(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def ScoringModelListViewSet(request):
     if request.method == 'GET':
-        # score_model = ScoringModel.objects.all().order_by('id')
-        # serializer = ScoringModelSerializer(score_model, context={'request': request}, many=True)
-        # return Response({'data': serializer.data,})
         data = []
         nextPage = 1
         previousPage = 1
@@ -248,13 +251,19 @@ def ScoringModelListViewSet(request):
                          'numpages' : paginator.num_pages, 
                          'nextlink': '/api/catalog_fields/?page=' + str(nextPage), 
                          'prevlink': '/api/catalog_fields/?page=' + str(previousPage)})
+    elif request.method == 'POST':
+        serializer = ScoringModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def ScoringModelDetailViewSet(request, pk):
     try:
         score_model_id = ScoringModel.objects.get(pk=pk)
     except ScoringModel.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_404_NOT_FOUND)   
     
     if request.method == 'GET':
         serializer = ScoringModelSerializer(score_model_id, context={'request': request})
@@ -283,3 +292,24 @@ class LogoutViewSet(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        
+@api_view(['GET'])
+def CreateRelationViewSet(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        counted_attr_id = data.get('counted_attr_id')
+        scoring_model_id = data.get('scoring_model_id')
+
+        counted_attr_ids = CountedAttributes.objects.get(id=counted_attr_id)
+        # scoring_model = ScoringModel.objects.get(id=scoring_model_id)
+
+        scoring_model = ScoringModel.objects.get(id=scoring_model_id)
+        for counted_attr_id in counted_attr_ids:
+            counted_attr = CountedAttributes.objects.get(id=counted_attr_id)
+
+        counted_attr.scoring_name.add(scoring_model)
+
+        return JsonResponse({'message': 'Relation created successfully'}, status=200)
+
+    return JsonResponse({'message': 'Invalid request method'}, status=400)
