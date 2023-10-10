@@ -2,7 +2,10 @@ from django.db import models
 import uuid
 from simple_history.models import HistoricalRecords
 from .parser import parser
-from simple_history import register
+# from simple_history import register
+# from author.decorators import with_author
+from django.contrib.auth.models import User
+from django.conf import settings
 
 class FileAttributes(models.Model):
     id = models.AutoField(primary_key=True)
@@ -230,7 +233,8 @@ class ScoringModel(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4, 
                             editable = False,)
-    author_id = models.CharField(max_length=125)
+    author_id = models.CharField(max_length=125, blank=True)
+    # author = models.ForeignKey( User, on_delete=models.CASCADE, blank=True, null=True) # TODO Подправить авторизацию
     created_date = models.DateTimeField("created_date", auto_now_add=True)
     version = models.IntegerField(blank=True)
     active = models.BooleanField(default=False)
@@ -302,7 +306,8 @@ class CountedAttributes(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4, 
                             editable = False,)
-    author_id = models.CharField(max_length=125)
+    author_id = models.CharField(max_length=125, blank=True)
+    # author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, editable=False, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=False)
     name_counted_attr = models.CharField(max_length=125)

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Table = ({ attributes, columns, setColumns, setAttributes }) => {
+const Table = ({ attributes, columns, setColumns }) => {
   const [sortType, setSortType] = useState({ path: "name", order: "asc" });
 
   const handleSort = (item) => {
@@ -56,17 +56,17 @@ const Table = ({ attributes, columns, setColumns, setAttributes }) => {
 
   return (
     <>
-      <h3>Управление отображаемыми полями</h3>
+      {/* <h3>Управление отображаемыми полями</h3> */}
       <div className="btn-group">
         <button
-          className="btn btn-secondary dropdown-toggle"
+          className="btn btn-outlier-primary dropdown-toggle"
           type="button"
           id="dropdownMenuClickableInside"
           data-bs-toggle="dropdown"
           data-bs-auto-close="outside"
           aria-expanded="false"
         >
-          Кликабельно внутри
+          Поле выбора колонок таблицы
         </button>
         <ul
           className="dropdown-menu"

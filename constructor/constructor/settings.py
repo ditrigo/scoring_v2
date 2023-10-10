@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'import_export',
     'simple_history',
+    'author',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     # Third party middleware
     'corsheaders.middleware.CorsMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
+    'author.middlewares.AuthorDefaultBackendMiddleware',
 ]
 
 # Third party ALLOW

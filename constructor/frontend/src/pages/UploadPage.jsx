@@ -1,33 +1,40 @@
-import React from 'react';
-import UploadBlock from '../components/UploadPage/UploadBlock/UploadBlock.tsx';
-import ButtonGroup from '../components/UploadPage/ButtonGroup/ButtonGroup.jsx';
-import 'bootstrap/dist/css/bootstrap.css';
-import '../styles/App.css';
+import React, { useEffect, useState } from "react";
+// import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock.tsx";
+import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock.tsx";
+import ButtonGroup from "../components/UploadPage/ButtonGroup/ButtonGroup.jsx";
+import "bootstrap/dist/css/bootstrap.css";
+import "../styles/App.css";
+import ContentGroup from "../components/UploadPage/ContentGroup/ContentGroup.jsx";
 
 function UploadPage() {
+  const [uploadedFiles, setUploadedFiles] = useState([{ name: 123 }]);
 
-    return (
-        <div className="UploadPage">
-            <div className="container">
-                <div className="row">
-                    <div className="upload-block col-6 col-md-4">
-                        <div >
-                            <h4 className='h4-info-area'>Добавить файлы</h4>
-                        </div>
-                        {/* Поле загрузки данных */}
-                        <div>
-                            <UploadBlock />
-                        </div>
-                    </div>
-                    <div className="btn-block col-12 col-md-8" >
-                        <div>
-                            <ButtonGroup />
-                        </div>
-                    </div>
-                </div>
+  return (
+    <div className="UploadPage">
+      <div className="container">
+        <div className="row">
+          <div className="upload-block col-6 col-md-4">
+            <div>
+              <h4 className="h4-info-area">Добавить файлы</h4>
             </div>
+            {/* Поле загрузки данных */}
+            <div>
+              <UploadBlock />
+            </div>
+          </div>
+          <div className="btn-block col-12 col-md-8">
+            <div>
+              <ContentGroup
+                uploadedFiles={uploadedFiles}
+                setUploadedFiles={setUploadedFiles}
+              />
+              {/* <ButtonGroup /> */}
+            </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default UploadPage;
@@ -38,7 +45,6 @@ export default UploadPage;
 // import "bootstrap/dist/css/bootstrap.css";
 // import "../styles/App.css";
 // import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock.jsx";
-
 
 // function UploadPage() {
 //   const [uploadedFiles, setUploadedFiles] = useState([{ name: 123 }]);

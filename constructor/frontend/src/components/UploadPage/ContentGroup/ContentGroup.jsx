@@ -8,6 +8,7 @@ import Table from "../../Table";
 const ContentGroup = ({ uploadedFiles }) => {
   const [view, setView] = useState("");
   const [attributes, setAttributes] = useState([]);
+  const [files, setFiles] = useState([]);
   const [uploadColumns, setUploadColumns] = useState([
     { name: "Id", isVisible: true },
     { name: "Дата загрузки", isVisible: true },
@@ -15,18 +16,30 @@ const ContentGroup = ({ uploadedFiles }) => {
     { name: "Дата выгрузки отчета", isVisible: true },
   ]);
   const [logColumns, setLogColumns] = useState([
-    { name: "Название", isVisible: true },
-    { name: "Дата загрузки", isVisible: true },
-    { name: "Размер", isVisible: true },
-    { name: "Удалить", isVisible: true },
+    { name: "Название файла", isVisible: true },
+    { name: "Дата загрузки файла", isVisible: true },
+    { name: "Размер файла", isVisible: true },
+    { name: "События при загрузке файла", isVisible: true },
   ]);
 
-  async function getfiles() {
+  async function getAttributes() {
     axios
       .get("http://127.0.0.1:8000/api/attributes/")
       .then((res) => {
         console.log(res.data.data);
         setAttributes(res.data.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  async function getFiles() {
+    axios
+      .get("http://127.0.0.1:8000/api/files/")
+      .then((res) => {
+        console.log(res.data.data);
+        setFiles(res.data.data);
       })
       .catch((e) => {
         console.log(e);
@@ -56,8 +69,8 @@ const ContentGroup = ({ uploadedFiles }) => {
   // }
 
   useEffect(() => {
-    // console.log('useEFFECT')
-    getfiles();
+    getAttributes();
+    getFiles();
   }, []);
 
   return (
@@ -91,32 +104,24 @@ const ContentGroup = ({ uploadedFiles }) => {
         {view === "log" && (
           <>
             <Table
-              attributes={attributes}
+              attributes={files}
               columns={logColumns}
               setColumns={setLogColumns}
             />
-            {/*<table className="table text-left table-bordered mt-5">*/}
-            {/*    <thead>*/}
-            {/*        <tr>*/}
-            {/*            <th>Название</th>*/}
-            {/*            <th>Размер</th>*/}
-            {/*            <th>Удалить</th>*/}
-            {/*        </tr>*/}
-            {/*    </thead>*/}
-            {/*{uploadedFiles.map( e => (*/}
-            {/*        <tbody>*/}
-            {/*            <tr>*/}
-            {/*                <td>{e.name}</td>*/}
-            {/*                <td>{formatBytes(e.size)}</td>*/}
-            {/*                <td>Delete</td>*/}
-            {/*            </tr>*/}
-            {/*        </tbody>*/}
-            {/*))}*/}
-            {/*</table>*/}
           </>
         )}
 
-        {view === "faq" && <h1>faq</h1>}
+        {view === "faq" && (
+          <div>
+            <h3>Главное меню содержит основные режимы работы Конструктора:</h3>
+            <ol>
+              <li>Модуль загрузки данных</li>
+              <li>Модуль скоринга</li>
+              <li>Модуль выдачи результатов</li>
+              <li>Модуль CRM</li>
+            </ol>
+          </div>
+        )}
       </div>
     </div>
   );

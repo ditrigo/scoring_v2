@@ -4,11 +4,9 @@ import axios from "axios";
 // import MyButton from "../components/UI/MyButton/MyButton";
 // import { Link } from "react-router-dom";
 import SearchBar from "../components/ScoringEditPage/SearchBar/SearchBar";
-import { useLocation } from 'react-router-dom';
-
+import { useLocation } from "react-router-dom";
 
 const ScoringEdit = () => {
-
   const [countedAttributes, setCountedAttributes] = useState([]);
   const { state } = useLocation();
 
@@ -28,10 +26,12 @@ const ScoringEdit = () => {
   }, []);
 
   async function changeModelStatusById() {
-    axios.put(`http://127.0.0.1:8000/api/scoring_model/${state.models.id}`, {
+    axios
+      .put(`http://127.0.0.1:8000/api/scoring_model/${state.models.id}`, {
         status: "AP",
-        author_id: "Den" // TODO CHANGE REAL SYSTEM USER. NOT HARD CODE !!
-    }).then(function (response) {
+        author_id: "Den", // TODO CHANGE REAL SYSTEM USER. NOT HARD CODE !!
+      })
+      .then(function (response) {
         console.log(response);
       })
       .catch(function (error) {
@@ -52,12 +52,16 @@ const ScoringEdit = () => {
         console.log(error);
       });
 
-      changeModelStatusById();
+    changeModelStatusById();
   }
 
   return (
     <div>
-      <SearchBar attributes={countedAttributes} postLink={postModelAndAttributes}/>
+      <SearchBar
+        attributes={countedAttributes}
+        postLink={postModelAndAttributes}
+        nameModel={state.models.model_name}
+      />
     </div>
   );
 };
