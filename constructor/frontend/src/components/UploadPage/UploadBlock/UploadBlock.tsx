@@ -1,4 +1,3 @@
-import React from 'react';
 import '../../../index.css';
 import { InboxOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';

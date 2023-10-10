@@ -57,7 +57,6 @@ const ContentGroup = ({uploadedFiles}) => {
                         <MyButton onClick={() => setView("faq")}>Информация</MyButton>
                     </div>
 
-
             {/* изменить структуру ниже Вынести за пределы. Сделать переиспользуемым модулем! */}
             <div className="table-responsive mx-3">
                 {view === "view" &&

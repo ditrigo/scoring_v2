@@ -11,14 +11,12 @@
 .btn-block,
 .btngroup {
   background-color: white;
-  border-radius: 5%;
+  border-radius: 20px;
 }
 
 .App {
   display: flex;
   flex-direction: column;
-
-=======
   height: 100%;
 }
 
@@ -29,11 +27,6 @@
   padding: 0 15px;
   justify-content: left;
   margin-bottom: 10px;
-}
-
-
-.btn-group {
-  background-color: white;
 }
 
 .table-responsive {
@@ -89,12 +82,12 @@
 }
 
 .card {
-  background-color: white; 
+  background-color: white;
 }*/
 /* ROMA VERSION*/
 
 
-/* 
+/*
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
