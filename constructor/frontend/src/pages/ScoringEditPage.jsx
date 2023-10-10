@@ -25,10 +25,10 @@ const ScoringEdit = () => {
     getCountedAttributes();
   }, []);
 
-  async function changeModelStatusById() {
+  async function changeModelStatusById(status) {
     axios
       .put(`http://127.0.0.1:8000/api/scoring_model/${state.models.id}`, {
-        status: "AP",
+        status: status,
         author_id: "Den", // TODO CHANGE REAL SYSTEM USER. NOT HARD CODE !!
       })
       .then(function (response) {
@@ -39,7 +39,8 @@ const ScoringEdit = () => {
       });
   }
 
-  async function postModelAndAttributes(newLinkModelAndAttributes) {
+  async function postModelAndAttributes(newLinkModelAndAttributes, statusButton) {
+    console.log(statusButton);
     axios
       .post("http://127.0.0.1:8000/api/counted_attributes/create_relation/", {
         counted_attr_ids: newLinkModelAndAttributes,
@@ -52,7 +53,7 @@ const ScoringEdit = () => {
         console.log(error);
       });
 
-    changeModelStatusById();
+    changeModelStatusById(statusButton);
   }
 
   return (

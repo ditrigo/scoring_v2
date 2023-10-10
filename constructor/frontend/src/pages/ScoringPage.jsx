@@ -107,7 +107,8 @@ const ScoringPage = () => {
                           <td>
                             <Link to={`/scoring/${model.id}/edit`}
                               state={{ models: model }}
-                            ><MyButton>
+                            >
+                              <MyButton>
                                 Редактировать
                               </MyButton>
                             </Link>
