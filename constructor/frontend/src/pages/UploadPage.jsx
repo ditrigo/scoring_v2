@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
-import UploadBlock from '../components/UploadPage/UploadBlock/UploadBlock.tsx';
-import ContentGroup from "../components/UploadPage/ContentGroup";
-
-import 'bootstrap/dist/css/bootstrap.css';
+import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock";
+import ContentGroup from "../components/UploadPage/ContentGroup/ContentGroup";
 
 function UploadPage() {
     const [uploadedFiles, setUploadedFiles] = useState([{name: 123}])
@@ -21,9 +19,7 @@ function UploadPage() {
                         </div>
 
                         {/* Поле загрузки данных */}
-                        <div>
-                            <UploadBlock uploadedFiles={uploadedFiles} setUploadedFiles={uploadHandler} />
-                        </div>
+                         <UploadBlock uploadedFiles={uploadedFiles} setUploadedFiles={uploadHandler} />
                     </div>
                     <ContentGroup uploadedFiles={uploadedFiles} setUploadedFiles={setUploadedFiles} />
                 </div>

@@ -1,5 +1,4 @@
 import React from 'react';
-// import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 
 import '../src/styles/App.css';
@@ -16,16 +15,9 @@ function App() {
     //    }, [isAuth]);
 
     return (
-        // <>
-        //     {isAuth ? <MainPage /> : <LoginPage />}
-        // </>
-        // ROMA VERSION
-        // <div className="App">
-        //     <MainPage />
-        // </div>
-        // ROMA VERSION
-
-        <MainPage />
+        <div className="App">
+            <MainPage />
+        </div>
     );
 }
 

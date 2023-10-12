@@ -6,7 +6,7 @@ const MyButton = ({ children, ...props }) => {
     return (
         <button
             {...props}
-            className="btn btn-outline-primary">
+            className={props.className ? `btn ${props.className}` : "btn btn-outline-primary"}>
             {children}
         </button>
     );

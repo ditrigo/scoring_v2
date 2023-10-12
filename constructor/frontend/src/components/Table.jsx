@@ -1,9 +1,10 @@
+import React, { useState } from "react";
+import _ from "lodash";
 
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-
-const Table = ({ attributes, columns, setColumns, setAttributes }) => {
+const Table = ({ attributes, columns, setColumns }) => {
   const [sortType, setSortType] = useState({ path: "name", order: "asc" });
+
+  const sortedAttributes = _.orderBy(attributes, sortType.path, sortType.order)
 
   const handleSort = (item) => {
     if (sortType.path === item) {
@@ -98,17 +99,17 @@ const Table = ({ attributes, columns, setColumns, setAttributes }) => {
                   key={column.id}
                   scope="col"
                   onClick={
-                    column.name ? () => handleSort(column.name) : undefined
+                    column.name ? () => handleSort(column.path) : undefined
                   }
                   {...{ role: column.path && "button" }}
                 >
-                  {column.name} {renderSortArrow(sortType, column.name)}
+                  <span className="d-flex justify-content-center align-items-center">{column.name} {renderSortArrow(sortType, column.name)}</span>
                 </th>
               ))}
           </tr>
         </thead>
         <tbody>
-          {attributes.map((file) => (
+          {sortedAttributes.map((file) => (
             <tr key={file.id}>
               <td>{file.id}</td>
               <td>{file.created_date}</td> {/* upload_date ??? */}
