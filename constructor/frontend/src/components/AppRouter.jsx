@@ -8,6 +8,7 @@ import Error from "../pages/Error";
 // import LoginPage from "../pages/LoginPage";
 import Logout from "../pages/LogoutPage";
 import ScoringEditPage from "../pages/ScoringEditPage";
+import NewCrmClientPage from "../pages/NewCrmClientPage";
 
 const AppRouter = () => {
 
@@ -23,6 +24,7 @@ const AppRouter = () => {
       {/* <Route path="/login" element={<LoginPage />} /> */}
       <Route path="/logout" element={<Logout />} />
       <Route path="*" element={<Navigate to="/error" replace />} />
+      <Route path="/newclient/:id?" element={<NewCrmClientPage />} />
     </Routes>
   );
 };

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import MyButton from "../../UI/MyButton/MyButton";
 import MyInput from "../../UI/MyInput/MyInput";
 
-const ModelForm = ({ create, status }) => {
+const ModelForm = ({ create }) => {
   const [model, setModel] = useState({ model_name: "", description: "" });
 
   const addNewModel = (e) => {
@@ -16,7 +16,7 @@ const ModelForm = ({ create, status }) => {
     };
     create(newModel);
 
-    setModel({ name_model: "", description: "" });
+    setModel({ model_name: "", description: "" });
   };
 
   return (

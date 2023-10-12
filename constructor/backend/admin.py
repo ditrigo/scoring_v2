@@ -33,9 +33,6 @@ class CsvAttributesResource(resources.ModelResource):
     #     return super().skip_row(instance, original, row,
     #     import_validation_errors=import_validation_errors)
 
-
-
-
 # class CsvAttributesAdmin(ImportExportModelAdmin):
 #     resorce_classes = [CsvAttributes]
 #     list_display = ('id', 
@@ -44,18 +41,6 @@ class CsvAttributesResource(resources.ModelResource):
 #                     'created_date', 
 #                     'np_name', 
 #                     'report_date')
-
-
-class CountedAttributesAdmin(admin.ModelAdmin):
-
-    search_fields = ('uuid', )
-
-    list_display = ('id', 
-                    'uuid', 
-                    'author_id', 
-                    'created_date', 
-                    'active', 
-                    'name_counted_attr')
 
 
 class CountedAttrFormulaAdmin(admin.ModelAdmin):
@@ -83,9 +68,21 @@ admin.site.register(MainCatalogFields)
 
 admin.site.register(ScoringModel, SimpleHistoryAdmin)
 # admin.site.register(ScoringModelHistory)
-# register(ScoringModel)
 
+class CountedAttributesAdmin(admin.ModelAdmin):
+    search_fields = ('uuid', )
+    list_display = ('id', 
+                    'uuid', 
+                    'author_id', 
+                    'created_date', 
+                    'active', 
+                    'name_counted_attr')
+    def save_model(self, request, obj, form, change):
+        obj.author = request.user
+        super().save_model(request, obj, form, change)
 admin.site.register(CountedAttributes, CountedAttributesAdmin)
+
+
 admin.site.register(CountedAttrFormula, CountedAttrFormulaAdmin)
 
 admin.site.register(InnRes)

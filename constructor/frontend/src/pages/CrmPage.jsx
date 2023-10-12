@@ -1,16 +1,92 @@
-import React from 'react';
+import React, { useEffect, useState } from "react"
+import api from "../api"
+import TableHeader from "../components/CrmPage/Form/TableHeader"
+import NumericRow from "../components/CrmPage/Form/NumericRow"
+import ContentRows from "../components/CrmPage/Form/ContentRows"
+import { Link } from "react-router-dom"
+import axios from "axios"
+import MyInput from "../components/UI/MyInput/MyInput"
 
 const CrmPage = () => {
-    return (
-        <div>
-            <h1 style={{ color: "black" }}>
-                Страницы CRM
-            </h1>
-            <h2>
-                Страница в разработке
-            </h2>
-        </div>
-    );
+  const [users, setUsers] = useState()
+  let [currentUserId, setCurrentUserId] = useState()
+  const [symb, setSymb] = useState("")
+  const [value, setValue] = useState("")
+
+  useEffect(() => {
+    api.users.fetchAll().then((data) => {
+      setUsers(data)
+    })
+    console.log(users)
+  }, [])
+
+  const handleGetCurrentUserId = (e) => {
+    console.log(e.target.dataset.id)
+    setCurrentUserId(e.target.dataset.id)
+  }
+
+  //   const filtredUSersINN = users.filter((el) => {
+  //     return el.INN.includes(value)
+  //   })
+
+  //   const filtredUSersManager = users.filter((el) => {
+  //     return el.manager.toLowerCase().includes(symb.toLocaleLowerCase())
+  //   })
+
+  return (
+    <div className="container m-5">
+      <div className="row row-centered colored">
+        <button className="btn btn-primary w-50 mx-auto m-2 col-sm-4">
+          <Link to="/newclient" className="nav-link m-2">
+            + Новый клиент
+          </Link>
+        </button>
+
+        <button
+          className="btn btn-primary w-50 mx-auto m-2 col-sm-4"
+          disabled={!currentUserId}
+        >
+          <Link to={"/newclient/" + currentUserId} className="nav-link m-2">
+            Редактировать клиента (нажмать на номер в таблице): {currentUserId}
+          </Link>
+        </button>
+      </div>
+      {users ? (
+        <>
+          <div className="mb-3">
+            <form>
+              <input
+                type="text"
+                placeholder="ИНН"
+                className="form-group search__input mr-5"
+                onChange={(event) => setValue(event.target.value)}
+              />
+
+              <MyInput
+                type="text"
+                placeholder="Менеджер"
+                className="search__input mr-5"
+                onChange={(event) => setSymb(event.target.value)}
+              />
+            </form>
+          </div>
+
+          <table className="table">
+            <TableHeader />
+            <tbody>
+              <NumericRow />
+              <ContentRows
+                users={users}
+                handleGetCurrentUserId={handleGetCurrentUserId}
+              />
+            </tbody>
+          </table>
+        </>
+      ) : (
+        <h2>Нет данных</h2>
+      )}
+    </div>
+  )
 }
 
-export default CrmPage;
+export default CrmPage

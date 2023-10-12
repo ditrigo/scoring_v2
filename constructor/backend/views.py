@@ -54,7 +54,6 @@ def FilesListViewSet(request):#(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
 @api_view(['GET', 'POST'])
 def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -142,13 +141,6 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
         #     return Response(serializer.data, status=status.HTTP_201_CREATED)
         # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-# class CsvAttributesViewSet(viewsets.ModelViewSet):
-
-#     queryset = CsvAttributes.objects.all()
-#     serializer_class = CsvAttributesSerialiser
-
-
 @api_view(['GET', 'POST'])
 def CatalogFieldsListViewSet(request):
     permission_classes = (IsAuthenticated,)
@@ -184,7 +176,6 @@ def CatalogFieldsListViewSet(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
 @api_view(['GET', 'POST'])
 def CountedAttributesListViewSet(request):
     permission_classes = (IsAuthenticated,)
@@ -222,7 +213,6 @@ def CountedAttributesListViewSet(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['GET', 'POST'])
 def ScoringModelListViewSet(request):
@@ -280,7 +270,6 @@ def ScoringModelDetailViewSet(request, pk):
         score_model_id.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
 class LogoutViewSet(APIView):
     permission_classes = (IsAuthenticated,)
     def post(self, request):
@@ -293,23 +282,18 @@ class LogoutViewSet(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        
-@api_view(['GET'])
-def CreateRelationViewSet(request):
+@api_view(['POST'])
+def CreateRelationScoreModelAndCountedAttributesViewSet(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        counted_attr_id = data.get('counted_attr_id')
+        data = json.loads(request.body.decode('utf-8'))
+
+        counted_attr_ids = data.get('counted_attr_ids')
         scoring_model_id = data.get('scoring_model_id')
-
-        counted_attr_ids = CountedAttributes.objects.get(id=counted_attr_id)
-        # scoring_model = ScoringModel.objects.get(id=scoring_model_id)
-
         scoring_model = ScoringModel.objects.get(id=scoring_model_id)
+        
         for counted_attr_id in counted_attr_ids:
             counted_attr = CountedAttributes.objects.get(id=counted_attr_id)
-
-        counted_attr.scoring_name.add(scoring_model)
+            counted_attr.scoring_name.add(scoring_model)
 
         return JsonResponse({'message': 'Relation created successfully'}, status=200)
-
     return JsonResponse({'message': 'Invalid request method'}, status=400)

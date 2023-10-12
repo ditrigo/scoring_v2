@@ -18,5 +18,5 @@ urlpatterns = [
     re_path(r"^catalog_fields/$", CatalogFieldsListViewSet, name='catalog_fields'),
     re_path(r"^scoring_model/$", ScoringModelListViewSet, name='scoring_model'),
     re_path(r"^scoring_model/(?P<pk>[0-9]+)$", ScoringModelDetailViewSet, name='scoring_model_detail'),
-    
+    re_path(r"^counted_attributes/create_relation/$", CreateRelationScoreModelAndCountedAttributesViewSet, name="create_relation"),
 ]

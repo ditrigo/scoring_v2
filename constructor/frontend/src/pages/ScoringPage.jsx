@@ -5,7 +5,7 @@ import MyButton from "../components/UI/MyButton/MyButton";
 import axios from "axios";
 import ModelForm from "../components/ScoringPage/ModelForm/ModelForm";
 import MyModal from "../components/ScoringPage/MyModal/MyModal";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ScoringPage = () => {
   const [models, setModels] = useState([]);
@@ -15,7 +15,7 @@ const ScoringPage = () => {
     axios
       .get("http://127.0.0.1:8000/api/scoring_model/")
       .then((res) => {
-        // console.log(res.data.data);
+        console.log(res.data.data);
         setModels(res.data.data);
       })
       .catch((e) => {
@@ -107,7 +107,8 @@ const ScoringPage = () => {
                           <td>
                             <Link to={`/scoring/${model.id}/edit`}
                               state={{ models: model }}
-                            ><MyButton>
+                            >
+                              <MyButton>
                                 Редактировать
                               </MyButton>
                             </Link>

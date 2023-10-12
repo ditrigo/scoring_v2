@@ -5,7 +5,7 @@
 }
 #root {
   height: 1000px;
-  background: #F4F5F5;
+  background: #f4f5f5;
 }
 .upload-block,
 .btn-block,
@@ -17,8 +17,6 @@
 .App {
   display: flex;
   flex-direction: column;
-
-=======
   height: 100%;
 }
 
@@ -30,7 +28,6 @@
   justify-content: left;
   margin-bottom: 10px;
 }
-
 
 .btn-group {
   background-color: white;
@@ -48,7 +45,6 @@
   justify-content: left;
   margin-bottom: 10px;
 } */
-
 
 /* ROMA VERSION*/
 /* * {
@@ -93,7 +89,6 @@
 }*/
 /* ROMA VERSION*/
 
-
 /* 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -124,18 +119,6 @@
     transform: rotate(360deg);
   }
 } */
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 @media (prefers-reduced-motion: no-preference) {

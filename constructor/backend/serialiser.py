@@ -30,12 +30,14 @@ class ScoringModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = ScoringModel
         fields = "__all__"
+        # exclude = ['author']
 
 
 class CountedAttributesSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountedAttributes
         fields = "__all__"
+        # exclude = ['author']
 
 
 class CountedAttrFormulaSerializer(serializers.ModelSerializer):
