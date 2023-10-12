@@ -112,6 +112,7 @@ const ContentGroup = ({ uploadedFiles }) => {
         )}
 
         {view === "faq" && (
+          <>
           <div>
             <h3>Главное меню содержит основные режимы работы Конструктора:</h3>
             <ol>
@@ -121,6 +122,7 @@ const ContentGroup = ({ uploadedFiles }) => {
               <li>Модуль CRM</li>
             </ol>
           </div>
+          </>
         )}
       </div>
     </div>

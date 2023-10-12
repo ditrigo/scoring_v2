@@ -1,14 +1,24 @@
 import React, { useState } from "react";
 import MyButton from "../components/UI/MyButton/MyButton";
+import MyInput from "../components/UI/MyInput/MyInput";
+import "@grapecity/wijmo.styles/wijmo.css";
+import "bootstrap/dist/css/bootstrap.css";
+import * as wjcGrid from "@grapecity/wijmo.react.grid";
+import * as wjGrid from "@grapecity/wijmo.grid";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 const PipelinePage = () => {
   const [open, setOpen] = useState(false);
+  //   Для отображения в дальнейшем различных элементов
   const [block, setBlock] = useState([
-    {name: "Статические данные", open: false}, 
-    {name: "Расчет модели", open: false}, 
-    {name: "Выписка СКУАД", open: false}, 
-    {name: "Журнал скоринга", open: false}, 
-  ])
+    { name: "Статические данные", open: false },
+    { name: "Расчет модели", open: false },
+    { name: "Выписка СКУАД", open: false },
+    { name: "Журнал скоринга", open: false },
+  ]);
+  const [startDate, setStartDate] = useState(new Date());
 
   const toggle = () => {
     setOpen(!open);
@@ -16,43 +26,97 @@ const PipelinePage = () => {
 
   return (
     <div>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-auto">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-auto">
             <MyButton>Статические данные</MyButton>
           </div>
-          <div class="col-md-auto">
+          <div className="col-md-auto">
             <MyButton>Расчет модели</MyButton>
           </div>
-          <div class="col-md-auto">
+          <div className="col-md-auto">
             <MyButton>Выписка СКУАД</MyButton>
           </div>
-          <div class="col-md-auto">
+          <div className="col-md-auto">
             <MyButton onClick={toggle}>Результаты скоринга</MyButton>
           </div>
-          <div class="col-md-auto">
+          <div className="col-md-auto">
             <MyButton>Журнал скоринга</MyButton>
           </div>
         </div>
       </div>
 
       {open && (
-        <div class="table-responsive-sm">
-        <table className="table text-left table-bordered mt-5">
-        <thead>
-          <tr>
-            <th scope="col">id</th>
-            <th scope="col">Дата загрузки</th>
-            <th scope="col">ИНН</th>
-            <th scope="col">Дата выгрузки отчета</th>
-          </tr>
-        </thead>
-        </table>
+        <div>
+          <div className="table-responsive-sm">
+            <table className="table text-left table-bordered mt-5">
+              <thead>
+                <tr>
+                  <th scope="col">Атрибут</th>
+                  <th>Условие фильтра</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>ИНН</td>
+                  <td>
+                    <table>
+                      <thead>
+                        <tr>
+                          <td>
+                            <MyInput placeholder="Оператор"></MyInput>
+                          </td>
+                          <td>
+                            <MyInput placeholder="Выражение"></MyInput>
+                          </td>
+                        </tr>
+                      </thead>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Модель скоринга</td>
+                  <td>
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                      defaultValue="0"
+                    >
+                      <option value="0" disabled>Выбрать модель для скоринга</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Отчетная дата</td>
+                  <td>
+                    <DatePicker
+                      selected={startDate}
+                      onChange={(date) => setStartDate(date)}
+                      isClearable
+                      placeholderText="I have been cleared!"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div className="container">
+              <div className="row">
+                <div className="col-md-auto">
+                  <MyButton>Запустить скоринг</MyButton>
+                </div>
+                <div className="col-md-auto">
+                  <MyButton>Журнал скоринга</MyButton>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
   );
 };
-
 
 export default PipelinePage;
