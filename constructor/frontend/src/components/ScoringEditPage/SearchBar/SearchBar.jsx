@@ -35,10 +35,11 @@ const SearchBar = ({ attributes, postLink, nameModel }) => {
     const handleSubmit = (e, status) => {
         e.preventDefault();
         console.log("Submitted. Values are submitted", selections);
-        if (status === "AP") {
-            setStatusButton("AP");
-        }; 
-        
+        // if (status === "AP") {
+        //     setStatusButton("AP");
+        // }; 
+        console.log("handleSubmit", statusButton);
+        setStatusButton(status);
         postLink(selections, statusButton);
     };
 

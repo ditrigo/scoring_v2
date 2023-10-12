@@ -35,7 +35,7 @@ const ButtonGroup = () => {
           {/* <p className="d-inline-flex gap-5"> */}
           <div
             className="btn-group"
-            role="group"
+            // role="group"
             aria-label="Basic outlined example"
           >
             <MyButton onClick={toggle}>Просмотр данных</MyButton>
