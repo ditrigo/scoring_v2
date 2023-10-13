@@ -3,8 +3,6 @@ import MyButton from "../components/UI/MyButton/MyButton";
 import MyInput from "../components/UI/MyInput/MyInput";
 import "@grapecity/wijmo.styles/wijmo.css";
 import "bootstrap/dist/css/bootstrap.css";
-import * as wjcGrid from "@grapecity/wijmo.react.grid";
-import * as wjGrid from "@grapecity/wijmo.grid";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";

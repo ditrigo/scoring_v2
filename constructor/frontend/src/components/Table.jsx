@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import _ from "lodash";
 
 const Table = ({ attributes, columns, setColumns }) => {
   const [sortType, setSortType] = useState({ path: "name", order: "asc" });
+
+  const sortedAttributes = _.orderBy(attributes, sortType.path, sortType.order)
 
   const handleSort = (item) => {
     if (sortType.path === item) {
@@ -56,17 +58,17 @@ const Table = ({ attributes, columns, setColumns }) => {
 
   return (
     <>
-      {/* <h3>Управление отображаемыми полями</h3> */}
+      <h3>Управление отображаемыми полями</h3>
       <div className="btn-group">
         <button
-          className="btn btn-outlier-primary dropdown-toggle"
+          className="btn btn-secondary dropdown-toggle"
           type="button"
           id="dropdownMenuClickableInside"
           data-bs-toggle="dropdown"
           data-bs-auto-close="outside"
           aria-expanded="false"
         >
-          Поле выбора колонок таблицы
+          Кликабельно внутри
         </button>
         <ul
           className="dropdown-menu"
@@ -97,17 +99,17 @@ const Table = ({ attributes, columns, setColumns }) => {
                   key={column.id}
                   scope="col"
                   onClick={
-                    column.name ? () => handleSort(column.name) : undefined
+                    column.name ? () => handleSort(column.path) : undefined
                   }
                   {...{ role: column.path && "button" }}
                 >
-                  {column.name} {renderSortArrow(sortType, column.name)}
+                  <span className="d-flex justify-content-center align-items-center">{column.name} {renderSortArrow(sortType, column.name)}</span>
                 </th>
               ))}
           </tr>
         </thead>
         <tbody>
-          {attributes.map((file) => (
+          {sortedAttributes.map((file) => (
             <tr key={file.id}>
               <td>{file.id}</td>
               <td>{file.created_date}</td> {/* upload_date ??? */}

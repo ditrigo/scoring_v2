@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import MyButton from "../components/UI/MyButton/MyButton";
 import "bootstrap/dist/css/bootstrap.css";
+import "../styles/App.css";
 
 const LoginPage = ({ setIsAuth }) => {
   const [username, setUsername] = useState("");

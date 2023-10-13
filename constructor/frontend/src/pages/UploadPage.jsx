@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock.tsx";
+// import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock.jsx";
 import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock.tsx";
 import ButtonGroup from "../components/UploadPage/ButtonGroup/ButtonGroup.jsx";
 import "bootstrap/dist/css/bootstrap.css";
@@ -8,6 +8,9 @@ import ContentGroup from "../components/UploadPage/ContentGroup/ContentGroup.jsx
 
 function UploadPage() {
   const [uploadedFiles, setUploadedFiles] = useState([{ name: 123 }]);
+  const uploadHandler = (item) => {
+    setUploadedFiles([...uploadedFiles, item])
+  }
 
   return (
     <div className="UploadPage">
@@ -21,6 +24,7 @@ function UploadPage() {
             <div>
               <UploadBlock />
             </div>
+            {/* <UploadBlock uploadedFiles={uploadedFiles} setUploadedFiles={uploadHandler} /> */}
           </div>
           <div className="btn-block col-12 col-md-8">
             <div>
