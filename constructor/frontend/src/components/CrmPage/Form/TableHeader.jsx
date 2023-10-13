@@ -15,7 +15,7 @@ const TableHeader = () => {
         <th scope="col">Вид отрицат. решения</th>
         <th scope="col">Платежесп-ть</th>
         <th scope="col">Деловая активность</th>
-        <th scope="col">Вид активов</th>
+        <th scope="col">Вывод активов</th>
         <th scope="col">Стадия рассмотрения</th>
         <th scope="col">Контр. точка</th>
       </tr>

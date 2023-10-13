@@ -84,10 +84,10 @@ const ScoringPage = () => {
   async function postAtributs(newAtr) {
     axios
       .post("http://127.0.0.1:8000/api/counted_attributes/", {
-        name_counted_attr: newAtr.author_id,
-        attr_formulas: newAtr.description,
-        description: newAtr.description,
-        nested_level: (newAtr.nested_level = 1),
+        name_counted_attr: newAtr.name,
+        attr_formulas: newAtr.formula,
+        description: "some description",
+        nested_level: "1",
       })
       .then(function (response) {
         console.log(response)
@@ -98,7 +98,7 @@ const ScoringPage = () => {
   }
 
   const createAtribut = (newAtr) => {
-    setAtributs([...models, newAtr])
+    setAtributs([...atributs, newAtr])
     postAtributs(newAtr)
     setModalAtribut(false)
   }
@@ -181,12 +181,14 @@ const ScoringPage = () => {
             <div className="card">
               <div className="card-header">
                 <h4>
-                  Атрибуты
+                  {/* Атрибуты */}
+                  Маркеры
                   <button
                     onClick={() => setModalAtribut(true)}
                     className="btn btn-outline-primary float-end"
                   >
-                    Создать атрибут
+                    {/* Создать атрибут */}
+                    Создать маркер
                   </button>
                 </h4>
               </div>
@@ -229,7 +231,7 @@ const ScoringPage = () => {
       </MyModal>
 
       <MyModal visible={modalAtribut} setVisible={setModalAtribut}>
-        <h3>Новый атрибут</h3>
+        <h3>Новый маркер</h3>
         <AtributForm create={createAtribut} setVisible={setModalAtribut} />
       </MyModal>
     </div>

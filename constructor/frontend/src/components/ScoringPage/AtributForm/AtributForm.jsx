@@ -16,20 +16,16 @@ const AtributForm = ({ create, setVisible }) => {
     setVisible(false)
   }
 
-  //   const addNewModel = (e) => {
-  //     e.preventDefault()
-  //     const newModel = {
-  //       ...model,
-  //       author_id: "Denis",
-  //       status: "DF",
-  //       version: 1,
-  //       active: true,
-  //     }
+  const addNewAttr = (e) => {
+    e.preventDefault()
+    const newAttr = {
+      ...atribut,
+    }
 
-  //     create(newModel)
+    create(newAttr)
 
-  //     setModel({ model_name: "", description: "" })
-  //   }
+    setAtribut({ name: "", formula: "" })
+  }
 
   return (
     <form>
@@ -37,7 +33,7 @@ const AtributForm = ({ create, setVisible }) => {
         value={atribut.name}
         onChange={(e) => setAtribut({ ...atribut, name: e.target.value })}
         type="text"
-        placeholder="Наименование атрибута"
+        placeholder="Наименование маркера"
       />
       <MyInput
         value={atribut.formula}
@@ -45,7 +41,7 @@ const AtributForm = ({ create, setVisible }) => {
         type="text"
         placeholder="Формула"
       />
-      <MyButton className="btn-outline-primary m-2" onClick={handleClick}>
+      <MyButton className="btn-outline-primary m-2" onClick={addNewAttr}>
         Сохранить
       </MyButton>
       <MyButton className="btn-outline-primary m-2" onClick={handleClick}>
