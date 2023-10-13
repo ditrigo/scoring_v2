@@ -9,11 +9,11 @@ const ContentRows = ({ users, handleGetCurrentUserId }) => {
     if (value === "Высокий риск") return "text-danger"
   }
   const makeClassNameDD = (value) => {
-    if (value === "Низкий риск") return "success"
-    if (value === "Средний риск") return "warning"
-    if (value === "Высокий риск") return "danger"
+    if (value === "Низкий риск") return "Success"
+    if (value === "Средний риск") return "Warning"
+    if (value === "Высокий риск") return "Danger"
   }
-  console.log(users)
+  // console.log(users)
   const [, setData] = useState({ dropdown: "" })
 
   const handleChange = ({ target }) => {
@@ -40,9 +40,10 @@ const ContentRows = ({ users, handleGetCurrentUserId }) => {
           <td>{el.support}</td>
           <td>{el.positive}</td>
           <td>{el.negative}</td>
-          {/* <td className={makeClassName(el.solvency)}>{el.solvency}</td> */}
-          <DropdownButton
-            id={`dropdown-${makeClassNameDD(el.solvency)}-button`}
+          <td className={makeClassName(el.solvency)}>{el.solvency}</td>
+          {/* <DropdownButton
+            id={`dropdown-variants-${makeClassNameDD(el.solvency)}`}
+            variant={makeClassNameDD(el.solvency).toLocaleLowerCase()}
             className="m-2"
             title={el.solvency}
             onClick={handleChange}
@@ -56,9 +57,12 @@ const ContentRows = ({ users, handleGetCurrentUserId }) => {
             <Dropdown.Item name="dropdown" href="#/action-2">
               Высокий риск
             </Dropdown.Item>
-          </DropdownButton>
+          </DropdownButton> */}
+
           <td className={makeClassName(el.activity)}>{el.activity}</td>
+
           <td className={makeClassName(el.activeType)}>{el.activeType}</td>
+
           <td>{el.stage}</td>
           <td>{el.point}</td>
         </tr>

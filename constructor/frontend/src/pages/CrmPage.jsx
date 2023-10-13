@@ -6,31 +6,32 @@ import ContentRows from "../components/CrmPage/Form/ContentRows"
 import { Link } from "react-router-dom"
 import axios from "axios"
 import MyInput from "../components/UI/MyInput/MyInput"
+import { users as usersApi } from "../api/fake.api/users"
 
 const CrmPage = () => {
   const [users, setUsers] = useState()
   let [currentUserId, setCurrentUserId] = useState()
-  const [symb, setSymb] = useState("")
   const [value, setValue] = useState("")
 
   useEffect(() => {
-    api.users.fetchAll().then((data) => {
-      setUsers(data)
-    })
+    // api.users.fetchAll().then((data) => {
+    //   setUsers(data)
+    // })
+    setUsers(usersApi)
     console.log(users)
   }, [])
 
   const handleGetCurrentUserId = (e) => {
-    console.log(e.target.dataset.id)
+    // console.log(e.target.dataset.id)
     setCurrentUserId(e.target.dataset.id)
   }
 
-  //   const filtredUSersINN = users.filter((el) => {
-  //     return el.INN.includes(value)
-  //   })
-
-  //   const filtredUSersManager = users.filter((el) => {
-  //     return el.manager.toLowerCase().includes(symb.toLocaleLowerCase())
+  //   const filtredUsers = users.filter((el) => {
+  //     if (Number.isInteger(+value)) {
+  //       return el.INN.includes(value)
+  //     } else {
+  //       return el.manager.toLowerCase().includes(value.toLowerCase())
+  //     }
   //   })
 
   return (
@@ -57,16 +58,9 @@ const CrmPage = () => {
             <form>
               <input
                 type="text"
-                placeholder="ИНН"
+                placeholder="ИНН или Менеджер"
                 className="form-group search__input mr-5"
                 onChange={(event) => setValue(event.target.value)}
-              />
-
-              <MyInput
-                type="text"
-                placeholder="Менеджер"
-                className="search__input mr-5"
-                onChange={(event) => setSymb(event.target.value)}
               />
             </form>
           </div>
