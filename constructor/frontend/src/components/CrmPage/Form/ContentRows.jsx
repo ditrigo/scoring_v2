@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import Dropdown from "react-bootstrap/Dropdown"
 import DropdownButton from "react-bootstrap/DropdownButton"
+import SelectField from "./SelectField"
 
 const ContentRows = ({ users, handleGetCurrentUserId }) => {
   const makeClassName = (value) => {
@@ -14,16 +15,35 @@ const ContentRows = ({ users, handleGetCurrentUserId }) => {
     if (value === "Высокий риск") return "Danger"
   }
   // console.log(users)
-  const [, setData] = useState({ dropdown: "" })
 
-  const handleChange = ({ target }) => {
-    if (target.text) {
-      setData((prevState) => ({
-        ...prevState,
-        [target.name]: target.text,
-      }))
-    }
+  // Для dropdown
+  // const [, setData] = useState({ dropdown: "" })
+
+  // const handleChange = ({ target }) => {
+  //   if (target.text) {
+  //     setData((prevState) => ({
+  //       ...prevState,
+  //       [target.name]: target.text,
+  //     }))
+  //   }
+  // }
+
+  // Для select
+  const handleChange = (target) => {
+    setUsersData((prevState) => ({
+      ...prevState,
+      [target.name]: target.value,
+    }))
   }
+
+  const riskList = [
+    { label: "Высокий риск", value: "Высокий риск" },
+    { label: "Средний риск", value: "Средний риск" },
+    { label: "Низкий риск", value: "Низкий риск" },
+  ]
+
+  const [usersData, setUsersData] = useState({})
+
   return (
     users &&
     users.map((el) => {
@@ -40,7 +60,20 @@ const ContentRows = ({ users, handleGetCurrentUserId }) => {
           <td>{el.support}</td>
           <td>{el.positive}</td>
           <td>{el.negative}</td>
-          <td className={makeClassName(el.solvency)}>{el.solvency}</td>
+          {/* <td className={makeClassName(el.solvency)}></td> */}
+
+          <td>
+            <SelectField
+              key={el.id}
+              label={el.name}
+              defaultOption="Выберите риск"
+              name={el.name}
+              options={riskList}
+              onChange={handleChange}
+              value={usersData?.name}
+            />
+          </td>
+
           {/* <DropdownButton
             id={`dropdown-variants-${makeClassNameDD(el.solvency)}`}
             variant={makeClassNameDD(el.solvency).toLocaleLowerCase()}
@@ -72,3 +105,14 @@ const ContentRows = ({ users, handleGetCurrentUserId }) => {
 }
 
 export default ContentRows
+
+{
+  /* <SelectField
+              label="Выбери важность"
+              defaultOption="Выберите..."
+              name="importance"
+              options={importanceList}
+              onChange={handleChange}
+              value={data.importance}
+            /> */
+}

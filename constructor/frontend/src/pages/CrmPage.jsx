@@ -6,7 +6,6 @@ import ContentRows from "../components/CrmPage/Form/ContentRows"
 import { Link } from "react-router-dom"
 import axios from "axios"
 import MyInput from "../components/UI/MyInput/MyInput"
-import { users as usersApi } from "../api/fake.api/users"
 
 const CrmPage = () => {
   const [users, setUsers] = useState()
@@ -14,10 +13,10 @@ const CrmPage = () => {
   const [value, setValue] = useState("")
 
   useEffect(() => {
-    // api.users.fetchAll().then((data) => {
-    //   setUsers(data)
-    // })
-    setUsers(usersApi)
+    api.users.fetchAll().then((data) => {
+      setUsers(data)
+    })
+    // setUsers(usersApi)
     console.log(users)
   }, [])
 
@@ -26,13 +25,16 @@ const CrmPage = () => {
     setCurrentUserId(e.target.dataset.id)
   }
 
-  //   const filtredUsers = users.filter((el) => {
-  //     if (Number.isInteger(+value)) {
-  //       return el.INN.includes(value)
-  //     } else {
-  //       return el.manager.toLowerCase().includes(value.toLowerCase())
-  //     }
-  //   })
+  // Добавил проверку, чтоб не падал в ошибку от пустых users
+  const filtredUsers = users
+    ? users.filter((el) => {
+        if (Number.isInteger(+value)) {
+          return el.INN.includes(value)
+        } else {
+          return el.manager.toLowerCase().includes(value.toLowerCase())
+        }
+      })
+    : null
 
   return (
     <div className="container m-5">
@@ -56,10 +58,10 @@ const CrmPage = () => {
         <>
           <div className="mb-3">
             <form>
-              <input
+              <MyInput
                 type="text"
                 placeholder="ИНН или Менеджер"
-                className="form-group search__input mr-5"
+                // className="form-group search__input mr-5"
                 onChange={(event) => setValue(event.target.value)}
               />
             </form>
@@ -70,7 +72,7 @@ const CrmPage = () => {
             <tbody>
               <NumericRow />
               <ContentRows
-                users={users}
+                users={filtredUsers}
                 handleGetCurrentUserId={handleGetCurrentUserId}
               />
             </tbody>

@@ -4,6 +4,7 @@ import TextField from "../components/CrmPage/Form/textField"
 import Divider from "../components/CrmPage/Form/Divider"
 import { Link, useParams } from "react-router-dom"
 import axios from "axios"
+import SelectField from "../components/CrmPage/Form/SelectField"
 
 const NewCrmClientPage = () => {
   const params = useParams()
@@ -11,7 +12,6 @@ const NewCrmClientPage = () => {
   const [firstData, setFirstData] = useState()
   const [KPI, setKPI] = useState()
   const [users, setUsers] = useState()
-  //   const [currentUser, setCurrentUser] = useState()
 
   const [usersData, setUsersData] = useState({})
 
@@ -76,6 +76,12 @@ const NewCrmClientPage = () => {
     }))
   }
 
+  const riskList = [
+    { label: "Высокий риск", value: "Высокий риск" },
+    { label: "Средний риск", value: "Средний риск" },
+    { label: "Низкий риск", value: "Низкий риск" },
+  ]
+
   return (
     <form>
       {firstData &&
@@ -103,7 +109,17 @@ const NewCrmClientPage = () => {
       {KPI &&
         KPI.map((el) => {
           if (el.name) {
-            return (
+            return el.type === "risk" ? (
+              <SelectField
+                key={el.id}
+                label={el.name}
+                defaultOption="Выберите риск"
+                name={el.name}
+                options={riskList}
+                onChange={handleChange}
+                value={usersData?.name}
+              />
+            ) : (
               <TextField
                 key={el.id}
                 label={el.name}
@@ -145,3 +161,14 @@ const NewCrmClientPage = () => {
 }
 
 export default NewCrmClientPage
+
+{
+  /* <SelectField
+              label="Выбери важность"
+              defaultOption="Выберите..."
+              name="importance"
+              options={importanceList}
+              onChange={handleChange}
+              value={data.importance}
+            /> */
+}

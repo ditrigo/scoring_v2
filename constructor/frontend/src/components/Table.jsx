@@ -1,20 +1,21 @@
-
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react"
+import _ from "lodash"
 
 const Table = ({ attributes, columns, setColumns }) => {
-  const [sortType, setSortType] = useState({ path: "name", order: "asc" });
+  const [sortType, setSortType] = useState({ path: "name", order: "asc" })
+
+  const sortedAttributes = _.orderBy(attributes, sortType.path, sortType.order)
 
   const handleSort = (item) => {
     if (sortType.path === item) {
       setSortType({
         ...sortType,
         order: sortType.order === "asc" ? "desc" : "asc",
-      });
+      })
     } else {
-      setSortType({ path: item, order: "asc" });
+      setSortType({ path: item, order: "asc" })
     }
-  };
+  }
 
   const renderSortArrow = (sortType, currentPath) => {
     if (sortType.path === currentPath) {
@@ -30,7 +31,7 @@ const Table = ({ attributes, columns, setColumns }) => {
           >
             <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
           </svg>
-        );
+        )
       } else {
         return (
           <svg
@@ -43,17 +44,17 @@ const Table = ({ attributes, columns, setColumns }) => {
           >
             <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
           </svg>
-        );
+        )
       }
     }
-    return null;
-  };
+    return null
+  }
 
   const checkClick = (idx) => {
-    const tableChange = [...columns];
-    tableChange[idx].isVisible = !tableChange[idx].isVisible;
-    setColumns(tableChange);
-  };
+    const tableChange = [...columns]
+    tableChange[idx].isVisible = !tableChange[idx].isVisible
+    setColumns(tableChange)
+  }
 
   return (
     <>
@@ -98,17 +99,19 @@ const Table = ({ attributes, columns, setColumns }) => {
                   key={column.id}
                   scope="col"
                   onClick={
-                    column.name ? () => handleSort(column.name) : undefined
+                    column.name ? () => handleSort(column.path) : undefined
                   }
                   {...{ role: column.path && "button" }}
                 >
-                  {column.name} {renderSortArrow(sortType, column.name)}
+                  <span className="d-flex justify-content-center align-items-center">
+                    {column.name} {renderSortArrow(sortType, column.name)}
+                  </span>
                 </th>
               ))}
           </tr>
         </thead>
         <tbody>
-          {attributes.map((file) => (
+          {sortedAttributes.map((file) => (
             <tr key={file.id}>
               <td>{file.id}</td>
               <td>{file.created_date}</td> {/* upload_date ??? */}
@@ -119,7 +122,7 @@ const Table = ({ attributes, columns, setColumns }) => {
         </tbody>
       </table>
     </>
-  );
-};
+  )
+}
 
-export default Table;
+export default Table
