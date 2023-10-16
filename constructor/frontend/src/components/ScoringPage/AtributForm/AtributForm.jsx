@@ -3,8 +3,10 @@ import MyButton from "../../UI/MyButton/MyButton"
 import MyInput from "../../UI/MyInput/MyInput"
 
 const AtributForm = ({ create, setVisible }) => {
-  //   const [model, setModel] = useState({ name_counted_attr: "", formula: "" })
-  const [atribut, setAtribut] = useState({ name: "", formula: "" })
+  const [marker, setMarker] = useState({
+    name_counted_attr: "",
+    attr_formulas: "",
+  })
 
   const handleClick = (e) => {
     e.preventDefault()
@@ -16,32 +18,39 @@ const AtributForm = ({ create, setVisible }) => {
     setVisible(false)
   }
 
-  const addNewAttr = (e) => {
+  const addNewMarker = (e) => {
     e.preventDefault()
-    const newAttr = {
-      ...atribut,
+    const newMarker = {
+      ...marker,
+      description: "some description",
+      nested_level: 1,
+      author_id: "Gr",
     }
 
-    create(newAttr)
+    create(newMarker)
 
-    setAtribut({ name: "", formula: "" })
+    setMarker({ name_counted_attr: "", attr_formulas: "" })
   }
 
   return (
     <form>
       <MyInput
-        value={atribut.name}
-        onChange={(e) => setAtribut({ ...atribut, name: e.target.value })}
+        value={marker.name_counted_attr}
+        onChange={(e) =>
+          setMarker({ ...marker, name_counted_attr: e.target.value })
+        }
         type="text"
         placeholder="Наименование маркера"
       />
       <MyInput
-        value={atribut.formula}
-        onChange={(e) => setAtribut({ ...atribut, formula: e.target.value })}
+        value={marker.attr_formulas}
+        onChange={(e) =>
+          setMarker({ ...marker, attr_formulas: e.target.value })
+        }
         type="text"
         placeholder="Формула"
       />
-      <MyButton className="btn-outline-primary m-2" onClick={addNewAttr}>
+      <MyButton className="btn-outline-primary m-2" onClick={addNewMarker}>
         Сохранить
       </MyButton>
       <MyButton className="btn-outline-primary m-2" onClick={handleClick}>

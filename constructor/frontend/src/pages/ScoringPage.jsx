@@ -7,19 +7,20 @@ import ModelForm from "../components/ScoringPage/ModelForm/ModelForm"
 import MyModal from "../components/ScoringPage/MyModal/MyModal"
 import { Link } from "react-router-dom"
 import AtributForm from "../components/ScoringPage/AtributForm/AtributForm"
+import MyInput from "../components/UI/MyInput/MyInput"
 
 const ScoringPage = () => {
   const [models, setModels] = useState([])
   const [modal, setModal] = useState(false)
 
-  const [atributs, setAtributs] = useState([])
-  const [modalAtribut, setModalAtribut] = useState(false)
+  const [markers, setMarkers] = useState([])
+  const [modalMarker, setModalMarker] = useState(false)
 
   async function getModels() {
     axios
       .get("http://127.0.0.1:8000/api/scoring_model/")
       .then((res) => {
-        console.log(res.data.data)
+        // console.log(res.data.data)
         setModels(res.data.data)
       })
       .catch((e) => {
@@ -69,44 +70,55 @@ const ScoringPage = () => {
   }, [])
 
   // get/post path/api/counted_attributes
-  async function getAtributs() {
+  async function getMarkers() {
     axios
       .get("http://127.0.0.1:8000/api/counted_attributes/")
       .then((res) => {
-        console.log("in getAtr ", res.data.data)
-        setAtributs(res.data.data)
+        console.log("in getMarker ", res.data.data)
+        setMarkers(res.data.data)
       })
       .catch((e) => {
         console.log(e)
       })
   }
 
-  async function postAtributs(newAtr) {
+  async function postMarkers(newAtr) {
     axios
       .post("http://127.0.0.1:8000/api/counted_attributes/", {
-        name_counted_attr: newAtr.name,
-        attr_formulas: newAtr.formula,
-        description: "some description",
-        nested_level: "1",
+        name_counted_attr: newAtr.name_counted_attr,
+        attr_formulas: newAtr.attr_formulas,
+        description: newAtr.description,
+        nested_level: newAtr.nested_level,
+        author_id: newAtr.author_id,
       })
       .then(function (response) {
         console.log(response)
+        setMarkers([...markers, response.data])
       })
       .catch(function (error) {
         console.log(error)
       })
   }
 
-  const createAtribut = (newAtr) => {
-    setAtributs([...atributs, newAtr])
-    postAtributs(newAtr)
-    setModalAtribut(false)
+  const createMarker = (newMarker) => {
+    // setMarkers([...Markers, newMarker])
+    postMarkers(newMarker)
+    setModalMarker(false)
   }
 
   useEffect(() => {
     // console.log("useEffect in getAtr")
-    getAtributs()
+    getMarkers()
   }, [])
+
+  // работа с выводом данных из инпут
+
+  const [inputINN, setInputINN] = useState("")
+
+  const handleChangeINN = (e) => {
+    setInputINN(e.target.value)
+    console.log(inputINN.split(","))
+  }
 
   return (
     <div className="ScoringPage">
@@ -184,7 +196,7 @@ const ScoringPage = () => {
                   {/* Атрибуты */}
                   Маркеры
                   <button
-                    onClick={() => setModalAtribut(true)}
+                    onClick={() => setModalMarker(true)}
                     className="btn btn-outline-primary float-end"
                   >
                     {/* Создать атрибут */}
@@ -197,7 +209,7 @@ const ScoringPage = () => {
                   <thead>
                     <tr>
                       {/* <th scope="col">id модели</th> */}
-                      <th scope="col">Наименование атрибута</th>
+                      <th scope="col">Наименование маркера</th>
                       <th>Автор</th>
                       <th>UUID</th>
                       <th>Дата изменения</th>
@@ -206,15 +218,15 @@ const ScoringPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {atributs.map((atr) => {
+                    {markers.map((marker) => {
                       return (
-                        <tr key={atr.id}>
-                          <td>{atr.name_counted_attr}</td>
-                          <td>{atr.author_id}</td>
-                          <td>{atr.uuid}</td>
-                          <td>{atr.created_date}</td>
-                          <td>{String(atr.active)}</td>
-                          <td>{atr.scoring_name}</td>
+                        <tr key={marker.id}>
+                          <td>{marker.name_counted_attr}</td>
+                          <td>{marker.author_id}</td>
+                          <td>{marker.uuid}</td>
+                          <td>{marker.created_date}</td>
+                          <td>{String(marker.active)}</td>
+                          <td>{marker.scoring_name}</td>
                         </tr>
                       )
                     })}
@@ -224,15 +236,22 @@ const ScoringPage = () => {
             </div>
           </div>
         </div>
+        <MyInput
+          value={inputINN}
+          onChange={(e) => handleChangeINN(e)}
+          type="text"
+          placeholder="Вставьте необходимые ИНН"
+        />
+        {inputINN && inputINN.split(",").map((el) => <p>{el}</p>)}
       </div>
 
       <MyModal visible={modal} setVisible={setModal}>
         <ModelForm create={createModel} />
       </MyModal>
 
-      <MyModal visible={modalAtribut} setVisible={setModalAtribut}>
+      <MyModal visible={modalMarker} setVisible={setModalMarker}>
         <h3>Новый маркер</h3>
-        <AtributForm create={createAtribut} setVisible={setModalAtribut} />
+        <AtributForm create={createMarker} setVisible={setModalMarker} />
       </MyModal>
     </div>
   )

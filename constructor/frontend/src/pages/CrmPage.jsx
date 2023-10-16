@@ -4,13 +4,11 @@ import TableHeader from "../components/CrmPage/Form/TableHeader"
 import NumericRow from "../components/CrmPage/Form/NumericRow"
 import ContentRows from "../components/CrmPage/Form/ContentRows"
 import { Link } from "react-router-dom"
-import axios from "axios"
 import MyInput from "../components/UI/MyInput/MyInput"
 
 const CrmPage = () => {
   const [users, setUsers] = useState()
-  let [currentUserId, setCurrentUserId] = useState()
-  const [value, setValue] = useState("")
+  const [searchValue, setSearchValue] = useState("")
 
   useEffect(() => {
     api.users.fetchAll().then((data) => {
@@ -20,18 +18,13 @@ const CrmPage = () => {
     console.log(users)
   }, [])
 
-  const handleGetCurrentUserId = (e) => {
-    // console.log(e.target.dataset.id)
-    setCurrentUserId(e.target.dataset.id)
-  }
-
-  // Добавил проверку, чтоб не падал в ошибку от пустых users
+  // Добавил проверку через тернарный оператор, чтоб не падал в ошибку от пустых users
   const filtredUsers = users
     ? users.filter((el) => {
-        if (Number.isInteger(+value)) {
-          return el.INN.includes(value)
+        if (Number.isInteger(+searchValue)) {
+          return el.INN.includes(searchValue)
         } else {
-          return el.manager.toLowerCase().includes(value.toLowerCase())
+          return el.manager.toLowerCase().includes(searchValue.toLowerCase())
         }
       })
     : null
@@ -44,15 +37,6 @@ const CrmPage = () => {
             + Новый клиент
           </Link>
         </button>
-
-        <button
-          className="btn btn-primary w-50 mx-auto m-2 col-sm-4"
-          disabled={!currentUserId}
-        >
-          <Link to={"/newclient/" + currentUserId} className="nav-link m-2">
-            Редактировать клиента (нажмать на номер в таблице): {currentUserId}
-          </Link>
-        </button>
       </div>
       {users ? (
         <>
@@ -62,7 +46,7 @@ const CrmPage = () => {
                 type="text"
                 placeholder="ИНН или Менеджер"
                 // className="form-group search__input mr-5"
-                onChange={(event) => setValue(event.target.value)}
+                onChange={(event) => setSearchValue(event.target.value)}
               />
             </form>
           </div>
@@ -71,10 +55,7 @@ const CrmPage = () => {
             <TableHeader />
             <tbody>
               <NumericRow />
-              <ContentRows
-                users={filtredUsers}
-                handleGetCurrentUserId={handleGetCurrentUserId}
-              />
+              <ContentRows users={filtredUsers} />
             </tbody>
           </table>
         </>

@@ -3,7 +3,6 @@ import api from "../api"
 import TextField from "../components/CrmPage/Form/textField"
 import Divider from "../components/CrmPage/Form/Divider"
 import { Link, useParams } from "react-router-dom"
-import axios from "axios"
 import SelectField from "../components/CrmPage/Form/SelectField"
 
 const NewCrmClientPage = () => {
@@ -13,7 +12,21 @@ const NewCrmClientPage = () => {
   const [KPI, setKPI] = useState()
   const [users, setUsers] = useState()
 
-  const [usersData, setUsersData] = useState({})
+  const [usersData, setUsersData] = useState({
+    INN: "fgdg",
+    clientName: "",
+    region: "",
+    status: "",
+    manager: "",
+  })
+
+  const [testData, setTestData] = useState({ test: "test" })
+  const handleChangeTest = (target) => {
+    setTestData((prevState) => ({
+      ...prevState,
+      [target.name]: target.value,
+    }))
+  }
 
   useEffect(() => {
     api.firstData.fetchAll().then((data) => {
@@ -37,34 +50,51 @@ const NewCrmClientPage = () => {
   // Теперь ок. Добавил корректное условие (не params, a params.id)
   useEffect(() => {
     if (params.id && users) {
-      console.log(params)
       const user = getCurrentUser(users)[0]
-      console.log(user)
+      console.log("Текущий ", user)
 
-      setUsersData({
+      setUsersData((prevState) => ({
+        ...prevState,
         INN: user.INN,
         clientName: user.clientName,
         region: user.region,
         status: user.status,
         manager: user.manager,
-      })
+      }))
+
+      //   ((prevState) => ({
+      //     ...prevState,
+      //     [target.name]: target.value,
+      //   }))
     }
-    console.log(usersData)
+    console.log("usersData B useEffect ", usersData)
   }, [users])
 
-  console.log("usersData - ", usersData)
+  //   if (params.id && users) {
+  //     const user = getCurrentUser(users)[0]
+  //     console.log("Текущий ", user)
+
+  //     setUsersData({
+  //       INN: user.INN,
+  //       clientName: user.clientName,
+  //       region: user.region,
+  //       status: user.status,
+  //       manager: user.manager,
+  //     })
+  //   }
+
+  console.log("usersData ВНЕ useEffect ", usersData)
 
   const handleSubmit = (e) => {
     e.preventDefault()
     alert("Отправка данных на сервер")
     setUsersData({})
-    // Показать изменение на странице (стейт пустеет, а на ничего не странице не обновляется)
+    // Показать изменение на странице (стейт пустеет, а ничего на странице не обновляется)
     console.log(usersData)
   }
 
   const handleCancle = (e) => {
     e.preventDefault()
-    alert("Изменения отменены")
     setUsersData({})
     // Добавить переход по history?
   }
@@ -76,6 +106,10 @@ const NewCrmClientPage = () => {
     }))
   }
 
+  const handleDate = (e) => {
+    console.log("Календарь ", e.target.value)
+  }
+
   const riskList = [
     { label: "Высокий риск", value: "Высокий риск" },
     { label: "Средний риск", value: "Средний риск" },
@@ -84,15 +118,15 @@ const NewCrmClientPage = () => {
 
   return (
     <form>
-      {firstData &&
+      {/* {firstData &&
         firstData.map((el) => {
           if (el.name) {
             return (
               <TextField
                 key={el.id}
                 label={el.name}
-                name={el.type ? el.type : el.name}
-                value={usersData?.name}
+                name={el.name}
+                value={usersData.name}
                 onChange={handleChange}
               />
             )
@@ -104,30 +138,45 @@ const NewCrmClientPage = () => {
               </div>
             )
           }
-        })}
+        })} */}
 
-      {KPI &&
-        KPI.map((el) => {
+      {firstData &&
+        firstData.map((el) => {
           if (el.name) {
-            return el.type === "risk" ? (
-              <SelectField
-                key={el.id}
-                label={el.name}
-                defaultOption="Выберите риск"
-                name={el.name}
-                options={riskList}
-                onChange={handleChange}
-                value={usersData?.name}
-              />
-            ) : (
-              <TextField
-                key={el.id}
-                label={el.name}
-                name={el.name}
-                value={usersData?.name}
-                onChange={handleChange}
-              />
-            )
+            if (el.type === "risk") {
+              return (
+                <SelectField
+                  key={el.id}
+                  label={el.name}
+                  defaultOption="Выберите риск"
+                  name={el.name}
+                  options={riskList}
+                  onChange={handleChange}
+                  value={usersData.name}
+                />
+              )
+            } else if (el.type === "date") {
+              return (
+                <input
+                  type={el.type}
+                  name={el.name}
+                  value={usersData.date}
+                  onChange={(e) => {
+                    handleDate(e)
+                  }}
+                ></input>
+              )
+            } else {
+              return (
+                <TextField
+                  key={el.id}
+                  label={el.name}
+                  name={el.name}
+                  value={usersData.name}
+                  onChange={handleChange}
+                />
+              )
+            }
           } else if (el.title) {
             return (
               <div key={el.id}>
@@ -137,7 +186,12 @@ const NewCrmClientPage = () => {
             )
           }
         })}
-
+      <TextField
+        label="test"
+        name="test"
+        value={testData.test}
+        onChange={handleChangeTest}
+      />
       <div className="row row-centered mb-4 colored">
         <button
           type="submit"
