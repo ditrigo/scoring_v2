@@ -136,7 +136,7 @@ class CsvAttributes(models.Model):
     cad_cost_amt_inpledge_6monthago = models.FloatField(null=True)
     stcontract_amount = models.FloatField(null=True)
     subsidy_sum = models.FloatField(null=True)
-    recovery_initiation = models.BooleanField(null=True, default=False)
+    recovery_initiation = models.FloatField(null=True, default=False)
     lastdate_operation = models.DateTimeField(null=True, default=False)
     restruct_sum = models.FloatField(null=True)
     early_term_restruct = models.BooleanField(null=True, default=False)
