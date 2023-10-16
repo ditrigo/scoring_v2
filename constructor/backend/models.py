@@ -1,7 +1,7 @@
 from django.db import models
 import uuid
 from simple_history.models import HistoricalRecords
-from .parser import parser
+from .parser import sql_parser
 # from simple_history import register
 # from author.decorators import with_author
 from django.contrib.auth.models import User
@@ -38,7 +38,7 @@ class CsvAttributes(models.Model):
     on_uch_date = models.DateTimeField()
     status_egrn = models.CharField(max_length=125,)
     foreign_uchred = models.BooleanField(null=True, default=False)
-    nedostov = models.IntegerField(null=False)
+    nedostov = models.IntegerField(null=True)
     sr_chis_thisyear = models.FloatField(null=True)
     sr_chis_lastyear = models.FloatField(null=True)
     bznaper_thisyear = models.FloatField(null=True)
@@ -119,7 +119,7 @@ class CsvAttributes(models.Model):
     efrsdul_lender = models.BooleanField(null=True, default=False)
     efrsdul_deptor = models.BooleanField(null=True, default=False)
     bankruptcy_procedure_bool = models.BooleanField(null=True, default=False)
-    bankruptcy_procedure = models.CharField(max_length=250)
+    bankruptcy_procedure = models.CharField(null=True,max_length=250)
     bs_pay_bool = models.BooleanField(null=True, default=False)
     stop_pay = models.BooleanField(null=True, default=False)
     art46_over3month = models.BooleanField(null=True, default=False)
@@ -312,45 +312,55 @@ class CountedAttributes(models.Model):
     active = models.BooleanField(default=False)
     name_counted_attr = models.CharField(max_length=125)
     scoring_name = models.ManyToManyField(ScoringModel, blank=True)
+    # From CountedAttrFormula
+    attr_formulas = models.CharField(max_length=250)
+    description = models.CharField(max_length=250)
+    sql_query = models.TextField(blank=True, null=True)
+    nested_level = models.IntegerField()
 
     class Meta:
         indexes = [
-            models.Index(fields=["name_counted_attr","created_date"])
+            models.Index(fields=["name_counted_attr","attr_formulas","created_date"])
         ]
         db_table  = "counted_attributes"
         verbose_name = "counted_attribute"
 
     def __str__(self) -> str:
         return f"{self.name_counted_attr}"
-
-
-class CountedAttrFormula(models.Model):
-    id = models.AutoField(primary_key=True)
-    uuid = models.UUIDField(default = uuid.uuid4, 
-                            editable = False,)
-    author_id = models.CharField(max_length=125)
-    created_date = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=False)
-    attr_formulas = models.CharField(max_length=250)
-    description = models.CharField(max_length=250)
-    cntd_attr_id = models.ForeignKey(CountedAttributes, 
-                                     on_delete=models.CASCADE)
-    sql_query = models.TextField(blank=True, null=True)
-    nested_level = models.IntegerField()
-
-    class Meta:
-        indexes = [
-            models.Index(fields=["attr_formulas","created_date"])
-        ]
-        db_table  = "counted_attr_formula"
-        verbose_name = "counted_attr_formula"
-
-    def __str__(self) -> str:
-        return f"{self.attr_formulas}"
     
+    # From CountedAttrFormula
     def save(self, *args, **kwargs):
-        self.sql_query = parser(self.attr_formulas)
+        self.sql_query = sql_parser(self.attr_formulas)
         super().save(*args, **kwargs)
+
+
+# class CountedAttrFormula(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     uuid = models.UUIDField(default = uuid.uuid4, 
+#                             editable = False,)
+#     author_id = models.CharField(max_length=125)
+#     created_date = models.DateTimeField(auto_now_add=True)
+#     active = models.BooleanField(default=False)
+#     attr_formulas = models.CharField(max_length=250)
+#     description = models.CharField(max_length=250)
+#     cntd_attr_id = models.ForeignKey(CountedAttributes, 
+#                                      on_delete=models.CASCADE)
+#     sql_query = models.TextField(blank=True, null=True)
+#     nested_level = models.IntegerField()
+
+#     class Meta:
+#         indexes = [
+#             models.Index(fields=["attr_formulas","created_date"])
+#         ]
+#         db_table  = "counted_attr_formula"
+#         verbose_name = "counted_attr_formula"
+
+#     def __str__(self) -> str:
+#         return f"{self.attr_formulas}"
+    
+#     def save(self, *args, **kwargs):
+#         self.sql_query = parser(self.attr_formulas)
+#         super().save(*args, **kwargs)
     
 
 class InnRes(models.Model):

@@ -33,39 +33,34 @@ class CsvAttributesResource(resources.ModelResource):
     #     return super().skip_row(instance, original, row,
     #     import_validation_errors=import_validation_errors)
 
-# class CsvAttributesAdmin(ImportExportModelAdmin):
-#     resorce_classes = [CsvAttributes]
-#     list_display = ('id', 
-#                     'uuid', 
-#                     'inn',
-#                     'created_date', 
-#                     'np_name', 
-#                     'report_date')
-
-
-class CountedAttrFormulaAdmin(admin.ModelAdmin):
-    
-    search_fields = ('uuid', )
-
+class CsvAttributesAdmin(ImportExportModelAdmin):
+    resorce_classes = [CsvAttributes]
     list_display = ('id', 
                     'uuid', 
-                    'author_id', 
+                    'inn',
                     'created_date', 
-                    'active', 
-                    'attr_formulas', 
-                    'description', 
-                    'cntd_attr_id',
-                    'sql_query', 
-                    'nested_level')
+                    'np_name', 
+                    'report_date')
+admin.site.register(CsvAttributes, CsvAttributesAdmin)
 
+# class CountedAttrFormulaAdmin(admin.ModelAdmin):
+#     search_fields = ('uuid', )
+#     list_display = ('id', 
+#                     'uuid', 
+#                     'author_id', 
+#                     'created_date', 
+#                     'active', 
+#                     'attr_formulas', 
+#                     'description', 
+#                     'cntd_attr_id',
+#                     'sql_query', 
+#                     'nested_level')
+# admin.site.register(CountedAttrFormula, CountedAttrFormulaAdmin)
 
+admin.site.register(InnRes)
 admin.site.register(FileAttributes)
-admin.site.register(CsvAttributes)
-# admin.site.register(CsvAttributes, CsvAttributesAdmin)
-
 admin.site.register(MainCatalog)
 admin.site.register(MainCatalogFields)
-
 admin.site.register(ScoringModel, SimpleHistoryAdmin)
 # admin.site.register(ScoringModelHistory)
 
@@ -81,8 +76,3 @@ class CountedAttributesAdmin(admin.ModelAdmin):
         obj.author = request.user
         super().save_model(request, obj, form, change)
 admin.site.register(CountedAttributes, CountedAttributesAdmin)
-
-
-admin.site.register(CountedAttrFormula, CountedAttrFormulaAdmin)
-
-admin.site.register(InnRes)
