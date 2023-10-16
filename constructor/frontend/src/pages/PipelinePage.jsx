@@ -62,10 +62,21 @@ const PipelinePage = () => {
                       <thead>
                         <tr>
                           <td>
-                            <MyInput placeholder="Оператор"></MyInput>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              defaultValue="0"
+                            >
+                              <option value="0" disabled>
+                                Выбрать инн для скоринга
+                              </option>
+                              <option value="1">One</option>
+                              <option value="2">Two</option>
+                              <option value="3">Three</option>
+                            </select>
                           </td>
                           <td>
-                            <MyInput placeholder="Выражение"></MyInput>
+                            <MyInput placeholder="Массовая вставка ИНН"></MyInput>
                           </td>
                         </tr>
                       </thead>
@@ -80,7 +91,9 @@ const PipelinePage = () => {
                       aria-label="Default select example"
                       defaultValue="0"
                     >
-                      <option value="0" disabled>Выбрать модель для скоринга</option>
+                      <option value="0" disabled>
+                        Выбрать модель для скоринга
+                      </option>
                       <option value="1">One</option>
                       <option value="2">Two</option>
                       <option value="3">Three</option>

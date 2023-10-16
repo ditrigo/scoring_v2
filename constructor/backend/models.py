@@ -367,12 +367,12 @@ class InnRes(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4, 
                             editable = False,)
-    author_id = models.CharField(max_length=125)
+    author_id = models.CharField(max_length=125, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=False)
     inn = models.IntegerField()
-    result_score = models.IntegerField()
-    scoring_model = models.ManyToManyField(ScoringModel, )
+    result_score = models.IntegerField(null=True, blank=True)
+    scoring_model = models.ManyToManyField(ScoringModel, blank=True)
 
     class Meta:
         indexes = [

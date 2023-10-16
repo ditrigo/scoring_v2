@@ -39,6 +39,10 @@ class CountedAttributesSerializer(serializers.ModelSerializer):
         fields = "__all__"
         # exclude = ['author']
 
+class InnResSerialiser(serializers.ModelSerializer):
+    class Meta:
+        model = InnRes
+        fields = "__all__"
 
 # class CountedAttrFormulaSerializer(serializers.ModelSerializer):
 #     class Meta:
