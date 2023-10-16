@@ -27,7 +27,7 @@ const PipelinePage = () => {
 
   const handleChangeINN = (e) => {
     setInputINN(e.target.value)
-    console.log(inputINN.split(", "))
+    // console.log(inputINN.split(", "))
   }
 
   const handleChange = (target) => {
@@ -45,7 +45,8 @@ const PipelinePage = () => {
 
   const handleSaveData = () => {
     const json = {
-      INNs: inputINN.split(", "),
+      INNs: inputINN.split(inputINN[12] === " " ? " " : ", "),
+      // INNs: inputINN.split(", "),
       scoringModel: scoringModel.scoring_model,
     }
     console.log("JSON: ", json)
