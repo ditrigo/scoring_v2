@@ -16,6 +16,10 @@ const ScoringPage = () => {
   const [markers, setMarkers] = useState([])
   const [modalMarker, setModalMarker] = useState(false)
 
+  const getModelStatus = (status) => {
+    return status === "AP" ? "Утвержден" : "Черновик"
+  }
+
   async function getModels() {
     axios
       .get("http://127.0.0.1:8000/api/scoring_model/")
@@ -111,15 +115,6 @@ const ScoringPage = () => {
     getMarkers()
   }, [])
 
-  // работа с выводом данных из инпут
-
-  const [inputINN, setInputINN] = useState("")
-
-  const handleChangeINN = (e) => {
-    setInputINN(e.target.value)
-    console.log(inputINN.split(","))
-  }
-
   return (
     <div className="ScoringPage">
       <div className="container mt-5">
@@ -158,7 +153,7 @@ const ScoringPage = () => {
                           {/* <td>{attribute.id}</td> */}
                           <td>{model.model_name}</td>
                           <td>{model.author_id}</td>
-                          <td>{model.status}</td>
+                          <td>{getModelStatus(model.status)}</td>
                           <td>{model.created_date}</td>
                           <td>
                             <Link
@@ -236,13 +231,6 @@ const ScoringPage = () => {
             </div>
           </div>
         </div>
-        <MyInput
-          value={inputINN}
-          onChange={(e) => handleChangeINN(e)}
-          type="text"
-          placeholder="Вставьте необходимые ИНН"
-        />
-        {inputINN && inputINN.split(",").map((el) => <p>{el}</p>)}
       </div>
 
       <MyModal visible={modal} setVisible={setModal}>
