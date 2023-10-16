@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import _ from "lodash";
+import React, { useState } from "react"
+import _ from "lodash"
 
 const Table = ({ attributes, columns, setColumns }) => {
-  const [sortType, setSortType] = useState({ path: "name", order: "asc" });
+  const [sortType, setSortType] = useState({ path: "name", order: "asc" })
 
   const sortedAttributes = _.orderBy(attributes, sortType.path, sortType.order)
 
@@ -11,11 +11,11 @@ const Table = ({ attributes, columns, setColumns }) => {
       setSortType({
         ...sortType,
         order: sortType.order === "asc" ? "desc" : "asc",
-      });
+      })
     } else {
-      setSortType({ path: item, order: "asc" });
+      setSortType({ path: item, order: "asc" })
     }
-  };
+  }
 
   const renderSortArrow = (sortType, currentPath) => {
     if (sortType.path === currentPath) {
@@ -31,7 +31,7 @@ const Table = ({ attributes, columns, setColumns }) => {
           >
             <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
           </svg>
-        );
+        )
       } else {
         return (
           <svg
@@ -44,17 +44,17 @@ const Table = ({ attributes, columns, setColumns }) => {
           >
             <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
           </svg>
-        );
+        )
       }
     }
-    return null;
-  };
+    return null
+  }
 
   const checkClick = (idx) => {
-    const tableChange = [...columns];
-    tableChange[idx].isVisible = !tableChange[idx].isVisible;
-    setColumns(tableChange);
-  };
+    const tableChange = [...columns]
+    tableChange[idx].isVisible = !tableChange[idx].isVisible
+    setColumns(tableChange)
+  }
 
   return (
     <>
@@ -103,7 +103,9 @@ const Table = ({ attributes, columns, setColumns }) => {
                   }
                   {...{ role: column.path && "button" }}
                 >
-                  <span className="d-flex justify-content-center align-items-center">{column.name} {renderSortArrow(sortType, column.name)}</span>
+                  <span className="d-flex justify-content-center align-items-center">
+                    {column.name} {renderSortArrow(sortType, column.name)}
+                  </span>
                 </th>
               ))}
           </tr>
@@ -120,7 +122,7 @@ const Table = ({ attributes, columns, setColumns }) => {
         </tbody>
       </table>
     </>
-  );
-};
+  )
+}
 
 export default Table;

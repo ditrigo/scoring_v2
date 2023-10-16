@@ -1,15 +1,15 @@
-import React from 'react';
 import '../../../index.css';
 import { InboxOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import { message, Upload } from 'antd';
+import React from "react";
 
 const { Dragger } = Upload;
 
 const props: UploadProps = {
   name: 'filename', // это название колонки в БД
   multiple: true,
-  action: 'http://127.0.0.1:8000/api/attributes/', // путь куда передавать данные
+  action: 'http://127.0.0.1:8000/api/files/', // путь куда передавать данные
   onChange(info) {
     const { status } = info.file;
     if (status !== 'uploading') {
@@ -26,7 +26,7 @@ const props: UploadProps = {
   },
 };
 
-const UploadBlock: React.FC = () => (
+const OldUploadBlock: React.FC = () => (
   <Dragger {...props}>
     <p className="ant-upload-drag-icon">
       <InboxOutlined />
@@ -35,7 +35,7 @@ const UploadBlock: React.FC = () => (
   </Dragger>
 );
 
-export default UploadBlock;
+export default OldUploadBlock;
 
 
 

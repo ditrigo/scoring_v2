@@ -1,26 +1,25 @@
-import React, { useState } from "react";
-import MyButton from "../components/UI/MyButton/MyButton";
-import MyInput from "../components/UI/MyInput/MyInput";
-import "@grapecity/wijmo.styles/wijmo.css";
-import "bootstrap/dist/css/bootstrap.css";
-import DatePicker from "react-datepicker";
+import React, { useState } from "react"
+import MyButton from "../components/UI/MyButton/MyButton"
+import MyInput from "../components/UI/MyInput/MyInput"
+import "bootstrap/dist/css/bootstrap.css"
+import DatePicker from "react-datepicker"
 
-import "react-datepicker/dist/react-datepicker.css";
+import "react-datepicker/dist/react-datepicker.css"
 
 const PipelinePage = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   //   Для отображения в дальнейшем различных элементов
   const [block, setBlock] = useState([
     { name: "Статические данные", open: false },
     { name: "Расчет модели", open: false },
     { name: "Выписка СКУАД", open: false },
     { name: "Журнал скоринга", open: false },
-  ]);
-  const [startDate, setStartDate] = useState(new Date());
+  ])
+  const [startDate, setStartDate] = useState(new Date())
 
   const toggle = () => {
-    setOpen(!open);
-  };
+    setOpen(!open)
+  }
 
   return (
     <div>
@@ -62,21 +61,10 @@ const PipelinePage = () => {
                       <thead>
                         <tr>
                           <td>
-                            <select
-                              className="form-select"
-                              aria-label="Default select example"
-                              defaultValue="0"
-                            >
-                              <option value="0" disabled>
-                                Выбрать инн для скоринга
-                              </option>
-                              <option value="1">One</option>
-                              <option value="2">Two</option>
-                              <option value="3">Three</option>
-                            </select>
+                            <MyInput placeholder="Оператор"></MyInput>
                           </td>
                           <td>
-                            <MyInput placeholder="Массовая вставка ИНН"></MyInput>
+                            <MyInput placeholder="Выражение"></MyInput>
                           </td>
                         </tr>
                       </thead>
@@ -127,7 +115,7 @@ const PipelinePage = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default PipelinePage;
+export default PipelinePage

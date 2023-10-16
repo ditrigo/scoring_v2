@@ -299,6 +299,7 @@ def CreateRelationScoreModelAndCountedAttributesViewSet(request):
     return JsonResponse({'message': 'Invalid request method'}, status=400)
 
 
+# TODO Доделать пост - снала создание записей, затем создание связок
 @api_view(['POST'])
 def CreateRelationInnAndScoringModelViewSet(request):
     if request.method == 'POST':

@@ -5,16 +5,16 @@ import "bootstrap/dist/css/bootstrap.css";
 import "../styles/App.css";
 
 const LoginPage = ({ setIsAuth }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
 
   // Create the submit method.
   const submit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     const user = {
       username: username,
       password: password,
-    };
+    }
     // Create the POST requuest
     const { data } = await axios.post(
       "http://localhost:8000/api/token/",
@@ -23,15 +23,15 @@ const LoginPage = ({ setIsAuth }) => {
         headers: { "Content-Type": "application/json" },
       },
       { withCredentials: true }
-    );
+    )
 
     // Initialize the access & refresh token in localstorage.
-    localStorage.clear();
-    localStorage.setItem("access_token", data.access);
-    localStorage.setItem("refresh_token", data.refresh);
-    axios.defaults.headers.common["Authorization"] = `Bearer ${data["access"]}`;
-    window.location.href = "/upload";
-  };
+    localStorage.clear()
+    localStorage.setItem("access_token", data.access)
+    localStorage.setItem("refresh_token", data.refresh)
+    axios.defaults.headers.common["Authorization"] = `Bearer ${data["access"]}`
+    window.location.href = "/upload"
+  }
 
   return (
     <div className="Auth-form-container">
@@ -71,7 +71,7 @@ const LoginPage = ({ setIsAuth }) => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage

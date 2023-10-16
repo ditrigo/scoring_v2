@@ -2,41 +2,31 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #F4F5F5;
-  
+}
+#root {
+  height: 1000px;
+  background: #f4f5f5;
+}
+.upload-block,
+.btn-block,
+.btngroup {
+  background-color: white;
+  border-radius: 5%;
 }
 
-#root {
+.App {
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
- 
-.App {
-  width: 10000px;
-  background-color: #F4F5F5;
-  
-} 
-
-.row {
-  background-color: white;
+  height: 100%;
 }
 
-.upload-block  {
-  background-color: white;
-  border: solid #F4F5F5;
-}
-
-.btn-block {
-  background-color: white;
-  border: solid #F4F5F5;
-  height: 500px;
-}
-
-.h4-info-area {
-  background-color: white;
+.navbar {
+  height: 50px;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  padding: 0 15px;
+  justify-content: left;
+  margin-bottom: 10px;
 }
 
 .btn-group {
@@ -55,7 +45,6 @@
   justify-content: left;
   margin-bottom: 10px;
 } */
-
 
 /* ROMA VERSION*/
 * {
@@ -79,8 +68,18 @@
   flex-direction: column;
   height: 100%;
 }
-/* ROMA VERSION*/
 
+
+.card-header-name {
+  margin-top: 16px;
+  margin-bottom: 0px;
+}
+
+.card {
+  background-color: white; 
+}
+
+/* ROMA VERSION*/
 
 /* 
 @media (prefers-reduced-motion: no-preference) {
@@ -113,19 +112,7 @@
   }
 } */
 
-
-
-
-
-
-
-
-
-
-
-
-
-/* 
+/*
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

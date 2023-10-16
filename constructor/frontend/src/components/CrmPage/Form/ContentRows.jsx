@@ -1,21 +1,23 @@
 import React from "react"
+import { Link } from "react-router-dom"
 
-const ContentRows = ({ users, handleGetCurrentUserId }) => {
+const ContentRows = ({ users }) => {
   const makeClassName = (value) => {
     if (value === "Низкий риск") return "text-success"
     if (value === "Средний риск") return "text-warning"
     if (value === "Высокий риск") return "text-danger"
   }
+  // console.log(users)
 
   return (
     users &&
     users.map((el) => {
       return (
-        <tr key={el.id} onClick={handleGetCurrentUserId} role="button">
-          <th scope="row" data-id={el.id}>
-            {el.id}
-          </th>
-          <td>{el.manager}</td>
+        <tr key={el.id} role="button">
+          <th scope="row">{el.id}</th>
+          <td>
+            <Link to={"/newclient/" + el.id}>{el.manager}</Link>
+          </td>
           <td>{el.clientName}</td>
           <td>{el.INN}</td>
           <td>{el.region}</td>
@@ -35,3 +37,14 @@ const ContentRows = ({ users, handleGetCurrentUserId }) => {
 }
 
 export default ContentRows
+
+{
+  /* <SelectField
+              label="Выбери важность"
+              defaultOption="Выберите..."
+              name="importance"
+              options={importanceList}
+              onChange={handleChange}
+              value={data.importance}
+            /> */
+}
