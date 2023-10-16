@@ -299,31 +299,23 @@ def CreateRelationScoreModelAndCountedAttributesViewSet(request):
     return JsonResponse({'message': 'Invalid request method'}, status=400)
 
 
-# TODO Доделать пост - снала создание записей, затем создание связок
 @api_view(['POST'])
 def CreateRelationInnAndScoringModelViewSet(request):
     if request.method == 'POST':
+        inn_ids = request.data.get('inn_ids', [])
+        scoring_model_id = request.data.get('scoringmodel_id')
 
-        def create_inns(inn):
-            print("create_inns")
-            inn = {"inn": inn}
-            serializer = InnResSerialiser(data=inn)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-        data = json.loads(request.body.decode('utf-8'))
-        print(data)
+        if inn_ids and scoring_model_id:
+            try:
+                scoring_model = ScoringModel.objects.get(id=scoring_model_id)
+            except ScoringModel.DoesNotExist:
+                return Response({'success': False, 'error': 'ScoringModel не найдена'}, status=status.HTTP_404_NOT_FOUND)
 
-        inn_ids = data.get('inn_ids')
-        scoringmodel_id = data.get('scoringmodel_id')
-        scoring_model = ScoringModel.objects.get(id=scoringmodel_id)
-        
-        for inn_id in inn_ids:
-            create_inns(inn_id)
-            inn = InnRes.objects.get(inn=inn_id)
-            inn.scoring_model.add(scoring_model)
+            for inn_id in inn_ids:
+                inn_res = InnRes.objects.create(inn=inn_id)
+                inn_res.scoring_model.add(scoring_model)
 
-        return JsonResponse({'message': 'Relation created successfully'}, status=200)
-    return JsonResponse({'message': 'Invalid request method'}, status=400)
+            serializer = InnResSerialiser(inn_res)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
