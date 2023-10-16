@@ -309,7 +309,10 @@ def CreateRelationInnAndScoringModelViewSet(request):
             try:
                 scoring_model = ScoringModel.objects.get(id=scoring_model_id)
             except ScoringModel.DoesNotExist:
-                return Response({'success': False, 'error': 'ScoringModel не найдена'}, status=status.HTTP_404_NOT_FOUND)
+                return Response({'success': False, 
+                                 'error': 'ScoringModel не найдена'}, 
+                                status=status.HTTP_404_NOT_FOUND)
+            # TODO Проверка на существование инн в csv_attributes - если нет - не создавать в таблице
 
             for inn_id in inn_ids:
                 inn_res = InnRes.objects.create(inn=inn_id)
