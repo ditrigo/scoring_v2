@@ -366,7 +366,7 @@ class CountedAttributesNew(models.Model):
     property_sum = models.FloatField()
     k_1_161 = models.FloatField()
     k_2_162 = models.FloatField()
-    k_3_164 = models.FloatField()
+    k_3_163 = models.FloatField()
     k_4_164 = models.FloatField()
     revenue_dinam = models.FloatField()
     current_business_value = models.FloatField()

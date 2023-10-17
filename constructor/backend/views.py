@@ -1,3 +1,4 @@
+import datetime
 from django.urls import reverse
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -54,6 +55,151 @@ def FilesListViewSet(request):  # (viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def InsertValuesToCountedAttributes():
+
+    def calculate_counted_attributes(csv_attributes):
+        attr_131 = csv_attributes.s_1150_4 - csv_attributes.pru_cad_cost_amt - csv_attributes.lru_cad_cost_amt - csv_attributes.lru_cad_cost_amt_6monthago if csv_attributes.s_1150_4 - \
+            csv_attributes.pru_cad_cost_amt - csv_attributes.lru_cad_cost_amt - csv_attributes.lru_cad_cost_amt_6monthago > 0 else 0
+        attr_132 = csv_attributes.s_1500_4 - \
+            csv_attributes.s_1530_4 if csv_attributes.s_1500_4 - \
+            csv_attributes.s_1530_4 != 0 else 0
+        attr_133 = csv_attributes.s_1200_4 / \
+            (csv_attributes.s_1500_4 + csv_attributes.s_1400_4) if csv_attributes.s_1500_4 + \
+            csv_attributes.s_1400_4 != 0 else 0
+        attr_134 = csv_attributes.s_1300_4 / \
+            csv_attributes.s_1600_4 if csv_attributes.s_1600_4 != 0 else 0
+        attr_135 = csv_attributes.s_2400_4 / \
+            csv_attributes.s_2330_4 if csv_attributes.s_2330_4 != 0 else 0
+        attr_136 = csv_attributes.s_2400_4 / \
+            csv_attributes.s_1600_4 if csv_attributes.s_1600_4 != 0 else 0
+        attr_137 = csv_attributes.dolg / \
+            csv_attributes.s_1600_4 if csv_attributes.s_1600_4 != 0 else 0
+        attr_138 = csv_attributes.s_2400_4 / ((csv_attributes.s_1300_4 + csv_attributes.s_1300_5) / 2) * \
+            100 if csv_attributes.s_1300_4 + csv_attributes.s_1300_5 != 0 else 0
+        attr_139 = (csv_attributes.s_1500_4 + csv_attributes.s_1400_4) / \
+            csv_attributes.s_1300_4 if csv_attributes.s_1300_4 != 0 else 0
+        attr_140 = (csv_attributes.s_1410_4 + csv_attributes.s_1510_4 - csv_attributes.s_1240_4 - csv_attributes.s_1250_4) / (csv_attributes.s_2110_4 - csv_attributes.s_2120_4 - csv_attributes.s_2210_4 - csv_attributes.s_2220_4 + csv_attributes.s_2310_4 + csv_attributes.s_2320_4 +
+                                                                                                                              csv_attributes.s_2340_4 - csv_attributes.s_2350_4) if (csv_attributes.s_2110_4 - csv_attributes.s_2120_4 - csv_attributes.s_2210_4 - csv_attributes.s_2220_4 + csv_attributes.s_2310_4 + csv_attributes.s_2320_4 + csv_attributes.s_2340_4 - csv_attributes.s_2350_4) != 0 else 0
+        attr_141 = csv_attributes.s_2110_4 / \
+            ((csv_attributes.s_1600_4 + csv_attributes.s_1600_5) /
+             2) if csv_attributes.s_1600_4 + csv_attributes.s_1600_5 != 0 else 0
+        attr_142 = (csv_attributes.s_1520_4 + csv_attributes.s_1520_5) / (csv_attributes.s_1230_4 +
+                                                                          csv_attributes.s_1230_5) if csv_attributes.s_1230_4 + csv_attributes.s_1230_5 != 0 else 0
+        attr_143 = (csv_attributes.account_balance_SKUAD + csv_attributes.pru_cad_cost_amt + csv_attributes.lru_cad_cost_amt - csv_attributes.cad_cost_amt_inpledge +
+                    csv_attributes.s_1230_4 * 0.0861 + csv_attributes.ts_cad_cost_amt + csv_attributes.attr_131) / (csv_attributes.s_1520_4 * 1.069) if csv_attributes.s_1520_4 != 0 else 0
+        attr_144 = (csv_attributes.s_1300_4 + csv_attributes.s_1400_4) / \
+            csv_attributes.s_1600_4 if csv_attributes.s_1600_4 != 0 else 0
+        attr_145 = (csv_attributes.s_1300_4 - csv_attributes.s_1100_4) / \
+            csv_attributes.s_1200_4 if csv_attributes.s_1200_4 != 0 else 0
+        attr_146 = (csv_attributes.s_1300_4 - csv_attributes.s_1100_4) / \
+            csv_attributes.s_1210_4 if csv_attributes.s_1210_4 != 0 else 0
+        attr_147 = (csv_attributes.s_1230_4 + csv_attributes.s_1240_4 + csv_attributes.s_1250_4) / \
+            csv_attributes.s_1210_4 if csv_attributes.s_1500_4 != 0 else 0
+        attr_148 = csv_attributes.s_1600_4 - csv_attributes.s_1600_5
+        attr_149 = csv_attributes.s_1600_5 - csv_attributes.s_1600_4_2yearago
+        attr_150 = csv_attributes.s_1600_4_2yearago - csv_attributes.s_1600_5_2yearago
+        attr_151 = csv_attributes.s_2400_4 - csv_attributes.s_2400_5
+        attr_152 = csv_attributes.s_2400_5 - csv_attributes.s_2400_4
+        attr_153 = csv_attributes.s_2400_4 - csv_attributes.s_2400_5_2yearago
+        attr_154 = csv_attributes.s_1200_4 / \
+            csv_attributes.s_1500_4 if csv_attributes.s_1500_4 != 0 else 0
+        attr_155 = csv_attributes.s_1300_4 / (csv_attributes.s_1510_4 + csv_attributes.s_1400_4 + csv_attributes.s_1550_4 +
+                                              csv_attributes.s_1520_4) if csv_attributes.s_1510_4 + csv_attributes.s_1400_4 + csv_attributes.s_1550_4 + csv_attributes.s_1520_4 != 0 else 0
+        attr_156 = (csv_attributes.s_2400_4 + csv_attributes.s_2330_4 + csv_attributes.s_2410_4) / \
+            csv_attributes.s_2330_4 if csv_attributes.s_2330_4 != 0 else 0
+        attr_157 = csv_attributes.s_2200_4 / \
+            csv_attributes.s_1100_4 if csv_attributes.s_1100_4 != 0 else 0
+        attr_158 = csv_attributes.s_1300_4 / \
+            csv_attributes.s_1600_4 if csv_attributes.s_1600_4 != 0 else 0
+        attr_159 = (csv_attributes.s_1400_4 + csv_attributes.s_1500_4) / \
+            csv_attributes.s_1300_4 if csv_attributes.s_1300_4 != 0 else 0
+        attr_160 = csv_attributes.pru_cad_cost_amt + \
+            csv_attributes.lru_cad_cost_amt + csv_attributes.ts_cad_cost_amt
+        attr_161 = (csv_attributes.enforce_ntfinish_sum_wthtax + csv_attributes.dolg) * \
+            100 / csv_attributes.s_1520_4 - 100 if csv_attributes.s_1520_4 != 0 else 0
+        attr_162 = csv_attributes.s_1210_4 * 100 / csv_attributes.s_1150_4 - \
+            100 if csv_attributes.s_1150_4 != 0 else 0
+        attr_163 = (csv_attributes.npo_2_010_year + csv_attributes.npo_4_010 + csv_attributes.npo_5_060) * \
+            100 / csv_attributes.s_2110_4 - 100 if csv_attributes.s_2110_4 != 0 else 0
+        attr_164 = 100 if (csv_attributes.s_1510_4 + csv_attributes.s_1410_4) == 0 and csv_attributes.cad_cost_amt_inpledge > 0 else (
+            csv_attributes.cad_cost_amt_inpledge * 100 / (csv_attributes.s_1510_4 + csv_attributes.s_1410_4) - 100)
+        attr_165 = 100 if csv_attributes.npo_2_020_thisyear > 0 and csv_attributes.npo_2_020_lastyear != 0 else (
+            (csv_attributes.npo_2_020_thisyear - csv_attributes.npo_2_020_lastyear) * 100 / csv_attributes.npo_2_020_lastyear - 100) if csv_attributes.npo_2_020_lastyear != 0 else 0
+        attr_166 = (csv_attributes.account_balance_SKUAD + csv_attributes.npo_2_020_year0 + csv_attributes.s_1230_4 * 0.0861 + csv_attributes.attr_131 + csv_attributes.s_1210_4 +
+                    csv_attributes.npo_2_060_year + csv_attributes.stcontract_amount - csv_attributes.dolg - csv_attributes.razryv_1stlink_sum - csv_attributes.enforce_ntfinish_sum_wthtax) / 1000000
+        attr_167 = ((csv_attributes.pru_cad_cost_amt + csv_attributes.lru_cad_cost_amt + csv_attributes.ts_cad_cost_amt)
+                    * 0.2 + csv_attributes.s_1230_4 * 0.0861 + csv_attributes.attr_131 * 0.2) / 1000000
+        attr_168 = ((csv_attributes.account_balance_SKUAD + (csv_attributes.pru_cad_cost_amt + csv_attributes.lru_cad_cost_amt + csv_attributes.ts_cad_cost_amt) * 0.2 + csv_attributes.s_1230_4 * 0.0861 +
+                    csv_attributes.attr_131 * 0.2) * 100) / (csv_attributes.s_1500_4 + csv_attributes.s_1400_4 + csv_attributes.dolg) if (csv_attributes.s_1500_4 + csv_attributes.s_1400_4 + csv_attributes.dolg) != 0 else 0
+        attr_169 = ((csv_attributes.s_1300_5 / csv_attributes.s_1300_4) / 1000000 - csv_attributes.s_1300_4 / 1000000) if csv_attributes.s_1300_4 != 0 and (
+            (csv_attributes.s_1300_5 / csv_attributes.s_1300_4) < 0 or (csv_attributes.s_1300_5 / csv_attributes.s_1300_4) > 3) else 0
+        attr_170 = ((csv_attributes.s_1410_4 / csv_attributes.s_1300_4) / 1000000 - csv_attributes.s_1300_4 / 1000000) if csv_attributes.s_1300_4 != 0 and (
+            (csv_attributes.s_1410_4 / csv_attributes.s_1300_4) < 0 or (csv_attributes.s_1410_4 / csv_attributes.s_1300_4) > 3) else 0
+        attr_171 = csv_attributes.npo_2_010_year + csv_attributes.npo_2_020_year - \
+            csv_attributes.npo_2_030_year - csv_attributes.npo_2_040_year
+        attr_172 = csv_attributes.s_1520_4 + \
+            csv_attributes.s_1450_4 + csv_attributes.s_1550_4
+        attr_173 = csv_attributes.s_1410_4 + csv_attributes.s_1450_4 + \
+            csv_attributes.s_1510_4 + csv_attributes.s_1520_4
+        attr_174 = (csv_attributes.account_balance_SKUAD + csv_attributes.npo_2_020_year0 + csv_attributes.s_1230_4 * 0.0861 + csv_attributes.attr_131 + csv_attributes.s_1210_4 +
+                    csv_attributes.npo_2_060_year + csv_attributes.stcontract_amount - csv_attributes.dolg - csv_attributes.razryv_1stlink_sum - csv_attributes.enforce_ntfinish_sum_wthtax) / 1000
+        attr_175 = ((csv_attributes.pru_cad_cost_amt + csv_attributes.lru_cad_cost_amt + csv_attributes.ts_cad_cost_amt)
+                    * 0.2 + csv_attributes.s_1230_4 * 0.0861 + csv_attributes.attr_131 * 0.2) / 1000
+
+        CountedAttributes.objects.create(
+            other_property=attr_131,
+            clr=attr_132,
+            solvency_ratio=attr_133,
+            autonomy_ratio=attr_134,
+            perc_coverage_ratio=attr_135,
+            assets_return=attr_136,
+            dolg_in_balance=attr_137,
+            return_on_equity=attr_138,
+            fin_leverage=attr_139,
+            dolg_ebit=attr_140,
+            turnover=attr_141,
+            turnover_in_credit=attr_142,
+            repay_fund=attr_143,
+            invest_coverage_ratio=attr_144,
+            equity_capital_ratio=attr_145,
+            stock_avail_ration=attr_146,
+            quick_liquid_ratio=attr_147,
+            asset_dinam_1=attr_148,
+            asset_dinam_2=attr_149,
+            asset_dinam_3=attr_150,
+            profit_dinam_1=attr_151,
+            profit_dinam_2=attr_152,
+            profit_dinam_3=attr_153,
+            k_5_154=attr_154,
+            k_6_155=attr_155,
+            k_7_156=attr_156,
+            k_8_157=attr_157,
+            k_9_158=attr_158,
+            k_10_159=attr_159,
+            property_sum=attr_160,
+            k_1_161=attr_161,
+            k_2_162=attr_162,
+            k_3_163=attr_163,
+            k_4_164=attr_164,
+            revenue_dinam=attr_165,
+            current_business_value=attr_166,
+            liquid_business_value=attr_167,
+            repay_fund_lender=attr_168,
+            need_capital=attr_169,
+            need_capital_dp=attr_170,
+            ebitda=attr_171,
+            dolg_score=attr_172,
+            dolg_dp=attr_173,
+            need_capital_rub=attr_174,
+            need_capital_dp_rub=attr_175
+        )
+
+    csv_attributes_list = CsvAttributes.objects.all()
+
+    for csv_attributes in csv_attributes_list:
+        calculate_counted_attributes(csv_attributes)
 
 
 @api_view(['GET', 'POST'])
@@ -127,6 +273,7 @@ def CsvAttributesListViewSet(request):  # (viewsets.ModelViewSet):
             )
         else:
             raise ImportError("Import data failed", code="import_data_failed")
+        
         # TODO Сделать репорт о пропущенных строках!
         return Response(
             data={"message": "Import successed",
@@ -342,7 +489,3 @@ def CreateRelationInnAndScoringModelViewSet(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
-
-
-def InsertValuesToCountedAttributes():
-    pass
