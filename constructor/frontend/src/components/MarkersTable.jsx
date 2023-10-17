@@ -4,8 +4,8 @@ import AtributForm from "./ScoringPage/AtributForm/AtributForm"
 import MyButton from "./UI/MyButton/MyButton"
 import { Link } from "react-router-dom"
 import axios from "axios"
-import moment from "moment"
-import localization from "moment/locale/ru"
+// import moment from "moment"
+// import localization from "moment/locale/ru"
 
 const MarkersTable = () => {
   const [markers, setMarkers] = useState([])
