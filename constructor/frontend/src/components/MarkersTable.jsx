@@ -77,9 +77,9 @@ const MarkersTable = () => {
                     <tr>
                       {/* <th scope="col">id модели</th> */}
                       <th scope="col">Наименование маркера</th>
-                      <th>Автор</th>
+                      {/* <th>Автор</th> */}
                       {/* <th>UUID</th> */}
-                      <th>Дата изменения</th>
+                      {/* <th>Дата изменения</th> */}
                       <th>Просмотр</th>
                       <th>Удалить</th>
                     </tr>
@@ -89,13 +89,13 @@ const MarkersTable = () => {
                       return (
                         <tr key={marker.id}>
                           <td>{marker.name_counted_attr}</td>
-                          <td>{marker.author_id}</td>
+                          {/* <td>{marker.author_id}</td> */}
                           {/* <td>{marker.uuid}</td> */}
-                          <td>
+                          {/* <td>
                             {moment(marker.created_date)
                               .locale("rus", localization)
                               .format("LLL")}
-                          </td>
+                          </td> */}
                           <td>
                             <Link
                             // to={`/scoring/${model.id}/edit`}

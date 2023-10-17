@@ -96,9 +96,9 @@ const SearchBar = ({ attributes, postLink, nameModel }) => {
               <MyButton type="submit" onClick={(e) => handleSubmit(e, "DF")}>
                 Сохранить
               </MyButton>
-              <MyButton type="button" onClick={() => setModal(true)}>
+              {/* <MyButton type="button" onClick={() => setModal(true)}>
                 Добавить новый маркер
-              </MyButton>
+              </MyButton> */}
               <Link
                 to={`/scoring`}
                 className="btn btn-outline-secondary"
