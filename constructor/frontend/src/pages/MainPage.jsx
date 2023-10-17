@@ -1,34 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter } from "react-router-dom";
 import Navbar from "../components/UI/Navbar/Navbar";
 import AppRouter from "../components/AppRouter";
 import LoginPage from "./LoginPage";
+import Logo from "../components/Img/output.png";
 
 function MainPage() {
-    const [isAuth, setIsAuth] = useState(true)
+  const [isAuth, setIsAuth] = useState(true);
 
-    useEffect(() => {
-        if (localStorage.getItem('access_token') !== null) {
-            setIsAuth(true);
-        }
-    }, [isAuth]);
+  useEffect(() => {
+    if (localStorage.getItem("access_token") !== null) {
+      setIsAuth(true);
+    }
+  }, [isAuth]);
 
-    return (
-        <>
-            {isAuth ?
-            <BrowserRouter>
-                <Navbar />
-                <AppRouter />
-            </BrowserRouter>
-                : <LoginPage />}
-        </>
+  return (
+    <>
+      {isAuth ? (
+        <BrowserRouter>
+          <div style={{display:"flex"}}>
+            <img src={Logo} style={{ width: "100px" }} />
+            <div>
+              <h2>КОНСТРУКТОР СКОРИНГА</h2>
+              <h5>версия v1</h5>
+            </div>
+          </div>
+          <Navbar />
+          <AppRouter />
+        </BrowserRouter>
+      ) : (
+        <LoginPage />
+      )}
+    </>
 
-
-        // <BrowserRouter>
-        //     <Navbar />
-        //     <AppRouter />
-        // </BrowserRouter>
-    );
+    // <BrowserRouter>
+    //     <Navbar />
+    //     <AppRouter />
+    // </BrowserRouter>
+  );
 }
 
 export default MainPage;

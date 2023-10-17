@@ -18,7 +18,9 @@ const ContentGroup = () => {
     { name: "Название", isVisible: true },
     { name: "Дата загрузки", isVisible: true },
     { name: "Размер", isVisible: true },
-    { name: "Удалить", isVisible: true },
+    { name: "Общее количество загруженных строк", isVisible: true },
+    { name: "Количество пропущенных строк", isVisible: true },
+    { name: "Новые загруженные строки", isVisible: true },
   ]);
 
   async function getfiles() {

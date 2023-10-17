@@ -20,7 +20,7 @@ from django.http import JsonResponse
 
 # Uploaded files into DataBase
 @api_view(['GET', 'POST'])
-def FilesListViewSet(request):#(viewsets.ModelViewSet):
+def FilesListViewSet(request):  # (viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     if request.method == 'GET':
         data = []
@@ -36,16 +36,17 @@ def FilesListViewSet(request):#(viewsets.ModelViewSet):
         except EmptyPage:
             data = paginator.page(paginator.num_pages)
 
-        serializer = FileAttributesSerialiser(data,context={'request': request}, many=True)
+        serializer = FileAttributesSerialiser(
+            data, context={'request': request}, many=True)
         if data.has_next():
             nextPage = data.next_page_number()
         if data.has_previous():
             previousPage = data.previous_page_number()
 
-        return Response({'data': serializer.data , 
-                         'count': paginator.count, 
-                         'numpages' : paginator.num_pages, 
-                         'nextlink': '/api/files/?page=' + str(nextPage), 
+        return Response({'data': serializer.data,
+                         'count': paginator.count,
+                         'numpages': paginator.num_pages,
+                         'nextlink': '/api/files/?page=' + str(nextPage),
                          'prevlink': '/api/files/?page=' + str(previousPage)})
     elif request.method == 'POST':
         serializer = FileAttributesSerialiser(data=request.data)
@@ -53,9 +54,10 @@ def FilesListViewSet(request):#(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 @api_view(['GET', 'POST'])
-def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
+def CsvAttributesListViewSet(request):  # (viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     EXPORT_FORMATS_DICT = {
@@ -78,28 +80,30 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
         except EmptyPage:
             data = paginator.page(paginator.num_pages)
 
-        serializer = CsvAttributesSerialiser(data,context={'request': request}, many=True)
+        serializer = CsvAttributesSerialiser(
+            data, context={'request': request}, many=True)
         if data.has_next():
             nextPage = data.next_page_number()
         if data.has_previous():
             previousPage = data.previous_page_number()
 
-        return Response({'data': serializer.data , 
-                         'count': paginator.count, 
-                         'numpages' : paginator.num_pages, 
-                         'nextlink': '/api/attributes/?page=' + str(nextPage), 
+        return Response({'data': serializer.data,
+                         'count': paginator.count,
+                         'numpages': paginator.num_pages,
+                         'nextlink': '/api/attributes/?page=' + str(nextPage),
                          'prevlink': '/api/attributes/?page=' + str(previousPage)})
     elif request.method == 'POST':
         filename = request.FILES["filename"]
         extension = filename.name.split(".")[-1].lower()
         dataset = Dataset()
-        
+
         csv_resource = CsvAttributesResource()
 
         if extension in IMPORT_FORMATS_DICT:
             dataset.load(filename.read(), format=extension)
         else:
-            raise ImportError("Unsupport import format", code="unsupport_import_format")
+            raise ImportError("Unsupport import format",
+                              code="unsupport_import_format")
 
         result = csv_resource.import_data(
             dataset,
@@ -113,7 +117,7 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
 
         if not result.has_validation_errors() or result.has_errors():
             result = csv_resource.import_data(
-                dataset, 
+                dataset,
                 dry_run=False,
                 collect_failed_rows=True,
                 # skip_unchanged=True,
@@ -123,16 +127,16 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
             )
         else:
             raise ImportError("Import data failed", code="import_data_failed")
-        #TODO Сделать репорт о пропущенных строках!
+        # TODO Сделать репорт о пропущенных строках!
         return Response(
             data={"message": "Import successed",
-                  "result_totals":f"{result.totals}",
-                  "result_total_rows":f"{result.total_rows}",
-                  "result_base_errors":f"{result.base_errors}", 
-                  "result_valid_rows":f"{result.valid_rows()}",
-                  "result_invalid_rows":f"{result.invalid_rows}",
-                  }, 
-                  status=status.HTTP_201_CREATED
+                  "result_totals": f"{result.totals}",
+                  "result_total_rows": f"{result.total_rows}",
+                  "result_base_errors": f"{result.base_errors}",
+                  "result_valid_rows": f"{result.valid_rows()}",
+                  "result_invalid_rows": f"{result.invalid_rows}",
+                  },
+            status=status.HTTP_201_CREATED
         )
 
         # serializer = CsvAttributesSerialiser(data=request.data)
@@ -140,6 +144,7 @@ def CsvAttributesListViewSet(request):#(viewsets.ModelViewSet):
         #     serializer.save()
         #     return Response(serializer.data, status=status.HTTP_201_CREATED)
         # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'POST'])
 def CatalogFieldsListViewSet(request):
@@ -158,16 +163,17 @@ def CatalogFieldsListViewSet(request):
         except EmptyPage:
             data = paginator.page(paginator.num_pages)
 
-        serializer = MainCatalogFieldsSerializer(data,context={'request': request}, many=True)
+        serializer = MainCatalogFieldsSerializer(
+            data, context={'request': request}, many=True)
         if data.has_next():
             nextPage = data.next_page_number()
         if data.has_previous():
             previousPage = data.previous_page_number()
 
-        return Response({'data': serializer.data , 
-                         'count': paginator.count, 
-                         'numpages' : paginator.num_pages, 
-                         'nextlink': '/api/catalog_fields/?page=' + str(nextPage), 
+        return Response({'data': serializer.data,
+                         'count': paginator.count,
+                         'numpages': paginator.num_pages,
+                         'nextlink': '/api/catalog_fields/?page=' + str(nextPage),
                          'prevlink': '/api/catalog_fields/?page=' + str(previousPage)})
     elif request.method == 'POST':
         serializer = MainCatalogFieldsSerializer(data=request.data)
@@ -175,7 +181,8 @@ def CatalogFieldsListViewSet(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 @api_view(['GET', 'POST'])
 def CountedAttributesListViewSet(request):
     permission_classes = (IsAuthenticated,)
@@ -184,7 +191,7 @@ def CountedAttributesListViewSet(request):
     serializer = CountedAttributesSerializer()
     next_page = None
     previous_page = None
-    
+
     if request.method == 'GET':
         attributes = CountedAttributes.objects.all().order_by('id')
         paginator = Paginator(attributes, 10)
@@ -195,16 +202,17 @@ def CountedAttributesListViewSet(request):
             data = paginator.page(1)
         except EmptyPage:
             data = paginator.page(paginator.num_pages)
-        
-        serializer = CountedAttributesSerializer(data, context={'request': request}, many=True)
+
+        serializer = CountedAttributesSerializer(
+            data, context={'request': request}, many=True)
         next_page = paginator.next_page_number() if data.has_next() else None
         previous_page = paginator.previous_page_number() if data.has_previous() else None
-        
+
         return Response({
             'data': serializer.data,
             'count': paginator.count,
             'numpages': paginator.num_pages,
-            'nextlink': '/api/counted_attr/?page=' + str(next_page), 
+            'nextlink': '/api/counted_attr/?page=' + str(next_page),
             'prevlink': '/api/counted_attr/?page=' + str(previous_page)
         })
     elif request.method == 'POST':
@@ -213,6 +221,7 @@ def CountedAttributesListViewSet(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'POST'])
 def ScoringModelListViewSet(request):
@@ -230,16 +239,17 @@ def ScoringModelListViewSet(request):
         except EmptyPage:
             data = paginator.page(paginator.num_pages)
 
-        serializer = ScoringModelSerializer(data,context={'request': request}, many=True)
+        serializer = ScoringModelSerializer(
+            data, context={'request': request}, many=True)
         if data.has_next():
             nextPage = data.next_page_number()
         if data.has_previous():
             previousPage = data.previous_page_number()
 
-        return Response({'data': serializer.data , 
-                         'count': paginator.count, 
-                         'numpages' : paginator.num_pages, 
-                         'nextlink': '/api/catalog_fields/?page=' + str(nextPage), 
+        return Response({'data': serializer.data,
+                         'count': paginator.count,
+                         'numpages': paginator.num_pages,
+                         'nextlink': '/api/catalog_fields/?page=' + str(nextPage),
                          'prevlink': '/api/catalog_fields/?page=' + str(previousPage)})
     elif request.method == 'POST':
         serializer = ScoringModelSerializer(data=request.data)
@@ -248,30 +258,35 @@ def ScoringModelListViewSet(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def ScoringModelDetailViewSet(request, pk):
     try:
         score_model_id = ScoringModel.objects.get(pk=pk)
     except ScoringModel.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)   
-    
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
     if request.method == 'GET':
-        serializer = ScoringModelSerializer(score_model_id, context={'request': request})
-        return Response({'data': serializer.data,})
-    
+        serializer = ScoringModelSerializer(
+            score_model_id, context={'request': request})
+        return Response({'data': serializer.data, })
+
     elif request.method == 'PUT':
-        serializer = ScoringModelSerializer(score_model_id, data=request.data,context={'request': request})
+        serializer = ScoringModelSerializer(
+            score_model_id, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     elif request.method == 'DELETE':
         score_model_id.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class LogoutViewSet(APIView):
     permission_classes = (IsAuthenticated,)
+
     def post(self, request):
         try:
             refresh_token = request.data["refresh_token"]
@@ -282,6 +297,7 @@ class LogoutViewSet(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['POST'])
 def CreateRelationScoreModelAndCountedAttributesViewSet(request):
     if request.method == 'POST':
@@ -290,7 +306,7 @@ def CreateRelationScoreModelAndCountedAttributesViewSet(request):
         counted_attr_ids = data.get('counted_attr_ids')
         scoring_model_id = data.get('scoring_model_id')
         scoring_model = ScoringModel.objects.get(id=scoring_model_id)
-        
+
         for counted_attr_id in counted_attr_ids:
             counted_attr = CountedAttributes.objects.get(id=counted_attr_id)
             counted_attr.scoring_name.add(scoring_model)
@@ -309,12 +325,16 @@ def CreateRelationInnAndScoringModelViewSet(request):
             try:
                 scoring_model = ScoringModel.objects.get(id=scoring_model_id)
             except ScoringModel.DoesNotExist:
-                return Response({'success': False, 
-                                 'error': 'ScoringModel не найдена'}, 
+                return Response({'success': False,
+                                 'error': 'ScoringModel не найдена'},
                                 status=status.HTTP_404_NOT_FOUND)
-            # TODO Проверка на существование инн в csv_attributes - если нет - не создавать в таблице
 
             for inn_id in inn_ids:
+                try:
+                    CsvAttributes.objects.get(inn=inn_id)
+                except CsvAttributes.DoesNotExist:
+                    continue
+
                 inn_res = InnRes.objects.create(inn=inn_id)
                 inn_res.scoring_model.add(scoring_model)
 
@@ -322,3 +342,7 @@ def CreateRelationInnAndScoringModelViewSet(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def InsertValuesToCountedAttributes():
+    pass

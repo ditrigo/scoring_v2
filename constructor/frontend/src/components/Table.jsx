@@ -1,5 +1,8 @@
-import React, { useState } from "react"
-import _ from "lodash"
+import React, { useState } from "react";
+import _ from "lodash";
+import Moment from 'moment';
+import localization from 'moment/locale/ru';
+// import 'https://momentjs.com/downloads/moment-with-locales.min.js';
 
 const Table = ({ attributes, columns, setColumns }) => {
   const [sortType, setSortType] = useState({ path: "name", order: "asc" })
@@ -58,7 +61,7 @@ const Table = ({ attributes, columns, setColumns }) => {
 
   return (
     <>
-      <h3>Управление отображаемыми полями</h3>
+      {/* <h3>Управление отображаемыми полями</h3> */}
       <div className="btn-group">
         <button
           className="btn btn-secondary dropdown-toggle"
@@ -68,7 +71,7 @@ const Table = ({ attributes, columns, setColumns }) => {
           data-bs-auto-close="outside"
           aria-expanded="false"
         >
-          Кликабельно внутри
+          Фильтрация колонок таблицы
         </button>
         <ul
           className="dropdown-menu"
@@ -114,9 +117,9 @@ const Table = ({ attributes, columns, setColumns }) => {
           {sortedAttributes.map((file) => (
             <tr key={file.id}>
               <td>{file.id}</td>
-              <td>{file.created_date}</td> {/* upload_date ??? */}
+              <td>{Moment(file.created_date).locale("rus", localization).format('LLL')}</td> {/* upload_date ??? */}
               <td>{file.inn}</td>
-              <td>{file.report_date}</td> {/* unload_date ??? */}
+              <td>{Moment(file.report_date).locale("rus", localization).format('LLL')}</td> {/* unload_date ??? */}
             </tr>
           ))}
         </tbody>

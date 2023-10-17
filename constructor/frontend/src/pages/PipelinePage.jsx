@@ -45,9 +45,10 @@ const PipelinePage = () => {
 
   const handleSaveData = () => {
     const json = {
-      INNs: inputINN.split(inputINN[12] === " " ? " " : ", "),
+      // INNs: inputINN.split(inputINN[12] === " " ? " " : ", "),
       // INNs: inputINN.split(", "),
-      scoringModel: scoringModel.scoring_model,
+      inn_ids: inputINN.split(", ").join(" ").split(" "),
+      scoringmodel_id: scoringModel.scoring_model,
     }
     console.log("JSON: ", json)
     alert("JSON в консоли")
