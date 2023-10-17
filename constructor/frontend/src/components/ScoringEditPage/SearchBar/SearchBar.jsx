@@ -1,47 +1,48 @@
-import React, { useState } from "react";
-import "./SearchBar.module.css";
-import MyButton from "../../UI/MyButton/MyButton";
-import { Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.css";
-import MyModal from "../../ScoringPage/MyModal/MyModal";
-import MyEditForm from "../MyEditForm/MyEditForm";
+import React, { useState } from "react"
+import "./SearchBar.module.css"
+import MyButton from "../../UI/MyButton/MyButton"
+import { Link } from "react-router-dom"
+import "bootstrap/dist/css/bootstrap.css"
+import MyModal from "../../ScoringPage/MyModal/MyModal"
+import MyEditForm from "../MyEditForm/MyEditForm"
+import MarkersTable from "../../MarkersTable"
 // import "bootstrap/dist/js/bootstrap.js";
 
 const SearchBar = ({ attributes, postLink, nameModel }) => {
-  const [expanded, setExpanded] = useState(false);
-  const [selections, setSelections] = useState([]);
-  const [statusButton, setStatusButton] = useState("DF");
-  const [modal, setModal] = useState(false);
+  const [expanded, setExpanded] = useState(false)
+  const [selections, setSelections] = useState([])
+  const [statusButton, setStatusButton] = useState("DF")
+  const [modal, setModal] = useState(false)
 
   const toggleExpanded = () => {
     if (!expanded) {
-      setExpanded(true);
+      setExpanded(true)
     } else {
-      setExpanded(false);
+      setExpanded(false)
     }
-  };
+  }
 
   const handleChange = (event) => {
-    console.log(event.target.name);
-    console.log(event.target.value);
+    console.log(event.target.name)
+    console.log(event.target.value)
     if (event.target.checked) {
-      return setSelections([...selections, event.target.name]);
+      return setSelections([...selections, event.target.name])
     }
 
-    const filtered = selections.filter((name) => name !== event.target.name);
-    return setSelections(filtered);
-  };
+    const filtered = selections.filter((name) => name !== event.target.name)
+    return setSelections(filtered)
+  }
 
   const handleSubmit = (e, status) => {
-    e.preventDefault();
-    console.log("Submitted. Values are submitted", selections);
+    e.preventDefault()
+    console.log("Submitted. Values are submitted", selections)
     // if (status === "AP") {
     //     setStatusButton("AP");
     // };
-    console.log("handleSubmit", statusButton);
-    setStatusButton(status);
-    postLink(selections, statusButton);
-  };
+    console.log("handleSubmit", statusButton)
+    setStatusButton(status)
+    postLink(selections, statusButton)
+  }
 
   return (
     <div>
@@ -51,7 +52,8 @@ const SearchBar = ({ attributes, postLink, nameModel }) => {
           <form onSubmit={handleSubmit} className="w-full">
             <div>
               <div onClick={toggleExpanded}>
-                <h6>Маркеры</h6>
+                {/* <h6>Маркеры</h6> */}
+                <MarkersTable />
                 <div
                   className={`font-semibold cursor-pointer ${
                     expanded ? "up-arrow" : "down-arrow"
@@ -94,9 +96,9 @@ const SearchBar = ({ attributes, postLink, nameModel }) => {
               <MyButton type="submit" onClick={(e) => handleSubmit(e, "DF")}>
                 Сохранить
               </MyButton>
-              <MyButton type="button" onClick={() => setModal(true)}>
+              {/* <MyButton type="button" onClick={() => setModal(true)}>
                 Добавить новый маркер
-              </MyButton>
+              </MyButton> */}
               <Link
                 to={`/scoring`}
                 className="btn btn-outline-secondary"
@@ -113,7 +115,7 @@ const SearchBar = ({ attributes, postLink, nameModel }) => {
         {/* <ModelForm create={createModel} /> */}
       </MyModal>
     </div>
-  );
-};
+  )
+}
 
-export default SearchBar;
+export default SearchBar

@@ -47,7 +47,7 @@ const PipelinePage = () => {
     const json = {
       // INNs: inputINN.split(inputINN[12] === " " ? " " : ", "),
       // INNs: inputINN.split(", "),
-      inn_ids: inputINN.split(", ").join(" ").split(" "),
+      inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
       scoringmodel_id: scoringModel.scoring_model,
     }
     console.log("JSON: ", json)
@@ -153,6 +153,9 @@ const PipelinePage = () => {
               <div className="row">
                 <div className="col-md-auto">
                   <MyButton>Запустить скоринг</MyButton>
+                </div>
+                <div className="col-md-auto">
+                  <MyButton>Журнал скоринга</MyButton>
                 </div>
                 <div className="col-md-auto">
                   <MyButton onClick={handleSaveData}>
