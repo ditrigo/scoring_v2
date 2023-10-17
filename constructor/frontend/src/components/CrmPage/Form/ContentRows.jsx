@@ -37,14 +37,3 @@ const ContentRows = ({ users }) => {
 }
 
 export default ContentRows
-
-{
-  /* <SelectField
-              label="Выбери важность"
-              defaultOption="Выберите..."
-              name="importance"
-              options={importanceList}
-              onChange={handleChange}
-              value={data.importance}
-            /> */
-}

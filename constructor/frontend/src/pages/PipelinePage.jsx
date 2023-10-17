@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.css"
 import DatePicker from "react-datepicker"
 
 import "react-datepicker/dist/react-datepicker.css"
+import SelectField from "../components/CrmPage/Form/SelectField"
 
 const PipelinePage = () => {
   const [open, setOpen] = useState(false)
@@ -19,6 +20,39 @@ const PipelinePage = () => {
 
   const toggle = () => {
     setOpen(!open)
+  }
+
+  const [inputINN, setInputINN] = useState("")
+  const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
+
+  const handleChangeINN = (e) => {
+    setInputINN(e.target.value)
+    // console.log(inputINN.split(", "))
+  }
+
+  const handleChange = (target) => {
+    setScoringModel((prevState) => ({
+      ...prevState,
+      [target.name]: target.value,
+    }))
+  }
+
+  const scoringOptions = [
+    { label: "One", value: 1 },
+    { label: "Two", value: 2 },
+    { label: "Three", value: 3 },
+  ]
+
+  const handleSaveData = () => {
+    const json = {
+      INNs: inputINN.split(inputINN[12] === " " ? " " : ", "),
+      // INNs: inputINN.split(", "),
+      scoringModel: scoringModel.scoring_model,
+    }
+    console.log("JSON: ", json)
+    alert("JSON в консоли")
+    setInputINN("")
+    setScoringModel({ scoring_model: "" })
   }
 
   return (
@@ -61,11 +95,16 @@ const PipelinePage = () => {
                       <thead>
                         <tr>
                           <td>
-                            <MyInput placeholder="Оператор"></MyInput>
+                            <MyInput
+                              value={inputINN}
+                              onChange={(e) => handleChangeINN(e)}
+                              type="text"
+                              placeholder="Вставьте список ИНН"
+                            ></MyInput>
                           </td>
-                          <td>
+                          {/* <td>
                             <MyInput placeholder="Выражение"></MyInput>
-                          </td>
+                          </td> */}
                         </tr>
                       </thead>
                     </table>
@@ -74,7 +113,15 @@ const PipelinePage = () => {
                 <tr>
                   <td>Модель скоринга</td>
                   <td>
-                    <select
+                    <SelectField
+                      label=""
+                      defaultOption="Выбрать модель для скоринга"
+                      name="scoring_model"
+                      options={scoringOptions}
+                      onChange={handleChange}
+                      value={scoringModel.scoring_model}
+                    />
+                    {/* <select
                       className="form-select"
                       aria-label="Default select example"
                       defaultValue="0"
@@ -85,7 +132,7 @@ const PipelinePage = () => {
                       <option value="1">One</option>
                       <option value="2">Two</option>
                       <option value="3">Three</option>
-                    </select>
+                    </select> */}
                   </td>
                 </tr>
                 <tr>
@@ -107,7 +154,9 @@ const PipelinePage = () => {
                   <MyButton>Запустить скоринг</MyButton>
                 </div>
                 <div className="col-md-auto">
-                  <MyButton>Журнал скоринга</MyButton>
+                  <MyButton onClick={handleSaveData}>
+                    Сохранить связку параметров
+                  </MyButton>
                 </div>
               </div>
             </div>
