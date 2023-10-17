@@ -1,4 +1,4 @@
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -35,7 +35,7 @@
 
 .table-responsive {
   background-color: white;
-}
+} */
 
 /* .navbar {
   height: 50px;
@@ -47,7 +47,7 @@
 } */
 
 /* ROMA VERSION*/
-/* * {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -60,7 +60,7 @@
 .btn-block,
 .btngroup {
   background-color: white;
-  border-radius: 5%;
+  border-radius: 20px;
 }
 
 .App {
@@ -77,7 +77,8 @@
 
 .card {
   background-color: white; 
-}*/
+}
+
 /* ROMA VERSION*/
 
 /* 

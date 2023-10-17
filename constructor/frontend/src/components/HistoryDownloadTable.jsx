@@ -4,12 +4,10 @@ import Moment from "moment"
 import localization from "moment/locale/ru"
 // import 'https://momentjs.com/downloads/moment-with-locales.min.js';
 
-const Table = ({ attributes, columns, setColumns }) => {
+const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
   const [sortType, setSortType] = useState({ path: "name", order: "asc" })
 
   const sortedAttributes = _.orderBy(attributes, sortType.path, sortType.order)
-  // console.log("header: ", columns)
-  // console.log("body: ", sortedAttributes)
 
   const handleSort = (item) => {
     if (sortType.path === item) {
@@ -119,7 +117,7 @@ const Table = ({ attributes, columns, setColumns }) => {
         <tbody>
           {sortedAttributes.map((file) => (
             <tr key={file.id}>
-              {columns[0].isVisible && <td>{file.id}</td>}
+              {columns[0].isVisible && <td>{file.name}</td>}
               {columns[1].isVisible && (
                 <td>
                   {Moment(file.created_date)
@@ -128,66 +126,19 @@ const Table = ({ attributes, columns, setColumns }) => {
                 </td>
               )}
 
-              {/* upload_date ??? */}
-              {columns[2].isVisible && <td>{file.inn}</td>}
+              {columns[2].isVisible && <td>{file.size}</td>}
 
-              {columns[3].isVisible && (
-                <td>
-                  {Moment(file.report_date)
-                    .locale("rus", localization)
-                    .format("LLL")}
-                </td>
-              )}
+              {columns[3].isVisible && <td>{file.total}</td>}
+              {columns[4].isVisible && <td>{file.missed}</td>}
+              {columns[5].isVisible && <td>{file.new}</td>}
 
               {/* unload_date ??? */}
             </tr>
           ))}
         </tbody>
       </table>
-
-      {/* <table className="table text-left table-bordered mt-5">
-        <thead>
-          <tr>
-            {columns
-              ?.filter((e) => e.isVisible)
-              ?.map((column) => (
-                <th
-                  key={column.id}
-                  scope="col"
-                  onClick={
-                    column.name ? () => handleSort(column.path) : undefined
-                  }
-                  {...{ role: column.path && "button" }}
-                >
-                  <span className="d-flex justify-content-center align-items-center">
-                    {column.name} {renderSortArrow(sortType, column.name)}
-                  </span>
-                </th>
-              ))}
-          </tr>
-        </thead>
-
-        <tbody>
-          {sortedAttributes.map((file) => (
-            <tr key={file.id}>
-              <td>{file.id}</td>
-              <td>
-                {Moment(file.created_date)
-                  .locale("rus", localization)
-                  .format("LLL")}
-              </td>{" "}
-              <td>{file.inn}</td>
-              <td>
-                {Moment(file.report_date)
-                  .locale("rus", localization)
-                  .format("LLL")}
-              </td>{" "}
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
     </>
   )
 }
 
-export default Table
+export default HistoryDownloadTable

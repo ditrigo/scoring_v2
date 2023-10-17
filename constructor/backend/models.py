@@ -1,25 +1,26 @@
 from django.db import models
 import uuid
 from simple_history.models import HistoricalRecords
-from .parser import parser
+from .parser import sql_parser
 # from simple_history import register
 # from author.decorators import with_author
 from django.contrib.auth.models import User
 from django.conf import settings
 
+
 class FileAttributes(models.Model):
     id = models.AutoField(primary_key=True)
-    uuid = models.UUIDField(default = uuid.uuid4, 
-                            editable = False,)
+    uuid = models.UUIDField(default=uuid.uuid4,
+                            editable=False,)
     author_id = models.CharField(max_length=125,)
     created_date = models.DateTimeField(auto_now_add=True)
     filename = models.FileField(upload_to='store/')
-    
+
     class Meta:
         indexes = [
             models.Index(fields=["created_date"])
         ]
-        db_table  = "file_attributes"
+        db_table = "file_attributes"
         verbose_name = "file_attribute"
 
     def __str__(self) -> str:
@@ -28,25 +29,25 @@ class FileAttributes(models.Model):
 
 class CsvAttributes(models.Model):
     id = models.AutoField(primary_key=True)
-    uuid = models.UUIDField(default = uuid.uuid4, 
-                            editable = False,)
+    uuid = models.UUIDField(default=uuid.uuid4,
+                            editable=False,)
     author_id = models.CharField(max_length=125,)
     created_date = models.DateTimeField(auto_now_add=True)
     inn = models.IntegerField(null=False)
     np_name = models.CharField(max_length=125,)
-    report_date =models.DateTimeField()
+    report_date = models.DateTimeField()
     on_uch_date = models.DateTimeField()
     status_egrn = models.CharField(max_length=125,)
     foreign_uchred = models.BooleanField(null=True, default=False)
-    nedostov = models.IntegerField(null=False)
+    nedostov = models.IntegerField(null=True)
     sr_chis_thisyear = models.FloatField(null=True)
     sr_chis_lastyear = models.FloatField(null=True)
     bznaper_thisyear = models.FloatField(null=True)
-    bznaper_lastyear =models.FloatField(null=True)
+    bznaper_lastyear = models.FloatField(null=True)
     postup_thisyear = models.FloatField(null=True)
     postup_lastyear = models.FloatField(null=True)
     dolg = models.FloatField(null=True)
-    dolg_overdue  = models.FloatField(null=True)
+    dolg_overdue = models.FloatField(null=True)
     npo_2_020_year = models.FloatField(null=True)
     npo_2_030_year = models.FloatField(null=True)
     npo_2_040_year = models.FloatField(null=True)
@@ -83,7 +84,7 @@ class CsvAttributes(models.Model):
     s_1510_4 = models.FloatField(null=True)
     s_1520_4 = models.FloatField(null=True)
     s_1520_5 = models.FloatField(null=True)
-    s_1530_4 =models.FloatField(null=True)
+    s_1530_4 = models.FloatField(null=True)
     s_1550_4 = models.FloatField(null=True)
     s_1500_4 = models.FloatField(null=True)
     s_2110_4 = models.FloatField(null=True)
@@ -119,7 +120,7 @@ class CsvAttributes(models.Model):
     efrsdul_lender = models.BooleanField(null=True, default=False)
     efrsdul_deptor = models.BooleanField(null=True, default=False)
     bankruptcy_procedure_bool = models.BooleanField(null=True, default=False)
-    bankruptcy_procedure = models.CharField(max_length=250)
+    bankruptcy_procedure = models.CharField(null=True, max_length=250)
     bs_pay_bool = models.BooleanField(null=True, default=False)
     stop_pay = models.BooleanField(null=True, default=False)
     art46_over3month = models.BooleanField(null=True, default=False)
@@ -136,7 +137,7 @@ class CsvAttributes(models.Model):
     cad_cost_amt_inpledge_6monthago = models.FloatField(null=True)
     stcontract_amount = models.FloatField(null=True)
     subsidy_sum = models.FloatField(null=True)
-    recovery_initiation = models.BooleanField(null=True, default=False)
+    recovery_initiation = models.FloatField(null=True, default=False)
     lastdate_operation = models.DateTimeField(null=True, default=False)
     restruct_sum = models.FloatField(null=True)
     early_term_restruct = models.BooleanField(null=True, default=False)
@@ -162,24 +163,24 @@ class CsvAttributes(models.Model):
     tax_burden = models.FloatField(null=True)
     ru_tax_burden = models.FloatField(null=True)
     p033001 = models.FloatField(null=True)
-    file_id = models.ForeignKey(FileAttributes, 
+    file_id = models.ForeignKey(FileAttributes,
                                 on_delete=models.CASCADE)
 
     class Meta:
         indexes = [
             models.Index(fields=["inn", "created_date", "report_date"])
         ]
-        db_table  = "csv_attributes"
+        db_table = "csv_attributes"
         verbose_name = "csv_attribute"
-        
-    def str(self) :
+
+    def str(self):
         return self.inn
-    
+
 
 class MainCatalog(models.Model):
     id = models.AutoField(primary_key=True)
-    uuid = models.UUIDField(default = uuid.uuid4, 
-                            editable = False,)
+    uuid = models.UUIDField(default=uuid.uuid4,
+                            editable=False,)
     author_id = models.CharField(max_length=125)
     created_date = models.DateTimeField(auto_now_add=True)
     date_from = models.DateTimeField(null=True)
@@ -189,19 +190,19 @@ class MainCatalog(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=["origin_name","created_date"])
+            models.Index(fields=["origin_name", "created_date"])
         ]
-        db_table  = "main_catalog"
+        db_table = "main_catalog"
         verbose_name = "main_catalog"
 
     def __str__(self) -> str:
         return f"{self.origin_name}"
-    
+
 
 class MainCatalogFields(models.Model):
     id = models.AutoField(primary_key=True)
-    uuid = models.UUIDField(default = uuid.uuid4, 
-                            editable = False,)
+    uuid = models.UUIDField(default=uuid.uuid4,
+                            editable=False,)
     author_id = models.CharField(max_length=125)
     created_date = models.DateTimeField(auto_now_add=True)
     date_from = models.DateTimeField(null=True)
@@ -210,14 +211,14 @@ class MainCatalogFields(models.Model):
     description = models.CharField(max_length=250, blank=True)
     origin = models.CharField(max_length=250, blank=True)
     active = models.BooleanField(default=False)
-    main_catalog_id = models.ForeignKey(MainCatalog, 
+    main_catalog_id = models.ForeignKey(MainCatalog,
                                         on_delete=models.CASCADE)
 
     class Meta:
         indexes = [
-            models.Index(fields=["filed_name","created_date"])
+            models.Index(fields=["filed_name", "created_date"])
         ]
-        db_table  = "main_catalog_fileds"
+        db_table = "main_catalog_fileds"
         verbose_name = "main_catalog_filed"
 
     def __str__(self) -> str:
@@ -231,34 +232,34 @@ class ScoringModel(models.Model):
         APPROVED = 'AP', 'Approved'
 
     id = models.AutoField(primary_key=True)
-    uuid = models.UUIDField(default = uuid.uuid4, 
-                            editable = False,)
+    uuid = models.UUIDField(default=uuid.uuid4,
+                            editable=False,)
     author_id = models.CharField(max_length=125, blank=True)
     # author = models.ForeignKey( User, on_delete=models.CASCADE, blank=True, null=True) # TODO Подправить авторизацию
     created_date = models.DateTimeField("created_date", auto_now_add=True)
     version = models.IntegerField(blank=True)
     active = models.BooleanField(default=False)
     model_name = models.CharField(max_length=250, blank=True)
-    status = models.CharField(max_length=2, 
+    status = models.CharField(max_length=2,
                               choices=Status.choices,
                               default=Status.DRAFT)
     description = models.CharField(max_length=250, blank=True)
     history = HistoricalRecords(
-         custom_model_name='ScoringModelHistory',
-         table_name='scoring_model_history',
-         inherit=True,
+        custom_model_name='ScoringModelHistory',
+        table_name='scoring_model_history',
+        inherit=True,
     )
 
     class Meta:
         indexes = [
-            models.Index(fields=["status","created_date"])
+            models.Index(fields=["status", "created_date"])
         ]
-        db_table  = "scoring_model"
+        db_table = "scoring_model"
         verbose_name = "scoring_model"
 
     def __str__(self) -> str:
         return f"{self.model_name}"
-    
+
     def save(self, *args, **kwargs):
         if self.pk:
             original_version = self.__class__.objects.get(pk=self.pk).version
@@ -269,25 +270,174 @@ class ScoringModel(models.Model):
         super(ScoringModel, self).save(*args, **kwargs)
 
 
-# class ScoringModelHistory(models.Model):
+# TODO переименовать на маркеры - их 40шт
+class CountedAttributes(models.Model):
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default=uuid.uuid4,
+                            editable=False,)
+    author_id = models.CharField(max_length=125, blank=True)
+    # author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, editable=False, null=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=False)
+    name_counted_attr = models.CharField(max_length=125)
+    scoring_name = models.ManyToManyField(ScoringModel, blank=True)
+    # From CountedAttrFormula
+    attr_formulas = models.CharField(max_length=250)
+    description = models.CharField(max_length=250)
+    sql_query = models.TextField(blank=True, null=True)
+    nested_level = models.IntegerField()
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["name_counted_attr",
+                         "attr_formulas", "created_date"])
+        ]
+        db_table = "counted_attributes"
+        verbose_name = "counted_attribute"
+
+    def __str__(self) -> str:
+        return f"{self.name_counted_attr}"
+
+    # From CountedAttrFormula
+    def save(self, *args, **kwargs):
+        self.sql_query = sql_parser(self.attr_formulas)
+        super().save(*args, **kwargs)
+
+
+class InnRes(models.Model):
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default=uuid.uuid4,
+                            editable=False,)
+    author_id = models.CharField(max_length=125, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=False)
+    inn = models.IntegerField()
+    result_score = models.IntegerField(null=True, blank=True)
+    scoring_model = models.ManyToManyField(ScoringModel, blank=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["inn", "created_date"])
+        ]
+        db_table = "inn_res"
+        verbose_name = "inn_re"
+
+    def __str__(self) -> str:
+        return f"{self.inn}"
+
+
+# Это истинные вычисляемые атрибуты с 131 по 171
+class CountedAttributesNew(models.Model):
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default=uuid.uuid4,
+                            editable=False,)
+    author_id = models.CharField(max_length=125)
+    created_date = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=False)
+    other_property = models.FloatField()
+    clr = models.FloatField()
+    solvency_ratio = models.FloatField()
+    autonomy_ratio = models.FloatField()
+    perc_coverage_ratio = models.FloatField()
+    assets_return = models.FloatField()
+    dolg_in_balance = models.FloatField()
+    return_on_equity = models.FloatField()
+    fin_leverage = models.FloatField()
+    dolg_ebit = models.FloatField()
+    turnover = models.FloatField()
+    turnover_in_credit = models.FloatField()
+    repay_fund = models.FloatField()
+    invest_coverage_ratio = models.FloatField()
+    equity_capital_ratio = models.FloatField()
+    stock_avail_ration = models.FloatField()
+    quick_liquid_ratio = models.FloatField()
+    asset_dinam_1 = models.FloatField()
+    asset_dinam_2 = models.FloatField()
+    asset_dinam_3 = models.FloatField()
+    profit_dinam_1 = models.FloatField()
+    profit_dinam_2 = models.FloatField()
+    profit_dinam_3 = models.FloatField()
+    k_5_154 = models.FloatField()
+    k_6_155 = models.FloatField()
+    k_7_156 = models.FloatField()
+    k_8_157 = models.FloatField()
+    k_9_158 = models.FloatField()
+    k_10_159 = models.FloatField()
+    property_sum = models.FloatField()
+    k_1_161 = models.FloatField()
+    k_2_162 = models.FloatField()
+    k_3_164 = models.FloatField()
+    k_4_164 = models.FloatField()
+    revenue_dinam = models.FloatField()
+    current_business_value = models.FloatField()
+    liquid_business_value = models.FloatField()
+    repay_fund_lender = models.FloatField()
+    need_capital = models.FloatField()
+    need_capital_dp = models.FloatField()
+    ebitda = models.FloatField()
+    dolg_score = models.FloatField()
+    dolg_dp = models.FloatField()
+    need_capital_rub = models.FloatField()
+    need_capital_dp_rub = models.FloatField()
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["id", "created_date"])
+        ]
+        db_table = "counted_attributes_new"
+        verbose_name = "counted_attributes_new"
+
+    def __str__(self) -> str:
+        return f"{self.author_id}"
+
+
+# class CountedAttrFormula(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     uuid = models.UUIDField(default = uuid.uuid4,
+#                             editable = False,)
+#     author_id = models.CharField(max_length=125)
+#     created_date = models.DateTimeField(auto_now_add=True)
+#     active = models.BooleanField(default=False)
+#     attr_formulas = models.CharField(max_length=250)
+#     description = models.CharField(max_length=250)
+#     cntd_attr_id = models.ForeignKey(CountedAttributes,
+#                                      on_delete=models.CASCADE)
+#     sql_query = models.TextField(blank=True, null=True)
+#     nested_level = models.IntegerField()
+
+#     class Meta:
+#         indexes = [
+#             models.Index(fields=["attr_formulas","created_date"])
+#         ]
+#         db_table  = "counted_attr_formula"
+#         verbose_name = "counted_attr_formula"
+
+#     def __str__(self) -> str:
+#         return f"{self.attr_formulas}"
+
+#     def save(self, *args, **kwargs):
+#         self.sql_query = parser(self.attr_formulas)
+#         super().save(*args, **kwargs)
+
+
+# class ScoringModelHistory(models.Model):
 #     class Status(models.TextChoices):
 #         DRAFT = 'DF', 'Draft'
 #         APPROVED = 'AP', 'Approved'
 
 #     id = models.AutoField(primary_key=True)
-#     uuid = models.UUIDField(default = uuid.uuid4, 
+#     uuid = models.UUIDField(default = uuid.uuid4,
 #                             editable = False,)
 #     author_id = models.CharField(max_length=125)
 #     created_date = models.DateTimeField(auto_now_add=True)
-#     scoring_model_id = models.ForeignKey(ScoringModel, 
+#     scoring_model_id = models.ForeignKey(ScoringModel,
 #                                          on_delete=models.CASCADE)
 #     date_from = models.DateTimeField(null=True)
 #     date_to = models.DateTimeField(null=True)
 #     version = models.IntegerField()
 #     active = models.BooleanField(default=False)
 #     model_name = models.CharField(max_length=250, blank=True)
-#     status = models.CharField(max_length=2, 
+#     status = models.CharField(max_length=2,
 #                               choices=Status.choices,
 #                               default=Status.DRAFT)
 
@@ -300,78 +450,3 @@ class ScoringModel(models.Model):
 
 #     def __str__(self) -> str:
 #         return f"{self.model_name}"
-    
-
-class CountedAttributes(models.Model):
-    id = models.AutoField(primary_key=True)
-    uuid = models.UUIDField(default = uuid.uuid4, 
-                            editable = False,)
-    author_id = models.CharField(max_length=125, blank=True)
-    # author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, editable=False, null=True)
-    created_date = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=False)
-    name_counted_attr = models.CharField(max_length=125)
-    scoring_name = models.ManyToManyField(ScoringModel, blank=True)
-
-    class Meta:
-        indexes = [
-            models.Index(fields=["name_counted_attr","created_date"])
-        ]
-        db_table  = "counted_attributes"
-        verbose_name = "counted_attribute"
-
-    def __str__(self) -> str:
-        return f"{self.name_counted_attr}"
-
-
-class CountedAttrFormula(models.Model):
-    id = models.AutoField(primary_key=True)
-    uuid = models.UUIDField(default = uuid.uuid4, 
-                            editable = False,)
-    author_id = models.CharField(max_length=125)
-    created_date = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=False)
-    attr_formulas = models.CharField(max_length=250)
-    description = models.CharField(max_length=250)
-    cntd_attr_id = models.ForeignKey(CountedAttributes, 
-                                     on_delete=models.CASCADE)
-    sql_query = models.TextField(blank=True, null=True)
-    nested_level = models.IntegerField()
-
-    class Meta:
-        indexes = [
-            models.Index(fields=["attr_formulas","created_date"])
-        ]
-        db_table  = "counted_attr_formula"
-        verbose_name = "counted_attr_formula"
-
-    def __str__(self) -> str:
-        return f"{self.attr_formulas}"
-    
-    def save(self, *args, **kwargs):
-        self.sql_query = parser(self.attr_formulas)
-        super().save(*args, **kwargs)
-    
-
-class InnRes(models.Model):
-    id = models.AutoField(primary_key=True)
-    uuid = models.UUIDField(default = uuid.uuid4, 
-                            editable = False,)
-    author_id = models.CharField(max_length=125)
-    created_date = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=False)
-    inn = models.IntegerField()
-    result_score = models.IntegerField()
-    scoring_model = models.ManyToManyField(ScoringModel, )
-
-    class Meta:
-        indexes = [
-            models.Index(fields=["inn","created_date"])
-        ]
-        db_table  = "inn_res"
-        verbose_name = "inn_re"
-
-    def __str__(self) -> str:
-        return f"{self.inn}"
-    
-    
