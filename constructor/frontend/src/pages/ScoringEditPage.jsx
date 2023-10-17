@@ -12,7 +12,7 @@ const ScoringEdit = () => {
 
   async function getCountedAttributes() {
     axios
-      .get("http://127.0.0.1:8000/api/counted_attributes/")
+      .get("http://127.0.0.1:8000/api/marker_attributes/")
       .then((res) => {
         setCountedAttributes(res.data.data);
       })
@@ -42,7 +42,7 @@ const ScoringEdit = () => {
   async function postModelAndAttributes(newLinkModelAndAttributes, statusButton) {
     console.log(statusButton);
     axios
-      .post("http://127.0.0.1:8000/api/counted_attributes/create_relation/", {
+      .post("http://127.0.0.1:8000/api/marker_attributes/create_relation/", {
         counted_attr_ids: newLinkModelAndAttributes,
         scoring_model_id: state.models.id,
       })
@@ -62,6 +62,8 @@ const ScoringEdit = () => {
         attributes={countedAttributes}
         postLink={postModelAndAttributes}
         nameModel={state.models.model_name}
+        idModel={state.models.id}
+        statusModel = {state.models.status}
       />
     </div>
   );

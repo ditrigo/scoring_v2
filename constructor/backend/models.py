@@ -239,7 +239,7 @@ class ScoringModel(models.Model):
     created_date = models.DateTimeField("created_date", auto_now_add=True)
     version = models.IntegerField(blank=True)
     active = models.BooleanField(default=False)
-    model_name = models.CharField(max_length=250, blank=True)
+    model_name = models.CharField(max_length=250, blank=True, unique=True)
     status = models.CharField(max_length=2,
                               choices=Status.choices,
                               default=Status.DRAFT)
@@ -271,7 +271,7 @@ class ScoringModel(models.Model):
 
 
 # TODO переименовать на маркеры - их 40шт
-class CountedAttributes(models.Model):
+class MarkersAttributes(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default=uuid.uuid4,
                             editable=False,)
@@ -279,7 +279,7 @@ class CountedAttributes(models.Model):
     # author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, editable=False, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=False)
-    name_counted_attr = models.CharField(max_length=125)
+    name_marker_attr = models.CharField(max_length=125, unique=True)
     scoring_name = models.ManyToManyField(ScoringModel, blank=True)
     # From CountedAttrFormula
     attr_formulas = models.CharField(max_length=250)
@@ -289,14 +289,14 @@ class CountedAttributes(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=["name_counted_attr",
+            models.Index(fields=["name_marker_attr",
                          "attr_formulas", "created_date"])
         ]
-        db_table = "counted_attributes"
-        verbose_name = "counted_attribute"
+        db_table = "marker_attributes"
+        verbose_name = "marker_attribute"
 
     def __str__(self) -> str:
-        return f"{self.name_counted_attr}"
+        return f"{self.name_marker_attr}"
 
     # From CountedAttrFormula
     def save(self, *args, **kwargs):
@@ -334,6 +334,7 @@ class CountedAttributesNew(models.Model):
     author_id = models.CharField(max_length=125)
     created_date = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=False)
+    inn = models.IntegerField(null=False)
     other_property = models.FloatField()
     clr = models.FloatField()
     solvency_ratio = models.FloatField()

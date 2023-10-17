@@ -5,13 +5,13 @@ import { Link } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.css"
 import MyModal from "../../ScoringPage/MyModal/MyModal"
 import MyEditForm from "../MyEditForm/MyEditForm"
-import MarkersTable from "../../MarkersTable"
+import MarkersTable from "../MarkersTable/MarkersTable"
 // import "bootstrap/dist/js/bootstrap.js";
 
-const SearchBar = ({ attributes, postLink, nameModel }) => {
+const SearchBar = ({ attributes, postLink, nameModel, idModel, statusModel }) => {
   const [expanded, setExpanded] = useState(false)
   const [selections, setSelections] = useState([])
-  const [statusButton, setStatusButton] = useState("DF")
+  const [statusButton, setStatusButton] = useState(statusModel)
   const [modal, setModal] = useState(false)
 
   const toggleExpanded = () => {
@@ -28,20 +28,17 @@ const SearchBar = ({ attributes, postLink, nameModel }) => {
     if (event.target.checked) {
       return setSelections([...selections, event.target.name])
     }
-
     const filtered = selections.filter((name) => name !== event.target.name)
     return setSelections(filtered)
   }
 
   const handleSubmit = (e, status) => {
+    // setStatusButton(status)
+    // console.log("status", status)
     e.preventDefault()
-    console.log("Submitted. Values are submitted", selections)
-    // if (status === "AP") {
-    //     setStatusButton("AP");
-    // };
-    console.log("handleSubmit", statusButton)
+    // console.log("Submitted. Values are submitted", selections)
     setStatusButton(status)
-    postLink(selections, statusButton)
+    postLink(selections, status)
   }
 
   return (
@@ -51,21 +48,20 @@ const SearchBar = ({ attributes, postLink, nameModel }) => {
         <div className="w-1/2 h-16 text-black-100 flex items-center justify-center text-xl">
           <form onSubmit={handleSubmit} className="w-full">
             <div>
+              <MarkersTable />
               <div onClick={toggleExpanded}>
-                {/* <h6>Маркеры</h6> */}
-                <MarkersTable />
+                {/* <MarkersTable /> */}
                 <div
-                  className={`font-semibold cursor-pointer ${
-                    expanded ? "up-arrow" : "down-arrow"
-                  }`}
+                  className={`font-semibold cursor-pointer ${expanded ? "up-arrow" : "down-arrow"
+                    }`}
                 >
                   {selections.length
                     ? selections.map((_, i) => (
-                        <span key={i}>
-                          {i ? ", " : null}
-                          {attributes[i].name_counted_attr}
-                        </span>
-                      ))
+                      <span key={i}>
+                        {i ? ", " : null}
+                        {attributes[i].name_marker_attr}
+                      </span>
+                    ))
                     : "Маркеры не выбраны"}
                 </div>
               </div>
@@ -79,21 +75,27 @@ const SearchBar = ({ attributes, postLink, nameModel }) => {
                       <input
                         type="checkbox"
                         name={attribute.id}
-                        value={attribute.name_counted_attr}
+                        value={attribute.name_marker_attr}
                         onChange={handleChange}
                         className="m-3 cursor-pointer"
                       />
-                      {attribute.name_counted_attr}
+                      {attribute.name_marker_attr}
                     </label>
                   ))}
                 </div>
               )}
             </div>
             <div className="row">
-              <MyButton type="submit" onClick={(e) => handleSubmit(e, "AP")}>
+              <MyButton
+                type="submit"
+                className={statusButton === "AP" ? "disabled" : ""}
+                onClick={(e) => handleSubmit(e, "AP")}>
                 Утвердить
               </MyButton>
-              <MyButton type="submit" onClick={(e) => handleSubmit(e, "DF")}>
+              <MyButton
+                type="submit"
+                className={statusButton === "AP" ? "disabled" : ""}
+                onClick={(e) => handleSubmit(e, "DF")}>
                 Сохранить
               </MyButton>
               {/* <MyButton type="button" onClick={() => setModal(true)}>
@@ -102,7 +104,7 @@ const SearchBar = ({ attributes, postLink, nameModel }) => {
               <Link
                 to={`/scoring`}
                 className="btn btn-outline-secondary"
-                // type="submit"
+              // type="submit"
               >
                 Выйти
               </Link>

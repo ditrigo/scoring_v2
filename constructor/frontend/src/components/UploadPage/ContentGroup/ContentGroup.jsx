@@ -28,7 +28,7 @@ const ContentGroup = () => {
 
   const logAttributs = [
     {
-      name: "Just a name",
+      name: "filename1",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "3kb",
       total: 10,
@@ -36,7 +36,7 @@ const ContentGroup = () => {
       new: 7,
     },
     {
-      name: "Just a second name",
+      name: "filename2",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "1kb",
       total: 134,
@@ -44,7 +44,7 @@ const ContentGroup = () => {
       new: 4,
     },
     {
-      name: "Just a package",
+      name: "filename3",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "8kb",
       total: 100,
@@ -52,7 +52,7 @@ const ContentGroup = () => {
       new: 80,
     },
     {
-      name: "Not just a package name",
+      name: "filename4",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "13kb",
       total: 13,
@@ -95,7 +95,6 @@ const ContentGroup = () => {
   // }
 
   useEffect(() => {
-    // console.log('useEFFECT')
     getfiles()
   }, [])
 

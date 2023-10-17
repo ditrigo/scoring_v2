@@ -148,7 +148,7 @@ def InsertValuesToCountedAttributes():
         attr_175 = ((csv_attributes.pru_cad_cost_amt + csv_attributes.lru_cad_cost_amt + csv_attributes.ts_cad_cost_amt)
                     * 0.2 + csv_attributes.s_1230_4 * 0.0861 + csv_attributes.attr_131 * 0.2) / 1000
 
-        CountedAttributes.objects.create(
+        CountedAttributesNew.objects.create(
             other_property=attr_131,
             clr=attr_132,
             solvency_ratio=attr_133,
@@ -331,16 +331,16 @@ def CatalogFieldsListViewSet(request):
 
 
 @api_view(['GET', 'POST'])
-def CountedAttributesListViewSet(request):
+def MarkersAttributesListViewSet(request):
     permission_classes = (IsAuthenticated,)
     data = None
     paginator = None
-    serializer = CountedAttributesSerializer()
+    serializer = MarkersAttributesSerializer()
     next_page = None
     previous_page = None
 
     if request.method == 'GET':
-        attributes = CountedAttributes.objects.all().order_by('id')
+        attributes = MarkersAttributes.objects.all().order_by('id')
         paginator = Paginator(attributes, 10)
         page = request.GET.get('page', 1)
         try:
@@ -350,7 +350,7 @@ def CountedAttributesListViewSet(request):
         except EmptyPage:
             data = paginator.page(paginator.num_pages)
 
-        serializer = CountedAttributesSerializer(
+        serializer = MarkersAttributesSerializer(
             data, context={'request': request}, many=True)
         next_page = paginator.next_page_number() if data.has_next() else None
         previous_page = paginator.previous_page_number() if data.has_previous() else None
@@ -363,11 +363,36 @@ def CountedAttributesListViewSet(request):
             'prevlink': '/api/counted_attr/?page=' + str(previous_page)
         })
     elif request.method == 'POST':
-        serializer = CountedAttributesSerializer(data=request.data)
+        serializer = MarkersAttributesSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def MarkersAttributesDetailViewSet(request, pk):
+    try:
+        marker_id = MarkersAttributes.objects.get(pk=pk)
+    except ScoringModel.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = MarkersAttributesSerializer(
+            marker_id, context={'request': request})
+        return Response({'data': serializer.data, })
+
+    elif request.method == 'PUT':
+        serializer = MarkersAttributesSerializer(
+            marker_id, data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        marker_id.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET', 'POST'])
@@ -446,7 +471,7 @@ class LogoutViewSet(APIView):
 
 
 @api_view(['POST'])
-def CreateRelationScoreModelAndCountedAttributesViewSet(request):
+def CreateRelationScoreModelAndMarkersAttributesViewSet(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
 
@@ -455,16 +480,42 @@ def CreateRelationScoreModelAndCountedAttributesViewSet(request):
         scoring_model = ScoringModel.objects.get(id=scoring_model_id)
 
         for counted_attr_id in counted_attr_ids:
-            counted_attr = CountedAttributes.objects.get(id=counted_attr_id)
+            counted_attr = MarkersAttributes.objects.get(id=counted_attr_id)
             counted_attr.scoring_name.add(scoring_model)
 
         return JsonResponse({'message': 'Relation created successfully'}, status=200)
     return JsonResponse({'message': 'Invalid request method'}, status=400)
 
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 def CreateRelationInnAndScoringModelViewSet(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        data = []
+        nextPage = 1
+        previousPage = 1
+        score_model = InnRes.objects.all().order_by('id')
+        page = request.GET.get('page', 1)
+        paginator = Paginator(score_model, 10)
+        try:
+            data = paginator.page(page)
+        except PageNotAnInteger:
+            data = paginator.page(1)
+        except EmptyPage:
+            data = paginator.page(paginator.num_pages)
+
+        serializer = InnResSerialiser(
+            data, context={'request': request}, many=True)
+        if data.has_next():
+            nextPage = data.next_page_number()
+        if data.has_previous():
+            previousPage = data.previous_page_number()
+
+        return Response({'data': serializer.data,
+                         'count': paginator.count,
+                         'numpages': paginator.num_pages,
+                         'nextlink': '/api/catalog_fields/?page=' + str(nextPage),
+                         'prevlink': '/api/catalog_fields/?page=' + str(previousPage)})
+    elif request.method == 'POST':
         inn_ids = request.data.get('inn_ids', [])
         scoring_model_id = request.data.get('scoringmodel_id')
 

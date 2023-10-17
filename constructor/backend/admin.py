@@ -61,18 +61,20 @@ admin.site.register(InnRes)
 admin.site.register(FileAttributes)
 admin.site.register(MainCatalog)
 admin.site.register(MainCatalogFields)
+admin.site.register(CountedAttributesNew)
 admin.site.register(ScoringModel, SimpleHistoryAdmin)
+
 # admin.site.register(ScoringModelHistory)
 
-class CountedAttributesAdmin(admin.ModelAdmin):
+class MarkersAttributesAdmin(admin.ModelAdmin):
     search_fields = ('uuid', )
     list_display = ('id', 
                     'uuid', 
                     'author_id', 
                     'created_date', 
                     'active', 
-                    'name_counted_attr')
+                    'name_marker_attr')
     def save_model(self, request, obj, form, change):
         obj.author = request.user
         super().save_model(request, obj, form, change)
-admin.site.register(CountedAttributes, CountedAttributesAdmin)
+admin.site.register(MarkersAttributes, MarkersAttributesAdmin)

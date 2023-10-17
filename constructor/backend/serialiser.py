@@ -26,19 +26,20 @@ class MainCatalogFieldsSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class MarkersAttributesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MarkersAttributes
+        fields = "__all__"
+        # exclude = ['author']
+
+
 class ScoringModelSerializer(serializers.ModelSerializer):
+    markers_set = MarkersAttributesSerializer(many=True, read_only=True)
+
     class Meta:
         model = ScoringModel
         fields = "__all__"
         # exclude = ['author']
-
-
-class CountedAttributesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CountedAttributes
-        fields = "__all__"
-        # exclude = ['author']
-
 
 class InnResSerialiser(serializers.ModelSerializer):
     class Meta:

@@ -78,7 +78,7 @@ const ScoringPage = () => {
   // get/post path/api/counted_attributes
   async function getMarkers() {
     axios
-      .get("http://127.0.0.1:8000/api/counted_attributes/")
+      .get("http://127.0.0.1:8000/api/marker_attributes/")
       .then((res) => {
         console.log("in getMarker ", res.data.data)
         setMarkers(res.data.data)
@@ -90,7 +90,7 @@ const ScoringPage = () => {
 
   async function postMarkers(newAtr) {
     axios
-      .post("http://127.0.0.1:8000/api/counted_attributes/", {
+      .post("http://127.0.0.1:8000/api/marker_attributes/", {
         name_counted_attr: newAtr.name_counted_attr,
         attr_formulas: newAtr.attr_formulas,
         description: newAtr.description,
@@ -172,7 +172,7 @@ const ScoringPage = () => {
                           <td>
                             <button
                               onClick={() => deleteModel(model.id)}
-                              className="btn btn-outline-danger"
+                              className={model.status === 'AP' ? "btn btn-outline-danger disabled" : "btn btn-outline-danger"}
                             >
                               Удалить
                             </button>
@@ -194,7 +194,6 @@ const ScoringPage = () => {
             <div className="card">
               <div className="card-header">
                 <h4>
-                  {/* Атрибуты */}
                   Маркеры
                   {/* <button
                     onClick={() => setModalMarker(true)}
@@ -222,7 +221,7 @@ const ScoringPage = () => {
                     {markers.map((marker) => {
                       return (
                         <tr key={marker.id}>
-                          <td>{marker.name_counted_attr}</td>
+                          <td>{marker.name_marker_attr}</td>
                           <td>{marker.author_id}</td>
                           {/* <td>{marker.uuid}</td> */}
                           <td>

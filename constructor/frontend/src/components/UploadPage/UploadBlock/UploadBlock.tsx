@@ -9,7 +9,7 @@ const { Dragger } = Upload;
 const props: UploadProps = {
   name: 'filename', // это название колонки в БД
   multiple: true,
-  action: 'http://127.0.0.1:8000/api/files/', // путь куда передавать данные
+  action: 'http://127.0.0.1:8000/api/attributes/', // путь куда передавать данные
   onChange(info) {
     const { status } = info.file;
     if (status !== 'uploading') {

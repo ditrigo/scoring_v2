@@ -1,9 +1,9 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import MyButton from "../components/UI/MyButton/MyButton"
 import MyInput from "../components/UI/MyInput/MyInput"
 import "bootstrap/dist/css/bootstrap.css"
 import DatePicker from "react-datepicker"
-
+import axios from "axios"
 import "react-datepicker/dist/react-datepicker.css"
 import SelectField from "../components/CrmPage/Form/SelectField"
 
@@ -36,13 +36,30 @@ const PipelinePage = () => {
       [target.name]: target.value,
     }))
   }
+  // const [scoringOptions, setScoringOptions] = useState([{ label: "", value: "" }])
+  // async function getModels() {
+  //   axios
+  //     .get("http://127.0.0.1:8000/api/scoring_model/")
+  //     .then((res) => {
+  //       console.log(res.data.data)
+  //       console.log(res.data.data[0].model_name)
+  //       console.log(res.data.data[0].id)
+  //     })
+  //     .catch((e) => {
+  //       console.log(e)
+  //     })
+  // }
+  // useEffect(() => {
+  //   // console.log("useEffect")
+  //   getModels()
+  // }, [])
 
   const scoringOptions = [
-    { label: "One", value: 1 },
-    { label: "Two", value: 2 },
-    { label: "Three", value: 3 },
+    { label: "СКУАД1", value: 1 },
+    { label: "СКУАД2", value: 2 },
+    { label: "СКУАД3", value: 3 },
   ]
-
+  
   const handleSaveData = () => {
     const json = {
       // INNs: inputINN.split(inputINN[12] === " " ? " " : ", "),
@@ -145,6 +162,24 @@ const PipelinePage = () => {
                       isClearable
                       placeholderText="I have been cleared!"
                     />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Вид отчетности
+                  </td>
+                  <td>
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                      defaultValue="0"
+                    >
+                      <option value="0" disabled>
+                        Выбрать вид отчетности
+                      </option>
+                      <option value="1">Первичная</option>
+                      <option value="2">Обновленная</option>
+                    </select>
                   </td>
                 </tr>
               </tbody>

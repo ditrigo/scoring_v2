@@ -4,7 +4,7 @@ import MyInput from "../../UI/MyInput/MyInput"
 
 const AtributForm = ({ create, setVisible }) => {
   const [marker, setMarker] = useState({
-    name_counted_attr: "",
+    name_marker_attr: "",
     attr_formulas: "",
   })
 
@@ -29,15 +29,15 @@ const AtributForm = ({ create, setVisible }) => {
 
     create(newMarker)
 
-    setMarker({ name_counted_attr: "", attr_formulas: "" })
+    setMarker({ name_marker_attr: "", attr_formulas: "" })
   }
 
   return (
     <form>
       <MyInput
-        value={marker.name_counted_attr}
+        value={marker.name_marker_attr}
         onChange={(e) =>
-          setMarker({ ...marker, name_counted_attr: e.target.value })
+          setMarker({ ...marker, name_marker_attr: e.target.value })
         }
         type="text"
         placeholder="Наименование маркера"
