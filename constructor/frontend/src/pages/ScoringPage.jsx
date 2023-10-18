@@ -167,7 +167,10 @@ const ScoringPage = () => {
                               to={`/scoring/${model.id}/edit`}
                               state={{ models: model }}
                             >
-                              <MyButton>Редактировать</MyButton>
+                              <MyButton
+                              >
+                                {model.status === 'AP' ? "Просмотр" : "Редактировать"}
+                              </MyButton>
                             </Link>
                           </td>
                           <td>

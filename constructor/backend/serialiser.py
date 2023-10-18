@@ -27,6 +27,7 @@ class MainCatalogFieldsSerializer(serializers.ModelSerializer):
 
 
 class MarkersAttributesSerializer(serializers.ModelSerializer):
+    # scoring_name = ScoringModelSerializer(many=True)
     class Meta:
         model = MarkersAttributes
         fields = "__all__"
@@ -34,12 +35,13 @@ class MarkersAttributesSerializer(serializers.ModelSerializer):
 
 
 class ScoringModelSerializer(serializers.ModelSerializer):
-    markers_set = MarkersAttributesSerializer(many=True, read_only=True)
+    marker_id = MarkersAttributesSerializer(many=True, read_only=True)
 
     class Meta:
         model = ScoringModel
         fields = "__all__"
         # exclude = ['author']
+
 
 class InnResSerialiser(serializers.ModelSerializer):
     class Meta:

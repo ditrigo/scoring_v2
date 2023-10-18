@@ -76,33 +76,33 @@ const PipelinePage = () => {
   }
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-auto">
-            <MyButton>Статические данные</MyButton>
-          </div>
-          <div className="col-md-auto">
-            <MyButton>Расчет модели</MyButton>
-          </div>
-          <div className="col-md-auto">
-            <MyButton>Выписка СКУАД</MyButton>
-          </div>
-          <div className="col-md-auto">
-            <MyButton
-              className={open ? "btn-primary": ""}
-              onClick={toggle}
-            >
-              Результаты скоринга</MyButton>
-          </div>
-          <div className="col-md-auto">
-            <MyButton>Журнал скоринга</MyButton>
-          </div>
+    <div className="container">
+      {/* <div className="row"> */}
+      <div className="row">
+        <div className="col-md-auto">
+          <MyButton>Статические данные</MyButton>
+        </div>
+        <div className="col-md-auto">
+          <MyButton>Расчет модели</MyButton>
+        </div>
+        <div className="col-md-auto">
+          <MyButton>Выписка СКУАД</MyButton>
+        </div>
+        <div className="col-md-auto">
+          <MyButton
+            className={open ? "btn-primary" : ""}
+            onClick={toggle}
+          >
+            Результаты скоринга</MyButton>
+        </div>
+        <div className="col-md-auto">
+          <MyButton>Журнал скоринга</MyButton>
         </div>
       </div>
+      {/* </div> */}
 
       {open && (
-        <div>
+        <div className="row">
           <div className="table-responsive-sm">
             <table className="table text-left table-bordered mt-5">
               <thead>
@@ -190,19 +190,17 @@ const PipelinePage = () => {
                 </tr>
               </tbody>
             </table>
-            <div className="container">
-              <div className="row">
-                <div className="col-md-auto">
-                  <MyButton>Запустить скоринг</MyButton>
-                </div>
-                <div className="col-md-auto">
-                  <MyButton>Журнал скоринга</MyButton>
-                </div>
-                <div className="col-md-auto">
-                  <MyButton onClick={handleSaveData}>
-                    Сохранить связку параметров
-                  </MyButton>
-                </div>
+            <div className="row">
+              <div className="col-md-auto">
+                <MyButton>Запустить скоринг</MyButton>
+              </div>
+              <div className="col-md-auto">
+                <MyButton>Журнал скоринга</MyButton>
+              </div>
+              <div className="col-md-auto">
+                <MyButton onClick={handleSaveData}>
+                  Сохранить связку параметров
+                </MyButton>
               </div>
             </div>
           </div>

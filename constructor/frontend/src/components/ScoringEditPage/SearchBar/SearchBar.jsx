@@ -45,11 +45,13 @@ const SearchBar = ({ attributes, postLink, nameModel, idModel, statusModel }) =>
     <div className="container">
       <div className="row">
         <h3>Добавление элементов для модели {nameModel}</h3>
-        <MarkersTable />
+        <MarkersTable modelId={idModel} />
       </div>
-      <div className="w-full h-screen flex justify-center items-center row">
-        <div className="w-1/2 h-16 text-black-100 flex items-center justify-center text-xl">
-          <form onSubmit={handleSubmit} className="w-full">
+      <div className="row">
+        {/* <div className="row"> */}
+          <form
+            onSubmit={handleSubmit}
+            className="w-full">
             <div >
               {/* <MarkersTable /> */}
               <div onClick={toggleExpanded}>
@@ -68,7 +70,7 @@ const SearchBar = ({ attributes, postLink, nameModel, idModel, statusModel }) =>
                 </div>
               </div>
               {expanded && (
-                <div className="border-gray-200 border border-solid">
+                <div className="">
                   {attributes.map((attribute, index) => (
                     <label
                       className="custom-select custom-select-lg mb-3"
@@ -112,7 +114,7 @@ const SearchBar = ({ attributes, postLink, nameModel, idModel, statusModel }) =>
               </Link>
             </div>
           </form>
-        </div>
+        {/* </div> */}
       </div>
       {/*<MyModal visible={modal} setVisible={setModal}>
         <MyEditForm />

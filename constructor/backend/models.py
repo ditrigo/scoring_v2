@@ -225,6 +225,40 @@ class MainCatalogFields(models.Model):
         return f"{self.filed_name}"
 
 
+# TODO переименовать на маркеры - их 40шт
+class MarkersAttributes(models.Model):
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default=uuid.uuid4,
+                            editable=False,)
+    author_id = models.CharField(max_length=125, blank=True)
+    # author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, editable=False, null=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=False)
+    name_marker_attr = models.CharField(max_length=125, unique=True)
+    # scoring_name = models.ManyToManyField(ScoringModel, blank=True)
+    # From CountedAttrFormula
+    attr_formulas = models.CharField(max_length=250)
+    description = models.CharField(max_length=250)
+    sql_query = models.TextField(blank=True, null=True)
+    nested_level = models.IntegerField()
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["name_marker_attr",
+                         "attr_formulas", "created_date"])
+        ]
+        db_table = "marker_attributes"
+        verbose_name = "marker_attribute"
+
+    def __str__(self) -> str:
+        return f"{self.name_marker_attr}"
+
+    # From CountedAttrFormula
+    def save(self, *args, **kwargs):
+        self.sql_query = sql_parser(self.attr_formulas)
+        super().save(*args, **kwargs)
+
+
 class ScoringModel(models.Model):
 
     class Status(models.TextChoices):
@@ -244,6 +278,7 @@ class ScoringModel(models.Model):
                               choices=Status.choices,
                               default=Status.DRAFT)
     description = models.CharField(max_length=250, blank=True)
+    marker_id = models.ManyToManyField(MarkersAttributes, blank=True)
     history = HistoricalRecords(
         custom_model_name='ScoringModelHistory',
         table_name='scoring_model_history',
@@ -268,40 +303,6 @@ class ScoringModel(models.Model):
         else:
             self.version = 1
         super(ScoringModel, self).save(*args, **kwargs)
-
-
-# TODO переименовать на маркеры - их 40шт
-class MarkersAttributes(models.Model):
-    id = models.AutoField(primary_key=True)
-    uuid = models.UUIDField(default=uuid.uuid4,
-                            editable=False,)
-    author_id = models.CharField(max_length=125, blank=True)
-    # author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, editable=False, null=True)
-    created_date = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=False)
-    name_marker_attr = models.CharField(max_length=125, unique=True)
-    scoring_name = models.ManyToManyField(ScoringModel, blank=True)
-    # From CountedAttrFormula
-    attr_formulas = models.CharField(max_length=250)
-    description = models.CharField(max_length=250)
-    sql_query = models.TextField(blank=True, null=True)
-    nested_level = models.IntegerField()
-
-    class Meta:
-        indexes = [
-            models.Index(fields=["name_marker_attr",
-                         "attr_formulas", "created_date"])
-        ]
-        db_table = "marker_attributes"
-        verbose_name = "marker_attribute"
-
-    def __str__(self) -> str:
-        return f"{self.name_marker_attr}"
-
-    # From CountedAttrFormula
-    def save(self, *args, **kwargs):
-        self.sql_query = sql_parser(self.attr_formulas)
-        super().save(*args, **kwargs)
 
 
 class InnRes(models.Model):

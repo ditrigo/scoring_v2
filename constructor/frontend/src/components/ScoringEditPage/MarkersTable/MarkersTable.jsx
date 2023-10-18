@@ -8,18 +8,21 @@ import MyInput from '../../UI/MyInput/MyInput.jsx';
 // import moment from "moment"
 // import localization from "moment/locale/ru"
 
-const MarkersTable = () => {
+const MarkersTable = ({ modelId }) => {
   const [markers, setMarkers] = useState([])
+  const [linkedMarkers, setLinkedMarkers] = useState([])
   const [modalMarker, setModalMarker] = useState(false)
   const [modalMarkerView, setModalMarkerView] = useState(false)
-  const [marker, setMarker] = useState([])
+  const [markerDetail, setMarkerDetail] = useState([
+    { name: "", formula: "" }
+  ])
 
-  async function getMarkers() {
+  async function getLinkedMarkers() {
     axios
-      .get("http://127.0.0.1:8000/api/marker_attributes/")
+      .get(`http://127.0.0.1:8000/api/scoring_model/${modelId}`)
       .then((res) => {
-        console.log("in getMarker ", res.data.data)
-        setMarkers(res.data.data)
+        // console.log("in getMarker ", res.data.data.marker_id)
+        setLinkedMarkers(res.data.data.marker_id)
       })
       .catch((e) => {
         console.log(e)
@@ -51,26 +54,12 @@ const MarkersTable = () => {
   }
 
   useEffect(() => {
-    // console.log("useEffect in getAtr")
-    getMarkers()
+    getLinkedMarkers()
   }, [])
 
-  async function getMarkerById(id) {
-    axios
-      .get(`http://127.0.0.1:8000/api/marker_attributes/${id}`)
-      .then((res) => {
-        console.log("in getMarker ", res.data.data)
-        setMarker(res.data.data)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-    console.log(setMarker)
-  }
-
-  const showMarkerDetail = (id) => {
+  const showMarkerDetail = (marker) => {
     setModalMarkerView(true)
-    getMarkerById(id)
+    setMarkerDetail({ name: marker.name_marker_attr, formula: marker.attr_formulas })
   }
 
   return (
@@ -96,36 +85,24 @@ const MarkersTable = () => {
                 <table className="table table-striped">
                   <thead>
                     <tr>
-                      {/* <th scope="col">id модели</th> */}
                       <th scope="col">Наименование маркера</th>
-                      {/* <th>Автор</th> */}
-                      {/* <th>UUID</th> */}
-                      {/* <th>Дата изменения</th> */}
                       <th>Просмотр</th>
                       <th>Удалить</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {markers.map((marker) => {
+                    {linkedMarkers.map((marker) => {
                       return (
                         <tr key={marker.id}>
                           <td>{marker.name_marker_attr}</td>
-                          {/* <td>{marker.author_id}</td> */}
-                          {/* <td>{marker.uuid}</td> */}
-                          {/* <td>
-                            {moment(marker.created_date)
-                              .locale("rus", localization)
-                              .format("LLL")}
-                          </td> */}
                           <td>
                             <MyButton
                               className=""
-                              onClick={() => showMarkerDetail(marker.id)}
+                              onClick={() => showMarkerDetail(marker)}
                             // setModalMarkerView(true)
                             >
                               Просмотр
                             </MyButton>
-
                           </td>
                           <td>
                             <button
@@ -160,16 +137,16 @@ const MarkersTable = () => {
           <label>Наименование маркера </label>
           <MyInput
             type='text'
-            placeholder='textbox2'
-            value={marker.name_marker_attr}
+            placeholder='Наименование маркера'
+            value={markerDetail.name}
           />
         </div>
         <div>
           <label>Формула маркера </label>
           <MyInput
             type='text'
-            placeholder='textbox2'
-            value={marker.attr_formulas}
+            placeholder='Формула маркера'
+            value={markerDetail.formula}
           />
         </div>
       </MyModal>

@@ -21,4 +21,5 @@ urlpatterns = [
     re_path(r"^scoring_model/(?P<pk>[0-9]+)$", ScoringModelDetailViewSet, name='scoring_model_detail'),
     re_path(r"^marker_attributes/create_relation/$", CreateRelationScoreModelAndMarkersAttributesViewSet, name="create_relation_cntd_attr_score_mdl"),
     re_path(r"^inn_res/create_relation/$", CreateRelationInnAndScoringModelViewSet, name="create_relation_inn_score_mdl"),
+    # re_path(r"^marker_attributes/$", get_marker_attributes, name="marker_attributes"),
 ]
