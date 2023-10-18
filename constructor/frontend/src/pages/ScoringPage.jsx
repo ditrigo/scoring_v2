@@ -45,6 +45,7 @@ const ScoringPage = () => {
       })
       .then(function (response) {
         console.log(response)
+        setModels([...models, response.data])
       })
       .catch(function (error) {
         console.log(error)

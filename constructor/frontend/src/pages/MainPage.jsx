@@ -18,13 +18,13 @@ function MainPage() {
     <>
       {isAuth ? (
         <BrowserRouter>
-          <div style={{display:"flex"}}>
+          {/* <div style={{display:"flex"}}>
             <img src={Logo} style={{ width: "100px" }} />
             <div>
               <h2>КОНСТРУКТОР СКОРИНГА</h2>
               <h5>версия v1</h5>
             </div>
-          </div>
+          </div> */}
           <Navbar />
           <AppRouter />
         </BrowserRouter>

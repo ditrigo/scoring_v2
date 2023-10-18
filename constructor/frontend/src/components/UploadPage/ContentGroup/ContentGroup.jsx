@@ -133,11 +133,13 @@ const ContentGroup = () => {
       <div className="table-responsive mx-3">
         {view === "view" && (
           <>
-            <Table
-              attributes={attributes}
-              columns={uploadColumns}
-              setColumns={setUploadColumns}
-            />
+            <div className="table-responsive mx-3">
+              <Table
+                attributes={attributes}
+                columns={uploadColumns}
+                setColumns={setUploadColumns}
+              />
+            </div>
           </>
         )}
 

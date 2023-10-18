@@ -55,7 +55,7 @@ const MarkersTable = () => {
     getMarkers()
   }, [])
 
-async function getMarkerById(id) {
+  async function getMarkerById(id) {
     axios
       .get(`http://127.0.0.1:8000/api/marker_attributes/${id}`)
       .then((res) => {
@@ -65,13 +65,13 @@ async function getMarkerById(id) {
       .catch((e) => {
         console.log(e)
       })
-      console.log(setMarker)
-    }
+    console.log(setMarker)
+  }
 
-const showMarkerDetail = (id) => {
-  setModalMarkerView(true)
-  getMarkerById(id)
-}
+  const showMarkerDetail = (id) => {
+    setModalMarkerView(true)
+    getMarkerById(id)
+  }
 
   return (
     <>
@@ -120,9 +120,9 @@ const showMarkerDetail = (id) => {
                           <td>
                             <MyButton
                               className=""
-                              onClick={() => showMarkerDetail(marker.id) } 
-                              // setModalMarkerView(true)
-                            > 
+                              onClick={() => showMarkerDetail(marker.id)}
+                            // setModalMarkerView(true)
+                            >
                               Просмотр
                             </MyButton>
 
@@ -172,9 +172,7 @@ const showMarkerDetail = (id) => {
             value={marker.attr_formulas}
           />
         </div>
-
       </MyModal>
-      
     </>
   )
 }

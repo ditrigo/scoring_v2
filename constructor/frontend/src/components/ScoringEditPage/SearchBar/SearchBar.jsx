@@ -42,15 +42,17 @@ const SearchBar = ({ attributes, postLink, nameModel, idModel, statusModel }) =>
   }
 
   return (
-    <div>
-      <h3>Добавление элементов для модели {nameModel}</h3>
-      <div className="w-full h-screen flex justify-center items-center">
+    <div className="container">
+      <div className="row">
+        <h3>Добавление элементов для модели {nameModel}</h3>
+        <MarkersTable />
+      </div>
+      <div className="w-full h-screen flex justify-center items-center row">
         <div className="w-1/2 h-16 text-black-100 flex items-center justify-center text-xl">
           <form onSubmit={handleSubmit} className="w-full">
-            <div>
-              <MarkersTable />
+            <div >
+              {/* <MarkersTable /> */}
               <div onClick={toggleExpanded}>
-                {/* <MarkersTable /> */}
                 <div
                   className={`font-semibold cursor-pointer ${expanded ? "up-arrow" : "down-arrow"
                     }`}
@@ -112,10 +114,10 @@ const SearchBar = ({ attributes, postLink, nameModel, idModel, statusModel }) =>
           </form>
         </div>
       </div>
-      <MyModal visible={modal} setVisible={setModal}>
+      {/*<MyModal visible={modal} setVisible={setModal}>
         <MyEditForm />
-        {/* <ModelForm create={createModel} /> */}
-      </MyModal>
+         <ModelForm create={createModel} /> 
+      </MyModal>*/}
     </div>
   )
 }

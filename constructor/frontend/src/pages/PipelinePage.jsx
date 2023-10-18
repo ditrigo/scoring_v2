@@ -8,15 +8,17 @@ import "react-datepicker/dist/react-datepicker.css"
 import SelectField from "../components/CrmPage/Form/SelectField"
 
 const PipelinePage = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
   //   Для отображения в дальнейшем различных элементов
   const [block, setBlock] = useState([
     { name: "Статические данные", open: false },
     { name: "Расчет модели", open: false },
     { name: "Выписка СКУАД", open: false },
+    { name: "Результаты скоринга", open: false },
     { name: "Журнал скоринга", open: false },
   ])
   const [startDate, setStartDate] = useState(new Date())
+  // const [view, setView] = useState("result")
 
   const toggle = () => {
     setOpen(!open)
@@ -59,7 +61,7 @@ const PipelinePage = () => {
     { label: "СКУАД2", value: 2 },
     { label: "СКУАД3", value: 3 },
   ]
-  
+
   const handleSaveData = () => {
     const json = {
       // INNs: inputINN.split(inputINN[12] === " " ? " " : ", "),
@@ -87,7 +89,11 @@ const PipelinePage = () => {
             <MyButton>Выписка СКУАД</MyButton>
           </div>
           <div className="col-md-auto">
-            <MyButton onClick={toggle}>Результаты скоринга</MyButton>
+            <MyButton
+              className={open ? "btn-primary": ""}
+              onClick={toggle}
+            >
+              Результаты скоринга</MyButton>
           </div>
           <div className="col-md-auto">
             <MyButton>Журнал скоринга</MyButton>
