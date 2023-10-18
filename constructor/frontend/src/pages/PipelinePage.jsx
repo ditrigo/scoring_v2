@@ -77,7 +77,7 @@ const PipelinePage = () => {
 
   return (
     <div>
-      <div className="container">
+      <div className="w-75 container m-auto">
         <div className="row">
           <div className="col-md-auto">
             <MyButton>Статические данные</MyButton>
@@ -89,11 +89,9 @@ const PipelinePage = () => {
             <MyButton>Выписка СКУАД</MyButton>
           </div>
           <div className="col-md-auto">
-            <MyButton
-              className={open ? "btn-primary": ""}
-              onClick={toggle}
-            >
-              Результаты скоринга</MyButton>
+            <MyButton className={open ? "btn-primary" : ""} onClick={toggle}>
+              Результаты скоринга
+            </MyButton>
           </div>
           <div className="col-md-auto">
             <MyButton>Журнал скоринга</MyButton>
@@ -102,7 +100,9 @@ const PipelinePage = () => {
       </div>
 
       {open && (
-        <div>
+        // <div className="d-flex justify-content-center align-items-center w-100">
+        // <div className="m-5">
+        <div className=" w-75 m-auto">
           <div className="table-responsive-sm">
             <table className="table text-left table-bordered mt-5">
               <thead>
@@ -171,9 +171,7 @@ const PipelinePage = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td>
-                    Вид отчетности
-                  </td>
+                  <td>Вид отчетности</td>
                   <td>
                     <select
                       className="form-select"

@@ -4,21 +4,25 @@ import TextField from "../components/CrmPage/Form/textField"
 import Divider from "../components/CrmPage/Form/Divider"
 import { Link, useParams } from "react-router-dom"
 import SelectField from "../components/CrmPage/Form/SelectField"
+import Select from "react-select"
 
 const NewCrmClientPage = () => {
   const params = useParams()
   //   console.log(params)
   const [firstData, setFirstData] = useState()
-  const [KPI, setKPI] = useState()
+  // const [KPI, setKPI] = useState()
   const [users, setUsers] = useState()
+  const [regions, setRegions] = useState()
 
-  const [usersData, setUsersData] = useState({
-    INN: "fgdg",
-    clientName: "",
-    region: "",
-    status: "",
-    manager: "",
-  })
+  const [usersData, setUsersData] = useState({})
+
+  const handleChangeSelect = (target) => {
+    console.log(target)
+    setUsersData((prevState) => ({
+      ...prevState,
+      [target.name]: target.value,
+    }))
+  }
 
   const [testData, setTestData] = useState({ test: "test" })
   const handleChangeTest = (target) => {
@@ -32,14 +36,17 @@ const NewCrmClientPage = () => {
     api.firstData.fetchAll().then((data) => {
       setFirstData(data)
     })
-    console.log()
-    api.KPI.fetchAll().then((data) => {
-      setKPI(data)
-    })
+    // console.log()
+    // api.KPI.fetchAll().then((data) => {
+    //   setKPI(data)
+    // })
     api.users.fetchAll().then((data) => {
       setUsers(data)
     })
-    console.log(users)
+    api.regions.fetchAll().then((data) => {
+      setRegions(data)
+    })
+    // console.log(regions)
   }, [])
 
   function getCurrentUser(users) {
@@ -51,7 +58,7 @@ const NewCrmClientPage = () => {
   useEffect(() => {
     if (params.id && users) {
       const user = getCurrentUser(users)[0]
-      console.log("Текущий ", user)
+      // console.log("Текущий ", user)
 
       setUsersData((prevState) => ({
         ...prevState,
@@ -67,7 +74,7 @@ const NewCrmClientPage = () => {
       //     [target.name]: target.value,
       //   }))
     }
-    console.log("usersData B useEffect ", usersData)
+    // console.log("usersData B useEffect ", usersData)
   }, [users])
 
   //   if (params.id && users) {
@@ -83,7 +90,7 @@ const NewCrmClientPage = () => {
   //     })
   //   }
 
-  console.log("usersData ВНЕ useEffect ", usersData)
+  // console.log("usersData ВНЕ useEffect ", usersData)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -100,6 +107,7 @@ const NewCrmClientPage = () => {
   }
 
   const handleChange = (target) => {
+    console.log(target)
     setUsersData((prevState) => ({
       ...prevState,
       [target.name]: target.value,
@@ -115,10 +123,19 @@ const NewCrmClientPage = () => {
     { label: "Средний риск", value: "Средний риск" },
     { label: "Низкий риск", value: "Низкий риск" },
   ]
+  const sources = [
+    { label: "Письмо", value: "Письмо", name: "source" },
+    { label: "Список", value: "Список", name: "source" },
+    { label: "Поручение", value: "Поручение", name: "source" },
+  ]
 
   return (
-    <form>
-      {/* {firstData &&
+    <div className="container ">
+      <div className="row">
+        <div className="col-md-12">
+          <div className="card p-4">
+            <form>
+              {/* {firstData &&
         firstData.map((el) => {
           if (el.name) {
             return (
@@ -140,77 +157,105 @@ const NewCrmClientPage = () => {
           }
         })} */}
 
-      {firstData &&
-        firstData.map((el) => {
-          if (el.name) {
-            if (el.type === "risk") {
-              return (
-                <SelectField
-                  key={el.id}
-                  label={el.name}
-                  defaultOption="Выберите риск"
-                  name={el.name}
-                  options={riskList}
-                  onChange={handleChange}
-                  value={usersData.name}
-                />
-              )
-            } else if (el.type === "date") {
-              return (
-                <input
-                  type={el.type}
-                  name={el.name}
-                  value={usersData.date}
-                  onChange={(e) => {
-                    handleDate(e)
-                  }}
-                ></input>
-              )
-            } else {
-              return (
-                <TextField
-                  key={el.id}
-                  label={el.name}
-                  name={el.name}
-                  value={usersData.name}
-                  onChange={handleChange}
-                />
-              )
-            }
-          } else if (el.title) {
-            return (
-              <div key={el.id}>
-                <h3 className="text-center mt-5">{el.title}</h3>
-                <Divider />
-              </div>
-            )
-          }
-        })}
-      <TextField
-        label="test"
-        name="test"
-        value={testData.test}
-        onChange={handleChangeTest}
-      />
-      <div className="row row-centered mb-4 colored">
-        <button
-          type="submit"
-          className="btn btn-primary w-25 mx-auto m-2 col-sm-3"
-          onClick={handleSubmit}
-        >
-          Сохранить
-        </button>
+              {firstData &&
+                firstData.map((el) => {
+                  if (el.name) {
+                    if (el.type === "risk") {
+                      return (
+                        <SelectField
+                          key={el.id}
+                          label={el.name}
+                          defaultOption="Выберите"
+                          name={el.name}
+                          options={riskList}
+                          onChange={handleChange}
+                          value={usersData.name}
+                        />
+                      )
+                    }
+                    // else if (el.type === "date") {
+                    //   return (
+                    //     <input
+                    //       type={el.type}
+                    //       name={el.name}
+                    //       value={usersData.date}
+                    //       onChange={(e) => {
+                    //         handleDate(e)
+                    //       }}
+                    //     ></input>
+                    //   )
+                    // }
+                    else if (el.name === "region") {
+                      return (
+                        <div className="mb-2">
+                          <label className="form-label">Регион</label>
+                          <Select
+                            options={regions}
+                            onChange={handleChangeSelect}
+                            name="region"
+                          />
+                        </div>
+                      )
+                    } else if (el.name === "source") {
+                      return (
+                        <div className="mb-2">
+                          <label className="form-label">Источник</label>
+                          <Select
+                            options={sources}
+                            onChange={handleChangeSelect}
+                            name="source"
+                          />
+                        </div>
+                      )
+                    } else {
+                      return (
+                        <TextField
+                          key={el.id}
+                          label={el.name}
+                          name={el.name}
+                          value={usersData.name}
+                          onChange={handleChange}
+                        />
+                      )
+                    }
+                  } else if (el.title) {
+                    return (
+                      <div key={el.id}>
+                        <h3 className="text-center mt-2">{el.title}</h3>
+                        <Divider />
+                      </div>
+                    )
+                  }
+                })}
+              {/* <TextField
+                label="test"
+                name="test"
+                value={testData.test}
+                onChange={handleChangeTest}
+              /> */}
+              <div className="row row-centered mb-2 colored">
+                <button
+                  type="submit"
+                  className="btn btn-primary w-25 mx-auto m-2 col-sm-3"
+                  onClick={handleSubmit}
+                >
+                  Сохранить
+                </button>
 
-        <button
-          className="btn btn-danger w-25 mx-auto m-2 col-sm-3"
-          onClick={handleCancle}
-        >
-          <Link to="/crm" className="nav-link m-2">
-            Отмена
-          </Link>
-        </button>
+                <button
+                  className="btn btn-danger w-25 mx-auto m-2 col-sm-3"
+                  onClick={handleCancle}
+                >
+                  <Link to="/crm" className="nav-link m-2">
+                    Отмена
+                  </Link>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-    </form>
+    </div>
   )
 }
 
