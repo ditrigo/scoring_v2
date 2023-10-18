@@ -92,7 +92,7 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
         </ul>
       </div>
 
-      <table className="table text-left table-bordered mt-4">
+      <table className="table align-middle table-bordered mt-4">
         <thead>
           <tr>
             {columns

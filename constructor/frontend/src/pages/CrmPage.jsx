@@ -30,9 +30,9 @@ const CrmPage = () => {
     : null
 
   return (
-    <div className="container m-5">
+    <div className="container m-5 mt-0">
       <div className="row row-centered colored">
-        <button className="btn btn-primary w-50 mx-auto m-2 col-sm-4">
+        <button className="btn btn-primary w-50 mx-auto m-2 col-sm-4 mb-4">
           <Link to="/newclient" className="nav-link m-2">
             + Новый клиент
           </Link>
@@ -60,7 +60,9 @@ const CrmPage = () => {
           </table>
         </>
       ) : (
-        <h2>Нет данных</h2>
+        <h2 className="d-flex justify-content-center align-items-center mt-5">
+          Нет данных
+        </h2>
       )}
     </div>
   )

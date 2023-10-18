@@ -167,16 +167,21 @@ const ScoringPage = () => {
                               to={`/scoring/${model.id}/edit`}
                               state={{ models: model }}
                             >
-                              <MyButton
-                              >
-                                {model.status === 'AP' ? "Просмотр" : "Редактировать"}
+                              <MyButton>
+                                {model.status === "AP"
+                                  ? "Просмотр"
+                                  : "Редактировать"}
                               </MyButton>
                             </Link>
                           </td>
                           <td>
                             <button
                               onClick={() => deleteModel(model.id)}
-                              className={model.status === 'AP' ? "btn btn-outline-danger disabled" : "btn btn-outline-danger"}
+                              className={
+                                model.status === "AP"
+                                  ? "btn btn-outline-danger disabled"
+                                  : "btn btn-outline-danger"
+                              }
                             >
                               Удалить
                             </button>

@@ -59,6 +59,14 @@ const ContentGroup = () => {
       missed: 3,
       new: 10,
     },
+    {
+      name: "filename5",
+      created_date: "2023-10-12T12:25:07.688056Z",
+      size: "22kb",
+      total: 24,
+      missed: 10,
+      new: 14,
+    },
   ]
 
   async function getfiles() {

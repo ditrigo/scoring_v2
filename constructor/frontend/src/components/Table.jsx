@@ -94,7 +94,7 @@ const Table = ({ attributes, columns, setColumns }) => {
         </ul>
       </div>
 
-      <table className="table text-left table-bordered mt-4">
+      <table className="table  table-bordered mt-4">
         <thead>
           <tr>
             {columns
@@ -119,9 +119,13 @@ const Table = ({ attributes, columns, setColumns }) => {
         <tbody>
           {sortedAttributes.map((file) => (
             <tr key={file.id}>
-              {columns[0].isVisible && <td>{file.id}</td>}
+              {columns[0].isVisible && (
+                <td className="d-flex justify-content-center align-items-center">
+                  {file.id}
+                </td>
+              )}
               {columns[1].isVisible && (
-                <td>
+                <td className="center-block">
                   {Moment(file.created_date)
                     .locale("rus", localization)
                     .format("LLL")}
@@ -129,7 +133,11 @@ const Table = ({ attributes, columns, setColumns }) => {
               )}
 
               {/* upload_date ??? */}
-              {columns[2].isVisible && <td>{file.inn}</td>}
+              {columns[2].isVisible && (
+                <td className="d-flex justify-content-center align-items-center">
+                  {file.inn}
+                </td>
+              )}
 
               {columns[3].isVisible && (
                 <td>

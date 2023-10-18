@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react"
-import MyButton from "../components/UI/MyButton/MyButton"
-import MyInput from "../components/UI/MyInput/MyInput"
-import "bootstrap/dist/css/bootstrap.css"
-import DatePicker from "react-datepicker"
-import axios from "axios"
-import "react-datepicker/dist/react-datepicker.css"
-import SelectField from "../components/CrmPage/Form/SelectField"
+import React, { useState, useEffect } from "react";
+import MyButton from "../components/UI/MyButton/MyButton";
+import MyInput from "../components/UI/MyInput/MyInput";
+import "bootstrap/dist/css/bootstrap.css";
+import DatePicker from "react-datepicker";
+import axios from "axios";
+import "react-datepicker/dist/react-datepicker.css";
+import SelectField from "../components/CrmPage/Form/SelectField";
 
 const PipelinePage = () => {
   const [open, setOpen] = useState(true)
+  
   //   Для отображения в дальнейшем различных элементов
   const [block, setBlock] = useState([
     { name: "Статические данные", open: false },
@@ -19,48 +20,19 @@ const PipelinePage = () => {
   ])
   const [startDate, setStartDate] = useState(new Date())
   // const [view, setView] = useState("result")
+  const [scoringModels, setScoringModels] = useState([])
+  const [inputINN, setInputINN] = useState("")
+  const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
+  const [scoringOptions, setScoringOptions] = useState([])
+  // const scoringOptions = [
+  //   { label: "СКУАД1", value: 1 },
+  //   { label: "СКУАД2", value: 2 },
+  //   { label: "СКУАД3", value: 3 },
+  // ]
 
   const toggle = () => {
     setOpen(!open)
   }
-
-  const [inputINN, setInputINN] = useState("")
-  const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
-
-  const handleChangeINN = (e) => {
-    setInputINN(e.target.value)
-    // console.log(inputINN.split(", "))
-  }
-
-  const handleChange = (target) => {
-    setScoringModel((prevState) => ({
-      ...prevState,
-      [target.name]: target.value,
-    }))
-  }
-  // const [scoringOptions, setScoringOptions] = useState([{ label: "", value: "" }])
-  // async function getModels() {
-  //   axios
-  //     .get("http://127.0.0.1:8000/api/scoring_model/")
-  //     .then((res) => {
-  //       console.log(res.data.data)
-  //       console.log(res.data.data[0].model_name)
-  //       console.log(res.data.data[0].id)
-  //     })
-  //     .catch((e) => {
-  //       console.log(e)
-  //     })
-  // }
-  // useEffect(() => {
-  //   // console.log("useEffect")
-  //   getModels()
-  // }, [])
-
-  const scoringOptions = [
-    { label: "СКУАД1", value: 1 },
-    { label: "СКУАД2", value: 2 },
-    { label: "СКУАД3", value: 3 },
-  ]
 
   const handleSaveData = () => {
     const json = {
@@ -74,6 +46,49 @@ const PipelinePage = () => {
     setInputINN("")
     setScoringModel({ scoring_model: "" })
   }
+
+  const handleChangeINN = (e) => {
+    setInputINN(e.target.value)
+    // console.log(inputINN.split(", "))
+  }
+
+  const handleChange = (target) => {
+    setScoringModel((prevState) => ({
+      ...prevState,
+      [target.name]: target.value,
+    }))
+  }
+
+  const setSelectScoringModelOptions = (modelspass) => {
+    modelspass.map((modelpass => {
+      if (modelpass.status === 'AP') {
+        setScoringOptions(current => [
+          ...current,
+          { label: modelpass.model_name, value: modelpass.id }
+        ])
+      }
+    }))
+  }
+
+  async function getModels() {
+    axios
+      .get("http://127.0.0.1:8000/api/scoring_model/")
+      .then((res) => {
+        console.log(res.data.data)
+        console.log(res.data.data[0].model_name)
+        console.log(res.data.data[0].id)
+        setScoringModels(res.data.data)
+        setSelectScoringModelOptions(res.data.data)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+    console.log("scoringOptions", scoringOptions)
+  }
+
+  useEffect(() => {
+    getModels()
+  }, [])
 
   return (
     <div className="container">
@@ -102,50 +117,51 @@ const PipelinePage = () => {
       {/* </div> */}
 
       {open && (
-        <div className="row">
+        <div className="container">
           <div className="table-responsive-sm">
-            <table className="table text-left table-bordered mt-5">
-              <thead>
-                <tr>
-                  <th scope="col">Атрибут</th>
-                  <th>Условие фильтра</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>ИНН</td>
-                  <td>
-                    <table>
-                      <thead>
-                        <tr>
-                          <td>
-                            <MyInput
-                              value={inputINN}
-                              onChange={(e) => handleChangeINN(e)}
-                              type="text"
-                              placeholder="Вставьте список ИНН"
-                            ></MyInput>
-                          </td>
-                          {/* <td>
+            <div className="row">
+              <table className="table text-left table-bordered mt-5">
+                <thead>
+                  <tr>
+                    <th scope="col">Атрибут</th>
+                    <th>Условие фильтра</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>ИНН</td>
+                    <td>
+                      <table>
+                        <thead>
+                          <tr>
+                            <td>
+                              <MyInput
+                                value={inputINN}
+                                onChange={(e) => handleChangeINN(e)}
+                                type="text"
+                                placeholder="Вставьте список ИНН"
+                              ></MyInput>
+                            </td>
+                            {/* <td>
                             <MyInput placeholder="Выражение"></MyInput>
                           </td> */}
-                        </tr>
-                      </thead>
-                    </table>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Модель скоринга</td>
-                  <td>
-                    <SelectField
-                      label=""
-                      defaultOption="Выбрать модель для скоринга"
-                      name="scoring_model"
-                      options={scoringOptions}
-                      onChange={handleChange}
-                      value={scoringModel.scoring_model}
-                    />
-                    {/* <select
+                          </tr>
+                        </thead>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Модель скоринга</td>
+                    <td>
+                      <SelectField
+                        label=""
+                        defaultOption="Выбрать модель для скоринга"
+                        name="scoring_model"
+                        options={scoringOptions}
+                        onChange={handleChange}
+                        value={scoringModel.scoring_model}
+                      />
+                      {/* <select
                       className="form-select"
                       aria-label="Default select example"
                       defaultValue="0"
@@ -157,51 +173,52 @@ const PipelinePage = () => {
                       <option value="2">Two</option>
                       <option value="3">Three</option>
                     </select> */}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Отчетная дата</td>
-                  <td>
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      isClearable
-                      placeholderText="I have been cleared!"
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Вид отчетности
-                  </td>
-                  <td>
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                      defaultValue="0"
-                    >
-                      <option value="0" disabled>
-                        Выбрать вид отчетности
-                      </option>
-                      <option value="1">Первичная</option>
-                      <option value="2">Обновленная</option>
-                    </select>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="row">
-              <div className="col-md-auto">
-                <MyButton>Запустить скоринг</MyButton>
-              </div>
-              <div className="col-md-auto">
-                <MyButton>Журнал скоринга</MyButton>
-              </div>
-              <div className="col-md-auto">
-                <MyButton onClick={handleSaveData}>
-                  Сохранить связку параметров
-                </MyButton>
-              </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Отчетная дата</td>
+                    <td>
+                      <DatePicker
+                        selected={startDate}
+                        onChange={(date) => setStartDate(date)}
+                        isClearable
+                        placeholderText="I have been cleared!"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Вид отчетности
+                    </td>
+                    <td>
+                      <select
+                        className="form-select"
+                        aria-label="Default select example"
+                        defaultValue="0"
+                      >
+                        <option value="0" disabled>
+                          Выбрать вид отчетности
+                        </option>
+                        <option value="1">Первичная</option>
+                        <option value="2">Обновленная</option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-auto">
+              <MyButton>Запустить скоринг</MyButton>
+            </div>
+            <div className="col-md-auto">
+              <MyButton>Журнал скоринга</MyButton>
+            </div>
+            <div className="col-md-auto">
+              <MyButton onClick={handleSaveData}>
+                Сохранить связку параметров
+              </MyButton>
             </div>
           </div>
         </div>
