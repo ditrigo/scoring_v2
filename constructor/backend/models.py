@@ -207,7 +207,7 @@ class MainCatalogFields(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     date_from = models.DateTimeField(null=True)
     date_to = models.DateTimeField(null=True)
-    filed_name = models.CharField(max_length=250, blank=True)
+    filed_name = models.CharField(max_length=250, blank=True)# TODO Remove this field - origin has the same meaning
     description = models.CharField(max_length=250, blank=True)
     origin = models.CharField(max_length=250, blank=True)
     active = models.BooleanField(default=False)
@@ -259,6 +259,28 @@ class MarkersAttributes(models.Model):
         super().save(*args, **kwargs)
 
 
+class InnRes(models.Model):
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default=uuid.uuid4,
+                            editable=False,)
+    author_id = models.CharField(max_length=125, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=False)
+    inn = models.IntegerField()
+    result_score = models.IntegerField(null=True, blank=True)
+    # scoring_model = models.ManyToManyField(ScoringModel, blank=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["inn", "created_date"])
+        ]
+        db_table = "inn_res"
+        verbose_name = "inn_re"
+
+    def __str__(self) -> str:
+        return f"{self.inn}"
+
+
 class ScoringModel(models.Model):
 
     class Status(models.TextChoices):
@@ -279,6 +301,7 @@ class ScoringModel(models.Model):
                               default=Status.DRAFT)
     description = models.CharField(max_length=250, blank=True)
     marker_id = models.ManyToManyField(MarkersAttributes, blank=True)
+    inns = models.ManyToManyField(InnRes, blank=True)
     history = HistoricalRecords(
         custom_model_name='ScoringModelHistory',
         table_name='scoring_model_history',
@@ -303,28 +326,6 @@ class ScoringModel(models.Model):
         else:
             self.version = 1
         super(ScoringModel, self).save(*args, **kwargs)
-
-
-class InnRes(models.Model):
-    id = models.AutoField(primary_key=True)
-    uuid = models.UUIDField(default=uuid.uuid4,
-                            editable=False,)
-    author_id = models.CharField(max_length=125, blank=True)
-    created_date = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=False)
-    inn = models.IntegerField()
-    result_score = models.IntegerField(null=True, blank=True)
-    scoring_model = models.ManyToManyField(ScoringModel, blank=True)
-
-    class Meta:
-        indexes = [
-            models.Index(fields=["inn", "created_date"])
-        ]
-        db_table = "inn_res"
-        verbose_name = "inn_re"
-
-    def __str__(self) -> str:
-        return f"{self.inn}"
 
 
 # Это истинные вычисляемые атрибуты с 131 по 171

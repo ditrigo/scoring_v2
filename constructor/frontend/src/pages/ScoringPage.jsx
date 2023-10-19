@@ -92,7 +92,7 @@ const ScoringPage = () => {
   async function postMarkers(newAtr) {
     axios
       .post("http://127.0.0.1:8000/api/marker_attributes/", {
-        name_counted_attr: newAtr.name_counted_attr,
+        name_marker_attr: newAtr.name_marker_attr,
         attr_formulas: newAtr.attr_formulas,
         description: newAtr.description,
         nested_level: newAtr.nested_level,
@@ -119,8 +119,8 @@ const ScoringPage = () => {
   }, [])
 
   return (
-    <div className="ScoringPage">
-      <div className="container mt-2">
+    <div className="container mt-2">
+      {/* <div className="container mt-2"> */}
         <div className="row">
           <div className="col-md-12">
             <div className="card">
@@ -195,10 +195,10 @@ const ScoringPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      {/* </div> */}
 
-      <div className="container mt-5">
-        <div className="row">
+      {/* <div className="container mt-5"> */}
+        <div className="row mt-5">
           <div className="col-md-12">
             <div className="card">
               <div className="card-header">
@@ -261,7 +261,7 @@ const ScoringPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      {/* </div> */}
 
       <MyModal visible={modal} setVisible={setModal}>
         <ModelForm create={createModel} />

@@ -13,31 +13,31 @@ function UploadPage() {
     setUploadedFiles([...uploadedFiles, item]);
   };
   return (
-    <div className="UploadPage">
-      <div className="container mt-2">
-        <div className="d-flex justify-content-between">
-          <div className="upload-block col"> 
+    // <div className="UploadPage">
+    <div className="container mt-2">
+      <div className="d-flex justify-content">
+        <div className="upload-block col">
           {/* col-5 col-md-4 */}
-            <div className="row">
-              <h4 className="text-center m-3">Добавить файлы</h4>
-            </div>
-            <div className="row m-3">
-              {/* Поле загрузки данных */}
-              <UploadBlock
-                uploadedFiles={uploadedFiles}
-                setUploadedFiles={uploadHandler}
-              />
-            </div>
+          <div className="row">
+            <h4 className="text-center m-3">Добавить файлы</h4>
           </div>
-          <div className="col">
-            <ContentGroup
+          <div className="row m-3">
+            {/* Поле загрузки данных */}
+            <UploadBlock
               uploadedFiles={uploadedFiles}
-              setUploadedFiles={setUploadedFiles}
+              setUploadedFiles={uploadHandler}
             />
           </div>
         </div>
+        <div className="col ml-3">
+          <ContentGroup
+            uploadedFiles={uploadedFiles}
+            setUploadedFiles={setUploadedFiles}
+          />
+        </div>
       </div>
     </div>
+    // </div>
   );
 }
 

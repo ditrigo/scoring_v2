@@ -34,9 +34,15 @@ class MarkersAttributesSerializer(serializers.ModelSerializer):
         # exclude = ['author']
 
 
+class InnResSerialiser(serializers.ModelSerializer):
+    class Meta:
+        model = InnRes
+        fields = "__all__"
+
+
 class ScoringModelSerializer(serializers.ModelSerializer):
     marker_id = MarkersAttributesSerializer(many=True, read_only=True)
-    # inn_ids = 
+    inns = InnResSerialiser(many=True, read_only=True)
     
     class Meta:
         model = ScoringModel
@@ -44,10 +50,7 @@ class ScoringModelSerializer(serializers.ModelSerializer):
         # exclude = ['author']
 
 
-class InnResSerialiser(serializers.ModelSerializer):
-    class Meta:
-        model = InnRes
-        fields = "__all__"
+
 
 # class CountedAttrFormulaSerializer(serializers.ModelSerializer):
 #     class Meta:

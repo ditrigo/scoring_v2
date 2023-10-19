@@ -405,15 +405,52 @@ def CatalogFieldsListViewSet(request):
 
 
 @api_view(['GET', 'POST'])
+def CatalogsListViewSet(request):
+    permission_classes = (IsAuthenticated,)
+    if request.method == 'GET':
+        data = []
+        nextPage = 1
+        previousPage = 1
+        fields = MainCatalog.objects.all().order_by('id')
+        page = request.GET.get('page', 1)
+        paginator = Paginator(fields, 10)
+        try:
+            data = paginator.page(page)
+        except PageNotAnInteger:
+            data = paginator.page(1)
+        except EmptyPage:
+            data = paginator.page(paginator.num_pages)
+
+        serializer = MainCatalogSerializer(
+            data, context={'request': request}, many=True)
+        if data.has_next():
+            nextPage = data.next_page_number()
+        if data.has_previous():
+            previousPage = data.previous_page_number()
+
+        return Response({'data': serializer.data,
+                         'count': paginator.count,
+                         'numpages': paginator.num_pages,
+                         'nextlink': '/api/catalogs/?page=' + str(nextPage),
+                         'prevlink': '/api/catalogs/?page=' + str(previousPage)})
+    elif request.method == 'POST':
+        serializer = MainCatalogSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST'])
 def MarkersAttributesListViewSet(request):
     permission_classes = (IsAuthenticated,)
-    data = None
-    paginator = None
-    serializer = MarkersAttributesSerializer()
-    next_page = None
-    previous_page = None
 
     if request.method == 'GET':
+        data = None
+        paginator = None
+        serializer = MarkersAttributesSerializer()
+        next_page = None
+        previous_page = None
         attributes = MarkersAttributes.objects.all().order_by('id')
         paginator = Paginator(attributes, 10)
         page = request.GET.get('page', 1)
@@ -583,16 +620,11 @@ def CreateRelationInnAndScoringModelViewSet(request):
                     continue
 
                 inn_res = InnRes.objects.create(inn=inn_id)
-                inn_res.scoring_model.add(scoring_model)
+                #TODO проверка на существования связки, чтобы не множить 
+                scoring_model.inns.add(inn_res)
 
             serializer = InnResSerialiser(inn_res)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
 
-
-@api_view(['GET'])
-def get_marker_attributes(request):
-    marker_attributes = MarkersAttributes.objects.all()
-    serializer = MarkersAttributesSerializer(marker_attributes, many=True)
-    return Response(serializer.data)

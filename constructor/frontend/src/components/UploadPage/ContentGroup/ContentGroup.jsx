@@ -108,7 +108,8 @@ const ContentGroup = () => {
 
   return (
     <div
-      className="text-center mx-3 btngroup"
+      className="text-center  btngroup container"
+      // text-center mx-3 btngroup container"
       style={{ width: 800, minHeight: 600 }}
     >
       <div

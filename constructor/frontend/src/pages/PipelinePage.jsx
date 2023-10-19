@@ -23,31 +23,43 @@ const PipelinePage = () => {
   const [scoringModel, setScoringModel] = useState({ scoring_model: "" });
   const [scoringOptions, setScoringOptions] = useState([]);
   const [disabledBtn, setDisabledBtn] = useState("")
-  // const scoringOptions = [
-  //   { label: "СКУАД1", value: 1 },
-  //   { label: "СКУАД2", value: 2 },
-  //   { label: "СКУАД3", value: 3 },
-  // ]
+
+  async function handleSaveData() {
+    axios
+      .post("http://127.0.0.1:8000/api/inn_res/create_relation/", {
+        inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
+        active: true,
+        scoringmodel_id: scoringModel.scoring_model,
+        author_id: "Denis"
+      })
+      .then(function (response) {
+        console.log(response);
+        setDisabledBtn("btn btn-outline-primary disabled");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   const toggle = () => {
     setOpen(!open);
   };
 
-  const handleSaveData = () => {
-    const json = {
-      // INNs: inputINN.split(inputINN[12] === " " ? " " : ", "),
-      // INNs: inputINN.split(", "),
-      inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
-      scoringmodel_id: scoringModel.scoring_model,
-    };
-    setDisabledBtn("btn btn-outline-primary disabled")
-    console.log("JSON: ", json);
-    // alert("JSON в консоли")
 
-    // ОЧИЩЕНИЕ ПОЛЕЙ ПОСЛЕ НАЖАТИЯ НА КНОПКУ ЗАПУСТИТЬ СКОРИНГ
-    // setInputINN("")
-    // setScoringModel({ scoring_model: "" })
-  };
+  // const handleSaveData = () => {
+  //   const json = {
+  //     // INNs: inputINN.split(inputINN[12] === " " ? " " : ", "),
+  //     // INNs: inputINN.split(", "),
+  //     inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
+  //     scoringmodel_id: scoringModel.scoring_model,
+  //   };
+  //   setDisabledBtn("btn btn-outline-primary disabled")
+  //   console.log("JSON: ", json);
+
+  //   // ОЧИЩЕНИЕ ПОЛЕЙ ПОСЛЕ НАЖАТИЯ НА КНОПКУ ЗАПУСТИТЬ СКОРИНГ
+  //   // setInputINN("")
+  //   // setScoringModel({ scoring_model: "" })
+  // };
 
   const handleChangeINN = (e) => {
     setInputINN(e.target.value);
@@ -141,21 +153,21 @@ const PipelinePage = () => {
                     <td>ИНН</td>
                     <td>
                       {/* <table> */}
-                        {/* <thead> */}
-                          {/* <tr> */}
-                            {/* <td> */}
-                              <MyInput
-                                value={inputINN}
-                                onChange={(e) => handleChangeINN(e)}
-                                type="text"
-                                placeholder="Вставьте список ИНН"
-                              ></MyInput>
-                            {/* </td> */}
-                            {/* <td>
+                      {/* <thead> */}
+                      {/* <tr> */}
+                      {/* <td> */}
+                      <MyInput
+                        value={inputINN}
+                        onChange={(e) => handleChangeINN(e)}
+                        type="text"
+                        placeholder="Вставьте список ИНН"
+                      ></MyInput>
+                      {/* </td> */}
+                      {/* <td>
                             <MyInput placeholder="Выражение"></MyInput>
                           </td> */}
-                          {/* </tr> */}
-                        {/* </thead> */}
+                      {/* </tr> */}
+                      {/* </thead> */}
                       {/* </table> */}
                     </td>
                   </tr>
@@ -223,9 +235,9 @@ const PipelinePage = () => {
               <MyButton>Журнал скоринга</MyButton>
             </div>
             <div className="col-md-auto">
-              <MyButton 
-              className={disabledBtn}
-              onClick={handleSaveData}>
+              <MyButton
+                className={disabledBtn}
+                onClick={handleSaveData}>
                 Сохранить связку параметров
               </MyButton>
             </div>
