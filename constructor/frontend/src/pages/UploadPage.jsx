@@ -7,16 +7,17 @@ import "../styles/App.css";
 import ContentGroup from "../components/UploadPage/ContentGroup/ContentGroup.jsx";
 
 function UploadPage() {
-  const [uploadedFiles, setUploadedFiles] = useState([{ name: 123 }])
+  const [uploadedFiles, setUploadedFiles] = useState([{ name: 123 }]);
 
   const uploadHandler = (item) => {
-    setUploadedFiles([...uploadedFiles, item])
-  }
+    setUploadedFiles([...uploadedFiles, item]);
+  };
   return (
     <div className="UploadPage">
       <div className="container mt-2">
         <div className="d-flex justify-content-between">
-          <div className="upload-block col-5 col-md-4">
+          <div className="upload-block col"> 
+          {/* col-5 col-md-4 */}
             <div className="row">
               <h4 className="text-center m-3">Добавить файлы</h4>
             </div>
@@ -28,17 +29,19 @@ function UploadPage() {
               />
             </div>
           </div>
-          <ContentGroup
-            uploadedFiles={uploadedFiles}
-            setUploadedFiles={setUploadedFiles}
-          />
+          <div className="col">
+            <ContentGroup
+              uploadedFiles={uploadedFiles}
+              setUploadedFiles={setUploadedFiles}
+            />
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default UploadPage
+export default UploadPage;
 
 // {
 //   /*// ROMA VERSTKA*/

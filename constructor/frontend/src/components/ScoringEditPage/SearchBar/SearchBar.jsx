@@ -90,6 +90,7 @@ const SearchBar = ({ attributes, postLink, nameModel, idModel, statusModel }) =>
               )}
             </div>
             <div className="row">
+              {/* <div> */}
               <MyButton
                 type="submit"
                 className={statusButton === "AP" ? "disabled" : ""}
@@ -112,7 +113,8 @@ const SearchBar = ({ attributes, postLink, nameModel, idModel, statusModel }) =>
               >
                 Выйти
               </Link>
-            </div>
+              </div>
+            {/* </div> */}
           </form>
         {/* </div> */}
       </div>

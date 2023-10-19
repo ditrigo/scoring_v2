@@ -72,13 +72,12 @@ const MarkersTable = ({ modelId }) => {
                 <h4>
                   {/* Атрибуты */}
                   Маркеры
-                  <button
+                  {/* <button
                     onClick={() => setModalMarker(true)}
                     className="btn btn-outline-primary float-end"
                   >
-                    {/* Создать атрибут */}
                     Добавить маркер
-                  </button>
+                  </button> */}
                 </h4>
               </div>
               <div className="card-body">
@@ -123,10 +122,10 @@ const MarkersTable = ({ modelId }) => {
         </div>
       </div>
 
-      <MyModal visible={modalMarker} setVisible={setModalMarker}>
+      {/* <MyModal visible={modalMarker} setVisible={setModalMarker}>
         <h3>Новый маркер</h3>
         <AtributForm create={createMarker} setVisible={setModalMarker} />
-      </MyModal>
+      </MyModal> */}
 
       {/* измененить элемент a controlled or uncontrolled??? */}
       <MyModal visible={modalMarkerView} setVisible={setModalMarkerView}>

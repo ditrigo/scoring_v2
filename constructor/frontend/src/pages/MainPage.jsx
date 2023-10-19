@@ -5,12 +5,14 @@ import AppRouter from "../components/AppRouter";
 import LoginPage from "./LoginPage";
 import Logo from "../components/Img/output.png";
 
+
 function MainPage() {
   const [isAuth, setIsAuth] = useState(true);
 
   useEffect(() => {
     if (localStorage.getItem("access_token") !== null) {
       setIsAuth(true);
+      console.log(localStorage.getItem("access_token"))
     }
   }, [isAuth]);
 
@@ -20,12 +22,6 @@ function MainPage() {
         <BrowserRouter>
           <div
             className="container"
-            // style={{
-            //   display: "flex",
-            //   marginLeft: "180px",
-            //   marginTop: "30px",
-            //   marginBottom: "10px",
-            // }}
           >
             <div className="row">
               <div className="col-md-auto">

@@ -5,7 +5,7 @@ import Upload from "../pages/UploadPage";
 import PipelinePage from "../pages/PipelinePage";
 import CrmPage from "../pages/CrmPage";
 import Error from "../pages/Error";
-// import LoginPage from "../pages/LoginPage";
+import LoginPage from "../pages/LoginPage";
 import Logout from "../pages/LogoutPage";
 import ScoringEditPage from "../pages/ScoringEditPage";
 import NewCrmClientPage from "../pages/NewCrmClientPage";

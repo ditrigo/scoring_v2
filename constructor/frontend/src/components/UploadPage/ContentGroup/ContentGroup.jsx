@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from "react"
-import "bootstrap/dist/css/bootstrap.css"
-import axios from "axios"
-import MyButton from "../../UI/MyButton/MyButton"
-import "../../../styles/App.css"
-import Table from "../../Table"
-import HistoryDownloadTable from "../../HistoryDownloadTable"
+import React, { useEffect, useState } from "react";
+import "bootstrap/dist/css/bootstrap.css";
+import axios from "axios";
+import MyButton from "../../UI/MyButton/MyButton";
+import "../../../styles/App.css";
+import Table from "../../Table";
+import HistoryDownloadTable from "../../HistoryDownloadTable";
 
 const ContentGroup = () => {
-  const [view, setView] = useState("view")
-  const [attributes, setAttributes] = useState([])
+  const [view, setView] = useState("log");
+  const [attributes, setAttributes] = useState([]);
 
   const [uploadColumns, setUploadColumns] = useState([
     { name: "Id", path: "id", isVisible: true },
     { name: "Дата загрузки", isVisible: true },
     { name: "ИНН", isVisible: true },
-    { name: "Дата выгрузки отчета", isVisible: true },
-  ])
+    { name: "Дата отчета", isVisible: true },
+  ]);
 
   const [logColumns, setLogColumns] = useState([
     { name: "Название", isVisible: true },
     { name: "Дата загрузки", isVisible: true },
     { name: "Размер", isVisible: true },
-    { name: "Общее количество загруженных строк", isVisible: true },
-    { name: "Количество пропущенных строк", isVisible: true },
-    { name: "Новые загруженные строки", isVisible: true },
-  ])
+    { name: "Общее количество строк", isVisible: true },
+    { name: "Пропущенные строки", isVisible: true },
+    { name: "Новые строки", isVisible: true },
+  ]);
 
   const logAttributs = [
     {
@@ -67,17 +67,17 @@ const ContentGroup = () => {
       missed: 10,
       new: 14,
     },
-  ]
+  ];
 
   async function getfiles() {
     axios
       .get("http://127.0.0.1:8000/api/attributes/")
       .then((res) => {
-        setAttributes(res.data.data)
+        setAttributes(res.data.data);
       })
       .catch((e) => {
-        console.log(e)
-      })
+        console.log(e);
+      });
   }
 
   // function formatBytes(bytes, decimals = 2) {
@@ -103,8 +103,8 @@ const ContentGroup = () => {
   // }
 
   useEffect(() => {
-    getfiles()
-  }, [])
+    getfiles();
+  }, []);
 
   return (
     <div
@@ -118,17 +118,18 @@ const ContentGroup = () => {
         aria-label="Basic outlined example"
       >
         <MyButton
-          className={view === "view" ? "btn-primary" : ""}
-          onClick={() => setView("view")}
-        >
-          Просмотр данных
-        </MyButton>
-        <MyButton
           className={view === "log" ? "btn-primary" : ""}
           onClick={() => setView("log")}
         >
           История загрузки
         </MyButton>
+        <MyButton
+          className={view === "view" ? "btn-primary" : ""}
+          onClick={() => setView("view")}
+        >
+          Просмотр данных
+        </MyButton>
+
         <MyButton
           className={view === "faq" ? "btn-primary" : ""}
           onClick={() => setView("faq")}
@@ -196,7 +197,7 @@ const ContentGroup = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ContentGroup
+export default ContentGroup;

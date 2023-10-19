@@ -36,7 +36,8 @@ class MarkersAttributesSerializer(serializers.ModelSerializer):
 
 class ScoringModelSerializer(serializers.ModelSerializer):
     marker_id = MarkersAttributesSerializer(many=True, read_only=True)
-
+    # inn_ids = 
+    
     class Meta:
         model = ScoringModel
         fields = "__all__"

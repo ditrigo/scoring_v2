@@ -204,23 +204,20 @@ const ScoringPage = () => {
               <div className="card-header">
                 <h4>
                   Маркеры
-                  {/* <button
+                  <button
                     onClick={() => setModalMarker(true)}
                     className="btn btn-outline-primary float-end"
                   >
-                    Создать атрибут
                     Добавить маркер
-                  </button> */}
+                  </button>
                 </h4>
               </div>
               <div className="card-body">
                 <table className="table table-striped">
                   <thead>
                     <tr>
-                      {/* <th scope="col">id модели</th> */}
                       <th scope="col">Наименование маркера</th>
                       <th>Автор</th>
-                      {/* <th>UUID</th> */}
                       <th>Дата изменения</th>
                       <th>Формула маркера</th>
                       <th>Просмотр</th>
