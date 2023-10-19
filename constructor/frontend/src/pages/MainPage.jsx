@@ -20,23 +20,32 @@ function MainPage() {
         <BrowserRouter>
           <div
             className="container"
-            style={{
-              display: "flex",
-              marginLeft: "180px",
-              marginTop: "30px",
-              marginBottom: "10px",
-            }}
+            // style={{
+            //   display: "flex",
+            //   marginLeft: "180px",
+            //   marginTop: "30px",
+            //   marginBottom: "10px",
+            // }}
           >
-            <img 
-              src={Logo} 
-              style={{ width: "100px", marginRight: "10px" }} 
-            />
-            <div
-              style={{ display: "flex", marginLeft: "10px", marginTop: "30px" }}
-            >
-              <h2>КОНСТРУКТОР СКОРИНГА</h2>
-              <p>build_v1_1</p>
+            <div className="row">
+              <div className="col-md-auto">
+                <img
+                  src={Logo}
+                  style={{ 
+                    width: "100px"
+                    // marginRight: "10px" 
+                  }}
+                />
+              </div>
+              <div className="col-6">
+                <h2>КОНСТРУКТОР СКОРИНГА</h2>
+                <p>build_v1_1</p>
+              </div>
             </div>
+
+            <div
+            // style={{ display: "flex", marginLeft: "10px", marginTop: "30px" }}
+            ></div>
           </div>
           <Navbar />
           <AppRouter />
