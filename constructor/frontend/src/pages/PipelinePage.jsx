@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import MyButton from "../components/UI/MyButton/MyButton";
-import MyInput from "../components/UI/MyInput/MyInput";
-import "bootstrap/dist/css/bootstrap.css";
-import DatePicker from "react-datepicker";
-import axios from "axios";
-import "react-datepicker/dist/react-datepicker.css";
-import SelectField from "../components/CrmPage/Form/SelectField";
+import React, { useState, useEffect } from "react"
+import MyButton from "../components/UI/MyButton/MyButton"
+import MyInput from "../components/UI/MyInput/MyInput"
+import "bootstrap/dist/css/bootstrap.css"
+import DatePicker from "react-datepicker"
+import axios from "axios"
+import "react-datepicker/dist/react-datepicker.css"
+import SelectField from "../components/CrmPage/Form/SelectField"
 
 const PipelinePage = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(true)
 
   //   Для отображения в дальнейшем различных элементов
   const [block, setBlock] = useState([
@@ -17,11 +17,11 @@ const PipelinePage = () => {
     { name: "Выписка СКУАД", open: false },
     { name: "Результаты скоринга", open: false },
     { name: "Журнал скоринга", open: false },
-  ]);
-  const [startDate, setStartDate] = useState(new Date());
-  const [inputINN, setInputINN] = useState("");
-  const [scoringModel, setScoringModel] = useState({ scoring_model: "" });
-  const [scoringOptions, setScoringOptions] = useState([]);
+  ])
+  const [startDate, setStartDate] = useState(new Date())
+  const [inputINN, setInputINN] = useState("")
+  const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
+  const [scoringOptions, setScoringOptions] = useState([])
   const [disabledBtn, setDisabledBtn] = useState("")
   // const scoringOptions = [
   //   { label: "СКУАД1", value: 1 },
@@ -30,8 +30,8 @@ const PipelinePage = () => {
   // ]
 
   const toggle = () => {
-    setOpen(!open);
-  };
+    setOpen(!open)
+  }
 
   const handleSaveData = () => {
     const json = {
@@ -39,27 +39,27 @@ const PipelinePage = () => {
       // INNs: inputINN.split(", "),
       inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
       scoringmodel_id: scoringModel.scoring_model,
-    };
+    }
     setDisabledBtn("btn btn-outline-primary disabled")
-    console.log("JSON: ", json);
+    console.log("JSON: ", json)
     // alert("JSON в консоли")
 
     // ОЧИЩЕНИЕ ПОЛЕЙ ПОСЛЕ НАЖАТИЯ НА КНОПКУ ЗАПУСТИТЬ СКОРИНГ
     // setInputINN("")
     // setScoringModel({ scoring_model: "" })
-  };
+  }
 
   const handleChangeINN = (e) => {
-    setInputINN(e.target.value);
+    setInputINN(e.target.value)
     // console.log(inputINN.split(", "))
-  };
+  }
 
   const handleChange = (target) => {
     setScoringModel((prevState) => ({
       ...prevState,
       [target.name]: target.value,
-    }));
-  };
+    }))
+  }
 
   // const setSelectScoringModelOptions = (modelspass) => {
   //   modelspass.map((modelpass => {
@@ -87,22 +87,22 @@ const PipelinePage = () => {
             setScoringOptions((current) => [
               ...current,
               { label: modelpass.model_name, value: modelpass.id },
-            ]);
+            ])
           }
-        });
+        })
       })
       .catch((e) => {
-        console.log(e);
-      });
-    console.log("scoringOptions", scoringOptions);
+        console.log(e)
+      })
+    console.log("scoringOptions", scoringOptions)
   }
 
   useEffect(() => {
-    getModels();
-  }, []);
+    getModels()
+  }, [])
 
   return (
-    <div className="container mt-2">
+    <div className="container mt-10">
       {/* <div className="row"> */}
       <div className="row">
         <div className="col-md-auto">
@@ -141,21 +141,21 @@ const PipelinePage = () => {
                     <td>ИНН</td>
                     <td>
                       {/* <table> */}
-                        {/* <thead> */}
-                          {/* <tr> */}
-                            {/* <td> */}
-                              <MyInput
-                                value={inputINN}
-                                onChange={(e) => handleChangeINN(e)}
-                                type="text"
-                                placeholder="Вставьте список ИНН"
-                              ></MyInput>
-                            {/* </td> */}
-                            {/* <td>
+                      {/* <thead> */}
+                      {/* <tr> */}
+                      {/* <td> */}
+                      <MyInput
+                        value={inputINN}
+                        onChange={(e) => handleChangeINN(e)}
+                        type="text"
+                        placeholder="Вставьте список ИНН"
+                      ></MyInput>
+                      {/* </td> */}
+                      {/* <td>
                             <MyInput placeholder="Выражение"></MyInput>
                           </td> */}
-                          {/* </tr> */}
-                        {/* </thead> */}
+                      {/* </tr> */}
+                      {/* </thead> */}
                       {/* </table> */}
                     </td>
                   </tr>
@@ -223,9 +223,7 @@ const PipelinePage = () => {
               <MyButton>Журнал скоринга</MyButton>
             </div>
             <div className="col-md-auto">
-              <MyButton 
-              className={disabledBtn}
-              onClick={handleSaveData}>
+              <MyButton className={disabledBtn} onClick={handleSaveData}>
                 Сохранить связку параметров
               </MyButton>
             </div>
@@ -233,7 +231,7 @@ const PipelinePage = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default PipelinePage;
+export default PipelinePage

@@ -8,7 +8,13 @@ import MyEditForm from "../MyEditForm/MyEditForm"
 import MarkersTable from "../MarkersTable/MarkersTable"
 // import "bootstrap/dist/js/bootstrap.js";
 
-const SearchBar = ({ attributes, postLink, nameModel, idModel, statusModel }) => {
+const SearchBar = ({
+  attributes,
+  postLink,
+  nameModel,
+  idModel,
+  statusModel,
+}) => {
   const [expanded, setExpanded] = useState(false)
   const [selections, setSelections] = useState([])
   const [statusButton, setStatusButton] = useState(statusModel)
@@ -42,78 +48,79 @@ const SearchBar = ({ attributes, postLink, nameModel, idModel, statusModel }) =>
   }
 
   return (
-    <div className="container">
+    <div className="container mt-10">
       <div className="row">
         <h3>Добавление элементов для модели {nameModel}</h3>
         <MarkersTable modelId={idModel} />
       </div>
       <div className="row">
         {/* <div className="row"> */}
-          <form
-            onSubmit={handleSubmit}
-            className="w-full">
-            <div >
-              {/* <MarkersTable /> */}
-              <div onClick={toggleExpanded}>
-                <div
-                  className={`font-semibold cursor-pointer ${expanded ? "up-arrow" : "down-arrow"
-                    }`}
-                >
-                  {selections.length
-                    ? selections.map((_, i) => (
+        <form onSubmit={handleSubmit} className="w-full">
+          <div>
+            {/* <MarkersTable /> */}
+            <div onClick={toggleExpanded}>
+              <div
+                className={`font-semibold cursor-pointer ${
+                  expanded ? "up-arrow" : "down-arrow"
+                }`}
+              >
+                {selections.length
+                  ? selections.map((_, i) => (
                       <span key={i}>
                         {i ? ", " : null}
                         {attributes[i].name_marker_attr}
                       </span>
                     ))
-                    : "Маркеры не выбраны"}
-                </div>
+                  : "Маркеры не выбраны"}
               </div>
-              {expanded && (
-                <div className="">
-                  {attributes.map((attribute, index) => (
-                    <label
-                      className="custom-select custom-select-lg mb-3"
-                      key={index}
-                    >
-                      <input
-                        type="checkbox"
-                        name={attribute.id}
-                        value={attribute.name_marker_attr}
-                        onChange={handleChange}
-                        className="m-3 cursor-pointer"
-                      />
-                      {attribute.name_marker_attr}
-                    </label>
-                  ))}
-                </div>
-              )}
             </div>
-            <div className="row">
-              <MyButton
-                type="submit"
-                className={statusButton === "AP" ? "disabled" : ""}
-                onClick={(e) => handleSubmit(e, "AP")}>
-                Утвердить
-              </MyButton>
-              <MyButton
-                type="submit"
-                className={statusButton === "AP" ? "disabled" : ""}
-                onClick={(e) => handleSubmit(e, "DF")}>
-                Сохранить
-              </MyButton>
-              {/* <MyButton type="button" onClick={() => setModal(true)}>
+            {expanded && (
+              <div className="">
+                {attributes.map((attribute, index) => (
+                  <label
+                    className="custom-select custom-select-lg mb-3"
+                    key={index}
+                  >
+                    <input
+                      type="checkbox"
+                      name={attribute.id}
+                      value={attribute.name_marker_attr}
+                      onChange={handleChange}
+                      className="m-3 cursor-pointer"
+                    />
+                    {attribute.name_marker_attr}
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="row">
+            <MyButton
+              type="submit"
+              className={statusButton === "AP" ? "disabled" : ""}
+              onClick={(e) => handleSubmit(e, "AP")}
+            >
+              Утвердить
+            </MyButton>
+            <MyButton
+              type="submit"
+              className={statusButton === "AP" ? "disabled" : ""}
+              onClick={(e) => handleSubmit(e, "DF")}
+            >
+              Сохранить
+            </MyButton>
+            {/* <MyButton type="button" onClick={() => setModal(true)}>
                 Добавить новый маркер
               </MyButton> */}
-              <Link
-                to={`/scoring`}
-                className="btn btn-outline-secondary"
+            <Link
+              to={`/scoring`}
+              className="btn btn-outline-secondary"
               // type="submit"
-              >
-                Выйти
-              </Link>
-            </div>
-          </form>
+            >
+              Выйти
+            </Link>
+          </div>
+        </form>
         {/* </div> */}
       </div>
       {/*<MyModal visible={modal} setVisible={setModal}>

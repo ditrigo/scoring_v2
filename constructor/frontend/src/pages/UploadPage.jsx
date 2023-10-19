@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 
-import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock.tsx";
+import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock.tsx"
 // import ButtonGroup from "../components/UploadPage/ButtonGroup/ButtonGroup.jsx";
-import "bootstrap/dist/css/bootstrap.css";
-import "../styles/App.css";
-import ContentGroup from "../components/UploadPage/ContentGroup/ContentGroup.jsx";
+import "bootstrap/dist/css/bootstrap.css"
+import "../styles/App.css"
+import ContentGroup from "../components/UploadPage/ContentGroup/ContentGroup.jsx"
 
 function UploadPage() {
   const [uploadedFiles, setUploadedFiles] = useState([{ name: 123 }])
@@ -14,7 +14,7 @@ function UploadPage() {
   }
   return (
     <div className="UploadPage">
-      <div className="container mt-2">
+      <div className="container mt-10">
         <div className="d-flex justify-content-between">
           <div className="upload-block col-5 col-md-4">
             <div className="row">

@@ -124,9 +124,112 @@ const NewCrmClientPage = () => {
     { label: "Низкий риск", value: "Низкий риск" },
   ]
   const sources = [
-    { label: "Письмо", value: "Письмо", name: "source" },
-    { label: "Список", value: "Список", name: "source" },
+    { label: "ТНО, ФНС    ", value: "ТНО, ФНС    ", name: "source" },
+    {
+      label: "Входящие звонки    ",
+      value: "Входящие звонки    ",
+      name: "source",
+    },
+    { label: "РГ    ", value: "РГ    ", name: "source" },
+  ]
+  const menegers = [
+    { label: "Бабасов П.Н.", value: "Бабасов П.Н.", name: "source" },
+    { label: "Бойченко И.А.    ", value: "Бойченко И.А.    ", name: "source" },
+    {
+      label: "Емельянова Е.А.    ",
+      value: "Емельянова Е.А.    ",
+      name: "source",
+    },
+  ]
+  const status = [
+    { label: "должник    ", value: "должник    ", name: "source" },
+    { label: "кредитор    ", value: "кредитор    ", name: "source" },
+  ]
+  const type = [
+    { label: "Текущий", value: "Текущий", name: "source" },
+    { label: "будущий", value: "будущий", name: "source" },
     { label: "Поручение", value: "Поручение", name: "source" },
+  ]
+  const category = [
+    {
+      label: "системообразующее    ",
+      value: "системообразующее    ",
+      name: "source",
+    },
+    {
+      label: "градообразующее    ",
+      value: "градообразующее    ",
+      name: "source",
+    },
+    {
+      label: "стратегическое    ",
+      value: "стратегическое    ",
+      name: "source",
+    },
+  ]
+  const positive = [
+    { label: "МС    ", value: "МС    ", name: "source" },
+    { label: "Рассрочка    ", value: "Рассрочка    ", name: "source" },
+    {
+      label: "отлагательные меры    ",
+      value: "отлагательные меры    ",
+      name: "source",
+    },
+  ]
+  const stage = [
+    {
+      label: "Получено обращение     ",
+      value: "Получено обращение     ",
+      name: "source",
+    },
+    {
+      label: "Проведено первое совещание     ",
+      value: "Проведено первое совещание     ",
+      name: "source",
+    },
+    {
+      label: "Истребованы документы",
+      value: "Истребованы документы",
+      name: "source",
+    },
+  ]
+  const negative = [
+    {
+      label:
+        "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство     ",
+      value:
+        "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство     ",
+      name: "source",
+    },
+    {
+      label:
+        "отказ - не требуется помощь, стабильное финансовое состояние     ",
+      value:
+        "отказ - не требуется помощь, стабильное финансовое состояние     ",
+      name: "source",
+    },
+    {
+      label: "отказ – не исполнение регламента деятельности ПРД     ",
+      value: "отказ – не исполнение регламента деятельности ПРД     ",
+      name: "source",
+    },
+  ]
+  const support = [
+    {
+      label: "отсрочка / рассрочка (ст. 64 НК РФ)    ",
+      value: "отсрочка / рассрочка (ст. 64 НК РФ)    ",
+      name: "source",
+    },
+    {
+      label: "отлагательные меры    ",
+      value: "отлагательные меры    ",
+      name: "source",
+    },
+    {
+      label: "отлагательные меры + МС    ",
+      value: "отлагательные меры + МС",
+      name: "source",
+    },
   ]
 
   return (
@@ -185,7 +288,7 @@ const NewCrmClientPage = () => {
                     //     ></input>
                     //   )
                     // }
-                    else if (el.name === "region") {
+                    else if (el.name === "Регион") {
                       return (
                         <div className="mb-2">
                           <label className="form-label">Регион</label>
@@ -193,17 +296,127 @@ const NewCrmClientPage = () => {
                             options={regions}
                             onChange={handleChangeSelect}
                             name="region"
+                            placeholder="Выберите"
+                          />
+                        </div>
+                      )
+                    } else if (el.name === "Менеджер") {
+                      return (
+                        <div className="mb-2">
+                          <label className="form-label">Менеджер</label>
+                          <Select
+                            options={menegers}
+                            onChange={handleChangeSelect}
+                            name="meneger"
+                            placeholder="Выберите"
                           />
                         </div>
                       )
                     } else if (el.name === "source") {
                       return (
                         <div className="mb-2">
-                          <label className="form-label">Источник</label>
+                          <label className="form-label">
+                            Письмо/поручение/список
+                          </label>
                           <Select
                             options={sources}
                             onChange={handleChangeSelect}
                             name="source"
+                            placeholder="Выберите"
+                          />
+                        </div>
+                      )
+                    } else if (el.name === "Статус заявителя") {
+                      return (
+                        <div className="mb-2">
+                          <label className="form-label">Статус заявителя</label>
+                          <Select
+                            options={status}
+                            onChange={handleChangeSelect}
+                            name="Статус заявителя"
+                            placeholder="Выберите"
+                          />
+                        </div>
+                      )
+                    } else if (el.name === "Тип долга") {
+                      return (
+                        <div className="mb-2">
+                          <label className="form-label">Тип долга</label>
+                          <Select
+                            options={type}
+                            onChange={handleChangeSelect}
+                            name="Тип долга"
+                            placeholder="Выберите"
+                          />
+                        </div>
+                      )
+                    } else if (el.name === "Категория") {
+                      return (
+                        <div className="mb-2">
+                          <label className="form-label">Категория</label>
+                          <Select
+                            options={category}
+                            onChange={handleChangeSelect}
+                            name="Категория"
+                            placeholder="Выберите"
+                          />
+                        </div>
+                      )
+                    } else if (
+                      el.name === "Мера поддержки, запрашиваемая клиентом"
+                    ) {
+                      return (
+                        <div className="mb-2">
+                          <label className="form-label">
+                            Мера поддержки, запрашиваемая клиентом
+                          </label>
+                          <Select
+                            options={support}
+                            onChange={handleChangeSelect}
+                            name="Мера поддержки, запрашиваемая клиентом"
+                            placeholder="Выберите"
+                          />
+                        </div>
+                      )
+                    } else if (el.name === "Вид положительного решения") {
+                      return (
+                        <div className="mb-2">
+                          <label className="form-label">
+                            Вид положительного решения
+                          </label>
+                          <Select
+                            options={positive}
+                            onChange={handleChangeSelect}
+                            name="Вид положительного решения"
+                            placeholder="Выберите"
+                          />
+                        </div>
+                      )
+                    } else if (el.name === "Вид отрицательного решения") {
+                      return (
+                        <div className="mb-2">
+                          <label className="form-label">
+                            Вид отрицательного решения
+                          </label>
+                          <Select
+                            options={negative}
+                            onChange={handleChangeSelect}
+                            name="Вид отрицательного решения"
+                            placeholder="Выберите"
+                          />
+                        </div>
+                      )
+                    } else if (el.name === "Стадия рассмотрения") {
+                      return (
+                        <div className="mb-2">
+                          <label className="form-label">
+                            Стадия рассмотрения
+                          </label>
+                          <Select
+                            options={stage}
+                            onChange={handleChangeSelect}
+                            name="Стадия рассмотрения"
+                            placeholder="Выберите"
                           />
                         </div>
                       )

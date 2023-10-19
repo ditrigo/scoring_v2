@@ -120,7 +120,7 @@ const ScoringPage = () => {
 
   return (
     <div className="ScoringPage">
-      <div className="container mt-2">
+      <div className="container mt-10">
         <div className="row">
           <div className="col-md-12">
             <div className="card">
@@ -241,8 +241,8 @@ const ScoringPage = () => {
                           <td>{marker.attr_formulas}</td>
                           <td>
                             <Link
-                            // to={`/scoring/${model.id}/edit`}
-                            // state={{ models: model }}
+                              to={`/scoring/${marker.id}/edit`}
+                              state={{ models: marker }}
                             >
                               <MyButton>Просмотр</MyButton>
                             </Link>
@@ -267,7 +267,8 @@ const ScoringPage = () => {
       </div>
 
       <MyModal visible={modal} setVisible={setModal}>
-        <ModelForm create={createModel} />
+        <h3>Новая модель</h3>
+        <ModelForm create={createModel} models={models} />
       </MyModal>
 
       <MyModal visible={modalMarker} setVisible={setModalMarker}>

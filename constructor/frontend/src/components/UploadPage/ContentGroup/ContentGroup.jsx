@@ -11,23 +11,24 @@ const ContentGroup = () => {
   const [attributes, setAttributes] = useState([])
 
   const [uploadColumns, setUploadColumns] = useState([
-    { name: "Id", path: "id", isVisible: true },
-    { name: "Дата загрузки", isVisible: true },
-    { name: "ИНН", isVisible: true },
-    { name: "Дата выгрузки отчета", isVisible: true },
+    { id: 1, name: "Id", path: "id", isVisible: true },
+    { id: 2, name: "Дата загрузки", isVisible: true },
+    { id: 3, name: "ИНН", isVisible: true },
+    { id: 4, name: "Дата выгрузки отчета", isVisible: true },
   ])
 
   const [logColumns, setLogColumns] = useState([
-    { name: "Название", isVisible: true },
-    { name: "Дата загрузки", isVisible: true },
-    { name: "Размер", isVisible: true },
-    { name: "Общее количество загруженных строк", isVisible: true },
-    { name: "Количество пропущенных строк", isVisible: true },
-    { name: "Новые загруженные строки", isVisible: true },
+    { id: 1, name: "Название", isVisible: true },
+    { id: 2, name: "Дата загрузки", isVisible: true },
+    { id: 3, name: "Размер", isVisible: true },
+    { id: 4, name: "Общее количество загруженных строк", isVisible: true },
+    { id: 5, name: "Количество пропущенных строк", isVisible: true },
+    { id: 6, name: "Новые загруженные строки", isVisible: true },
   ])
 
   const logAttributs = [
     {
+      id: 1,
       name: "filename1",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "3kb",
@@ -36,6 +37,7 @@ const ContentGroup = () => {
       new: 7,
     },
     {
+      id: 2,
       name: "filename2",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "1kb",
@@ -44,6 +46,7 @@ const ContentGroup = () => {
       new: 4,
     },
     {
+      id: 3,
       name: "filename3",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "8kb",
@@ -52,6 +55,7 @@ const ContentGroup = () => {
       new: 80,
     },
     {
+      id: 4,
       name: "filename4",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "13kb",
@@ -60,6 +64,7 @@ const ContentGroup = () => {
       new: 10,
     },
     {
+      id: 5,
       name: "filename5",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "22kb",
