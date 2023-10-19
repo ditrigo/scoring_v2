@@ -30,7 +30,7 @@ const CrmPage = () => {
     : null
 
   return (
-    <div className="container m-5 mt-0">
+    <div className="container m-5 mt-2">
       <div className="row row-centered colored">
         <button className="btn btn-primary w-50 mx-auto m-2 col-sm-4 mb-4">
           <Link to="/newclient" className="nav-link m-2">

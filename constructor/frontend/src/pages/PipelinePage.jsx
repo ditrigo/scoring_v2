@@ -8,8 +8,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import SelectField from "../components/CrmPage/Form/SelectField";
 
 const PipelinePage = () => {
-  const [open, setOpen] = useState(true)
-  
+  const [open, setOpen] = useState(true);
+
   //   Для отображения в дальнейшем различных элементов
   const [block, setBlock] = useState([
     { name: "Статические данные", open: false },
@@ -17,13 +17,12 @@ const PipelinePage = () => {
     { name: "Выписка СКУАД", open: false },
     { name: "Результаты скоринга", open: false },
     { name: "Журнал скоринга", open: false },
-  ])
-  const [startDate, setStartDate] = useState(new Date())
-  // const [view, setView] = useState("result")
-  const [scoringModels, setScoringModels] = useState([])
-  const [inputINN, setInputINN] = useState("")
-  const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
-  const [scoringOptions, setScoringOptions] = useState([])
+  ]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [inputINN, setInputINN] = useState("");
+  const [scoringModel, setScoringModel] = useState({ scoring_model: "" });
+  const [scoringOptions, setScoringOptions] = useState([]);
+  const [disabledBtn, setDisabledBtn] = useState("")
   // const scoringOptions = [
   //   { label: "СКУАД1", value: 1 },
   //   { label: "СКУАД2", value: 2 },
@@ -31,8 +30,8 @@ const PipelinePage = () => {
   // ]
 
   const toggle = () => {
-    setOpen(!open)
-  }
+    setOpen(!open);
+  };
 
   const handleSaveData = () => {
     const json = {
@@ -40,58 +39,70 @@ const PipelinePage = () => {
       // INNs: inputINN.split(", "),
       inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
       scoringmodel_id: scoringModel.scoring_model,
-    }
-    console.log("JSON: ", json)
-    alert("JSON в консоли")
-    setInputINN("")
-    setScoringModel({ scoring_model: "" })
-  }
+    };
+    setDisabledBtn("btn btn-outline-primary disabled")
+    console.log("JSON: ", json);
+    // alert("JSON в консоли")
+
+    // ОЧИЩЕНИЕ ПОЛЕЙ ПОСЛЕ НАЖАТИЯ НА КНОПКУ ЗАПУСТИТЬ СКОРИНГ
+    // setInputINN("")
+    // setScoringModel({ scoring_model: "" })
+  };
 
   const handleChangeINN = (e) => {
-    setInputINN(e.target.value)
+    setInputINN(e.target.value);
     // console.log(inputINN.split(", "))
-  }
+  };
 
   const handleChange = (target) => {
     setScoringModel((prevState) => ({
       ...prevState,
       [target.name]: target.value,
-    }))
-  }
+    }));
+  };
 
-  const setSelectScoringModelOptions = (modelspass) => {
-    modelspass.map((modelpass => {
-      if (modelpass.status === 'AP') {
-        setScoringOptions(current => [
-          ...current,
-          { label: modelpass.model_name, value: modelpass.id }
-        ])
-      }
-    }))
-  }
+  // const setSelectScoringModelOptions = (modelspass) => {
+  //   modelspass.map((modelpass => {
+  //     if (modelpass.status === 'AP') {
+  //       setScoringOptions(current => [
+  //         ...current,
+  //         { label: modelpass.model_name, value: modelpass.id }
+  //       ])
+  //     }
+  //   }))
+  // }
 
   async function getModels() {
     axios
       .get("http://127.0.0.1:8000/api/scoring_model/")
       .then((res) => {
-        console.log(res.data.data)
-        console.log(res.data.data[0].model_name)
-        console.log(res.data.data[0].id)
-        setScoringModels(res.data.data)
-        setSelectScoringModelOptions(res.data.data)
+        // console.log(res.data.data)
+        // console.log(res.data.data[0].model_name)
+        // console.log(res.data.data[0].id)
+        // setScoringModels(res.data.data)
+        // setSelectScoringModelOptions(res.data.data)
+
+        res.data.data.map((modelpass) => {
+          if (modelpass.status === "AP") {
+            setScoringOptions((current) => [
+              ...current,
+              { label: modelpass.model_name, value: modelpass.id },
+            ]);
+          }
+        });
       })
       .catch((e) => {
-        console.log(e)
-      })
-    console.log("scoringOptions", scoringOptions)
+        console.log(e);
+      });
+    console.log("scoringOptions", scoringOptions);
   }
 
   useEffect(() => {
-    getModels()
-  }, [])
+    getModels();
+  }, []);
 
   return (
-    <div className="container">
+    <div className="container mt-2">
       {/* <div className="row"> */}
       <div className="row">
         <div className="col-md-auto">
@@ -104,11 +115,9 @@ const PipelinePage = () => {
           <MyButton>Выписка СКУАД</MyButton>
         </div>
         <div className="col-md-auto">
-          <MyButton
-            className={open ? "btn-primary" : ""}
-            onClick={toggle}
-          >
-            Результаты скоринга</MyButton>
+          <MyButton className={open ? "btn-primary" : ""} onClick={toggle}>
+            Результаты скоринга
+          </MyButton>
         </div>
         <div className="col-md-auto">
           <MyButton>Журнал скоринга</MyButton>
@@ -131,23 +140,23 @@ const PipelinePage = () => {
                   <tr>
                     <td>ИНН</td>
                     <td>
-                      <table>
-                        <thead>
-                          <tr>
-                            <td>
+                      {/* <table> */}
+                        {/* <thead> */}
+                          {/* <tr> */}
+                            {/* <td> */}
                               <MyInput
                                 value={inputINN}
                                 onChange={(e) => handleChangeINN(e)}
                                 type="text"
                                 placeholder="Вставьте список ИНН"
                               ></MyInput>
-                            </td>
+                            {/* </td> */}
                             {/* <td>
                             <MyInput placeholder="Выражение"></MyInput>
                           </td> */}
-                          </tr>
-                        </thead>
-                      </table>
+                          {/* </tr> */}
+                        {/* </thead> */}
+                      {/* </table> */}
                     </td>
                   </tr>
                   <tr>
@@ -187,9 +196,7 @@ const PipelinePage = () => {
                     </td>
                   </tr>
                   <tr>
-                    <td>
-                      Вид отчетности
-                    </td>
+                    <td>Вид отчетности</td>
                     <td>
                       <select
                         className="form-select"
@@ -216,7 +223,9 @@ const PipelinePage = () => {
               <MyButton>Журнал скоринга</MyButton>
             </div>
             <div className="col-md-auto">
-              <MyButton onClick={handleSaveData}>
+              <MyButton 
+              className={disabledBtn}
+              onClick={handleSaveData}>
                 Сохранить связку параметров
               </MyButton>
             </div>
@@ -224,7 +233,7 @@ const PipelinePage = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default PipelinePage
+export default PipelinePage;

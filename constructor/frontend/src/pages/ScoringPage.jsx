@@ -120,7 +120,7 @@ const ScoringPage = () => {
 
   return (
     <div className="ScoringPage">
-      <div className="container mt-5">
+      <div className="container mt-2">
         <div className="row">
           <div className="col-md-12">
             <div className="card">
@@ -222,6 +222,7 @@ const ScoringPage = () => {
                       <th>Автор</th>
                       {/* <th>UUID</th> */}
                       <th>Дата изменения</th>
+                      <th>Формула маркера</th>
                       <th>Просмотр</th>
                       <th>Удалить</th>
                     </tr>
@@ -232,12 +233,12 @@ const ScoringPage = () => {
                         <tr key={marker.id}>
                           <td>{marker.name_marker_attr}</td>
                           <td>{marker.author_id}</td>
-                          {/* <td>{marker.uuid}</td> */}
                           <td>
                             {Moment(marker.created_date)
                               .locale("rus", localization)
                               .format("LLL")}
                           </td>
+                          <td>{marker.attr_formulas}</td>
                           <td>
                             <Link
                             // to={`/scoring/${model.id}/edit`}

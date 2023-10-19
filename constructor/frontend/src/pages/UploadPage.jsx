@@ -14,9 +14,9 @@ function UploadPage() {
   }
   return (
     <div className="UploadPage">
-      <div className="container">
+      <div className="container mt-2">
         <div className="d-flex justify-content-between">
-          <div className="upload-block col-6 col-md-4">
+          <div className="upload-block col-5 col-md-4">
             <div className="row">
               <h4 className="text-center m-3">Добавить файлы</h4>
             </div>
