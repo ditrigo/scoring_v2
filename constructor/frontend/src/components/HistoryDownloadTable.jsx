@@ -97,9 +97,9 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
           <tr>
             {columns
               ?.filter((e) => e.isVisible)
-              ?.map((column) => (
+              ?.map((column, index) => (
                 <th
-                  key={column.id}
+                  key={index}
                   scope="col"
                   onClick={
                     column.name ? () => handleSort(column.path) : undefined

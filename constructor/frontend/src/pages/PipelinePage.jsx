@@ -6,6 +6,9 @@ import DatePicker from "react-datepicker"
 import axios from "axios"
 import "react-datepicker/dist/react-datepicker.css"
 import SelectField from "../components/CrmPage/Form/SelectField"
+import MyModal from "../components/ScoringPage/MyModal/MyModal"
+import ResultTable from "../components/PiplinePage/ResultTable"
+import { Link } from "react-router-dom"
 
 const PipelinePage = () => {
   const [open, setOpen] = useState(true)
@@ -23,6 +26,11 @@ const PipelinePage = () => {
   const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
   const [scoringOptions, setScoringOptions] = useState([])
   const [disabledBtn, setDisabledBtn] = useState("")
+  const [modalScoringResults, setModalScoringResults] = useState(false)
+
+  const doScoring = () => {
+    console.log("Scoring...")
+  }
 
   async function handleSaveData() {
     axios
@@ -30,21 +38,20 @@ const PipelinePage = () => {
         inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
         active: true,
         scoringmodel_id: scoringModel.scoring_model,
-        author_id: "Denis"
+        author_id: "Denis",
       })
       .then(function (response) {
-        console.log(response);
-        setDisabledBtn("btn btn-outline-primary disabled");
+        console.log(response)
+        setDisabledBtn("btn btn-outline-primary disabled")
       })
       .catch(function (error) {
-        console.log(error);
-      });
+        console.log(error)
+      })
   }
 
   const toggle = () => {
     setOpen(!open)
   }
-
 
   // const handleSaveData = () => {
   //   const json = {
@@ -229,19 +236,32 @@ const PipelinePage = () => {
           </div>
           <div className="row">
             <div className="col-md-auto">
-              <MyButton>Запустить скоринг</MyButton>
+              {/* <MyButton onClick={() => setModalScoringResults(true)}>
+                Запустить скоринг
+              </MyButton> */}
+              <Link to="/results">
+                <MyButton onClick={() => setModalScoringResults(true)}>
+                  Запустить скоринг
+                </MyButton>
+              </Link>
             </div>
             <div className="col-md-auto">
               <MyButton>Журнал скоринга</MyButton>
             </div>
             <div className="col-md-auto">
-              <MyButton
-                className={disabledBtn}
-                onClick={handleSaveData}>
+              <MyButton className={disabledBtn} onClick={handleSaveData}>
                 Сохранить связку параметров
               </MyButton>
             </div>
           </div>
+
+          <MyModal
+            visible={modalScoringResults}
+            setVisible={setModalScoringResults}
+          >
+            <h3>Результат скоринга</h3>
+            <ResultTable setVisible={setModalScoringResults} />
+          </MyModal>
         </div>
       )}
     </div>

@@ -138,7 +138,7 @@ const NewCrmClientPage = () => {
     {
       label: "Емельянова Е.А.    ",
       value: "Емельянова Е.А.    ",
-      name: "source",
+      name: "meneger",
     },
   ]
   const status = [
@@ -231,9 +231,26 @@ const NewCrmClientPage = () => {
       name: "source",
     },
   ]
+  const PRD = [
+    {
+      label: "МИДУОЛ",
+      value: "МИДУОЛ",
+      name: "source",
+    },
+    {
+      label: "РП Республика Коми",
+      value: "РП Республика Коми",
+      name: "source",
+    },
+    {
+      label: "РП Республика Карелия      ",
+      value: "РП Республика Карелия",
+      name: "source",
+    },
+  ]
 
   return (
-    <div className="container ">
+    <div className="container mt-3">
       <div className="row">
         <div className="col-md-12">
           <div className="card p-4">
@@ -308,6 +325,20 @@ const NewCrmClientPage = () => {
                             options={menegers}
                             onChange={handleChangeSelect}
                             name="meneger"
+                            placeholder="Выберите"
+                          />
+                        </div>
+                      )
+                    } else if (el.name === "Представительсво ПРД") {
+                      return (
+                        <div className="mb-2">
+                          <label className="form-label">
+                            Представительсво ПРД
+                          </label>
+                          <Select
+                            options={PRD}
+                            onChange={handleChangeSelect}
+                            name="PRD"
                             placeholder="Выберите"
                           />
                         </div>

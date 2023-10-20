@@ -16,7 +16,7 @@ const ModelForm = ({ create, models, getLinkMarkers }) => {
     }))
   }
 
-  console.log("models", models)
+  // console.log("models", models)
   const modelsForSelect = []
 
   models &&
@@ -82,8 +82,8 @@ const ModelForm = ({ create, models, getLinkMarkers }) => {
     getLinkMarkers(marker_ids)
 
     const newModel = {
-      model_name: model.model_name ,
-      description: model.description, 
+      model_name: model.model_name,
+      description: model.description,
       author_id: "Denis",
       status: "DF",
       version: 1,
