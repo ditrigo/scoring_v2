@@ -3,7 +3,7 @@ export const firstData = [
   { id: 2, name: "ИНН", type: "INN" },
   { id: 3, name: "Клиент", type: "clientName" },
   { id: 4, name: "Регион", type: "region" },
-  { id: 5, name: "Статус", type: "status" },
+  { id: 5, name: "Статус заявителя", type: "status" },
   { id: 6, name: "Менеджер", type: "manager" },
   { id: 7, title: "Источник информации" },
   { id: 8, name: "source" },

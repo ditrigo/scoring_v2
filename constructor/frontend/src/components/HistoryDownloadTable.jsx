@@ -78,12 +78,12 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
           aria-labelledby="dropdownMenuClickableInside"
         >
           {columns?.map((col, idx) => (
-            <li>
-              <span key={col.id} className="mx-3">
+            <li key={idx}>
+              <span className="mx-3">
                 <input
                   type="checkbox"
                   checked={col.isVisible}
-                  onClick={() => checkClick(idx)}
+                  onChange={() => checkClick(idx)}
                 />
                 <span> {col.name}</span>
               </span>

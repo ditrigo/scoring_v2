@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import MyButton from "../components/UI/MyButton/MyButton";
-import MyInput from "../components/UI/MyInput/MyInput";
-import "bootstrap/dist/css/bootstrap.css";
-import DatePicker from "react-datepicker";
-import axios from "axios";
-import "react-datepicker/dist/react-datepicker.css";
-import SelectField from "../components/CrmPage/Form/SelectField";
+import React, { useState, useEffect } from "react"
+import MyButton from "../components/UI/MyButton/MyButton"
+import MyInput from "../components/UI/MyInput/MyInput"
+import "bootstrap/dist/css/bootstrap.css"
+import DatePicker from "react-datepicker"
+import axios from "axios"
+import "react-datepicker/dist/react-datepicker.css"
+import SelectField from "../components/CrmPage/Form/SelectField"
 
 const PipelinePage = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(true)
 
   //   Для отображения в дальнейшем различных элементов
   const [block, setBlock] = useState([
@@ -17,11 +17,11 @@ const PipelinePage = () => {
     { name: "Выписка СКУАД", open: false },
     { name: "Результаты скоринга", open: false },
     { name: "Журнал скоринга", open: false },
-  ]);
-  const [startDate, setStartDate] = useState(new Date());
-  const [inputINN, setInputINN] = useState("");
-  const [scoringModel, setScoringModel] = useState({ scoring_model: "" });
-  const [scoringOptions, setScoringOptions] = useState([]);
+  ])
+  const [startDate, setStartDate] = useState(new Date())
+  const [inputINN, setInputINN] = useState("")
+  const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
+  const [scoringOptions, setScoringOptions] = useState([])
   const [disabledBtn, setDisabledBtn] = useState("")
 
   async function handleSaveData() {
@@ -42,8 +42,8 @@ const PipelinePage = () => {
   }
 
   const toggle = () => {
-    setOpen(!open);
-  };
+    setOpen(!open)
+  }
 
 
   // const handleSaveData = () => {
@@ -62,16 +62,16 @@ const PipelinePage = () => {
   // };
 
   const handleChangeINN = (e) => {
-    setInputINN(e.target.value);
+    setInputINN(e.target.value)
     // console.log(inputINN.split(", "))
-  };
+  }
 
   const handleChange = (target) => {
     setScoringModel((prevState) => ({
       ...prevState,
       [target.name]: target.value,
-    }));
-  };
+    }))
+  }
 
   // const setSelectScoringModelOptions = (modelspass) => {
   //   modelspass.map((modelpass => {
@@ -99,22 +99,22 @@ const PipelinePage = () => {
             setScoringOptions((current) => [
               ...current,
               { label: modelpass.model_name, value: modelpass.id },
-            ]);
+            ])
           }
-        });
+        })
       })
       .catch((e) => {
-        console.log(e);
-      });
-    console.log("scoringOptions", scoringOptions);
+        console.log(e)
+      })
+    console.log("scoringOptions", scoringOptions)
   }
 
   useEffect(() => {
-    getModels();
-  }, []);
+    getModels()
+  }, [])
 
   return (
-    <div className="container mt-2">
+    <div className="container mt-3">
       {/* <div className="row"> */}
       <div className="row">
         <div className="col-md-auto">
@@ -245,7 +245,7 @@ const PipelinePage = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default PipelinePage;
+export default PipelinePage

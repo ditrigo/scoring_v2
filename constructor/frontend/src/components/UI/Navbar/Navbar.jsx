@@ -1,12 +1,16 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Link } from "react-router-dom"
 
 const Navbar = () => {
   return (
     <div className="container">
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary" style={{backgroundPosition: "50% 0"}}>
+      <nav
+        className="navbar navbar-expand-lg navbar-dark bg-primary"
+        style={{ backgroundPosition: "50% 0" }}
+      >
         <div className="container">
           <div className="collapse navbar-collapse m-0" id="navbarNavAltMarkup">
+            {/* <ul className="navbar-nav w-75 m-auto"> */}
             <ul className="navbar-nav m-0">
               <li className="nav-item active">
                 <Link to="/upload" className="navbar-brand m-0 mb-2">
@@ -38,7 +42,7 @@ const Navbar = () => {
         </div>
       </nav>
     </div>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

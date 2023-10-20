@@ -30,34 +30,43 @@ const CrmPage = () => {
     : null
 
   return (
-    <div className="container m-5 mt-2">
+    <div className="container mr-5 mt-3">
       <div className="row row-centered colored">
-        <button className="btn btn-primary w-50 mx-auto m-2 col-sm-4 mb-4">
+        <form className="col d-flex align-items-center">
+          <MyInput
+            type="text"
+            placeholder="ИНН или Менеджер"
+            // className="form-group search__input mr-5"
+            onChange={(event) => setSearchValue(event.target.value)}
+          />
+        </form>
+        <button className="btn btn-primary w-50 mx-auto col">
           <Link to="/newclient" className="nav-link m-2">
-            + Новый клиент
+            Новый клиент
           </Link>
         </button>
       </div>
       {users ? (
         <>
-          <div className="mb-3">
-            <form>
-              <MyInput
-                type="text"
-                placeholder="ИНН или Менеджер"
-                // className="form-group search__input mr-5"
-                onChange={(event) => setSearchValue(event.target.value)}
-              />
-            </form>
+          <div className="row mt-4">
+            <div className="col-md-12">
+              <div className="card">
+                {/* <div className="card-header"></div> */}
+                <div className="card-body">
+                  {" "}
+                  <div className="table-responsive">
+                    <table className="table">
+                      <TableHeader />
+                      <tbody>
+                        <NumericRow />
+                        <ContentRows users={filtredUsers} />
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-
-          <table className="table">
-            <TableHeader />
-            <tbody>
-              <NumericRow />
-              <ContentRows users={filtredUsers} />
-            </tbody>
-          </table>
         </>
       ) : (
         <h2 className="d-flex justify-content-center align-items-center mt-5">

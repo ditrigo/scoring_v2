@@ -28,6 +28,7 @@ const ContentGroup = () => {
 
   const logAttributs = [
     {
+      id: 1,
       name: "filename1",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "3kb",
@@ -36,6 +37,7 @@ const ContentGroup = () => {
       new: 7,
     },
     {
+      id: 2,
       name: "filename2",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "1kb",
@@ -44,6 +46,7 @@ const ContentGroup = () => {
       new: 4,
     },
     {
+      id: 3,
       name: "filename3",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "8kb",
@@ -52,6 +55,7 @@ const ContentGroup = () => {
       new: 80,
     },
     {
+      id: 4,
       name: "filename4",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "13kb",
@@ -60,6 +64,7 @@ const ContentGroup = () => {
       new: 10,
     },
     {
+      id: 5,
       name: "filename5",
       created_date: "2023-10-12T12:25:07.688056Z",
       size: "22kb",
