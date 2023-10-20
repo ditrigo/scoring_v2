@@ -240,6 +240,7 @@ class MarkersAttributes(models.Model):
     attr_formulas = models.CharField(max_length=250)
     description = models.CharField(max_length=250)
     sql_query = models.TextField(blank=True, null=True)
+    # py_query = models.TextField(blank=True, null=True)
     nested_level = models.IntegerField()
 
     class Meta:
@@ -256,6 +257,7 @@ class MarkersAttributes(models.Model):
     # From CountedAttrFormula
     def save(self, *args, **kwargs):
         self.sql_query = sql_parser(self.attr_formulas)
+        # self.py_query = py_parser(self.attr_formulas)
         super().save(*args, **kwargs)
 
 
@@ -453,3 +455,10 @@ class CountedAttributesNew(models.Model):
 
 #     def __str__(self) -> str:
 #         return f"{self.model_name}"
+
+
+
+
+### CRM DATA MODELS ###########################################################################################
+
+

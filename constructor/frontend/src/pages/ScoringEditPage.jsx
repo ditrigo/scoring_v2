@@ -57,7 +57,7 @@ const ScoringEdit = () => {
   }
 
   return (
-    <div>
+    // <div className="container">
       <SearchBar
         attributes={countedAttributes}
         postLink={postModelAndAttributes}
@@ -65,7 +65,7 @@ const ScoringEdit = () => {
         idModel={state.models.id}
         statusModel = {state.models.status}
       />
-    </div>
+    // </div>
   );
 };
 

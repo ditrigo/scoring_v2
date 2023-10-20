@@ -63,14 +63,12 @@ const MarkersTable = ({ modelId }) => {
   }
 
   return (
-    <>
       <div className="container mb-4">
         <div className="row">
           <div className="col-md-12">
             <div className="card">
               <div className="card-header">
                 <h4>
-                  {/* Атрибуты */}
                   Маркеры
                   {/* <button
                     onClick={() => setModalMarker(true)}
@@ -120,36 +118,37 @@ const MarkersTable = ({ modelId }) => {
             </div>
           </div>
         </div>
-      </div>
+        {/* </div> */}
 
-      {/* <MyModal visible={modalMarker} setVisible={setModalMarker}>
+        {/* <MyModal visible={modalMarker} setVisible={setModalMarker}>
         <h3>Новый маркер</h3>
         <AtributForm create={createMarker} setVisible={setModalMarker} />
       </MyModal> */}
 
-      {/* измененить элемент a controlled or uncontrolled??? */}
-      <MyModal visible={modalMarkerView} setVisible={setModalMarkerView}>
-        <h4>Просмотр маркера</h4>
-        <hr />
-        <br />
-        <div>
-          <label>Наименование маркера </label>
-          <MyInput
-            type='text'
-            placeholder='Наименование маркера'
-            value={markerDetail.name}
-          />
-        </div>
-        <div>
-          <label>Формула маркера </label>
-          <MyInput
-            type='text'
-            placeholder='Формула маркера'
-            value={markerDetail.formula}
-          />
-        </div>
-      </MyModal>
-    </>
+        {/* измененить элемент a controlled or uncontrolled??? */}
+        <MyModal visible={modalMarkerView} setVisible={setModalMarkerView}>
+          <h4>Просмотр маркера</h4>
+          <hr />
+          <br />
+          <div>
+            <label>Наименование маркера </label>
+            <MyInput
+              type='text'
+              placeholder='Наименование маркера'
+              value={markerDetail.name}
+            />
+          </div>
+          <div>
+            <label>Формула маркера </label>
+            <MyInput
+              type='text'
+              placeholder='Формула маркера'
+              value={markerDetail.formula}
+            />
+          </div>
+        </MyModal>
+      </div>
+    
   )
 }
 
