@@ -618,9 +618,12 @@ def CreateRelationInnAndScoringModelViewSet(request):
                     CsvAttributes.objects.get(inn=inn_id)
                 except CsvAttributes.DoesNotExist:
                     continue
-
-                inn_res = InnRes.objects.create(inn=inn_id)
-                #TODO проверка на существования связки, чтобы не множить 
+                
+                if not InnRes.objects.get(inn=inn_id):
+                    inn_res = InnRes.objects.create(inn=inn_id)
+                else:
+                    inn_res = InnRes.objects.get(inn=inn_id)
+                    
                 scoring_model.inns.add(inn_res)
 
             serializer = InnResSerialiser(inn_res)
@@ -689,3 +692,30 @@ def InnAndResultsDetailViewSet(request, pk):
     elif request.method == 'DELETE':
         inn_result_id.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+@api_view(['POST'])
+def StartScoringViewSet(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        # print(data)
+        for key, value in data["data"].items():
+            print(key, value)
+            print('\n')
+
+        # print(data["marker_id"])
+        # print(data["inns"])
+        # marker_ids = data.get('marker_ids')
+        # # scoring_model_id = data.get('scoring_model_id')
+        # inn_ids = request.data.get('inn_ids', [])
+
+        # # scoring_model = ScoringModel.objects.get(id=scoring_model_id) 
+
+        # for inn_id in inn_ids:
+        #     try:
+        #         CsvAttributes.objects.get(inn=inn_id)
+        #     except CsvAttributes.DoesNotExist:
+        #         continue
+
+        #     for marker_id in marker_ids:
+        #         scoring_model = MarkersAttributes.objects.get(id=marker_id).py_query
