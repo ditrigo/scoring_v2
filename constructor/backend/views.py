@@ -623,7 +623,7 @@ def CreateRelationInnAndScoringModelViewSet(request):
                     inn_res = InnRes.objects.create(inn=inn_id)
                 else:
                     inn_res = InnRes.objects.get(inn=inn_id)
-                    
+
                 scoring_model.inns.add(inn_res)
 
             serializer = InnResSerialiser(inn_res)
@@ -698,24 +698,43 @@ def InnAndResultsDetailViewSet(request, pk):
 def StartScoringViewSet(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
-        # print(data)
+        
+        rank = 0.0 
+        inn_list, marker_formula_list = [], []
         for key, value in data["data"].items():
-            print(key, value)
-            print('\n')
+            # print(key, value)
+            # print('\n')
+            if key == "inns":
+                for val in value:
+                    print(val)
+                    for k, v in val.items():
+                        print("inns.keys", k ,"inns.values", v)
+                        if k == "inn":
+                            inn_list.append(v)
+            elif key == "marker_id":
+                for val in value:
+                    print(val)
+                    for k, v in val.items():
+                        print("marker_id.keys", k ,"marker_id.values", v)
+                        if k == "py_query":
+                            marker_formula_list.append(v)
+        
+        # print(inn_list)
+        # print(marker_formula_list)
+        # print(CsvAttributes.objects.get(inn=inn_list[0]).np_name)
 
-        # print(data["marker_id"])
-        # print(data["inns"])
-        # marker_ids = data.get('marker_ids')
-        # # scoring_model_id = data.get('scoring_model_id')
-        # inn_ids = request.data.get('inn_ids', [])
+        for inn in inn_list:
+            for formula in marker_formula_list:
+                try:
+                    csv_attributes = CsvAttributes.objects.get(inn=inn)
+                    counted_attributes = CountedAttributesNew.objects.get(inn=inn)
+                except CsvAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
+                    continue
+                value = eval(formula)
+                rank += value
+                print(value)
+                inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
+                # inn_res.save()
+        return JsonResponse({'message': 'Results were updated '}, status=200)
 
-        # # scoring_model = ScoringModel.objects.get(id=scoring_model_id) 
-
-        # for inn_id in inn_ids:
-        #     try:
-        #         CsvAttributes.objects.get(inn=inn_id)
-        #     except CsvAttributes.DoesNotExist:
-        #         continue
-
-        #     for marker_id in marker_ids:
-        #         scoring_model = MarkersAttributes.objects.get(id=marker_id).py_query
+    return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
