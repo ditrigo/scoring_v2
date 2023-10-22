@@ -1,17 +1,18 @@
 import React, { useState } from "react"
 
-import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock.tsx"
+// import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock.tsx"
 // import ButtonGroup from "../components/UploadPage/ButtonGroup/ButtonGroup.jsx";
 import "bootstrap/dist/css/bootstrap.css"
 import "../styles/App.css"
 import ContentGroup from "../components/UploadPage/ContentGroup/ContentGroup.jsx"
+import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock"
 
 function UploadPage() {
-  const [uploadedFiles, setUploadedFiles] = useState([{ name: 123 }]);
+  const [uploadedFiles, setUploadedFiles] = useState([{ name: 123 }])
 
   const uploadHandler = (item) => {
-    setUploadedFiles([...uploadedFiles, item]);
-  };
+    setUploadedFiles([...uploadedFiles, item])
+  }
   return (
     // <div className="UploadPage">
     <div className="container mt-3">
@@ -38,10 +39,10 @@ function UploadPage() {
       </div>
     </div>
     // </div>
-  );
+  )
 }
 
-export default UploadPage;
+export default UploadPage
 
 // {
 //   /*// ROMA VERSTKA*/

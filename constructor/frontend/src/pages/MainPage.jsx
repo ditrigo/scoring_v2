@@ -1,35 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter } from "react-router-dom";
-import Navbar from "../components/UI/Navbar/Navbar";
-import AppRouter from "../components/AppRouter";
-import LoginPage from "./LoginPage";
-import Logo from "../components/Img/output.png";
-
+import React, { useState, useEffect } from "react"
+import { BrowserRouter } from "react-router-dom"
+import Navbar from "../components/UI/Navbar/Navbar"
+import AppRouter from "../components/AppRouter"
+import LoginPage from "./LoginPage"
+import Logo from "../components/Img/output.png"
 
 function MainPage() {
-  const [isAuth, setIsAuth] = useState(true);
+  const [isAuth, setIsAuth] = useState(true)
 
   useEffect(() => {
     if (localStorage.getItem("access_token") !== null) {
-      setIsAuth(true);
+      setIsAuth(true)
       console.log(localStorage.getItem("access_token"))
     }
-  }, [isAuth]);
+  }, [isAuth])
 
   return (
     <>
       {isAuth ? (
         <BrowserRouter>
-          <div
-            className="container"
-          >
+          <div className="container mt-2 mb-2">
             <div className="row">
               <div className="col-md-auto">
                 <img
                   src={Logo}
-                  style={{ 
-                    width: "100px"
-                    // marginRight: "10px" 
+                  style={{
+                    width: "100px",
+                    // marginRight: "10px"
                   }}
                 />
               </div>
@@ -55,7 +52,7 @@ function MainPage() {
     //     <Navbar />
     //     <AppRouter />
     // </BrowserRouter>
-  );
+  )
 }
 
-export default MainPage;
+export default MainPage

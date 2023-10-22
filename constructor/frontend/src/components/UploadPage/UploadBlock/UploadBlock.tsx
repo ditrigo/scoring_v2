@@ -15,14 +15,14 @@ const props: UploadProps = {
     const { status } = info.file
     if (status !== "uploading") {
       console.log("vot", info.file, info.fileList)
-      axios
-        .post("http://127.0.0.1:8000/api/files/", info.file)
-        .then(function (response) {
-          console.log(response)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+      // axios
+      //   .post("http://127.0.0.1:8000/api/files/", info.file)
+      //   .then(function (response) {
+      //     console.log(response)
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error)
+      //   })
     }
     if (status === "done") {
       message.success(`${info.file.name} file uploaded successfully.`)

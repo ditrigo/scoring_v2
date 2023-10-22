@@ -87,7 +87,7 @@ const ScoringPage = () => {
 
   const createModel = (newModel) => {
     setModels([...models, newModel])
-    postModel(newModel).then(response => {
+    postModel(newModel).then((response) => {
       // console.log("postModel(newModel).then(response)", response)
       postLinkMarkerAndModel(response)
     })
@@ -107,14 +107,13 @@ const ScoringPage = () => {
     setModels(models.filter((item) => item.id !== id))
   }
 
-
   // get/post path/api/counted_attributes
   async function getMarkers() {
     axios
       .get("http://127.0.0.1:8000/api/marker_attributes/")
       .then((res) => {
-        console.log("in getMarker ", res.data.data)
-        console.log("in getMarker ", res.data.data.id)
+        // console.log("in getMarker ", res.data.data)
+        // console.log("in getMarker ", res.data.data.id)
         setMarkers(res.data.data)
       })
       .catch((e) => {
@@ -150,7 +149,6 @@ const ScoringPage = () => {
     postMarkers(newMarker)
     setModalMarker(false)
   }
-
 
   return (
     <div className="container mt-3">
@@ -272,8 +270,8 @@ const ScoringPage = () => {
                         <td>{marker.attr_formulas}</td>
                         <td>
                           <Link
-                            to={`/scoring/${marker.id}/edit`}
-                            state={{ models: marker }}
+                          // to={`/scoring/${marker.id}/edit`}
+                          // state={{ models: marker }}
                           >
                             <MyButton>Просмотр</MyButton>
                           </Link>

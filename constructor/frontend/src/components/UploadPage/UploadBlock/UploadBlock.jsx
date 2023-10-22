@@ -1,3 +1,4 @@
+import axios from "axios"
 import React, { useRef, useState } from "react"
 
 const UploadBlock = ({ uploadedFiles, setUploadedFiles }) => {
@@ -17,17 +18,18 @@ const UploadBlock = ({ uploadedFiles, setUploadedFiles }) => {
   function onDropHandler(e) {
     e.preventDefault()
     let files = [...e.dataTransfer.files]
-    console.log(uploadedFiles)
+    console.log(e.dataTransfer.files)
+    // console.log(uploadedFiles)
     console.log(files)
     for (let file in files) {
       console.log(files[file])
       setUploadedFiles(files[file])
-      console.log(uploadedFiles)
+      axios.post("http://127.0.0.1:8000/api/attributes/", files[file])
     }
 
     // const formData = new FormData()
     // formData.append(`file`, files)
-    // axios.post(`url`, formData)
+    // console.log("fd ", formData)
   }
 
   function handlePick() {

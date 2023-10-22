@@ -2,6 +2,7 @@ export const firstData = [
   { id: 1, title: "Данные клиента" },
   { id: 2, name: "ИНН", type: "INN" },
   { id: 3, name: "Клиент", type: "clientName" },
+  { id: 63, name: "Представительсво ПРД" },
   { id: 4, name: "Регион", type: "region" },
   { id: 5, name: "Статус заявителя", type: "status" },
   { id: 6, name: "Менеджер", type: "manager" },

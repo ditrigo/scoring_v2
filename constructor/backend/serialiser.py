@@ -21,6 +21,7 @@ class MainCatalogSerializer(serializers.ModelSerializer):
 
 
 class MainCatalogFieldsSerializer(serializers.ModelSerializer):
+    main_catalog_id = MainCatalogSerializer(many=False, read_only=True)
     class Meta:
         model = MainCatalogFields
         fields = "__all__"
