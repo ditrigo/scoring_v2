@@ -67,9 +67,9 @@ const ResultTable = ({ getLinkMarkers }) => {
             </tr>
           </thead>
           <tbody>
-            {results.map((el) => {
+            {results.map((el, index) => {
               return (
-                <tr>
+                <tr key={index}>
                   <td>{Moment(el.created_date).locale("rus", localization)
                     .format("LLL")}</td>
                   <td className="text-center">{el.inn}</td>
