@@ -19,7 +19,7 @@ const AtributForm = ({ create, setVisible }) => {
 
   // const handleChangeSelect = (target) => {
   //   console.log(target)
-  //   setUsersData((prevState) => ({
+  //   setCountedAttributes((prevState) => ({
   //     ...prevState,
   //     [target.name]: target.value,
   //   }))
@@ -110,7 +110,7 @@ const AtributForm = ({ create, setVisible }) => {
             <Select
               options={countedAttributes}
               // onChange={handleChangeSelect}
-              // name="Тип долга"
+              name="Загружаемые атрибуты"
               placeholder="Выберите"
             />
           </div>
