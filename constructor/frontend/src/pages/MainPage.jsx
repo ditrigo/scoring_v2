@@ -6,7 +6,7 @@ import LoginPage from "./LoginPage"
 import Logo from "../components/Img/output.png"
 
 function MainPage() {
-  const [isAuth, setIsAuth] = useState(true)
+  const [isAuth, setIsAuth] = useState(false)
 
   useEffect(() => {
     if (localStorage.getItem("access_token") !== null) {
@@ -24,6 +24,7 @@ function MainPage() {
               <div className="col-md-auto">
                 <img
                   src={Logo}
+                  alt="Logo"
                   style={{
                     width: "100px",
                     // marginRight: "10px"

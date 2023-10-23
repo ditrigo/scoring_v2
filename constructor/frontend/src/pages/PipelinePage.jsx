@@ -35,7 +35,13 @@ const PipelinePage = () => {
   async function handleSaveData() {
     axios
       .post("http://127.0.0.1:8000/api/inn_res/create_relation/", {
-        inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
+        inn_ids: inputINN
+          .trim()
+          .split(", ")
+          .join(" ")
+          .split("/")
+          .join(" ")
+          .split(" "),
         active: true,
         scoringmodel_id: scoringModel.scoring_model,
         author_id: "Denis",
@@ -245,9 +251,9 @@ const PipelinePage = () => {
                 </MyButton>
               </Link>
             </div>
-            <div className="col-md-auto">
+            {/* <div className="col-md-auto">
               <MyButton>Журнал скоринга</MyButton>
-            </div>
+            </div> */}
             <div className="col-md-auto">
               <MyButton className={disabledBtn} onClick={handleSaveData}>
                 Сохранить связку параметров

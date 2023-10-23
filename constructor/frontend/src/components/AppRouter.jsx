@@ -22,7 +22,7 @@ const AppRouter = () => {
       <Route path="/crm" element={<CrmPage />} />
       <Route path="/results" element={<ResultTable />} />
       <Route path="/error" element={<Error />} />
-      {/* <Route path="/login" element={<LoginPage />} /> */}
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="*" element={<Navigate to="/error" replace />} />
       <Route path="/newclient/:id?" element={<NewCrmClientPage />} />

@@ -19,6 +19,7 @@ const ContentRows = ({ users }) => {
             <Link to={"/newclient/" + el.id}>{el.manager}</Link>
           </td>
           <td>{el.clientName}</td>
+          <td>{el.PRD}</td>
           <td>{el.INN}</td>
           <td>{el.region}</td>
           <td>{el.status}</td>

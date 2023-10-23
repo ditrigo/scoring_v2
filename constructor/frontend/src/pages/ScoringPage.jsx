@@ -252,7 +252,6 @@ const ScoringPage = () => {
                     <th>Автор</th>
                     <th>Дата изменения</th>
                     <th>Формула маркера</th>
-                    <th>Просмотр</th>
                     <th>Удалить</th>
                   </tr>
                 </thead>
@@ -268,14 +267,7 @@ const ScoringPage = () => {
                             .format("LLL")}
                         </td>
                         <td>{marker.attr_formulas}</td>
-                        <td>
-                          <Link
-                          // to={`/scoring/${marker.id}/edit`}
-                          // state={{ models: marker }}
-                          >
-                            <MyButton>Просмотр</MyButton>
-                          </Link>
-                        </td>
+
                         <td>
                           <button
                             // onClick={() => deleteModel(model.id)}
