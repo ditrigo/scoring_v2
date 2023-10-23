@@ -49,10 +49,11 @@ const AtributForm = ({ create, setVisible }) => {
       .get("http://127.0.0.1:8000/api/catalog_fields/")
       .then((res) => {
         // importedAttributes(res.data.data)
-        console.log(res.data.data);
+        // console.log(res.data.data);
         res.data.data.forEach((element) => {
-          console.log(element.main_catalog_id.description);
-          console.log(element);
+          // console.log(element.main_catalog_id.description);
+          // console.log(element);
+          // console.log(element.main_catalog_id.origin_name)
           if (
             element.main_catalog_id.origin_name === "counted_attributes"
           ) {
@@ -60,50 +61,54 @@ const AtributForm = ({ create, setVisible }) => {
               ...current,
               {
                 label:
-                  "counted_attributes." +
+                  element.main_catalog_id.origin_name +
+                  "." +
                   element.origin +
                   " - " +
                   element.description,
                 value:
-                  "counted_attributes." +
+                  element.main_catalog_id.origin_name +
+                  "." +
                   element.origin +
                   " - " +
                   element.description,
                 name:
-                  "counted_attributes." +
+                  element.main_catalog_id.origin_name +
+                  "." +
                   element.origin +
                   " - " +
                   element.description,
-              },
+              }
+            ])
+          } else if (
+            element.main_catalog_id.origin_name === "imported_attributes"
+          ) {
+            setImportedAttributes((current1) => [
+              ...current1,
+              {
+                label:
+                  element.main_catalog_id.origin_name +
+                  "." +
+                  element.origin +
+                  " - " +
+                  element.description,
+                value:
+                  element.main_catalog_id.origin_name +
+                  "." +
+                  element.origin +
+                  " - " +
+                  element.description,
+                name:
+                  element.main_catalog_id.origin_name +
+                  "." +
+                  element.origin +
+                  " - " +
+                  element.description,
+              }
             ]);
-          } else {
-            if (element.main_catalog_id.origin_name === "imported_attributes") {
-              setImportedAttributes((current1) => [
-                ...current1,
-                {
-                  label:
-                    element.main_catalog_id.origin_name +
-                    "." +
-                    element.origin +
-                    " - " +
-                    element.description,
-                  value:
-                    element.main_catalog_id.origin_name +
-                    "." +
-                    element.origin +
-                    " - " +
-                    element.description,
-                  name:
-                    element.main_catalog_id.origin_name +
-                    "." +
-                    element.origin +
-                    " - " +
-                    element.description,
-                },
-              ]);
-            }
           }
-        });
+        }
+        )
       })
       .catch((e) => {
         console.log(e);
