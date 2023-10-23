@@ -258,19 +258,19 @@ def InsertValuesToCountedAttributes():
             need_capital_dp_rub=need_capital_dp_rub
         )
 
-    csv_attributes_list = CsvAttributes.objects.all()
+    imported_attributes_list = ImportedAttributes.objects.all()
 
-    csv_attributes_with_error = []
-    for csv_attributes in csv_attributes_list:
+    imported_attributes_with_error = []
+    for imported_attributes in imported_attributes_list:
         try:
-            calculate_counted_attributes(csv_attributes)
+            calculate_counted_attributes(imported_attributes)
         except:
-            csv_attributes_with_error.append(csv_attributes)
-    return csv_attributes_with_error, len(csv_attributes_with_error)
+            imported_attributes_with_error.append(imported_attributes)
+    return imported_attributes_with_error, len(imported_attributes_with_error)
 
 
 @api_view(['GET', 'POST'])
-def CsvAttributesListViewSet(request):  # (viewsets.ModelViewSet):
+def ImportedAttributesListViewSet(request):  # (viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     EXPORT_FORMATS_DICT = {
@@ -283,7 +283,7 @@ def CsvAttributesListViewSet(request):  # (viewsets.ModelViewSet):
         data = []
         nextPage = 1
         previousPage = 1
-        attributes = CsvAttributes.objects.all().order_by('id')
+        attributes = ImportedAttributes.objects.all().order_by('id')
         page = request.GET.get('page', 1)
         paginator = Paginator(attributes, 10)
         try:
@@ -293,7 +293,7 @@ def CsvAttributesListViewSet(request):  # (viewsets.ModelViewSet):
         except EmptyPage:
             data = paginator.page(paginator.num_pages)
 
-        serializer = CsvAttributesSerialiser(
+        serializer = ImportedAttributesSerialiser(
             data, context={'request': request}, many=True)
         if data.has_next():
             nextPage = data.next_page_number()
@@ -310,7 +310,7 @@ def CsvAttributesListViewSet(request):  # (viewsets.ModelViewSet):
         extension = filename.name.split(".")[-1].lower()
         dataset = Dataset()
 
-        csv_resource = CsvAttributesResource()
+        csv_resource = ImportedAttributesResource()
 
         if extension in IMPORT_FORMATS_DICT:
             dataset.load(filename.read(), format=extension)
@@ -615,15 +615,21 @@ def CreateRelationInnAndScoringModelViewSet(request):
 
             for inn_id in inn_ids:
                 try:
-                    CsvAttributes.objects.get(inn=inn_id)
-                except CsvAttributes.DoesNotExist:
+                    ImportedAttributes.objects.get(inn=inn_id)
+                except ImportedAttributes.DoesNotExist:
                     continue
-                
-                if not InnRes.objects.get(inn=inn_id):
-                    inn_res = InnRes.objects.create(inn=inn_id)
-                else:
-                    inn_res = InnRes.objects.get(inn=inn_id)
 
+                # try:
+                #     inn_res = InnRes.objects.get(inn=inn_id)
+                # except InnRes.DoesNotExist:
+                #     inn_res = InnRes.objects.create(inn=inn_id)
+                
+                # if not InnRes.objects.get(inn=inn_id):
+                #     inn_res = InnRes.objects.create(inn=inn_id)
+                # else:
+                #     inn_res = InnRes.objects.get(inn=inn_id)
+
+                inn_res = InnRes.objects.create(inn=inn_id)
                 scoring_model.inns.add(inn_res)
 
             serializer = InnResSerialiser(inn_res)
@@ -719,16 +725,16 @@ def StartScoringViewSet(request):
                         if k == "py_query":
                             marker_formula_list.append(v)
         
-        # print(inn_list)
-        # print(marker_formula_list)
+        print(inn_list)
+        print(marker_formula_list)
         # print(CsvAttributes.objects.get(inn=inn_list[0]).np_name)
 
         for inn in inn_list:
             for formula in marker_formula_list:
                 try:
-                    csv_attributes = CsvAttributes.objects.get(inn=inn)
+                    imported_attributes = ImportedAttributes.objects.get(inn=inn)
                     counted_attributes = CountedAttributesNew.objects.get(inn=inn)
-                except CsvAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
+                except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
                     continue
                 value = eval(formula)
                 rank += value

@@ -7,9 +7,9 @@ class FileAttributesSerialiser(serializers.ModelSerializer):
         fields = ["id", "created_date", "filename"]
 
 
-class CsvAttributesSerialiser(serializers.ModelSerializer):
+class ImportedAttributesSerialiser(serializers.ModelSerializer):
     class Meta:
-        model = CsvAttributes
+        model = ImportedAttributes
         fields = ["id", "created_date" , "author_id", "inn", "report_date"]
         # fields = "__all__"
 

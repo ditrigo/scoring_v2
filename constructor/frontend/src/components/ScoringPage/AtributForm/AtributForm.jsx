@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MyButton from "../../UI/MyButton/MyButton";
 import MyInput from "../../UI/MyInput/MyInput";
-import Select from "react-select"
+import Select from "react-select";
 import axios from "axios";
 
 const AtributForm = ({ create, setVisible }) => {
@@ -9,8 +9,8 @@ const AtributForm = ({ create, setVisible }) => {
     name_marker_attr: "",
     attr_formulas: "",
   });
-  const [importedAttributes, setImportedAttributes] = useState([])
-  const [countedAttributes, setCountedAttributes] = useState([])
+  const [importedAttributes, setImportedAttributes] = useState([]);
+  const [countedAttributes, setCountedAttributes] = useState([]);
 
   // const handleClick = (e) => {
   //   e.preventDefault();
@@ -49,34 +49,69 @@ const AtributForm = ({ create, setVisible }) => {
       .get("http://127.0.0.1:8000/api/catalog_fields/")
       .then((res) => {
         // importedAttributes(res.data.data)
-        console.log(res.data.data)
-        res.data.data.forEach(element => {
-          console.log(element.main_catalog_id.description)
-          console.log(element)
-          if (element.main_catalog_id.origin_name === 'counted_attributes_new') {
+        console.log(res.data.data);
+        res.data.data.forEach((element) => {
+          console.log(element.main_catalog_id.description);
+          console.log(element);
+          if (
+            element.main_catalog_id.origin_name === "counted_attributes"
+          ) {
             setCountedAttributes((current) => [
               ...current,
-              { label: 'counted_attributes.' + element.origin + ' - ' + element.description, 
-                value: 'counted_attributes.' + element.origin + ' - ' + element.description,
-                name: 'counted_attributes.' + element.origin + ' - ' + element.description}
-            ])
+              {
+                label:
+                  "counted_attributes." +
+                  element.origin +
+                  " - " +
+                  element.description,
+                value:
+                  "counted_attributes." +
+                  element.origin +
+                  " - " +
+                  element.description,
+                name:
+                  "counted_attributes." +
+                  element.origin +
+                  " - " +
+                  element.description,
+              },
+            ]);
           } else {
-            setImportedAttributes((current1) => [
-              ...current1,
-              { label: 'csv_attributes.' + element.origin + ' - ' + element.description, 
-                value: 'csv_attributes.' + element.origin + ' - ' + element.description,
-                name: 'csv_attributes.' + element.origin + ' - ' + element.description}
-            ])
+            if (element.main_catalog_id.origin_name === "imported_attributes") {
+              setImportedAttributes((current1) => [
+                ...current1,
+                {
+                  label:
+                    element.main_catalog_id.origin_name +
+                    "." +
+                    element.origin +
+                    " - " +
+                    element.description,
+                  value:
+                    element.main_catalog_id.origin_name +
+                    "." +
+                    element.origin +
+                    " - " +
+                    element.description,
+                  name:
+                    element.main_catalog_id.origin_name +
+                    "." +
+                    element.origin +
+                    " - " +
+                    element.description,
+                },
+              ]);
+            }
           }
         });
       })
       .catch((e) => {
-        console.log(e)
-      })
+        console.log(e);
+      });
   }
   useEffect(() => {
-    getAttributes()
-  }, [])
+    getAttributes();
+  }, []);
 
   return (
     <form>
@@ -130,7 +165,10 @@ const AtributForm = ({ create, setVisible }) => {
       {/* <MyButton className="btn-outline-primary m-2" onClick={handleClick}>
         Применить
       </MyButton> */}
-      <MyButton className="btn btn-outline-secondary m-2" onClick={handleCancle}>
+      <MyButton
+        className="btn btn-outline-secondary m-2"
+        onClick={handleCancle}
+      >
         Отменить
       </MyButton>
     </form>

@@ -27,7 +27,7 @@ class FileAttributes(models.Model):
         return self.author_id
 
 
-class CsvAttributes(models.Model):
+class ImportedAttributes(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default=uuid.uuid4,
                             editable=False,)
@@ -170,8 +170,8 @@ class CsvAttributes(models.Model):
         indexes = [
             models.Index(fields=["inn", "created_date", "report_date"])
         ]
-        db_table = "csv_attributes"
-        verbose_name = "csv_attribute"
+        db_table = "imported_attributes"
+        verbose_name = "imported_attribute"
 
     def str(self):
         return self.inn

@@ -1,11 +1,11 @@
 import React, { useState } from "react"
 
-// import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock.tsx"
+import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock.tsx"
 // import ButtonGroup from "../components/UploadPage/ButtonGroup/ButtonGroup.jsx";
 import "bootstrap/dist/css/bootstrap.css"
 import "../styles/App.css"
 import ContentGroup from "../components/UploadPage/ContentGroup/ContentGroup.jsx"
-import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock"
+// import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock"
 
 function UploadPage() {
   const [uploadedFiles, setUploadedFiles] = useState([{ name: 123 }])

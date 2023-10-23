@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react"
-import MyButton from "../components/UI/MyButton/MyButton"
-import MyInput from "../components/UI/MyInput/MyInput"
-import "bootstrap/dist/css/bootstrap.css"
-import DatePicker from "react-datepicker"
-import axios from "axios"
-import "react-datepicker/dist/react-datepicker.css"
-import SelectField from "../components/CrmPage/Form/SelectField"
-import MyModal from "../components/ScoringPage/MyModal/MyModal"
-import ResultTable from "../components/PiplinePage/ResultTable"
-import { Link } from "react-router-dom"
+import React, { useState, useEffect } from "react";
+import MyButton from "../components/UI/MyButton/MyButton";
+import MyInput from "../components/UI/MyInput/MyInput";
+import "bootstrap/dist/css/bootstrap.css";
+import DatePicker from "react-datepicker";
+import axios from "axios";
+import "react-datepicker/dist/react-datepicker.css";
+import SelectField from "../components/CrmPage/Form/SelectField";
+import MyModal from "../components/ScoringPage/MyModal/MyModal";
+import ResultTable from "../components/PiplinePage/ResultTable";
+import { Link } from "react-router-dom";
 
 const PipelinePage = () => {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(true);
 
   //   Для отображения в дальнейшем различных элементов
   const [block, setBlock] = useState([
@@ -20,17 +20,17 @@ const PipelinePage = () => {
     { name: "Выписка СКУАД", open: false },
     { name: "Результаты скоринга", open: false },
     { name: "Журнал скоринга", open: false },
-  ])
-  const [startDate, setStartDate] = useState(new Date())
-  const [inputINN, setInputINN] = useState("")
-  const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
-  const [scoringOptions, setScoringOptions] = useState([])
-  const [disabledBtn, setDisabledBtn] = useState("")
-  const [modalScoringResults, setModalScoringResults] = useState(false)
+  ]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [inputINN, setInputINN] = useState("");
+  const [scoringModel, setScoringModel] = useState({ scoring_model: "" });
+  const [scoringOptions, setScoringOptions] = useState([]);
+  const [disabledBtn, setDisabledBtn] = useState("");
+  const [modalScoringResults, setModalScoringResults] = useState(false);
 
   const doScoring = () => {
-    console.log("Scoring...")
-  }
+    console.log("Scoring...");
+  };
 
   async function handleSaveData() {
     axios
@@ -41,17 +41,17 @@ const PipelinePage = () => {
         author_id: "Denis",
       })
       .then(function (response) {
-        console.log(response)
-        setDisabledBtn("btn btn-outline-primary disabled")
+        console.log(response);
+        setDisabledBtn("btn btn-outline-primary disabled");
       })
       .catch(function (error) {
-        console.log(error)
-      })
+        console.log(error);
+      });
   }
 
   const toggle = () => {
-    setOpen(!open)
-  }
+    setOpen(!open);
+  };
 
   // const handleSaveData = () => {
   //   const json = {
@@ -69,16 +69,16 @@ const PipelinePage = () => {
   // };
 
   const handleChangeINN = (e) => {
-    setInputINN(e.target.value)
+    setInputINN(e.target.value);
     // console.log(inputINN.split(", "))
-  }
+  };
 
   const handleChange = (target) => {
     setScoringModel((prevState) => ({
       ...prevState,
       [target.name]: target.value,
-    }))
-  }
+    }));
+  };
 
   // const setSelectScoringModelOptions = (modelspass) => {
   //   modelspass.map((modelpass => {
@@ -106,19 +106,19 @@ const PipelinePage = () => {
             setScoringOptions((current) => [
               ...current,
               { label: modelpass.model_name, value: modelpass.id },
-            ])
+            ]);
           }
-        })
+        });
       })
       .catch((e) => {
-        console.log(e)
-      })
-    console.log("scoringOptions", scoringOptions)
+        console.log(e);
+      });
+    console.log("scoringOptions", scoringOptions);
   }
 
   useEffect(() => {
-    getModels()
-  }, [])
+    getModels();
+  }, []);
 
   return (
     <div className="container mt-3">
@@ -139,7 +139,9 @@ const PipelinePage = () => {
           </MyButton>
         </div>
         <div className="col-md-auto">
-          <MyButton>Журнал скоринга</MyButton>
+          <Link to="/results">
+            <MyButton>Журнал скоринга</MyButton>
+          </Link>
         </div>
       </div>
       {/* </div> */}
@@ -234,22 +236,20 @@ const PipelinePage = () => {
               </table>
             </div>
           </div>
-          <div className="row justify-content-md-center">
+          <div className="row justify-content-md-left">
             <div className="col-md-auto">
               {/* <MyButton onClick={() => setModalScoringResults(true)}>
                 Запустить скоринг
               </MyButton> */}
 
-              <MyButton
-                onClick={() => setModalScoringResults(true)}>
+              <MyButton onClick={() => setModalScoringResults(true)}>
                 Запустить скоринг
               </MyButton>
-
             </div>
             <div className="col-md-auto">
-              <Link to="/results">
+              {/* <Link to="/results">
                 <MyButton>Журнал скоринга</MyButton>
-              </Link>
+              </Link> */}
             </div>
             <div className="col-md-auto">
               <MyButton className={disabledBtn} onClick={handleSaveData}>
@@ -268,7 +268,7 @@ const PipelinePage = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default PipelinePage
+export default PipelinePage;

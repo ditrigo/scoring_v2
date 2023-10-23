@@ -5,9 +5,9 @@ from simple_history.admin import SimpleHistoryAdmin
 from .models import *
 
 
-class CsvAttributesResource(resources.ModelResource):
+class ImportedAttributesResource(resources.ModelResource):
     class Meta:
-        model = CsvAttributes
+        model = ImportedAttributes
         skip_unchanged = True
         import_id_fields  = ('inn', 'np_name')
     
@@ -34,14 +34,14 @@ class CsvAttributesResource(resources.ModelResource):
     #     import_validation_errors=import_validation_errors)
 
 class CsvAttributesAdmin(ImportExportModelAdmin):
-    resorce_classes = [CsvAttributes]
+    resorce_classes = [ImportedAttributes]
     list_display = ('id', 
                     'uuid', 
                     'inn',
                     'created_date', 
                     'np_name', 
                     'report_date')
-admin.site.register(CsvAttributes, CsvAttributesAdmin)
+admin.site.register(ImportedAttributes, CsvAttributesAdmin)
 
 # class CountedAttrFormulaAdmin(admin.ModelAdmin):
 #     search_fields = ('uuid', )
