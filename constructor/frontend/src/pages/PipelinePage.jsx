@@ -22,15 +22,39 @@ const PipelinePage = () => {
     { name: "Журнал скоринга", open: false },
   ])
   const [startDate, setStartDate] = useState(new Date())
+  const [models, setModels] = useState()
   const [inputINN, setInputINN] = useState("")
   const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
   const [scoringOptions, setScoringOptions] = useState([])
   const [disabledBtn, setDisabledBtn] = useState("")
   const [modalScoringResults, setModalScoringResults] = useState(false)
+  const [isSaved, setIsSaved] = useState(false)
 
   const doScoring = () => {
     console.log("Scoring...")
+    const model = models.find(
+      (el) => el.model_name === scoringModel.scoring_model
+    )
+    console.log(model)
+    const json = {
+      data: {
+        model,
+      },
+    }
+    axios
+      .post("http://127.0.0.1:8000/api/start_scoring/", json)
+      .then((resp) => {
+        console.log(resp)
+        setInputINN("")
+        setScoringModel({ scoring_model: "" })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
+
+  const isDisabled = scoringModel.scoring_model && inputINN
+  const isDisabledScoring = scoringModel.scoring_model && inputINN && isSaved
 
   async function handleSaveData() {
     axios
@@ -43,12 +67,15 @@ const PipelinePage = () => {
           .join(" ")
           .split(" "),
         active: true,
-        scoringmodel_id: scoringModel.scoring_model,
+        scoringmodel_id: models.find(
+          (el) => el.model_name === scoringModel.scoring_model
+        ).id,
         author_id: "Denis",
       })
       .then(function (response) {
         console.log(response)
         setDisabledBtn("btn btn-outline-primary disabled")
+        setIsSaved(true)
       })
       .catch(function (error) {
         console.log(error)
@@ -101,17 +128,17 @@ const PipelinePage = () => {
     axios
       .get("http://127.0.0.1:8000/api/scoring_model/")
       .then((res) => {
-        // console.log(res.data.data)
+        console.log(res.data.data)
         // console.log(res.data.data[0].model_name)
         // console.log(res.data.data[0].id)
         // setScoringModels(res.data.data)
         // setSelectScoringModelOptions(res.data.data)
-
-        res.data.data.map((modelpass) => {
+        setModels(res.data.data)
+        res.data.data.forEach((modelpass) => {
           if (modelpass.status === "AP") {
             setScoringOptions((current) => [
               ...current,
-              { label: modelpass.model_name, value: modelpass.id },
+              { label: modelpass.model_name, value: modelpass.model_name },
             ])
           }
         })
@@ -145,7 +172,9 @@ const PipelinePage = () => {
           </MyButton>
         </div>
         <div className="col-md-auto">
-          <MyButton>Журнал скоринга</MyButton>
+          <Link to="/results">
+            <MyButton>Журнал скоринга</MyButton>
+          </Link>
         </div>
       </div>
       {/* </div> */}
@@ -240,22 +269,31 @@ const PipelinePage = () => {
               </table>
             </div>
           </div>
-          <div className="row">
+          <div className="row justify-content-md-left">
             <div className="col-md-auto">
               {/* <MyButton onClick={() => setModalScoringResults(true)}>
                 Запустить скоринг
               </MyButton> */}
-              <Link to="/results">
-                <MyButton onClick={() => setModalScoringResults(true)}>
-                  Запустить скоринг
-                </MyButton>
-              </Link>
+
+              <MyButton
+                disabled={!isDisabledScoring}
+                // onClick={() => setModalScoringResults(true)}
+                onClick={doScoring}
+              >
+                Запустить скоринг
+              </MyButton>
             </div>
-            {/* <div className="col-md-auto">
-              <MyButton>Журнал скоринга</MyButton>
-            </div> */}
             <div className="col-md-auto">
-              <MyButton className={disabledBtn} onClick={handleSaveData}>
+              {/* <Link to="/results">
+                <MyButton>Журнал скоринга</MyButton>
+              </Link> */}
+            </div>
+            <div className="col-md-auto">
+              <MyButton
+                className={disabledBtn}
+                disabled={!isDisabled}
+                onClick={handleSaveData}
+              >
                 Сохранить связку параметров
               </MyButton>
             </div>

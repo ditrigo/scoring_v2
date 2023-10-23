@@ -7,9 +7,9 @@ class FileAttributesSerialiser(serializers.ModelSerializer):
         fields = ["id", "created_date", "filename"]
 
 
-class CsvAttributesSerialiser(serializers.ModelSerializer):
+class ImportedAttributesSerialiser(serializers.ModelSerializer):
     class Meta:
-        model = CsvAttributes
+        model = ImportedAttributes
         fields = ["id", "created_date" , "author_id", "inn", "report_date"]
         # fields = "__all__"
 
@@ -21,6 +21,7 @@ class MainCatalogSerializer(serializers.ModelSerializer):
 
 
 class MainCatalogFieldsSerializer(serializers.ModelSerializer):
+    main_catalog_id = MainCatalogSerializer(many=False, read_only=True)
     class Meta:
         model = MainCatalogFields
         fields = "__all__"

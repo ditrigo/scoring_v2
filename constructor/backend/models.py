@@ -27,7 +27,7 @@ class FileAttributes(models.Model):
         return self.author_id
 
 
-class CsvAttributes(models.Model):
+class ImportedAttributes(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default=uuid.uuid4,
                             editable=False,)
@@ -170,8 +170,8 @@ class CsvAttributes(models.Model):
         indexes = [
             models.Index(fields=["inn", "created_date", "report_date"])
         ]
-        db_table = "csv_attributes"
-        verbose_name = "csv_attribute"
+        db_table = "imported_attributes"
+        verbose_name = "imported_attribute"
 
     def str(self):
         return self.inn
@@ -207,7 +207,7 @@ class MainCatalogFields(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     date_from = models.DateTimeField(null=True)
     date_to = models.DateTimeField(null=True)
-    filed_name = models.CharField(max_length=250, blank=True)# TODO Remove this field - origin has the same meaning
+    # filed_name = models.CharField(max_length=250, blank=True)# TODO Remove this field - origin has the same meaning
     description = models.CharField(max_length=250, blank=True)
     origin = models.CharField(max_length=250, blank=True)
     active = models.BooleanField(default=False)
@@ -216,13 +216,13 @@ class MainCatalogFields(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=["filed_name", "created_date"])
+            models.Index(fields=["origin", "created_date"])
         ]
         db_table = "main_catalog_fileds"
         verbose_name = "main_catalog_filed"
 
     def __str__(self) -> str:
-        return f"{self.filed_name}"
+        return f"{self.origin}"
 
 
 # TODO переименовать на маркеры - их 40шт
@@ -240,6 +240,7 @@ class MarkersAttributes(models.Model):
     attr_formulas = models.CharField(max_length=250)
     description = models.CharField(max_length=250)
     sql_query = models.TextField(blank=True, null=True)
+    py_query = models.TextField(blank=True, null=True)
     nested_level = models.IntegerField()
 
     class Meta:
@@ -256,6 +257,7 @@ class MarkersAttributes(models.Model):
     # From CountedAttrFormula
     def save(self, *args, **kwargs):
         self.sql_query = sql_parser(self.attr_formulas)
+        # self.py_query = py_parser(self.attr_formulas)
         super().save(*args, **kwargs)
 
 
@@ -453,3 +455,10 @@ class CountedAttributesNew(models.Model):
 
 #     def __str__(self) -> str:
 #         return f"{self.model_name}"
+
+
+
+
+### CRM DATA MODELS ###########################################################################################
+
+

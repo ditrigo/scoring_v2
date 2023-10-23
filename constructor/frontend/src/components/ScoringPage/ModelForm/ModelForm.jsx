@@ -42,38 +42,9 @@ const ModelForm = ({ create, models, getLinkMarkers }) => {
     setModel({ model_name: "", description: "" })
   }
 
-  // async function postLinkMarkerAndModel(newModel) {
-  //   // TODO получить все id маркеров
-  //   const marker_ids = []
-  //   newModel.marker_id.forEach((marker) => {
-  //     marker_ids.push(marker.id)
-  //   })
-  //   linkMarkers(marker_ids)
-  //   console.log("marker_ids", marker_ids)
-  //   console.log("newModel.id", newModel.id)
-  //   axios
-  //     .post("http://127.0.0.1:8000/api/marker_attributes/create_relation/", {
-  //       counted_attr_ids: marker_ids,
-  //       scoring_model_id: newModel.id,
-  //     })
-  //     .then(function (response) {
-  //       console.log(response)
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error)
-  //     })
-  // }
-
   const createModelBy = (e) => {
     e.preventDefault()
     const findModel = models.filter((el) => el.model_name === modelSelect.model)
-    // const findMarkers = model.filter((el) => el )
-
-    // console.log("Find ", findModel[0].model_name)
-    // console.log("findModel", findModel)
-    // console.log("findModel[0].marker_id", findModel[0].marker_id)
-    // postLinkMarkerAndModel(findModel[0])
-
     let marker_ids = []
     findModel[0].marker_id.forEach((marker) => {
       marker_ids.push(marker.id)

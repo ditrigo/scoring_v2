@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import axios from "axios";
-import MyButton from "../components/UI/MyButton/MyButton";
-import "bootstrap/dist/css/bootstrap.css";
-import "../styles/App.css";
+import React, { useState } from "react"
+import axios from "axios"
+import MyButton from "../components/UI/MyButton/MyButton"
+import "bootstrap/dist/css/bootstrap.css"
+import "../styles/App.css"
 
 const LoginPage = ({ setIsAuth }) => {
   const [username, setUsername] = useState("")
@@ -34,7 +34,7 @@ const LoginPage = ({ setIsAuth }) => {
   }
 
   return (
-    <div className="Auth-form-container">
+    <div className="Auth-form-container text-center w-25 h-75 m-auto">
       <form className="Auth-form" onSubmit={submit}>
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">Войти</h3>

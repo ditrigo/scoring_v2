@@ -55,22 +55,25 @@ const SearchBar = ({
       </div>
       <div className="row">
         {/* <div className="row"> */}
-        <form onSubmit={handleSubmit} className="w-full">
-          <div>
+        <form
+        className="" 
+        onSubmit={handleSubmit} >
+          <div className="row">
             {/* <MarkersTable /> */}
             <div onClick={toggleExpanded}>
               <div
-                className={`font-semibold cursor-pointer ${
-                  expanded ? "up-arrow" : "down-arrow"
-                }`}
+                className={`row font-semibold cursor-pointer ${expanded ? "up-arrow" : "down-arrow"
+                  }`}
               >
                 {selections.length
                   ? selections.map((_, i) => (
-                      <span key={i}>
-                        {i ? ", " : null}
-                        {attributes[i].name_marker_attr}
-                      </span>
-                    ))
+                    <span 
+                    className="row"
+                    key={i}>
+                      {i ? ", " : null}
+                      {attributes[i].name_marker_attr}
+                    </span>
+                  ))
                   : "Маркеры не выбраны"}
               </div>
             </div>
@@ -95,30 +98,37 @@ const SearchBar = ({
             )}
           </div>
           <div className="row">
-            <MyButton
-              type="submit"
-              className={statusButton === "AP" ? "disabled" : ""}
-              onClick={(e) => handleSubmit(e, "AP")}
-            >
-              Утвердить
-            </MyButton>
-            <MyButton
-              type="submit"
-              className={statusButton === "AP" ? "disabled" : ""}
-              onClick={(e) => handleSubmit(e, "DF")}
-            >
-              Сохранить
-            </MyButton>
+            <div className="row mb-2">
+              <MyButton
+                type="submit"
+                className={statusButton === "AP" ? "disabled" : ""}
+                onClick={(e) => handleSubmit(e, "AP")}
+              >
+                Утвердить
+              </MyButton>
+            </div>
+            <div className="row mb-2">
+              <MyButton
+                type="submit"
+                className={statusButton === "AP" ? "disabled" : ""}
+                onClick={(e) => handleSubmit(e, "DF")}
+              >
+                Сохранить
+              </MyButton>
+            </div>
+
             {/* <MyButton type="button" onClick={() => setModal(true)}>
                 Добавить новый маркер
               </MyButton> */}
-            <Link
-              to={`/scoring`}
-              className="btn btn-outline-secondary"
-              // type="submit"
-            >
-              Выйти
-            </Link>
+            <div className="row">
+              <Link
+                to={`/scoring`}
+                className="btn btn-outline-secondary"
+              >
+                Выйти
+              </Link>
+            </div>
+
           </div>
         </form>
         {/* </div> */}

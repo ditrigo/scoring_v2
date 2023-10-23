@@ -258,19 +258,19 @@ def InsertValuesToCountedAttributes():
             need_capital_dp_rub=need_capital_dp_rub
         )
 
-    csv_attributes_list = CsvAttributes.objects.all()
+    imported_attributes_list = ImportedAttributes.objects.all()
 
-    csv_attributes_with_error = []
-    for csv_attributes in csv_attributes_list:
+    imported_attributes_with_error = []
+    for imported_attributes in imported_attributes_list:
         try:
-            calculate_counted_attributes(csv_attributes)
+            calculate_counted_attributes(imported_attributes)
         except:
-            csv_attributes_with_error.append(csv_attributes)
-    return csv_attributes_with_error, len(csv_attributes_with_error)
+            imported_attributes_with_error.append(imported_attributes)
+    return imported_attributes_with_error, len(imported_attributes_with_error)
 
 
 @api_view(['GET', 'POST'])
-def CsvAttributesListViewSet(request):  # (viewsets.ModelViewSet):
+def ImportedAttributesListViewSet(request):  # (viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     EXPORT_FORMATS_DICT = {
@@ -283,7 +283,7 @@ def CsvAttributesListViewSet(request):  # (viewsets.ModelViewSet):
         data = []
         nextPage = 1
         previousPage = 1
-        attributes = CsvAttributes.objects.all().order_by('id')
+        attributes = ImportedAttributes.objects.all().order_by('id')
         page = request.GET.get('page', 1)
         paginator = Paginator(attributes, 10)
         try:
@@ -293,7 +293,7 @@ def CsvAttributesListViewSet(request):  # (viewsets.ModelViewSet):
         except EmptyPage:
             data = paginator.page(paginator.num_pages)
 
-        serializer = CsvAttributesSerialiser(
+        serializer = ImportedAttributesSerialiser(
             data, context={'request': request}, many=True)
         if data.has_next():
             nextPage = data.next_page_number()
@@ -310,7 +310,7 @@ def CsvAttributesListViewSet(request):  # (viewsets.ModelViewSet):
         extension = filename.name.split(".")[-1].lower()
         dataset = Dataset()
 
-        csv_resource = CsvAttributesResource()
+        csv_resource = ImportedAttributesResource()
 
         if extension in IMPORT_FORMATS_DICT:
             dataset.load(filename.read(), format=extension)
@@ -615,12 +615,21 @@ def CreateRelationInnAndScoringModelViewSet(request):
 
             for inn_id in inn_ids:
                 try:
-                    CsvAttributes.objects.get(inn=inn_id)
-                except CsvAttributes.DoesNotExist:
+                    ImportedAttributes.objects.get(inn=inn_id)
+                except ImportedAttributes.DoesNotExist:
                     continue
 
+                # try:
+                #     inn_res = InnRes.objects.get(inn=inn_id)
+                # except InnRes.DoesNotExist:
+                #     inn_res = InnRes.objects.create(inn=inn_id)
+                
+                # if not InnRes.objects.get(inn=inn_id):
+                #     inn_res = InnRes.objects.create(inn=inn_id)
+                # else:
+                #     inn_res = InnRes.objects.get(inn=inn_id)
+
                 inn_res = InnRes.objects.create(inn=inn_id)
-                #TODO проверка на существования связки, чтобы не множить 
                 scoring_model.inns.add(inn_res)
 
             serializer = InnResSerialiser(inn_res)
@@ -628,3 +637,110 @@ def CreateRelationInnAndScoringModelViewSet(request):
 
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['GET', 'POST'])
+def InnAndResultsListViewSet(request):
+    permission_classes = (IsAuthenticated,)
+    if request.method == 'GET':
+        data = []
+        nextPage = 1
+        previousPage = 1
+        fields = InnRes.objects.all().order_by('id')
+        page = request.GET.get('page', 1)
+        paginator = Paginator(fields, 10)
+        try:
+            data = paginator.page(page)
+        except PageNotAnInteger:
+            data = paginator.page(1)
+        except EmptyPage:
+            data = paginator.page(paginator.num_pages)
+
+        serializer = InnResSerialiser(
+            data, context={'request': request}, many=True)
+        if data.has_next():
+            nextPage = data.next_page_number()
+        if data.has_previous():
+            previousPage = data.previous_page_number()
+
+        return Response({'data': serializer.data,
+                         'count': paginator.count,
+                         'numpages': paginator.num_pages,
+                         'nextlink': '/api/inn_res/?page=' + str(nextPage),
+                         'prevlink': '/api/inn_res/?page=' + str(previousPage)})
+    elif request.method == 'POST':
+        serializer = InnResSerialiser(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def InnAndResultsDetailViewSet(request, pk):
+    try:
+        inn_result_id = InnRes.objects.get(pk=pk)
+    except InnRes.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = InnResSerialiser(
+            inn_result_id, context={'request': request})
+        return Response({'data': serializer.data, })
+
+    elif request.method == 'PUT':
+        serializer = InnResSerialiser(
+            inn_result_id, data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        inn_result_id.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+@api_view(['POST'])
+def StartScoringViewSet(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        rank = 0.0 
+        inn_list, marker_formula_list = [], []
+        for key, value in data["data"].items():
+            # print(key, value)
+            # print('\n')
+            if key == "inns":
+                for val in value:
+                    print(val)
+                    for k, v in val.items():
+                        print("inns.keys", k ,"inns.values", v)
+                        if k == "inn":
+                            inn_list.append(v)
+            elif key == "marker_id":
+                for val in value:
+                    print(val)
+                    for k, v in val.items():
+                        print("marker_id.keys", k ,"marker_id.values", v)
+                        if k == "py_query":
+                            marker_formula_list.append(v)
+        
+        print(inn_list)
+        print(marker_formula_list)
+        # print(CsvAttributes.objects.get(inn=inn_list[0]).np_name)
+
+        for inn in inn_list:
+            for formula in marker_formula_list:
+                try:
+                    imported_attributes = ImportedAttributes.objects.get(inn=inn)
+                    counted_attributes = CountedAttributesNew.objects.get(inn=inn)
+                except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
+                    continue
+                value = eval(formula)
+                rank += value
+                print(value)
+                inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
+                # inn_res.save()
+        return JsonResponse({'message': 'Results were updated '}, status=200)
+
+    return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)

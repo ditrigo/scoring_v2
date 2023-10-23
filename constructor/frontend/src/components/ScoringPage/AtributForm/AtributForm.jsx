@@ -1,36 +1,116 @@
-import React, { useState } from "react";
-import MyButton from "../../UI/MyButton/MyButton";
-import MyInput from "../../UI/MyInput/MyInput";
+import React, { useState, useEffect } from "react"
+import MyButton from "../../UI/MyButton/MyButton"
+import MyInput from "../../UI/MyInput/MyInput"
+import Select from "react-select"
+import axios from "axios"
 
 const AtributForm = ({ create, setVisible }) => {
   const [marker, setMarker] = useState({
     name_marker_attr: "",
     attr_formulas: "",
-  });
+  })
+  const [importedAttributes, setImportedAttributes] = useState([])
+  const [countedAttributes, setCountedAttributes] = useState([])
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    console.log(e.target);
-  };
+  // const handleClick = (e) => {
+  //   e.preventDefault();
+  //   console.log(e.target);
+  // };
+
+  // const handleChangeSelect = (target) => {
+  //   console.log(target)
+  //   setCountedAttributes((prevState) => ({
+  //     ...prevState,
+  //     [target.name]: target.value,
+  //   }))
+  // }
 
   const handleCancle = (e) => {
-    e.preventDefault();
-    setVisible(false);
-  };
+    e.preventDefault()
+    setVisible(false)
+  }
 
   const addNewMarker = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     const newMarker = {
       ...marker,
       description: "some description",
       nested_level: 1,
       author_id: "Gr",
-    };
+    }
 
-    create(newMarker);
+    create(newMarker)
 
-    setMarker({ name_marker_attr: "", attr_formulas: "" });
-  };
+    setMarker({ name_marker_attr: "", attr_formulas: "" })
+  }
+
+  async function getAttributes() {
+    axios
+      .get("http://127.0.0.1:8000/api/catalog_fields/")
+      .then((res) => {
+        // importedAttributes(res.data.data)
+        console.log(res.data.data)
+        res.data.data.forEach((element) => {
+          console.log(element.main_catalog_id.description)
+          console.log(element)
+          if (element.main_catalog_id.origin_name === "counted_attributes") {
+            setCountedAttributes((current) => [
+              ...current,
+              {
+                label:
+                  "counted_attributes." +
+                  element.origin +
+                  " - " +
+                  element.description,
+                value:
+                  "counted_attributes." +
+                  element.origin +
+                  " - " +
+                  element.description,
+                name:
+                  "counted_attributes." +
+                  element.origin +
+                  " - " +
+                  element.description,
+              },
+            ])
+          } else {
+            if (element.main_catalog_id.origin_name === "imported_attributes") {
+              setImportedAttributes((current1) => [
+                ...current1,
+                {
+                  label:
+                    element.main_catalog_id.origin_name +
+                    "." +
+                    element.origin +
+                    " - " +
+                    element.description,
+                  value:
+                    element.main_catalog_id.origin_name +
+                    "." +
+                    element.origin +
+                    " - " +
+                    element.description,
+                  name:
+                    element.main_catalog_id.origin_name +
+                    "." +
+                    element.origin +
+                    " - " +
+                    element.description,
+                },
+              ])
+            }
+          }
+        })
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+    console.log("attr", countedAttributes)
+  }
+  useEffect(() => {
+    getAttributes()
+  }, [])
 
   return (
     <form>
@@ -47,15 +127,13 @@ const AtributForm = ({ create, setVisible }) => {
           <div className="row">
             <label>Вычисляемые Атрибуты</label>
           </div>
-          <div className="row">
-            <select defaultValue="Open this select menu" value="0">
-              <option value="0" disabled>
-                Выбрать атрибуты
-              </option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-            </select>
+          <div className="row mb-3">
+            <Select
+              options={importedAttributes}
+              // onChange={handleChangeSelect}
+              // name="Тип долга"
+              placeholder="Выберите"
+            />
           </div>
         </div>
         <div className="col">
@@ -63,14 +141,12 @@ const AtributForm = ({ create, setVisible }) => {
             <label>Загружаемые Атрибуты</label>
           </div>
           <div className="row md-auto">
-            <select defaultValue="Open this select menu" value="0">
-              <option value="0" disabled>
-                Выбрать атрибуты
-              </option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-            </select>
+            <Select
+              options={countedAttributes}
+              // onChange={handleChangeSelect}
+              name="Загружаемые атрибуты"
+              placeholder="Выберите"
+            />
           </div>
         </div>
       </div>
@@ -88,11 +164,14 @@ const AtributForm = ({ create, setVisible }) => {
       {/* <MyButton className="btn-outline-primary m-2" onClick={handleClick}>
         Применить
       </MyButton> */}
-      <MyButton className="btn-outline-primary m-2" onClick={handleCancle}>
+      <MyButton
+        className="btn btn-outline-secondary m-2"
+        onClick={handleCancle}
+      >
         Отменить
       </MyButton>
     </form>
-  );
-};
+  )
+}
 
-export default AtributForm;
+export default AtributForm
