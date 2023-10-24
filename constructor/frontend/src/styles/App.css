@@ -79,7 +79,10 @@
 }
 
 .select {
-  z-index: 5;
+  z-index: 10;
+}
+.text.input-group {
+  z-index: 1;
 }
 
 /* ROMA VERSION*/
