@@ -78,6 +78,10 @@
   background-color: white;
 }
 
+.select {
+  z-index: 5;
+}
+
 /* ROMA VERSION*/
 
 /* 
