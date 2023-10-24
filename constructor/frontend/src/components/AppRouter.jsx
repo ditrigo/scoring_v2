@@ -10,6 +10,7 @@ import Logout from "../pages/LogoutPage"
 import ScoringEditPage from "../pages/ScoringEditPage"
 import NewCrmClientPage from "../pages/NewCrmClientPage"
 import ResultTable from "./PiplinePage/ResultTable"
+import NewClientPage from "../pages/NewClientPage"
 
 const AppRouter = () => {
   return (
@@ -25,7 +26,7 @@ const AppRouter = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="*" element={<Navigate to="/error" replace />} />
-      <Route path="/newclient/:id?" element={<NewCrmClientPage />} />
+      <Route path="/newclient/:id?" element={<NewClientPage />} />
     </Routes>
   )
 }

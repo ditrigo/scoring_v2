@@ -10,7 +10,6 @@ const NewCrmClientPage = () => {
   const params = useParams()
   //   console.log(params)
   const [firstData, setFirstData] = useState()
-  // const [KPI, setKPI] = useState()
   const [users, setUsers] = useState()
   const [regions, setRegions] = useState()
 
@@ -24,30 +23,43 @@ const NewCrmClientPage = () => {
     }))
   }
 
-  const [testData, setTestData] = useState({ test: "test" })
+  const [testData, setTestData] = useState({
+    test: "",
+    risk: "",
+  })
+  const [testApi, setTestApi] = useState()
   const handleChangeTest = (target) => {
+    console.log(target)
+
     setTestData((prevState) => ({
       ...prevState,
       [target.name]: target.value,
     }))
   }
+  const riskList = [
+    { label: "Высокий риск", value: "Высокий риск" },
+    { label: "Средний риск", value: "Средний риск" },
+    { label: "Низкий риск", value: "Низкий риск" },
+  ]
 
   useEffect(() => {
     api.firstData.fetchAll().then((data) => {
       setFirstData(data)
     })
-    // console.log()
-    // api.KPI.fetchAll().then((data) => {
-    //   setKPI(data)
-    // })
+
     api.users.fetchAll().then((data) => {
       setUsers(data)
     })
     api.regions.fetchAll().then((data) => {
       setRegions(data)
     })
-    // console.log(regions)
+    api.testFiedls.fetchAll().then((data) => {
+      setTestApi(data)
+    })
   }, [])
+  useEffect(() => {
+    testApi && setTestData(testApi[0])
+  }, [testApi])
 
   function getCurrentUser(users) {
     const user = users.filter((el) => el.id === +params.id)
@@ -60,8 +72,7 @@ const NewCrmClientPage = () => {
       const user = getCurrentUser(users)[0]
       // console.log("Текущий ", user)
 
-      setUsersData((prevState) => ({
-        ...prevState,
+      setUsersData(() => ({
         INN: user.INN,
         clientName: user.clientName,
         region: user.region,
@@ -118,11 +129,6 @@ const NewCrmClientPage = () => {
     console.log("Календарь ", e.target.value)
   }
 
-  const riskList = [
-    { label: "Высокий риск", value: "Высокий риск" },
-    { label: "Средний риск", value: "Средний риск" },
-    { label: "Низкий риск", value: "Низкий риск" },
-  ]
   const sources = [
     { label: "ТНО, ФНС    ", value: "ТНО, ФНС    ", name: "source" },
     {
@@ -252,6 +258,22 @@ const NewCrmClientPage = () => {
   return (
     <div className="container mt-3">
       <div className="row">
+        <SelectField
+          label="label select"
+          defaultOption="Выберите"
+          name="risk"
+          options={riskList}
+          onChange={handleChangeTest}
+          value={testData.risk}
+        />
+
+        <TextField
+          label="label tex"
+          name="test"
+          value={testData.test}
+          onChange={handleChangeTest}
+        />
+
         <div className="col-md-12">
           <div className="card p-4">
             <form>
@@ -471,12 +493,7 @@ const NewCrmClientPage = () => {
                     )
                   }
                 })}
-              {/* <TextField
-                label="test"
-                name="test"
-                value={testData.test}
-                onChange={handleChangeTest}
-              /> */}
+
               <div className="row row-centered mb-2 colored">
                 <button
                   type="submit"

@@ -13,7 +13,7 @@ const Navbar = () => {
             {/* <ul className="navbar-nav w-75 m-auto"> */}
             <ul className="navbar-nav m-0">
               <li className="nav-item active">
-                <Link to="/upload" className="navbar-brand m-0 mb-2">
+                <Link to="/upload" className="navbar-brand ml-5 mb-2">
                   Модуль загрузки данных
                 </Link>
               </li>

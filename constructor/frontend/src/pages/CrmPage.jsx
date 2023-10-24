@@ -30,7 +30,7 @@ const CrmPage = () => {
     : null
 
   return (
-    <div className="container mr-5 mt-3">
+    <div className="container mr-5 mt-3 mb-4">
       <div className="row row-centered colored">
         <form className="col d-flex align-items-center">
           <MyInput

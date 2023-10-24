@@ -11,7 +11,7 @@ function MainPage() {
   useEffect(() => {
     if (localStorage.getItem("access_token") !== null) {
       setIsAuth(true)
-      console.log(localStorage.getItem("access_token"))
+      // console.log(localStorage.getItem("access_token"))
     }
   }, [isAuth])
 
