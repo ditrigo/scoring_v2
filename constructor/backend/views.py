@@ -882,6 +882,4 @@ def NegativeDecisionViewSet(request):
                 many=True
                 )
         return Response({'data': serializer.data})
-
-
 #---------------------

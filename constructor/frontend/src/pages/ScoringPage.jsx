@@ -296,7 +296,7 @@ const ScoringPage = () => {
       {/* </div> */}
 
       <MyModal visible={modal} setVisible={setModal}>
-        <h3>Новая модель</h3>
+        {/* <h3>Новая модель</h3> */}
         <ModelForm
           create={createModel}
           models={models}
@@ -305,7 +305,7 @@ const ScoringPage = () => {
       </MyModal>
 
       <MyModal visible={modalMarker} setVisible={setModalMarker}>
-        <h3>Новый маркер</h3>
+        {/* <h3>Новый маркер</h3> */}
         <AtributForm create={createMarker} setVisible={setModalMarker} />
       </MyModal>
     </div>
