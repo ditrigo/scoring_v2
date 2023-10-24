@@ -53,8 +53,8 @@
   box-sizing: border-box;
 }
 #root {
-  height: 1000px;
-  background: #F4F5F5;
+  /* height: 1000px; */
+  background: #f4f5f5;
 }
 .upload-block,
 .btn-block,
@@ -69,14 +69,13 @@
   height: 100%;
 }
 
-
 .card-header-name {
   margin-top: 16px;
   margin-bottom: 0px;
 }
 
 .card {
-  background-color: white; 
+  background-color: white;
 }
 
 /* ROMA VERSION*/

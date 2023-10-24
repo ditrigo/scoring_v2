@@ -154,7 +154,7 @@ const PipelinePage = () => {
   }, [])
 
   return (
-    <div className="container mt-3">
+    <div className="container mt-3 mb-4">
       {/* <div className="row"> */}
       <div className="row">
         <div className="col-md-auto">
@@ -182,7 +182,7 @@ const PipelinePage = () => {
       {open && (
         <div className="container">
           <div className="table-responsive-sm">
-            <div className="row">
+            <div className="row m-0">
               <table className="table text-left table-bordered mt-5">
                 <thead>
                   <tr>
@@ -269,8 +269,8 @@ const PipelinePage = () => {
               </table>
             </div>
           </div>
-          <div className="row justify-content-md-left">
-            <div className="col-md-auto">
+          <div className="row justify-content-start">
+            <div className="col-md-auto ">
               {/* <MyButton onClick={() => setModalScoringResults(true)}>
                 Запустить скоринг
               </MyButton> */}
@@ -283,11 +283,11 @@ const PipelinePage = () => {
                 Запустить скоринг
               </MyButton>
             </div>
-            <div className="col-md-auto">
-              {/* <Link to="/results">
+            {/* <div className="col-md-auto">
+              <Link to="/results">
                 <MyButton>Журнал скоринга</MyButton>
-              </Link> */}
-            </div>
+              </Link>
+            </div> */}
             <div className="col-md-auto">
               <MyButton
                 className={disabledBtn}
