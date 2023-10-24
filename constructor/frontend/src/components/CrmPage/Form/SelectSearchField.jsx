@@ -1,7 +1,14 @@
 import React from "react"
 import Select from "react-select"
 
-const SelectSearchField = ({ label, name, options, onChange, error }) => {
+const SelectSearchField = ({
+  label,
+  name,
+  options,
+  onChange,
+  error,
+  placeholder,
+}) => {
   const getInputClasses = () => {
     return "select form-control mt-1 mr-2" + (error ? " is-invalid" : "")
   }
@@ -16,7 +23,7 @@ const SelectSearchField = ({ label, name, options, onChange, error }) => {
           options={options}
           onChange={onChange}
           name={name}
-          placeholder="Выберите"
+          placeholder={placeholder}
           className={getInputClasses()}
         />
         {error && <div className="invalid-feedback ">{error}</div>}

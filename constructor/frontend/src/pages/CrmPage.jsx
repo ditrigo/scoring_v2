@@ -9,25 +9,29 @@ import MyInput from "../components/UI/MyInput/MyInput"
 const CrmPage = () => {
   const [users, setUsers] = useState()
   const [searchValue, setSearchValue] = useState("")
-
-  useEffect(() => {
-    api.users.fetchAll().then((data) => {
-      setUsers(data)
-    })
-    // setUsers(usersApi)
-    console.log(users)
-  }, [])
-
-  // Добавил проверку через тернарный оператор, чтоб не падал в ошибку от пустых users
-  const filtredUsers = users
-    ? users.filter((el) => {
-        if (Number.isInteger(+searchValue)) {
-          return el.INN.includes(searchValue)
-        } else {
-          return el.manager.toLowerCase().includes(searchValue.toLowerCase())
-        }
+  let filtredUsers = []
+  try {
+    useEffect(() => {
+      api.users.fetchAll().then((data) => {
+        setUsers(data)
       })
-    : null
+      // setUsers(usersApi)
+      console.log(users)
+    }, [])
+
+    // Добавил проверку через тернарный оператор, чтоб не падал в ошибку от пустых users
+    filtredUsers = users
+      ? users.filter((el) => {
+          if (Number.isInteger(+searchValue)) {
+            return el.INN.includes(searchValue)
+          } else {
+            return el.manager.toLowerCase().includes(searchValue.toLowerCase())
+          }
+        })
+      : null
+  } catch (e) {
+    console.log(e)
+  }
 
   return (
     <div className="container mr-5 mt-3 mb-4">

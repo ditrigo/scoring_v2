@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom"
 import axios from "axios"
 import { validator } from "../components/utils/validator"
 import SelectSearchField from "../components/CrmPage/Form/SelectSearchField"
+import Select from "react-select"
 
 const NewClientPage = () => {
   const params = useParams()
@@ -33,12 +34,12 @@ const NewClientPage = () => {
     }))
   }
 
-  async function getManagers() {
+  const getServerData = (url, func) => {
     axios
-      .get("http://127.0.0.1:8000/api/crm_managers/")
+      .get(url)
       .then((res) => {
         // setModels(res.data.data)
-        console.log(res.data)
+        func(res.data)
       })
       .catch((e) => {
         console.log(e)
@@ -46,7 +47,22 @@ const NewClientPage = () => {
   }
 
   useEffect(() => {
-    getManagers()
+    getServerData("http://127.0.0.1:8000/api/crm_managers/", console.log)
+    getServerData("http://127.0.0.1:8000/api/crm_region/", console.log)
+    getServerData("http://127.0.0.1:8000/api/crm_supp_measure/", console.log)
+    getServerData("http://127.0.0.1:8000/api/crm_review_stage/", console.log)
+    getServerData("http://127.0.0.1:8000/api/crm_category/", console.log)
+    getServerData(
+      "http://127.0.0.1:8000/api/crm_applicant_status/",
+      console.log
+    )
+    getServerData(
+      "http://127.0.0.1:8000/api/crm_info_source_type/",
+      console.log
+    )
+    getServerData("http://127.0.0.1:8000/api/crm_pos_decision/", console.log)
+    getServerData("http://127.0.0.1:8000/api/crm_neg_decision/", console.log)
+    getServerData("http://127.0.0.1:8000/api/crm_dept_type/", console.log)
   }, [])
 
   const validatorConfig = {
@@ -79,6 +95,7 @@ const NewClientPage = () => {
       [target.name]: target.value,
     }))
   }
+
   const riskList = [
     { label: "Высокий риск", value: "Высокий риск", name: "risk" },
     { label: "Средний риск", value: "Средний риск", name: "risk" },
@@ -93,6 +110,7 @@ const NewClientPage = () => {
       setTestApi(data)
     })
   }, [])
+
   useEffect(() => {
     if (params.id && users) {
       testApi && setTestData(testApi[0])
@@ -108,30 +126,34 @@ const NewClientPage = () => {
     setErrors(errors)
     return Object.keys(errors).length === 0
   }
-
   // TEST
 
   return (
     <div className="container mt-3">
       <div className="row">
-        <SelectSearchField
-          options={riskList}
-          onChange={handleChangeTest}
-          name="risk"
-          error={errors.risk}
-          label="New label select"
-        />
-
-        <TextField
-          label="label tex"
-          name="test"
-          value={testData.test}
-          onChange={handleChangeTest}
-          error={errors.test}
-        />
         <div className="col-md-12 mb-4">
           <div className="card p-2">
             <form>
+              <div>
+                <h3 className="text-center mt-2">Данные клиента</h3>
+                <Divider />
+              </div>
+              <SelectSearchField
+                options={riskList}
+                onChange={handleChangeTest}
+                name="risk"
+                error={errors.risk}
+                label="New label select"
+                placeholder={testData.risk}
+              />
+
+              <TextField
+                label="label tex"
+                name="test"
+                value={testData.test}
+                onChange={handleChangeTest}
+                error={errors.test}
+              />
               <div className="row row-centered  colored">
                 <button
                   type="submit"

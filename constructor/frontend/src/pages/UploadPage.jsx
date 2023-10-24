@@ -8,7 +8,7 @@ import ContentGroup from "../components/UploadPage/ContentGroup/ContentGroup.jsx
 // import UploadBlock from "../components/UploadPage/UploadBlock/UploadBlock"
 
 function UploadPage() {
-  const [uploadedFiles, setUploadedFiles] = useState([{ name: 123 }])
+  const [uploadedFiles, setUploadedFiles] = useState()
 
   const uploadHandler = (item) => {
     setUploadedFiles([...uploadedFiles, item])
