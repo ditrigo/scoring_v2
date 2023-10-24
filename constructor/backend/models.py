@@ -458,7 +458,229 @@ class CountedAttributesNew(models.Model):
 
 
 
-
 ### CRM DATA MODELS ###########################################################################################
 
+#----------------
+# СПРАВОЧНИКИ
 
+class Manager(models.Model):   # Manager - Менеджер площадки
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    first_name = models.CharField(max_length=255)
+    second_name = models.CharField(max_length=255)
+    patronymic = models.CharField(max_length=255)
+    job_title = models.CharField(max_length=255)
+
+    class Meta:
+        db_table ='manager'
+
+    def __str__(self):
+        return f"{self.first_name} {self.second_name}"
+
+
+class Region(models.Model):   # Region - Регион
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    region = models.CharField(max_length=255)
+    region_number = models.IntegerField()
+
+    class Meta:
+        db_table ='region'
+        
+    def __str__(self):
+        return f"{self.region_number} - {self.region}"
+    
+
+class SupportMeasure(models.Model):   # SupportMeasure мера поддержки
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    category_type = models.CharField(max_length=255)
+
+    class Meta:
+        db_table ='supp_measure'
+ 
+    def __str__(self):
+        return self.category_type
+
+
+class ReviewStage(models.Model): # ReviewStage - Стадия рассмотрения
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    stage = models.CharField(max_length=255)  
+
+    class Meta:
+        db_table ='review_stage'
+ 
+    def __str__(self):
+        return self.stage
+    
+
+class DebtType(models.Model):   #  DebtType - тип долга
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    type = models.CharField(max_length=255)
+
+    class Meta:
+        db_table ='debt_type'
+ 
+    def __str__(self):
+        return self.type
+
+
+class Category(models.Model):   # Category - Категория
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    type = models.CharField(max_length=255)
+
+    class Meta:
+        db_table ='category'
+ 
+    def __str__(self):
+        return self.type
+
+
+class ApplicantStatus(models.Model):    #  ApplicantStatus - Статус заявителя
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    status = models.CharField(max_length=255)
+
+    class Meta:
+        db_table ='appl_status'
+ 
+    def __str__(self):
+        return self.status
+
+
+class InformationSourceType(models.Model):   # InformationSource - Тип источника
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    type = models.CharField(max_length=255)
+
+    class Meta:
+        db_table ='inform_source_type'
+ 
+    def __str__(self):
+        return self.type
+    
+
+class PositiveDecision(models.Model):    # KPI -> PositiveDecision
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    positive_decision = models.CharField(max_length=255)
+
+    class Meta:
+        db_table ='pos_decision'
+ 
+    def __str__(self):
+        return self.positive_decision
+    
+
+class NegativeDecision(models.Model):    # KPI -> PositiveDecision
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    negative_decision = models.CharField(max_length=255)
+
+    class Meta:
+        db_table ='neg_decision'
+ 
+    def __str__(self):
+        return self.negative_decision
+
+#---------------------
+
+#---------------------
+# MAIN
+
+class ClientRepresentative(models.Model): # Представитель клиента
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    representative_first_name = models.CharField(max_length=255)
+    representative_second_name = models.CharField(max_length=255)
+    representative_patronymic = models.CharField(max_length=255)
+    representative_position = models.CharField(max_length=255) # Должность представителя
+    representative_phone = models.CharField(max_length=20) # Телефон представителя
+    representative_email = models.CharField(max_length=255) # Почта представителя
+    control_point = models.CharField(max_length=255) # Контрольная точка
+
+    class Meta:
+        db_table ='client_representative'
+ 
+    def __str__(self):
+        return f"{self.first_name} {self.second_name}"
+    
+
+class InformationSource(models.Model):
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    info_source_type_id = models.ForeignKey(InformationSourceType, on_delete=models.CASCADE)
+    info_source_date = models.DateTimeField()
+    info_source_number = models.CharField(max_length=255)
+    
+    class Meta:
+        db_table ='inform_source'
+ 
+    def __str__(self):
+        return self.info_source_number
+
+
+class ComplianceCriteria(models.Model):
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    debt_amount = models.IntegerField() # Сумма задолженности
+    debt_type = models.ForeignKey(DebtType, on_delete=models.CASCADE) # Тип долга
+    category = models.ForeignKey(Category, on_delete=models.CASCADE) # Категория
+    support_measure = models.ForeignKey(SupportMeasure, on_delete=models.CASCADE) # Мера поддержки
+    note = models.TextField() # Примечание к гр. 23
+    support_duration = models.IntegerField() # Срок предоставления меры
+
+    class Meta:
+        db_table ='compliance_criteria'
+ 
+    def __str__(self):
+        return f"{self.client.name} - {self.debt_type}"
+
+
+class KPI(models.Model): # KPI вид решения
+    pass 
+
+
+class Client(models.Model):
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    first_name = models.CharField(max_length=255)
+    second_name = models.CharField(max_length=255)
+    patronymic = models.CharField(max_length=255)
+    inn = models.IntegerField() # ИНН
+    # registration_date = models.DateTimeField() это, наверное,  ClientRepresentative.control_point 
+    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    manager = models.ForeignKey(Manager, on_delete=models.CASCADE)
+    applicant_status = models.ForeignKey(ApplicantStatus, on_delete=models.CASCADE) # Статус заявителя
+    information_source = models.ForeignKey(InformationSource, on_delete=models.CASCADE) # Источник информации
+    representitive_client = models.ForeignKey(ClientRepresentative, on_delete=models.CASCADE) # Представитель клиента
+    support_measure = models.ForeignKey(SupportMeasure, on_delete=models.CASCADE) # Мера поддержки
+    compliance_criteria = models.ForeignKey(ComplianceCriteria, on_delete=models.CASCADE) # Мера поддержки
+    kpi = models.ForeignKey(KPI, on_delete=models.CASCADE) # Мера поддержки
+    
+    
+    class Meta:
+        db_table ='client'
+ 
+    def __str__(self):
+        return f"{self.first_name} - {self.second_name}"
+
+
+#---------------------

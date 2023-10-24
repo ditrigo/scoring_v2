@@ -49,7 +49,6 @@ const ResultTable = ({ getLinkMarkers }) => {
     getResults()
   }, [])
 
-
   return (
     <>
       <div
@@ -70,8 +69,11 @@ const ResultTable = ({ getLinkMarkers }) => {
             {results.map((el, index) => {
               return (
                 <tr key={index}>
-                  <td>{Moment(el.created_date).locale("rus", localization)
-                    .format("LLL")}</td>
+                  <td>
+                    {Moment(el.created_date)
+                      .locale("rus", localization)
+                      .format("LLL")}
+                  </td>
                   <td className="text-center">{el.inn}</td>
                   <td>{el.result_score}</td>
                 </tr>
@@ -82,12 +84,14 @@ const ResultTable = ({ getLinkMarkers }) => {
         {/* <MyButton className="btn-outline-primary mt-2 mr-4" onClick={() => { }}>
           Подтвердить
         </MyButton> */}
-        <Link  to="/pipeline">
-          <MyButton className="btn btn-outline-secondary mt-2" onClick={() => { }}>
+        <Link to="/pipeline">
+          <MyButton
+            className="btn btn-outline-secondary mt-2"
+            onClick={() => {}}
+          >
             На модуль выдачи результатов
           </MyButton>
         </Link>
-
       </div>
     </>
   )

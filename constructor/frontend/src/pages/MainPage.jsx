@@ -24,6 +24,7 @@ function MainPage() {
               <div className="col-md-auto">
                 <img
                   src={Logo}
+                  alt="Logo"
                   style={{
                     width: "100px",
                     // marginRight: "10px"

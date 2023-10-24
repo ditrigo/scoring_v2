@@ -3,6 +3,7 @@ export const users = [
     id: 1,
     manager: "Панфилова И. О,",
     clientName: "ООО 'Розочка'",
+    PRD: "МИДУОЛ",
     INN: "345352342",
     region: "77 г. Москва",
     status: "Кредитор",
@@ -19,6 +20,8 @@ export const users = [
     id: 2,
     manager: "Бойченко К. О,",
     clientName: "ИП Волков А. Р.",
+    PRD: "МИДУОЛ",
+
     INN: "3458258916",
     region: "61 Ростовская область",
     status: "Должник",
@@ -35,6 +38,8 @@ export const users = [
     id: 3,
     manager: "Кириллова К. О,",
     clientName: "ИП Кур А. Р.",
+    PRD: "МИДУОЛ",
+
     INN: "16876168936",
     region: "Ростовская область",
     status: "Должник",

@@ -280,31 +280,36 @@ def ImportedAttributesListViewSet(request):  # (viewsets.ModelViewSet):
     IMPORT_FORMATS_DICT = EXPORT_FORMATS_DICT
 
     if request.method == 'GET':
-        data = []
-        nextPage = 1
-        previousPage = 1
+        # data = []
+        # nextPage = 1
+        # previousPage = 1
         attributes = ImportedAttributes.objects.all().order_by('id')
-        page = request.GET.get('page', 1)
-        paginator = Paginator(attributes, 10)
-        try:
-            data = paginator.page(page)
-        except PageNotAnInteger:
-            data = paginator.page(1)
-        except EmptyPage:
-            data = paginator.page(paginator.num_pages)
+        # page = request.GET.get('page', 1)
+        # paginator = Paginator(attributes, 10)
+        # try:
+        #     data = paginator.page(page)
+        # except PageNotAnInteger:
+        #     data = paginator.page(1)
+        # except EmptyPage:
+        #     data = paginator.page(paginator.num_pages)
 
         serializer = ImportedAttributesSerialiser(
-            data, context={'request': request}, many=True)
-        if data.has_next():
-            nextPage = data.next_page_number()
-        if data.has_previous():
-            previousPage = data.previous_page_number()
+            attributes,
+            # data, 
+            context={'request': request}, 
+            many=True
+            )
+        # if data.has_next():
+        #     nextPage = data.next_page_number()
+        # if data.has_previous():
+        #     previousPage = data.previous_page_number()
 
         return Response({'data': serializer.data,
-                         'count': paginator.count,
-                         'numpages': paginator.num_pages,
-                         'nextlink': '/api/attributes/?page=' + str(nextPage),
-                         'prevlink': '/api/attributes/?page=' + str(previousPage)})
+                        #  'count': paginator.count,
+                        #  'numpages': paginator.num_pages,
+                        #  'nextlink': '/api/attributes/?page=' + str(nextPage),
+                        #  'prevlink': '/api/attributes/?page=' + str(previousPage)
+                         })
     elif request.method == 'POST':
         filename = request.FILES["filename"]
         extension = filename.name.split(".")[-1].lower()
@@ -751,3 +756,61 @@ def StartScoringViewSet(request):
         return JsonResponse({'message': 'Results were updated '}, status=200)
 
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+### CRM VIEWS ###########################################################################################
+
+#----------------
+# СПРАВОЧНИКИ
+
+@api_view(['GET', 'POST'])
+def ManagerViewSet(request):
+    if request.method == 'GET':
+        managers = Manager.objects.all().order_by('id')
+        serializer = ManagerSerializer(
+                managers,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
+
+
+
+def RegionViewSet(request):
+    pass
+
+
+def SupportMeasureViewSet(request):
+    pass
+
+
+def ReviewStageViewSet(request):
+    pass
+
+
+def DebtTypeViewSet(request):
+    pass
+
+
+def CategoryViewSet(request):
+    pass
+
+
+def ApplicantStatusViewSet(request):
+    pass
+
+
+def InformationSourceTypeViewSet(request):
+    pass
+
+
+def PositiveDecisionViewSet(request):
+    pass
+
+
+def NegativeDecisionViewSet(request):
+    pass
+
+
+#---------------------

@@ -14,7 +14,7 @@ const props: UploadProps = {
   onChange(info) {
     const { status } = info.file
     if (status !== "uploading") {
-      console.log("vot", info.file, info.fileList)
+      console.log("vot", info.file)
       // axios
       //   .post("http://127.0.0.1:8000/api/files/", info.file)
       //   .then(function (response) {
