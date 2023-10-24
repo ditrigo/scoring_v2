@@ -30,5 +30,21 @@ urlpatterns = [
     re_path(r"^inn_res/$", InnAndResultsListViewSet, name="inn_and_results"),
     re_path(r"^inn_res/(?P<pk>[0-9]+)$", InnAndResultsDetailViewSet, name="inn_and_results_detail"),
 
-    re_path(r"^start_scoring/$", StartScoringViewSet, name="start_scoring")
+    re_path(r"^start_scoring/$", StartScoringViewSet, name="start_scoring"),
+
+
+    ### CRM URLS ###########################################################################################
+    #----------------
+    # СПРАВОЧНИКИ
+    re_path(r"^crm_managers/$", ManagerViewSet, name="crm_managers"),
+    re_path(r"^crm_region/$", RegionViewSet, name="crm_region"),
+    re_path(r"^crm_supp_measure/$", SupportMeasureViewSet, name="crm_supp_measure"),
+    re_path(r"^crm_review_stage/$", ReviewStageViewSet, name="crm_review_stage"),
+    re_path(r"^crm_dept_type/$", DebtTypeViewSet, name="crm_dept_type"),
+    re_path(r"^crm_category/$", CategoryViewSet, name="crm_category"),
+    re_path(r"^crm_applicant_status/$", ApplicantStatusViewSet, name="crm_applicant_status"),
+    re_path(r"^crm_info_source_type/$", InformationSourceTypeViewSet, name="crm_info_source_type"),
+    re_path(r"^crm_pos_decision/$", PositiveDecisionViewSet, name="crm_pos_decision"),
+    re_path(r"^crm_neg_decision/$", NegativeDecisionViewSet, name="crm_neg_decision"),
+    #----------------
 ]

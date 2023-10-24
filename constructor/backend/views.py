@@ -280,31 +280,36 @@ def ImportedAttributesListViewSet(request):  # (viewsets.ModelViewSet):
     IMPORT_FORMATS_DICT = EXPORT_FORMATS_DICT
 
     if request.method == 'GET':
-        data = []
-        nextPage = 1
-        previousPage = 1
+        # data = []
+        # nextPage = 1
+        # previousPage = 1
         attributes = ImportedAttributes.objects.all().order_by('id')
-        page = request.GET.get('page', 1)
-        paginator = Paginator(attributes, 10)
-        try:
-            data = paginator.page(page)
-        except PageNotAnInteger:
-            data = paginator.page(1)
-        except EmptyPage:
-            data = paginator.page(paginator.num_pages)
+        # page = request.GET.get('page', 1)
+        # paginator = Paginator(attributes, 10)
+        # try:
+        #     data = paginator.page(page)
+        # except PageNotAnInteger:
+        #     data = paginator.page(1)
+        # except EmptyPage:
+        #     data = paginator.page(paginator.num_pages)
 
         serializer = ImportedAttributesSerialiser(
-            data, context={'request': request}, many=True)
-        if data.has_next():
-            nextPage = data.next_page_number()
-        if data.has_previous():
-            previousPage = data.previous_page_number()
+            attributes,
+            # data, 
+            context={'request': request}, 
+            many=True
+            )
+        # if data.has_next():
+        #     nextPage = data.next_page_number()
+        # if data.has_previous():
+        #     previousPage = data.previous_page_number()
 
         return Response({'data': serializer.data,
-                         'count': paginator.count,
-                         'numpages': paginator.num_pages,
-                         'nextlink': '/api/attributes/?page=' + str(nextPage),
-                         'prevlink': '/api/attributes/?page=' + str(previousPage)})
+                        #  'count': paginator.count,
+                        #  'numpages': paginator.num_pages,
+                        #  'nextlink': '/api/attributes/?page=' + str(nextPage),
+                        #  'prevlink': '/api/attributes/?page=' + str(previousPage)
+                         })
     elif request.method == 'POST':
         filename = request.FILES["filename"]
         extension = filename.name.split(".")[-1].lower()
@@ -371,31 +376,35 @@ def ImportedAttributesListViewSet(request):  # (viewsets.ModelViewSet):
 def CatalogFieldsListViewSet(request):
     permission_classes = (IsAuthenticated,)
     if request.method == 'GET':
-        data = []
-        nextPage = 1
-        previousPage = 1
+        # data = []
+        # nextPage = 1
+        # previousPage = 1
         fields = MainCatalogFields.objects.all().order_by('id')
-        page = request.GET.get('page', 1)
-        paginator = Paginator(fields, 10)
-        try:
-            data = paginator.page(page)
-        except PageNotAnInteger:
-            data = paginator.page(1)
-        except EmptyPage:
-            data = paginator.page(paginator.num_pages)
+        # page = request.GET.get('page', 1)
+        # paginator = Paginator(fields, 10)
+        # try:
+        #     data = paginator.page(page)
+        # except PageNotAnInteger:
+        #     data = paginator.page(1)
+        # except EmptyPage:
+        #     data = paginator.page(paginator.num_pages)
 
         serializer = MainCatalogFieldsSerializer(
-            data, context={'request': request}, many=True)
-        if data.has_next():
-            nextPage = data.next_page_number()
-        if data.has_previous():
-            previousPage = data.previous_page_number()
+            fields,
+            # data, 
+            context={'request': request}, 
+            many=True)
+        # if data.has_next():
+        #     nextPage = data.next_page_number()
+        # if data.has_previous():
+        #     previousPage = data.previous_page_number()
 
         return Response({'data': serializer.data,
-                         'count': paginator.count,
-                         'numpages': paginator.num_pages,
-                         'nextlink': '/api/catalog_fields/?page=' + str(nextPage),
-                         'prevlink': '/api/catalog_fields/?page=' + str(previousPage)})
+                        #  'count': paginator.count,
+                        #  'numpages': paginator.num_pages,
+                        #  'nextlink': '/api/catalog_fields/?page=' + str(nextPage),
+                        #  'prevlink': '/api/catalog_fields/?page=' + str(previousPage)
+                         })
     elif request.method == 'POST':
         serializer = MainCatalogFieldsSerializer(data=request.data)
         if serializer.is_valid():
@@ -446,32 +455,35 @@ def MarkersAttributesListViewSet(request):
     permission_classes = (IsAuthenticated,)
 
     if request.method == 'GET':
-        data = None
-        paginator = None
-        serializer = MarkersAttributesSerializer()
-        next_page = None
-        previous_page = None
+        # data = None
+        # paginator = None
+        # next_page = None
+        # previous_page = None
         attributes = MarkersAttributes.objects.all().order_by('id')
-        paginator = Paginator(attributes, 10)
-        page = request.GET.get('page', 1)
-        try:
-            data = paginator.page(page)
-        except PageNotAnInteger:
-            data = paginator.page(1)
-        except EmptyPage:
-            data = paginator.page(paginator.num_pages)
+        # paginator = Paginator(attributes, 10)
+        # page = request.GET.get('page', 1)
+        # try:
+        #     data = paginator.page(page)
+        # except PageNotAnInteger:
+        #     data = paginator.page(1)
+        # except EmptyPage:
+        #     data = paginator.page(paginator.num_pages)
 
         serializer = MarkersAttributesSerializer(
-            data, context={'request': request}, many=True)
-        next_page = paginator.next_page_number() if data.has_next() else None
-        previous_page = paginator.previous_page_number() if data.has_previous() else None
+            attributes,
+            # data, 
+            context={'request': request}, 
+            many=True
+            )
+        # next_page = paginator.next_page_number() if data.has_next() else None
+        # previous_page = paginator.previous_page_number() if data.has_previous() else None
 
         return Response({
             'data': serializer.data,
-            'count': paginator.count,
-            'numpages': paginator.num_pages,
-            'nextlink': '/api/counted_attr/?page=' + str(next_page),
-            'prevlink': '/api/counted_attr/?page=' + str(previous_page)
+            # 'count': paginator.count,
+            # 'numpages': paginator.num_pages,
+            # 'nextlink': '/api/counted_attr/?page=' + str(next_page),
+            # 'prevlink': '/api/counted_attr/?page=' + str(previous_page)
         })
     elif request.method == 'POST':
         serializer = MarkersAttributesSerializer(data=request.data)
@@ -744,3 +756,61 @@ def StartScoringViewSet(request):
         return JsonResponse({'message': 'Results were updated '}, status=200)
 
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+### CRM VIEWS ###########################################################################################
+
+#----------------
+# СПРАВОЧНИКИ
+
+@api_view(['GET', 'POST'])
+def ManagerViewSet(request):
+    if request.method == 'GET':
+        managers = Manager.objects.all().order_by('id')
+        serializer = ManagerSerializer(
+                managers,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
+
+
+
+def RegionViewSet(request):
+    pass
+
+
+def SupportMeasureViewSet(request):
+    pass
+
+
+def ReviewStageViewSet(request):
+    pass
+
+
+def DebtTypeViewSet(request):
+    pass
+
+
+def CategoryViewSet(request):
+    pass
+
+
+def ApplicantStatusViewSet(request):
+    pass
+
+
+def InformationSourceTypeViewSet(request):
+    pass
+
+
+def PositiveDecisionViewSet(request):
+    pass
+
+
+def NegativeDecisionViewSet(request):
+    pass
+
+
+#---------------------

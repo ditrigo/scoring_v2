@@ -57,3 +57,15 @@ class ScoringModelSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = CountedAttrFormula
 #         fields = "__all__"
+
+
+### CRM VIEWS ###########################################################################################
+
+#----------------
+# СПРАВОЧНИКИ
+
+
+class ManagerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Manager
+        fields = "__all__"
