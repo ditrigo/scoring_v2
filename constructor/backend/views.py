@@ -776,41 +776,112 @@ def ManagerViewSet(request):
         return Response({'data': serializer.data})
 
 
-
+@api_view(['GET', 'POST'])
 def RegionViewSet(request):
-    pass
+    if request.method == 'GET':
+        regions = Region.objects.all().order_by('id')
+        serializer = RegionSerializer(
+                regions,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
 
 
+@api_view(['GET', 'POST'])
 def SupportMeasureViewSet(request):
-    pass
+    if request.method == 'GET':
+        supp_measure = SupportMeasure.objects.all().order_by('id')
+        serializer = SupportMeasureSerializer(
+                supp_measure,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
 
 
+@api_view(['GET', 'POST'])
 def ReviewStageViewSet(request):
-    pass
+    if request.method == 'GET':
+        review_stage = ReviewStage.objects.all().order_by('id')
+        serializer = ReviewStageSerializer(
+                review_stage,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
 
 
+@api_view(['GET', 'POST'])
 def DebtTypeViewSet(request):
-    pass
+    if request.method == 'GET':
+        dept_type = DebtType.objects.all().order_by('id')
+        serializer = DebtTypeSerializer(
+                dept_type,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
 
 
+@api_view(['GET', 'POST'])
 def CategoryViewSet(request):
-    pass
+    if request.method == 'GET':
+        categories = Category.objects.all().order_by('id')
+        serializer = CategorySerializer(
+                categories,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
 
 
+@api_view(['GET', 'POST'])
 def ApplicantStatusViewSet(request):
-    pass
+    if request.method == 'GET':
+        app_status = ApplicantStatus.objects.all().order_by('id')
+        serializer = ApplicantStatusSerializer(
+                app_status,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
 
 
+@api_view(['GET', 'POST'])
 def InformationSourceTypeViewSet(request):
-    pass
+    if request.method == 'GET':
+        info_source_types = InformationSourceType.objects.all().order_by('id')
+        serializer = InformationSourceTypeSerializer(
+                info_source_types,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
 
 
+@api_view(['GET', 'POST'])
 def PositiveDecisionViewSet(request):
-    pass
+    if request.method == 'GET':
+        pos_decisions = PositiveDecision.objects.all().order_by('id')
+        serializer = PositiveDecisionSerializer(
+                pos_decisions,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
 
 
+@api_view(['GET', 'POST'])
 def NegativeDecisionViewSet(request):
-    pass
+    if request.method == 'GET':
+        neg_decisions = NegativeDecision.objects.all().order_by('id')
+        serializer = NegativeDecisionSerializer(
+                neg_decisions,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
 
 
 #---------------------

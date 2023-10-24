@@ -69,3 +69,57 @@ class ManagerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manager
         fields = "__all__"
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Region
+        fields = "__all__"
+
+
+class SupportMeasureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SupportMeasure
+        fields = "__all__"
+
+
+class ReviewStageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReviewStage
+        fields = "__all__"
+
+
+class DebtTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DebtType
+        fields = "__all__"
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = "__all__"
+
+
+class ApplicantStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ApplicantStatus
+        fields = "__all__"
+
+
+class InformationSourceTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InformationSourceType
+        fields = "__all__"
+
+
+class PositiveDecisionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PositiveDecision
+        fields = "__all__"
+
+
+class NegativeDecisionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NegativeDecision
+        fields = "__all__"
