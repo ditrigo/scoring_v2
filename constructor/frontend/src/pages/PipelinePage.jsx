@@ -7,27 +7,27 @@ import axios from "axios"
 import "react-datepicker/dist/react-datepicker.css"
 import SelectField from "../components/CrmPage/Form/SelectField"
 import MyModal from "../components/ScoringPage/MyModal/MyModal"
-import ResultTable from "../components/PiplinePage/ResultTable"
-import { Link } from "react-router-dom"
+// import ResultTable from "../components/PiplinePage/ResultTable"
+// import { Link } from "react-router-dom"
 
 const PipelinePage = () => {
   const [open, setOpen] = useState(true)
 
   //   Для отображения в дальнейшем различных элементов
-  const [block, setBlock] = useState([
-    { name: "Статические данные", open: false },
-    { name: "Расчет модели", open: false },
-    { name: "Выписка СКУАД", open: false },
-    { name: "Результаты скоринга", open: false },
-    { name: "Журнал скоринга", open: false },
-  ])
+  // const [block, setBlock] = useState([
+  //   { name: "Статические данные", open: false },
+  //   { name: "Расчет модели", open: false },
+  //   { name: "Выписка СКУАД", open: false },
+  //   { name: "Результаты скоринга", open: false },
+  //   { name: "Журнал скоринга", open: false },
+  // ])
   const [startDate, setStartDate] = useState(new Date())
   const [models, setModels] = useState()
   const [inputINN, setInputINN] = useState("")
   const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
   const [scoringOptions, setScoringOptions] = useState([])
   const [disabledBtn, setDisabledBtn] = useState("")
-  const [modalScoringResults, setModalScoringResults] = useState(false)
+  // const [modalScoringResults, setModalScoringResults] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
 
   const doScoring = () => {
@@ -40,6 +40,7 @@ const PipelinePage = () => {
     const json = {
       model
     }
+    console.log(json)
     axios
       .post("http://127.0.0.1:8000/api/start_scoring/", json)
       .then((resp) => {
@@ -170,11 +171,11 @@ const PipelinePage = () => {
             Результаты скоринга
           </MyButton>
         </div>
-        <div className="col-md-auto">
+        {/* <div className="col-md-auto">
           <Link to="/results">
             <MyButton>Журнал скоринга</MyButton>
           </Link>
-        </div>
+        </div> */}
       </div>
       {/* </div> */}
 
@@ -298,13 +299,13 @@ const PipelinePage = () => {
             </div>
           </div>
 
-          <MyModal
+          {/* <MyModal
             visible={modalScoringResults}
             setVisible={setModalScoringResults}
           >
             <h3>Результат скоринга</h3>
             <ResultTable setVisible={setModalScoringResults} />
-          </MyModal>
+          </MyModal> */}
         </div>
       )}
     </div>

@@ -99,6 +99,7 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
               ?.filter((e) => e.isVisible)
               ?.map((column, index) => (
                 <th
+                  style={{textAlign:"center", paddingTop:"0px"}}
                   key={index}
                   scope="col"
                   onClick={

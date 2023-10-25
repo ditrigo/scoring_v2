@@ -17,6 +17,7 @@ from tablib import Dataset
 from .exceptions import ExportError, ImportError
 import json
 from django.http import JsonResponse
+from django.db import transaction, connection
 
 
 # Uploaded files into DataBase
@@ -24,31 +25,36 @@ from django.http import JsonResponse
 def FilesListViewSet(request):  # (viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     if request.method == 'GET':
-        data = []
-        nextPage = 1
-        previousPage = 1
+        # data = []
+        # nextPage = 1
+        # previousPage = 1
         files = FileAttributes.objects.all().order_by('id')
-        page = request.GET.get('page', 1)
-        paginator = Paginator(files, 10)
-        try:
-            data = paginator.page(page)
-        except PageNotAnInteger:
-            data = paginator.page(1)
-        except EmptyPage:
-            data = paginator.page(paginator.num_pages)
+        # page = request.GET.get('page', 1)
+        # paginator = Paginator(files, 10)
+        # try:
+        #     data = paginator.page(page)
+        # except PageNotAnInteger:
+        #     data = paginator.page(1)
+        # except EmptyPage:
+        #     data = paginator.page(paginator.num_pages)
 
         serializer = FileAttributesSerialiser(
-            data, context={'request': request}, many=True)
-        if data.has_next():
-            nextPage = data.next_page_number()
-        if data.has_previous():
-            previousPage = data.previous_page_number()
+            files,
+            # data, 
+            context={'request': request}, 
+            many=True
+            )
+        # if data.has_next():
+        #     nextPage = data.next_page_number()
+        # if data.has_previous():
+        #     previousPage = data.previous_page_number()
 
         return Response({'data': serializer.data,
-                         'count': paginator.count,
-                         'numpages': paginator.num_pages,
-                         'nextlink': '/api/files/?page=' + str(nextPage),
-                         'prevlink': '/api/files/?page=' + str(previousPage)})
+                        #  'count': paginator.count,
+                        #  'numpages': paginator.num_pages,
+                        #  'nextlink': '/api/files/?page=' + str(nextPage),
+                        #  'prevlink': '/api/files/?page=' + str(previousPage)
+                         })
     elif request.method == 'POST':
         serializer = FileAttributesSerialiser(data=request.data)
         if serializer.is_valid():
@@ -312,6 +318,7 @@ def ImportedAttributesListViewSet(request):  # (viewsets.ModelViewSet):
                          })
     elif request.method == 'POST':
         filename = request.FILES["filename"]
+        # print(request.FILES['filename'].size)
         extension = filename.name.split(".")[-1].lower()
         dataset = Dataset()
 
@@ -322,6 +329,22 @@ def ImportedAttributesListViewSet(request):  # (viewsets.ModelViewSet):
         else:
             raise ImportError("Unsupport import format",
                               code="unsupport_import_format")
+        
+        ############ Чтобы получить id файла, который загружается ###############################################
+
+        with transaction.atomic():
+            serializer_body = FileAttributesSerialiser(data=request.data)
+            if not serializer_body.is_valid():
+                transaction.set_rollback(True)
+                return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer_body.save()
+            
+            get_file_id = FileAttributes.objects.latest('id').id
+            
+            dataset.append_col([get_file_id for _ in range(len(dataset))], header='file_id')
+            # print(dataset)
+		
+        #######################################################################################################
 
         result = csv_resource.import_data(
             dataset,
@@ -347,8 +370,16 @@ def ImportedAttributesListViewSet(request):  # (viewsets.ModelViewSet):
         else:
             raise ImportError("Import data failed", code="import_data_failed")
         
-        print("IMPORT_TYPE_NEW - ", result.totals[RowResult.IMPORT_TYPE_NEW])
-        print("IMPORT_TYPE_UPDATE - ", result.totals[RowResult.IMPORT_TYPE_UPDATE])
+        # print("IMPORT_TYPE_NEW - ", result.totals[RowResult.IMPORT_TYPE_NEW])
+        # print("IMPORT_TYPE_UPDATE - ", result.totals[RowResult.IMPORT_TYPE_UPDATE])
+        # print("result.total_rows", result.total_rows)
+
+        FileAttributes.objects.filter(id=get_file_id).update(
+            import_new_rows = result.totals[RowResult.IMPORT_TYPE_NEW],
+            import_update_rows = result.totals[RowResult.IMPORT_TYPE_UPDATE],
+            import_total_rows = result.total_rows,
+            filesize = request.FILES['filename'].size,
+        )       
         
         if result.totals[RowResult.IMPORT_TYPE_NEW]:
             InsertValuesToCountedAttributes()
@@ -720,27 +751,29 @@ def StartScoringViewSet(request):
         rank = 0.0 
         inn_list, marker_formula_list = [], []
         for key, value in data["model"].items():
-            print("key -", key,"\nvalue - ", value)
-            print('\n')
+            # print("key -", key,"\nvalue - ", value)
+            # print('\n')
             if key == "inns":
                 for val in value:
-                    print(val)
+                    # print(val)
                     for k, v in val.items():
-                        print("inns.keys", k ,"inns.values", v)
+                        # print("inns.keys", k ,"inns.values", v)
                         if k == "inn":
                             inn_list.append(v)
             elif key == "marker_id":
                 for val in value:
-                    print(val)
+                    # print(val)
                     for k, v in val.items():
-                        print("marker_id.keys", k ,"marker_id.values", v)
+                        # print("marker_id.keys", k ,"marker_id.values", v)
                         if k == "py_query":
                             marker_formula_list.append(v)
         
-        print(inn_list)
-        print(marker_formula_list)
+        # print(inn_list)
+        # print(marker_formula_list)
         # print(CsvAttributes.objects.get(inn=inn_list[0]).np_name)
 
+        dict_markers = {}
+        list_markers = []
         for inn in inn_list:
             for formula in marker_formula_list:
                 try:
@@ -749,10 +782,23 @@ def StartScoringViewSet(request):
                 except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
                     continue
                 value = eval(formula)
+                list_markers.append({'formula': formula, "value": value})
+                
                 rank += value
                 print(value)
-                inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
+                # inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
                 # inn_res.save()
+
+            total_json = {
+                "markers_and_values": list_markers,
+                "total_rank": rank
+            }
+            dict_markers.update(total_json)
+            print(dict_markers)
+            InnRes.objects.filter(inn=inn).update(result_score=dict_markers) 
+            # InnRes.objects.create(markers_json=dict_markers)
+            dict_markers = {}
+
         return JsonResponse({'message': 'Results were updated '}, status=200)
 
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)

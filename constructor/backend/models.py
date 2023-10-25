@@ -13,9 +13,13 @@ class FileAttributes(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default=uuid.uuid4,
                             editable=False,)
-    author_id = models.CharField(max_length=125,)
+    author_id = models.CharField(max_length=125,null=True, blank=True,)
     created_date = models.DateTimeField(auto_now_add=True)
     filename = models.FileField(upload_to='store/')
+    filesize = models.CharField(max_length=255,null=True, blank=True,)
+    import_new_rows = models.CharField(max_length=255,null=True, blank=True,)
+    import_update_rows = models.CharField(max_length=255,null=True, blank=True,)
+    import_total_rows = models.CharField(max_length=255,null=True, blank=True,)
 
     class Meta:
         indexes = [
@@ -270,8 +274,9 @@ class InnRes(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=False)
     inn = models.IntegerField()
-    result_score = models.IntegerField(null=True, blank=True)
+    result_score = models.JSONField(null=True, blank=True)
     # scoring_model = models.ManyToManyField(ScoringModel, blank=True)
+    # markers_json = models.JSONField()
 
     class Meta:
         indexes = [

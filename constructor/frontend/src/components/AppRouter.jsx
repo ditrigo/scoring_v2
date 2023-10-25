@@ -9,7 +9,7 @@ import LoginPage from "../pages/LoginPage"
 import Logout from "../pages/LogoutPage"
 import ScoringEditPage from "../pages/ScoringEditPage"
 import NewCrmClientPage from "../pages/NewCrmClientPage"
-import ResultTable from "./PiplinePage/ResultTable"
+// import ResultTable from "./PiplinePage/ResultTable"
 import NewClientPage from "../pages/NewClientPage"
 
 const AppRouter = () => {
@@ -21,7 +21,7 @@ const AppRouter = () => {
       <Route path="/upload" element={<Upload />} />
       <Route path="/pipeline" element={<PipelinePage />} />
       <Route path="/crm" element={<CrmPage />} />
-      <Route path="/results" element={<ResultTable />} />
+      {/* <Route path="/results" element={<ResultTable />} /> */}
       <Route path="/error" element={<Error />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/logout" element={<Logout />} />

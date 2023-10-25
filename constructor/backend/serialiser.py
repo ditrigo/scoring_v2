@@ -4,7 +4,7 @@ from .models import *
 class FileAttributesSerialiser(serializers.ModelSerializer):
     class Meta:
         model = FileAttributes
-        fields = ["id", "created_date", "filename"]
+        fields = "__all__"
 
 
 class ImportedAttributesSerialiser(serializers.ModelSerializer):

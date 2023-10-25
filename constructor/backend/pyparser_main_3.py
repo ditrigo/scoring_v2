@@ -161,6 +161,7 @@ if __name__ == "__main__":
     # Строка 77, Коэффициент долга по 44-ФЗ
     expression = 'условие(dolg=0;0;условие(И(s_1600_4=0;dolg>0);-15;условие(dolg/s_1600_4>0,25;-15;0)))'
     expression2 = 'условие(imported_attributes.dolg=0;0;условие(И(imported_attributes.s_1600_4=0;imported_attributes.dolg>0);-15;условие(imported_attributes.dolg/imported_attributes.s_1600_4>0,25;-15;0)))'
+    expression3 = 'условие(imported_attributes.dolg=0;0;условие(И(imported_attributes.s_1600_4=0;imported_attributes.dolg>0);-15;условие(imported_attributes.dolg/imported_attributes.s_1600_4>0,20;-15;0)))'
     print(py_parser_main(expression2))
 
     # Correct answer: 
