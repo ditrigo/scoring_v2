@@ -130,6 +130,11 @@ const NewClientPage = () => {
         message: "Это поле обязательно для заполнения",
       },
     },
+    type: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
   }
 
   const isValid = Object.keys(errors).length === 0
@@ -155,6 +160,14 @@ const NewClientPage = () => {
     date2: "",
     sum: "",
     descr: "",
+    Номер: "",
+    representative: "",
+    Телефон: "",
+    Почта: "",
+    Примечания: "",
+    term: "",
+    activity: "",
+    firstData: "",
   })
   const [testApi, setTestApi] = useState()
 
@@ -166,6 +179,12 @@ const NewClientPage = () => {
       [target.name]: target.value,
     }))
   }
+
+  const type = [
+    { label: "Текущий", value: "Текущий", name: "source" },
+    { label: "будущий", value: "будущий", name: "source" },
+    { label: "Поручение", value: "Поручение", name: "source" },
+  ]
 
   const riskList = [
     { label: "Высокий риск", value: "Высокий риск", name: "risk" },
@@ -182,7 +201,7 @@ const NewClientPage = () => {
     },
     { label: "РГ    ", value: "РГ    ", name: "sources" },
   ]
-  const menegers = [
+  const managers = [
     { label: "Бабасов П.Н.", value: "Бабасов П.Н.", name: "menegers" },
     {
       label: "Бойченко И.А.    ",
@@ -264,6 +283,54 @@ const NewClientPage = () => {
     },
   ]
 
+  const PRD = [
+    {
+      label: "МИДУОЛ",
+      value: "МИДУОЛ",
+      name: "PRD",
+    },
+    {
+      label: "РП Республика Коми",
+      value: "РП Республика Коми",
+      name: "PRD",
+    },
+    {
+      label: "РП Республика Карелия      ",
+      value: "РП Республика Карелия",
+      name: "PRD",
+    },
+  ]
+  const negative = [
+    {
+      label:
+        "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство     ",
+      value:
+        "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство     ",
+      name: "negative",
+    },
+    {
+      label:
+        "отказ - не требуется помощь, стабильное финансовое состояние     ",
+      value:
+        "отказ - не требуется помощь, стабильное финансовое состояние     ",
+      name: "negative",
+    },
+    {
+      label: "отказ – не исполнение регламента деятельности ПРД     ",
+      value: "отказ – не исполнение регламента деятельности ПРД     ",
+      name: "negative",
+    },
+  ]
+  const positive = [
+    { label: "МС    ", value: "МС    ", name: "positive" },
+    { label: "Рассрочка    ", value: "Рассрочка    ", name: "positive" },
+    {
+      label: "отлагательные меры    ",
+      value: "отлагательные меры    ",
+      name: "positive",
+    },
+  ]
+
   useEffect(() => {
     api.users.fetchAll().then((data) => {
       setUsers(data)
@@ -288,6 +355,50 @@ const NewClientPage = () => {
     setErrors(errors)
     return Object.keys(errors).length === 0
   }
+
+  const firstData = [
+    { id: 10, name: "Номер" },
+    {
+      id: 13,
+      name: "Представитель клиента. ФИО, должность",
+      representative: "",
+    },
+    { id: 14, name: "Телефон" },
+    { id: 15, name: "Почта" },
+    { id: 20, name: "Вид деятельности", activity: "" },
+    { id: 22, name: "Примечания" },
+    { id: 23, name: "Срок, на который необходимо предоставить меры", term: "" },
+    { id: 26, name: "Дата первой встречи", firstData },
+
+    { id: 31, name: "На сколько предоставлена мера (в месяцах)" },
+    { id: 32, name: "Вид отрицательного решения" },
+    { id: 33, name: "От кого ходатайство (для МС)" },
+    { id: 34, name: "Сумма урегулированной задолжности (тыс руб)" },
+    { id: 35, name: "Сумма, поступившая в бюджет (тыс руб)" },
+    {
+      id: 37,
+      name: "Близжайший срок исполнения обязательства (до какого момента отложены меры)",
+    },
+    { id: 39, name: "Не вступило в силу рассрочка/отсрочка (тыс руб)" },
+    { id: 41, name: "Номер дела" },
+    { id: 42, name: "Дата утверждения МС судом" },
+    { id: 43, name: "Сумма требований, вошедших в МС" },
+    { id: 44, name: "Дата окончания МС" },
+    { id: 45, name: "Сумма исполненных обязательств (тыс руб)" },
+    { id: 47, name: "Сумма (тыс руб)" },
+    { id: 48, name: "Сумма тезнической просроченной задолженности (тыс руб)" },
+    { id: 49, name: "Стадия рассмотрения" },
+    { id: 51, name: "Залог имущества (тыс руб)" },
+    { id: 52, name: "Поручительство (тыс руб)" },
+    { id: 53, name: "Банковская гарантия (тыс руб)" },
+
+    { id: 55, name: "Дата направления ДОЛЖНИКУ уведомления (претензии)" },
+    { id: 56, name: "Дата направления ПОРУЧИТЕЛЮ уведомления (претензии)" },
+    { id: 57, name: "Дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)" },
+    { id: 59, name: "Деловая активность (риск)", type: "risk" },
+    { id: 60, name: "Вид активов (риск)", type: "risk" },
+    { id: 62, name: "Контрольная точка", type: "date" },
+  ]
   // TEST
 
   return (
@@ -345,7 +456,7 @@ const NewClientPage = () => {
                 onChange={handleChangeTest}
                 name="support"
                 error={errors.support}
-                label="Мера поддержки запрашиваемая"
+                label="Мера поддержки запрашиваемая клиентом"
                 placeholder={testData.support}
               />
               <SelectSearchField
@@ -363,6 +474,46 @@ const NewClientPage = () => {
                 error={errors.stage}
                 label="Стадия рассмотрения"
                 placeholder={testData.stage}
+              />
+              <SelectSearchField
+                options={managers}
+                onChange={handleChangeTest}
+                name="managers"
+                error={errors.managers}
+                label="Менеджер"
+                placeholder={testData.managers}
+              />
+              <SelectSearchField
+                options={positive}
+                onChange={handleChangeTest}
+                name="positive"
+                error={errors.positive}
+                label="Положительное решение"
+                placeholder={testData.positive}
+              />
+              <SelectSearchField
+                options={negative}
+                onChange={handleChangeTest}
+                name="negative"
+                error={errors.negative}
+                label="Отрицательное решение"
+                placeholder={testData.negative}
+              />
+              <SelectSearchField
+                options={PRD}
+                onChange={handleChangeTest}
+                name="PRD"
+                error={errors.PRD}
+                label="Представительсво РПД"
+                placeholder={testData.PRD}
+              />
+              <SelectSearchField
+                options={type}
+                onChange={handleChangeTest}
+                name="type"
+                error={errors.type}
+                label="Тип долга"
+                placeholder={testData.type}
               />
 
               {/* <TextField
@@ -414,6 +565,18 @@ const NewClientPage = () => {
                 onChange={handleChangeTest}
                 error={errors.date2}
               />
+              {firstData.map((el) => {
+                const elName = el.name
+                return (
+                  <TextField
+                    label={elName}
+                    name={elName}
+                    value={testData.elName}
+                    onChange={handleChangeTest}
+                    error={errors.elName}
+                  />
+                )
+              })}
               <div className="row row-centered  colored">
                 <button
                   type="submit"
