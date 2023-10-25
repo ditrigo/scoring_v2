@@ -31,15 +31,14 @@ const PipelinePage = () => {
   const [isSaved, setIsSaved] = useState(false)
 
   const doScoring = () => {
+    
     console.log("Scoring...")
     const model = models.find(
       (el) => el.model_name === scoringModel.scoring_model
     )
     console.log(model)
     const json = {
-      data: {
-        model,
-      },
+      model
     }
     axios
       .post("http://127.0.0.1:8000/api/start_scoring/", json)

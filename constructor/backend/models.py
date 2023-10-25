@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from simple_history.models import HistoricalRecords
 from .parser import sql_parser
+from .pyparser_main_3 import py_parser_main
 # from simple_history import register
 # from author.decorators import with_author
 from django.contrib.auth.models import User
@@ -257,7 +258,7 @@ class MarkersAttributes(models.Model):
     # From CountedAttrFormula
     def save(self, *args, **kwargs):
         self.sql_query = sql_parser(self.attr_formulas)
-        # self.py_query = py_parser(self.attr_formulas)
+        self.py_query = py_parser_main(self.attr_formulas)
         super().save(*args, **kwargs)
 
 

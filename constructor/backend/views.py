@@ -659,7 +659,7 @@ def InnAndResultsListViewSet(request):
         previousPage = 1
         fields = InnRes.objects.all().order_by('id')
         page = request.GET.get('page', 1)
-        paginator = Paginator(fields, 10)
+        paginator = Paginator(fields, 20)
         try:
             data = paginator.page(page)
         except PageNotAnInteger:
@@ -719,9 +719,9 @@ def StartScoringViewSet(request):
         
         rank = 0.0 
         inn_list, marker_formula_list = [], []
-        for key, value in data["data"].items():
-            # print(key, value)
-            # print('\n')
+        for key, value in data["model"].items():
+            print("key -", key,"\nvalue - ", value)
+            print('\n')
             if key == "inns":
                 for val in value:
                     print(val)
