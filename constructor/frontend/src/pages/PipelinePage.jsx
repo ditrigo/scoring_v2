@@ -31,7 +31,7 @@ const PipelinePage = () => {
   const [isSaved, setIsSaved] = useState(false)
 
   const doScoring = () => {
-    
+
     console.log("Scoring...")
     const model = models.find(
       (el) => el.model_name === scoringModel.scoring_model
@@ -160,10 +160,10 @@ const PipelinePage = () => {
         <div className="col-md-auto">
           <MyButton>Статические данные</MyButton>
         </div>
-        
+
         <div className="col-md-auto">
           <MyButton className={open ? "btn-primary" : ""} onClick={toggle}>
-          Расчет скоринга
+            Расчет скоринга
           </MyButton>
         </div>
         <div className="col-md-auto">
@@ -181,10 +181,10 @@ const PipelinePage = () => {
       {/* </div> */}
 
       {open && (
-        <div className="container">
-          <div className="table-responsive-sm">
-            <div className="row m-0">
-              <table className="table text-left table-bordered mt-5">
+        <div className="container p-0">
+          <div className="row">
+            <div className="table-responsive-lg">
+              <table className="table text-left table-bordered mt-3">
                 <thead>
                   <tr>
                     <th scope="col">Атрибут</th>
@@ -270,8 +270,8 @@ const PipelinePage = () => {
               </table>
             </div>
           </div>
-          <div className="row justify-content-start">
-            <div className="col-md-auto ">
+          <div className="row justify-content-start m-0 p-0">
+            <div className="col-md-auto p-0">
               {/* <MyButton onClick={() => setModalScoringResults(true)}>
                 Запустить скоринг
               </MyButton> */}
