@@ -85,6 +85,9 @@
 .text.input-group {
   z-index: 1;
 }
+.has-validation {
+  z-index: 0;
+}
 
 /* ROMA VERSION*/
 
