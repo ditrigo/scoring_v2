@@ -32,6 +32,8 @@ urlpatterns = [
 
     re_path(r"^start_scoring/$", StartScoringViewSet, name="start_scoring"),
 
+    re_path(r"^download/$", DownloadTryViewSet, name="download"),
+
 
     ### CRM URLS ###########################################################################################
     #----------------

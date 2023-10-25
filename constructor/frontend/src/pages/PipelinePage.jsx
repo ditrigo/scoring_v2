@@ -6,7 +6,7 @@ import DatePicker from "react-datepicker"
 import axios from "axios"
 import "react-datepicker/dist/react-datepicker.css"
 import SelectField from "../components/CrmPage/Form/SelectField"
-import MyModal from "../components/ScoringPage/MyModal/MyModal"
+// import MyModal from "../components/ScoringPage/MyModal/MyModal"
 // import ResultTable from "../components/PiplinePage/ResultTable"
 // import { Link } from "react-router-dom"
 

@@ -33,7 +33,7 @@ class ImportedAttributesResource(resources.ModelResource):
     #     return super().skip_row(instance, original, row,
     #     import_validation_errors=import_validation_errors)
 
-class CsvAttributesAdmin(ImportExportModelAdmin):
+class ImportedAttributesAdmin(ImportExportModelAdmin):
     resorce_classes = [ImportedAttributes]
     list_display = ('id', 
                     'uuid', 
@@ -41,7 +41,7 @@ class CsvAttributesAdmin(ImportExportModelAdmin):
                     'created_date', 
                     'np_name', 
                     'report_date')
-admin.site.register(ImportedAttributes, CsvAttributesAdmin)
+admin.site.register(ImportedAttributes, ImportedAttributesAdmin)
 
 # class CountedAttrFormulaAdmin(admin.ModelAdmin):
 #     search_fields = ('uuid', )

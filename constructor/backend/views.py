@@ -19,6 +19,23 @@ import json
 from django.http import JsonResponse
 from django.db import transaction, connection
 import os
+from django.http import HttpResponse
+
+from import_export import mixins
+from django.views.generic.list import ListView
+
+
+# @api_view(['POST'])
+def DownloadTryViewSet(request):
+    # model = ImportedAttributes
+    # if request.method == 'POST':
+    attr = ImportedAttributes.objects.all()
+    resource = ImportedAttributesResource()
+    ds = resource.export(attr)
+
+    response = HttpResponse(ds.xlsx, content_type='text/xlsx')
+    response['Content-Disposition'] = 'attachment; filename="books.xlsx"'
+    return response
 
 
 # Uploaded files into DataBase
@@ -803,6 +820,7 @@ def StartScoringViewSet(request):
         return JsonResponse({'message': 'Results were updated '}, status=200)
 
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
