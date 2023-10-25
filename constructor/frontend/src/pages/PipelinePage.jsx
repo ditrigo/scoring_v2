@@ -160,16 +160,17 @@ const PipelinePage = () => {
         <div className="col-md-auto">
           <MyButton>Статические данные</MyButton>
         </div>
+        
         <div className="col-md-auto">
-          <MyButton>Расчет модели</MyButton>
+          <MyButton className={open ? "btn-primary" : ""} onClick={toggle}>
+          Расчет скоринга
+          </MyButton>
+        </div>
+        <div className="col-md-auto">
+          <MyButton>Результаты модели</MyButton>
         </div>
         <div className="col-md-auto">
           <MyButton>Выписка СКУАД</MyButton>
-        </div>
-        <div className="col-md-auto">
-          <MyButton className={open ? "btn-primary" : ""} onClick={toggle}>
-            Результаты скоринга
-          </MyButton>
         </div>
         {/* <div className="col-md-auto">
           <Link to="/results">
