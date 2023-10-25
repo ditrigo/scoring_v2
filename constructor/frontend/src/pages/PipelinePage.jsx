@@ -31,8 +31,9 @@ const PipelinePage = () => {
   const [isSaved, setIsSaved] = useState(false)
 
   const doScoring = () => {
-
     console.log("Scoring...")
+    setScoringOptions([])
+    getModels()
     const model = models.find(
       (el) => el.model_name === scoringModel.scoring_model
     )
