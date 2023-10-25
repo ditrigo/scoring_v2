@@ -18,6 +18,7 @@ from .exceptions import ExportError, ImportError
 import json
 from django.http import JsonResponse
 from django.db import transaction, connection
+import os
 
 
 # Uploaded files into DataBase
@@ -384,7 +385,7 @@ def ImportedAttributesListViewSet(request):  # (viewsets.ModelViewSet):
         if result.totals[RowResult.IMPORT_TYPE_NEW]:
             InsertValuesToCountedAttributes()
 
-        # TODO Сделать репорт о пропущенных строках!
+        os.remove("./media/store/"+str(filename.name))
         return Response(
             data={"message": "Import successed",
                   "result_totals": f"{result.totals}",
