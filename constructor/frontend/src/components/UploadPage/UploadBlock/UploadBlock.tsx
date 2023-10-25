@@ -25,9 +25,9 @@ const props: UploadProps = {
       //   })
     }
     if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`)
+      message.success(`${info.file.name} файл загружен успешно.`)
     } else if (status === "error") {
-      message.error(`${info.file.name} file upload failed.`)
+      message.error(`${info.file.name} файл не загружен.`)
     }
   },
   onDrop(e) {

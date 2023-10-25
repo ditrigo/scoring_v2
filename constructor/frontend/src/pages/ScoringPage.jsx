@@ -177,8 +177,8 @@ const ScoringPage = () => {
                     <th>Автор</th>
                     <th>Статус</th>
                     <th>Дата изменения</th>
-                    <th>Редактировать</th>
-                    <th>Удалить</th>
+                    <th></th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -232,43 +232,50 @@ const ScoringPage = () => {
       {/* <div className="container mt-5"> */}
       <div className="row mt-5">
         <div className="col-md-12">
-          <div className="card">
-            <div className="card-header">
-              <h4>
-                Маркеры
-                <button
-                  onClick={() => setModalMarker(true)}
-                  className="btn btn-outline-primary float-end"
-                >
-                  Добавить маркер
-                </button>
-              </h4>
-            </div>
-            <div className="card-body">
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">Наименование маркера</th>
-                    <th>Автор</th>
-                    <th>Дата изменения</th>
-                    <th>Формула маркера</th>
-                    {/* <th>Просмотр</th> */}
-                    <th>Удалить</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {markers.map((marker) => {
-                    return (
-                      <tr key={marker.id}>
-                        <td>{marker.name_marker_attr}</td>
-                        <td>{marker.author_id}</td>
-                        <td>
-                          {Moment(marker.created_date)
-                            .locale("rus", localization)
-                            .format("LLL")}
-                        </td>
-                        <td>{marker.attr_formulas}</td>
-                        {/* <td>
+          
+            <div className="card">
+              <div className="card-header">
+                <h4>
+                  Маркеры
+                  <button
+                    onClick={() => setModalMarker(true)}
+                    className="btn btn-outline-primary float-end"
+                  >
+                    Добавить маркер
+                  </button>
+                </h4>
+              </div>
+              <div className="card-body">
+
+                <table className="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Наименование маркера</th>
+                      <th>Автор</th>
+                      <th>Дата изменения</th>
+                      <th>Формула маркера</th>
+                      {/* <th>Просмотр</th> */}
+                      <th></th> 
+                      {/* Удалить */}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {markers.map((marker) => {
+                      return (
+                        <tr key={marker.id}>
+                          <td>{marker.name_marker_attr}</td>
+                          <td>{marker.author_id}</td>
+                          <td>
+                            {Moment(marker.created_date)
+                              .locale("rus", localization)
+                              .format("LLL")}
+                          </td>
+                          <td
+                          style={{wordBreak:"break-word"}}
+                          >
+                            {marker.attr_formulas}
+                            </td>
+                          {/* <td>
                           <Link
                           // to={`/scoring/${marker.id}/edit`}
                           // state={{ models: marker }}
@@ -276,27 +283,30 @@ const ScoringPage = () => {
                             <MyButton>Просмотр</MyButton>
                           </Link>
                         </td> */}
-                        <td>
-                          <button
-                            // onClick={() => deleteModel(model.id)}
-                            className="btn btn-outline-danger"
-                          >
-                            Удалить
-                          </button>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+                          <td>
+                            <button
+                              // onClick={() => deleteModel(model.id)}
+                              className="btn btn-outline-danger"
+                            >
+                              Удалить
+                            </button>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+
+              </div>
             </div>
-          </div>
+          
+
         </div>
       </div>
       {/* </div> */}
 
       <MyModal visible={modal} setVisible={setModal}>
-        <h3>Новая модель</h3>
+        {/* <h3>Новая модель</h3> */}
         <ModelForm
           create={createModel}
           models={models}
@@ -305,7 +315,7 @@ const ScoringPage = () => {
       </MyModal>
 
       <MyModal visible={modalMarker} setVisible={setModalMarker}>
-        <h3>Новый маркер</h3>
+        {/* <h3>Новый маркер</h3> */}
         <AtributForm create={createMarker} setVisible={setModalMarker} />
       </MyModal>
     </div>

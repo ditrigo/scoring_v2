@@ -3,6 +3,8 @@ import MyButton from "../../UI/MyButton/MyButton";
 import MyInput from "../../UI/MyInput/MyInput";
 import Select from "react-select";
 import axios from "axios";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 
 const AtributForm = ({ create, setVisible }) => {
   const [marker, setMarker] = useState({
@@ -11,6 +13,10 @@ const AtributForm = ({ create, setVisible }) => {
   });
   const [importedAttributes, setImportedAttributes] = useState([]);
   const [countedAttributes, setCountedAttributes] = useState([]);
+  const [copiedValue, setCopiedValue] = useState({
+    value: '',
+    copied: false,
+  })
 
   // const handleClick = (e) => {
   //   e.preventDefault();
@@ -20,11 +26,14 @@ const AtributForm = ({ create, setVisible }) => {
   const handleChangeSelect = (target) => {
     // Накинуть копирование элементов в формулы
     console.log("target", target);
+    setCopiedValue({ value: target.value })
     // setCountedAttributes((prevState) => ({
     //   ...prevState,
     //   [target.name]: target.value,
     // }))
+    console.log(copiedValue)
   };
+  // console.log(copiedValue)
 
   const handleCancle = (e) => {
     e.preventDefault();
@@ -55,17 +64,20 @@ const AtributForm = ({ create, setVisible }) => {
               ...current,
               {
                 label:
-                  element.main_catalog_id.origin_name +
-                  "." +
-                  element.origin +
-                  " - " +
+                  // element.main_catalog_id.origin_name +
+                  // "." +
+                  // element.origin +
+                  // " - " +
                   element.description,
                 value:
                   element.main_catalog_id.origin_name +
                   "." +
-                  element.origin +
-                  " - " +
-                  element.description,
+                  element.origin,
+                // +
+                // "." +
+                // element.origin +
+                // " - " +
+                // element.description,
                 name:
                   element.main_catalog_id.origin_name +
                   "." +
@@ -81,21 +93,23 @@ const AtributForm = ({ create, setVisible }) => {
               ...current1,
               {
                 label:
-                  element.main_catalog_id.origin_name +
-                  "." +
-                  element.origin +
-                  " - " +
+                  // element.main_catalog_id.origin_name +
+                  // "." +
+                  // element.origin +
+                  // " - " +
                   element.description,
                 value:
                   element.main_catalog_id.origin_name +
                   "." +
-                  element.origin +
-                  " - " +
-                  element.description,
+                  element.origin,
+                // +
+                // " - " +
+                // element.description,
                 name:
                   element.main_catalog_id.origin_name +
                   "." +
-                  element.origin +
+                  element.origin
+                  +
                   " - " +
                   element.description,
               },
@@ -106,7 +120,7 @@ const AtributForm = ({ create, setVisible }) => {
       .catch((e) => {
         console.log(e);
       });
-    console.log("attr", countedAttributes);
+    // console.log("attr", countedAttributes);
   }
   useEffect(() => {
     getAttributes();
@@ -114,6 +128,7 @@ const AtributForm = ({ create, setVisible }) => {
 
   return (
     <div className="container">
+      <h3>Новый маркер</h3>
       <form>
         {/* <div className="row "> */}
         <MyInput
@@ -135,7 +150,7 @@ const AtributForm = ({ create, setVisible }) => {
                 options={importedAttributes}
                 onChange={handleChangeSelect}
                 name="Загружаемые атрибуты"
-                placeholder="Выберите Загружаемые атрибуты"
+                placeholder="Выберите загружаемые атрибуты"
               />
             </div>
           </div>
@@ -148,10 +163,24 @@ const AtributForm = ({ create, setVisible }) => {
                 options={countedAttributes}
                 onChange={handleChangeSelect}
                 name="Вычисляемые атрибуты"
-                placeholder="Выберите Вычисляемые атрибуты"
+                placeholder="Выберите вычисляемые атрибуты"
               />
             </div>
           </div>
+        </div>
+        <div className="row-md-auto mb-3">
+          {/* <div className="col"> */}
+            <CopyToClipboard
+              text={copiedValue.value}
+            // onCopy={() => this.setState({ copied: true })}
+            >
+              <MyButton
+                onClick={(e) => e.preventDefault()}
+              >
+                Нажмите, чтобы скопировать
+              </MyButton>
+            </CopyToClipboard>
+          {/* </div> */}
         </div>
         <MyInput
           value={marker.attr_formulas}
@@ -168,7 +197,7 @@ const AtributForm = ({ create, setVisible }) => {
             </MyButton>
           </div>
           <div className="col-md-auto">
-            <MyButton className="btn-outline-primary">
+            <MyButton className="btn-outline-primary disabled">
               Валидация формулы маркера
             </MyButton>
           </div>

@@ -66,34 +66,38 @@ const ModelForm = ({ create, models, getLinkMarkers }) => {
   }
 
   return (
-    <form>
-      <MyInput
-        value={model.name_model}
-        onChange={(e) => setModel({ ...model, model_name: e.target.value })}
-        type="text"
-        placeholder="Название модели"
-      />
-      <MyInput
-        value={model.description}
-        onChange={(e) => setModel({ ...model, description: e.target.value })}
-        type="text"
-        placeholder="Описание модели"
-      />
-      <MyButton className="btn-outline-primary mt-2" onClick={addNewModel}>
-        Создать модель
-      </MyButton>
-      <Select
-        options={modelsForSelect}
-        onChange={handleChangeSelect}
-        name="model"
-        placeholder="Выберите модель"
-        className="mt-2"
-      />
+    <div className="container">
+      <h3>Новая модель</h3>
+      <form>
+        <MyInput
+          value={model.name_model}
+          onChange={(e) => setModel({ ...model, model_name: e.target.value })}
+          type="text"
+          placeholder="Название модели"
+        />
+        <MyInput
+          value={model.description}
+          onChange={(e) => setModel({ ...model, description: e.target.value })}
+          type="text"
+          placeholder="Описание модели"
+        />
+        <MyButton className="btn-outline-primary mt-2" onClick={addNewModel}>
+          Создать модель
+        </MyButton>
+        <Select
+          options={modelsForSelect}
+          onChange={handleChangeSelect}
+          name="model"
+          placeholder="Выберите модель"
+          className="mt-2"
+        />
 
-      <MyButton className="btn-outline-primary mt-2" onClick={createModelBy}>
-        Создать на основании модели
-      </MyButton>
-    </form>
+        <MyButton className="btn-outline-primary mt-2" onClick={createModelBy}>
+          Создать на основании модели
+        </MyButton>
+      </form>
+    </div>
+
   )
 }
 

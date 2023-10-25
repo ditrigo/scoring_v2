@@ -9,6 +9,7 @@ import HistoryDownloadTable from "../../HistoryDownloadTable";
 const ContentGroup = () => {
   const [view, setView] = useState("log");
   const [attributes, setAttributes] = useState([]);
+  const [logAttributs, setLogAttributs] = useState();
 
   const [uploadColumns, setUploadColumns] = useState([
     { name: "Id", path: "id", isVisible: true },
@@ -26,53 +27,21 @@ const ContentGroup = () => {
     { name: "Новые строки", isVisible: true },
   ]);
 
-  const logAttributs = [
-    {
-      id: 1,
-      name: "filename1",
-      created_date: "2023-10-12T12:25:07.688056Z",
-      size: "3kb",
-      total: 10,
-      missed: 3,
-      new: 7,
-    },
-    {
-      id: 2,
-      name: "filename2",
-      created_date: "2023-10-12T12:25:07.688056Z",
-      size: "1kb",
-      total: 134,
-      missed: 130,
-      new: 4,
-    },
-    {
-      id: 3,
-      name: "filename3",
-      created_date: "2023-10-12T12:25:07.688056Z",
-      size: "8kb",
-      total: 100,
-      missed: 20,
-      new: 80,
-    },
-    {
-      id: 4,
-      name: "filename4",
-      created_date: "2023-10-12T12:25:07.688056Z",
-      size: "13kb",
-      total: 13,
-      missed: 3,
-      new: 10,
-    },
-    {
-      id: 5,
-      name: "filename5",
-      created_date: "2023-10-12T12:25:07.688056Z",
-      size: "22kb",
-      total: 24,
-      missed: 10,
-      new: 14,
-    },
-  ];
+  async function getFilesAttributes() {
+    axios
+      .get("http://127.0.0.1:8000/api/files/")
+      .then((res) => {
+        setLogAttributs(res.data.data)
+        console.log("getFilesAttributes", res.data.data)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  } 
+
+  useEffect(() => {
+    getFilesAttributes()
+  }, [])
 
   async function getfiles() {
     axios
@@ -84,28 +53,6 @@ const ContentGroup = () => {
         console.log(e);
       });
   }
-
-  // function formatBytes(bytes, decimals = 2) {
-  //   if (!+bytes) return "0 Bytes";
-
-  //   const k = 1024;
-  //   const dm = decimals < 0 ? 0 : decimals;
-  //   const sizes = [
-  //     "Bytes",
-  //     "KiB",
-  //     "MiB",
-  //     "GiB",
-  //     "TiB",
-  //     "PiB",
-  //     "EiB",
-  //     "ZiB",
-  //     "YiB",
-  //   ];
-
-  //   const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-  //   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
-  // }
 
   useEffect(() => {
     getfiles();
