@@ -26,16 +26,7 @@ from django.views.generic.list import ListView
 
 
 # @api_view(['POST'])
-def DownloadTryViewSet(request):
-    # model = ImportedAttributes
-    # if request.method == 'POST':
-    attr = InnRes.objects.all()
-    resource = InnResResource()
-    ds = resource.export(attr)
 
-    response = HttpResponse(ds.xlsx, content_type='text/xlsx')
-    response['Content-Disposition'] = 'attachment; filename="books.xlsx"'
-    return response
 
 
 # Uploaded files into DataBase
@@ -697,6 +688,18 @@ def CreateRelationInnAndScoringModelViewSet(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def DownloadTryViewSet(request):
+    # model = ImportedAttributes
+    # if request.method == 'POST':
+    attr = InnRes.objects.all()
+    resource = InnResResource()
+    ds = resource.export(attr)
+
+    response = HttpResponse(ds.xlsx, content_type='text/xlsx')
+    response['Content-Disposition'] = 'attachment; filename="books.xlsx"'
+    return response
 
 
 @api_view(['GET', 'POST'])
