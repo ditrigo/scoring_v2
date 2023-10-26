@@ -7,6 +7,7 @@ import axios from "axios"
 import "react-datepicker/dist/react-datepicker.css"
 import SelectField from "../components/CrmPage/Form/SelectField"
 import MyModal from "../components/ScoringPage/MyModal/MyModal"
+import { Link } from "react-router-dom"
 // import ResultTable from "../components/PiplinePage/ResultTable"
 // import { Link } from "react-router-dom"
 
@@ -57,10 +58,6 @@ const PipelinePage = () => {
   const isDisabledScoring = scoringModel.scoring_model && inputINN && isSaved
 
   async function handleSaveData() {
-    // console.log(inputINN.split(", ").join(" ").split("/").join(" ").split(" "))
-    // console.log(
-    //   models.find((el) => el.model_name === scoringModel.scoring_model).id
-    // )
     axios
       .post("http://127.0.0.1:8000/api/inn_res/create_relation/", {
         inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
@@ -282,11 +279,11 @@ const PipelinePage = () => {
                 Запустить скоринг
               </MyButton>
             </div>
-            {/* <div className="col-md-auto">
+            <div className="col-md-auto">
               <Link to="/results">
                 <MyButton>Журнал скоринга</MyButton>
               </Link>
-            </div> */}
+            </div>
             <div className="col-md-auto">
               <MyButton
                 className={disabledBtn}

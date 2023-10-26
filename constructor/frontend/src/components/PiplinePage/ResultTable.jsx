@@ -38,6 +38,7 @@ const ResultTable = ({ getLinkMarkers }) => {
     axios
       .get("http://127.0.0.1:8000/api/inn_res/")
       .then((res) => {
+        console.log(res.data.data)
         setResults(res.data.data)
       })
       .catch((e) => {
@@ -60,25 +61,25 @@ const ResultTable = ({ getLinkMarkers }) => {
         <table className="text-center table  table-bordered table-responsive">
           <thead>
             <tr>
-              <th scope="col">Дата создания</th>
               <th scope="col">ИНН</th>
               <th scope="col">Результат</th>
             </tr>
           </thead>
           <tbody>
-            {results.map((el, index) => {
-              return (
-                <tr key={index}>
-                  <td>
-                    {Moment(el.created_date)
-                      .locale("rus", localization)
-                      .format("LLL")}
-                  </td>
-                  <td className="text-center">{el.inn}</td>
-                  <td>{el.result_score}</td>
-                </tr>
-              )
-            })}
+            {results &&
+              results.map((el, index) => {
+                const rank = el.result_score?.total_rank
+                return (
+                  <tr key={index}>
+                    <td className="text-center">
+                      {" "}
+                      <Link to={"/results/" + el.inn}>{el.inn}</Link>
+                    </td>
+
+                    <td>{rank}</td>
+                  </tr>
+                )
+              })}
           </tbody>
         </table>
         {/* <MyButton className="btn-outline-primary mt-2 mr-4" onClick={() => { }}>
