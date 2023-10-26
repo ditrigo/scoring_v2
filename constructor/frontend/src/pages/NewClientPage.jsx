@@ -45,24 +45,24 @@ const NewClientPage = () => {
       })
   }
 
-  useEffect(() => {
-    getServerData("http://127.0.0.1:8000/api/crm_managers/", console.log)
-    getServerData("http://127.0.0.1:8000/api/crm_region/", console.log)
-    getServerData("http://127.0.0.1:8000/api/crm_supp_measure/", console.log)
-    getServerData("http://127.0.0.1:8000/api/crm_review_stage/", console.log)
-    getServerData("http://127.0.0.1:8000/api/crm_category/", console.log)
-    getServerData(
-      "http://127.0.0.1:8000/api/crm_applicant_status/",
-      console.log
-    )
-    getServerData(
-      "http://127.0.0.1:8000/api/crm_info_source_type/",
-      console.log
-    )
-    getServerData("http://127.0.0.1:8000/api/crm_pos_decision/", console.log)
-    getServerData("http://127.0.0.1:8000/api/crm_neg_decision/", console.log)
-    getServerData("http://127.0.0.1:8000/api/crm_dept_type/", console.log)
-  }, [])
+  // useEffect(() => {
+  //   getServerData("http://127.0.0.1:8000/api/crm_managers/", console.log)
+  //   getServerData("http://127.0.0.1:8000/api/crm_region/", console.log)
+  //   getServerData("http://127.0.0.1:8000/api/crm_supp_measure/", console.log)
+  //   getServerData("http://127.0.0.1:8000/api/crm_review_stage/", console.log)
+  //   getServerData("http://127.0.0.1:8000/api/crm_category/", console.log)
+  //   getServerData(
+  //     "http://127.0.0.1:8000/api/crm_applicant_status/",
+  //     console.log
+  //   )
+  //   getServerData(
+  //     "http://127.0.0.1:8000/api/crm_info_source_type/",
+  //     console.log
+  //   )
+  //   getServerData("http://127.0.0.1:8000/api/crm_pos_decision/", console.log)
+  //   getServerData("http://127.0.0.1:8000/api/crm_neg_decision/", console.log)
+  //   getServerData("http://127.0.0.1:8000/api/crm_dept_type/", console.log)
+  // }, [])
 
   const validatorConfig = {
     // test: {
@@ -110,17 +110,17 @@ const NewClientPage = () => {
         message: "Это поле обязательно для заполнения",
       },
     },
-    date: {
+    dateAppealsToMIDUOL: {
       isRequired: {
         message: "Это поле обязательно для заполнения",
       },
     },
-    date2: {
+    dateEventOccurance: {
       isRequired: {
         message: "Это поле обязательно для заполнения",
       },
     },
-    sum: {
+    deptSum: {
       isRequired: {
         message: "Это поле обязательно для заполнения",
       },
@@ -142,7 +142,7 @@ const NewClientPage = () => {
   // TEST
   const [testData, setTestData] = useState({
     test: "",
-    risk: "",
+    solvencyRisk: "",
     sources: "",
     managers: "",
     status: "",
@@ -156,18 +156,40 @@ const NewClientPage = () => {
     regions: "",
     name: "",
     INN: "",
-    date: "",
-    date2: "",
-    sum: "",
+    dateAppealsToMIDUOL: "",
+    dateEventOccurance: "",
+    deptSum: "",
     descr: "",
-    Номер: "",
-    representative: "",
-    Телефон: "",
-    Почта: "",
-    Примечания: "",
-    term: "",
     activity: "",
-    firstData: "",
+    sourceNumber: "",
+    representativeNameEndTitle: "",
+    representativeNumber: "",
+    representativeMail: "",
+    notes: "",
+    termMesureNecessary: "",
+    firstMeetDate: "",
+    termMesure: "",
+    petitionAuthor: "",
+    settledDebtAmount: "",
+    amountReceivedIntoBudget: "",
+    nearestDateForFulfillment: "",
+    notInForce: "",
+    caseNumber: "",
+    courtMCApprovalDate: "",
+    amountOfClaimsMC: "",
+    MCexpirationDate: "",
+    amountOfFulfilledObligations: "",
+    sum: "",
+    amountOfTechnicalOverdueDebt: "",
+    pledgeOfProperty: "",
+    surety: "",
+    bankGuarantee: "",
+    deptorDirectionDate: "",
+    garantorDirectionDate: "",
+    pledgetorDirectionDate: "",
+    checkPoint: "",
+    activityRisk: "",
+    assetsTypeRisk: "",
   })
   const [testApi, setTestApi] = useState()
 
@@ -181,66 +203,76 @@ const NewClientPage = () => {
   }
 
   const type = [
-    { label: "Текущий", value: "Текущий", name: "source" },
-    { label: "будущий", value: "будущий", name: "source" },
-    { label: "Поручение", value: "Поручение", name: "source" },
+    { label: "Текущий", value: "Текущий", name: "type" },
+    { label: "будущий", value: "будущий", name: "type" },
+    { label: "Поручение", value: "Поручение", name: "type" },
   ]
 
-  const riskList = [
-    { label: "Высокий риск", value: "Высокий риск", name: "risk" },
-    { label: "Средний риск", value: "Средний риск", name: "risk" },
-    { label: "Низкий риск", value: "Низкий риск", name: "risk" },
+  const solvencyRisk = [
+    { label: "Высокий риск", value: "Высокий риск", name: "solvencyRisk" },
+    { label: "Средний риск", value: "Средний риск", name: "solvencyRisk" },
+    { label: "Низкий риск", value: "Низкий риск", name: "solvencyRisk" },
+  ]
+  const activityRisk = [
+    { label: "Высокий риск", value: "Высокий риск", name: "activityRisk" },
+    { label: "Средний риск", value: "Средний риск", name: "activityRisk" },
+    { label: "Низкий риск", value: "Низкий риск", name: "activityRisk" },
+  ]
+  const assetsTypeRisk = [
+    { label: "Высокий риск", value: "Высокий риск", name: "assetsTypeRisk" },
+    { label: "Средний риск", value: "Средний риск", name: "assetsTypeRisk" },
+    { label: "Низкий риск", value: "Низкий риск", name: "assetsTypeRisk" },
   ]
 
   const sources = [
-    { label: "ТНО, ФНС    ", value: "ТНО, ФНС    ", name: "sources" },
+    { label: "ТНО, ФНС", value: "ТНО, ФНС", name: "sources" },
     {
-      label: "Входящие звонки    ",
-      value: "Входящие звонки    ",
+      label: "Входящие звонки",
+      value: "Входящие звонки",
       name: "sources",
     },
-    { label: "РГ    ", value: "РГ    ", name: "sources" },
+    { label: "РГ", value: "РГ", name: "sources" },
   ]
   const managers = [
-    { label: "Бабасов П.Н.", value: "Бабасов П.Н.", name: "menegers" },
+    { label: "Бабасов П.Н.", value: "Бабасов П.Н.", name: "managers" },
     {
-      label: "Бойченко И.А.    ",
-      value: "Бойченко И.А.    ",
-      name: "menegers",
+      label: "Бойченко И.А.",
+      value: "Бойченко И.А.",
+      name: "managers",
     },
     {
-      label: "Емельянова Е.А.    ",
-      value: "Емельянова Е.А.    ",
-      name: "menegers",
+      label: "Емельянова Е.А.",
+      value: "Емельянова Е.А.",
+      name: "managers",
     },
   ]
   const status = [
-    { label: "должник    ", value: "должник    ", name: "status" },
-    { label: "кредитор    ", value: "кредитор    ", name: "status" },
+    { label: "должник", value: "должник", name: "status" },
+    { label: "кредитор", value: "кредитор", name: "status" },
   ]
 
   const category = [
     {
-      label: "системообразующее    ",
-      value: "системообразующее    ",
+      label: "системообразующее",
+      value: "системообразующее",
       name: "category",
     },
     {
-      label: "градообразующее    ",
-      value: "градообразующее    ",
+      label: "градообразующее",
+      value: "градообразующее",
       name: "category",
     },
   ]
 
   const stage = [
     {
-      label: "Получено обращение     ",
-      value: "Получено обращение     ",
+      label: "Получено обращение",
+      value: "Получено обращение",
       name: "stage",
     },
     {
-      label: "Проведено первое совещание     ",
-      value: "Проведено первое совещание     ",
+      label: "Проведено первое совещание",
+      value: "Проведено первое совещание",
       name: "stage",
     },
     {
@@ -252,17 +284,17 @@ const NewClientPage = () => {
 
   const support = [
     {
-      label: "отсрочка / рассрочка (ст. 64 НК РФ)    ",
-      value: "отсрочка / рассрочка (ст. 64 НК РФ)    ",
+      label: "отсрочка / рассрочка (ст. 64 НК РФ)",
+      value: "отсрочка / рассрочка (ст. 64 НК РФ)",
       name: "support",
     },
     {
-      label: "отлагательные меры    ",
-      value: "отлагательные меры    ",
+      label: "отлагательные меры",
+      value: "отлагательные меры",
       name: "support",
     },
     {
-      label: "отлагательные меры + МС    ",
+      label: "отлагательные меры + МС",
       value: "отлагательные меры + МС",
       name: "support",
     },
@@ -295,7 +327,7 @@ const NewClientPage = () => {
       name: "PRD",
     },
     {
-      label: "РП Республика Карелия      ",
+      label: "РП Республика Карелия",
       value: "РП Республика Карелия",
       name: "PRD",
     },
@@ -303,30 +335,28 @@ const NewClientPage = () => {
   const negative = [
     {
       label:
-        "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство     ",
+        "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство",
       value:
-        "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство     ",
+        "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство",
       name: "negative",
     },
     {
-      label:
-        "отказ - не требуется помощь, стабильное финансовое состояние     ",
-      value:
-        "отказ - не требуется помощь, стабильное финансовое состояние     ",
+      label: "отказ - не требуется помощь, стабильное финансовое состояние",
+      value: "отказ - не требуется помощь, стабильное финансовое состояние",
       name: "negative",
     },
     {
-      label: "отказ – не исполнение регламента деятельности ПРД     ",
-      value: "отказ – не исполнение регламента деятельности ПРД     ",
+      label: "отказ – не исполнение регламента деятельности ПРД",
+      value: "отказ – не исполнение регламента деятельности ПРД",
       name: "negative",
     },
   ]
   const positive = [
-    { label: "МС    ", value: "МС    ", name: "positive" },
-    { label: "Рассрочка    ", value: "Рассрочка    ", name: "positive" },
+    { label: "МС", value: "МС", name: "positive" },
+    { label: "Рассрочка", value: "Рассрочка", name: "positive" },
     {
-      label: "отлагательные меры    ",
-      value: "отлагательные меры    ",
+      label: "отлагательные меры",
+      value: "отлагательные меры",
       name: "positive",
     },
   ]
@@ -357,47 +387,92 @@ const NewClientPage = () => {
   }
 
   const firstData = [
-    { id: 10, name: "Номер" },
+    { id: 10, name: "Источник информации. Номер", key: "sourceNumber" },
     {
       id: 13,
       name: "Представитель клиента. ФИО, должность",
-      representative: "",
+      key: "representativeNameEndTitle",
     },
-    { id: 14, name: "Телефон" },
-    { id: 15, name: "Почта" },
-    { id: 20, name: "Вид деятельности", activity: "" },
-    { id: 22, name: "Примечания" },
-    { id: 23, name: "Срок, на который необходимо предоставить меры", term: "" },
-    { id: 26, name: "Дата первой встречи", firstData },
+    {
+      id: 14,
+      name: "Представитель клиента. Телефон",
+      key: "representativeNumber",
+    },
+    { id: 15, name: "Представитель клиента. Почта", key: "representativeMail" },
+    { id: 20, name: "Вид деятельности", key: "activity" },
+    { id: 22, name: "Примечания", key: "notes" },
+    {
+      id: 23,
+      name: "Срок, на который необходимо предоставить меры",
+      key: "termMesureNecessary",
+    },
+    { id: 26, name: "Дата первой встречи", key: "firstMeetDate" },
 
-    { id: 31, name: "На сколько предоставлена мера (в месяцах)" },
-    { id: 32, name: "Вид отрицательного решения" },
-    { id: 33, name: "От кого ходатайство (для МС)" },
-    { id: 34, name: "Сумма урегулированной задолжности (тыс руб)" },
-    { id: 35, name: "Сумма, поступившая в бюджет (тыс руб)" },
+    {
+      id: 31,
+      name: "На сколько предоставлена мера (в месяцах)",
+      key: "termMesure",
+    },
+    { id: 33, name: "От кого ходатайство (для МС)", key: "petitionAuthor" },
+    {
+      id: 34,
+      name: "Сумма урегулированной задолжности (тыс руб)",
+      key: "settledDebtAmount",
+    },
+    {
+      id: 35,
+      name: "Сумма, поступившая в бюджет (тыс руб)",
+      key: "amountReceivedIntoBudget",
+    },
     {
       id: 37,
       name: "Близжайший срок исполнения обязательства (до какого момента отложены меры)",
+      key: "nearestDateForFulfillment ",
     },
-    { id: 39, name: "Не вступило в силу рассрочка/отсрочка (тыс руб)" },
-    { id: 41, name: "Номер дела" },
-    { id: 42, name: "Дата утверждения МС судом" },
-    { id: 43, name: "Сумма требований, вошедших в МС" },
-    { id: 44, name: "Дата окончания МС" },
-    { id: 45, name: "Сумма исполненных обязательств (тыс руб)" },
-    { id: 47, name: "Сумма (тыс руб)" },
-    { id: 48, name: "Сумма тезнической просроченной задолженности (тыс руб)" },
-    { id: 49, name: "Стадия рассмотрения" },
-    { id: 51, name: "Залог имущества (тыс руб)" },
-    { id: 52, name: "Поручительство (тыс руб)" },
-    { id: 53, name: "Банковская гарантия (тыс руб)" },
+    {
+      id: 39,
+      name: "Не вступило в силу рассрочка/отсрочка (тыс руб)",
+      key: "notInForce",
+    },
+    { id: 41, name: "Номер дела", key: "caseNumber" },
+    { id: 42, name: "Дата утверждения МС судом", key: "courtMCApprovalDate" },
+    {
+      id: 43,
+      name: "Сумма требований, вошедших в МС",
+      key: "amountOfClaimsMC",
+    },
+    { id: 44, name: "Дата окончания МС", key: "MCexpirationDate" },
+    {
+      id: 45,
+      name: "Сумма исполненных обязательств (тыс руб)",
+      key: "amountOfFulfilledObligations",
+    },
+    { id: 47, name: "Сумма (тыс руб)", key: "sum" },
+    {
+      id: 48,
+      name: "Сумма технической просроченной задолженности (тыс руб)",
+      key: "amountOfTechnicalOverdueDebt",
+    },
+    { id: 51, name: "Залог имущества (тыс руб)", key: "pledgeOfProperty" },
+    { id: 52, name: "Поручительство (тыс руб)", key: "surety" },
+    { id: 53, name: "Банковская гарантия (тыс руб)", key: "bankGuarantee" },
 
-    { id: 55, name: "Дата направления ДОЛЖНИКУ уведомления (претензии)" },
-    { id: 56, name: "Дата направления ПОРУЧИТЕЛЮ уведомления (претензии)" },
-    { id: 57, name: "Дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)" },
-    { id: 59, name: "Деловая активность (риск)", type: "risk" },
-    { id: 60, name: "Вид активов (риск)", type: "risk" },
-    { id: 62, name: "Контрольная точка", type: "date" },
+    {
+      id: 55,
+      name: "Дата направления ДОЛЖНИКУ уведомления (претензии)",
+      key: "deptorDirectionDate",
+    },
+    {
+      id: 56,
+      name: "Дата направления ПОРУЧИТЕЛЮ уведомления (претензии)",
+      key: "garantorDirectionDate",
+    },
+    {
+      id: 57,
+      name: "Дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)",
+      key: "pledgetorDirectionDate",
+    },
+    { id: 62, name: "Контрольная точка", key: "checkPoint" },
   ]
   // TEST
 
@@ -420,12 +495,12 @@ const NewClientPage = () => {
                 placeholder={testData.risk}
               /> */}
               <SelectSearchField
-                options={riskList}
+                options={solvencyRisk}
                 onChange={handleChangeTest}
-                name="risk"
-                error={errors.risk}
+                name="solvencyRisk"
+                error={errors.solvencyRisk}
                 label="Платежеспособность"
-                placeholder={testData.risk}
+                placeholder={testData.solvencyRisk}
               />
               <SelectSearchField
                 options={regions}
@@ -515,6 +590,22 @@ const NewClientPage = () => {
                 label="Тип долга"
                 placeholder={testData.type}
               />
+              <SelectSearchField
+                options={activityRisk}
+                onChange={handleChangeTest}
+                name="activityRisk"
+                error={errors.activityRisk}
+                label="Деловая активность (риск)"
+                placeholder={testData.activityRisk}
+              />
+              <SelectSearchField
+                options={assetsTypeRisk}
+                onChange={handleChangeTest}
+                name="assetsTypeRisk"
+                error={errors.assetsTypeRisk}
+                label="Вид активов (риск)"
+                placeholder={testData.assetsTypeRisk}
+              />
 
               {/* <TextField
                 label="label tex"
@@ -539,10 +630,10 @@ const NewClientPage = () => {
               />
               <TextField
                 label="Сумма задолженности"
-                name="sum"
-                value={testData.sum}
+                name="deptSum"
+                value={testData.deptSum}
                 onChange={handleChangeTest}
-                error={errors.sum}
+                error={errors.deptSum}
               />
               <TextField
                 label="Описание события"
@@ -553,27 +644,27 @@ const NewClientPage = () => {
               />
               <TextField
                 label="Дата обращения в МИДУОЛ"
-                name="date"
-                value={testData.date}
+                name="dateAppealsToMIDUOL"
+                value={testData.dateAppealsToMIDUOL}
                 onChange={handleChangeTest}
-                error={errors.date}
+                error={errors.dateAppealsToMIDUOL}
               />
               <TextField
                 label="Дата наступления события"
-                name="date2"
-                value={testData.date2}
+                name="dateEventOccurance"
+                value={testData.dateEventOccurance}
                 onChange={handleChangeTest}
-                error={errors.date2}
+                error={errors.dadateEventOccurancete2}
               />
               {firstData.map((el) => {
-                const elName = el.name
                 return (
                   <TextField
-                    label={elName}
-                    name={elName}
-                    value={testData.elName}
+                    key={el.id}
+                    label={el.name}
+                    name={el.key}
+                    value={testData.key}
                     onChange={handleChangeTest}
-                    error={errors.elName}
+                    error={errors.key}
                   />
                 )
               })}

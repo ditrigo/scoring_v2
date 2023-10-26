@@ -31,14 +31,14 @@ const PipelinePage = () => {
   const [isSaved, setIsSaved] = useState(false)
 
   const doScoring = () => {
-    
     console.log("Scoring...")
     const model = models.find(
       (el) => el.model_name === scoringModel.scoring_model
     )
     console.log(model)
+    // model.inns = inputINN.split(", ").join(" ").split("/").join(" ").split(" ")
     const json = {
-      model
+      model,
     }
     console.log(json)
     axios
@@ -57,15 +57,13 @@ const PipelinePage = () => {
   const isDisabledScoring = scoringModel.scoring_model && inputINN && isSaved
 
   async function handleSaveData() {
+    // console.log(inputINN.split(", ").join(" ").split("/").join(" ").split(" "))
+    // console.log(
+    //   models.find((el) => el.model_name === scoringModel.scoring_model).id
+    // )
     axios
       .post("http://127.0.0.1:8000/api/inn_res/create_relation/", {
-        inn_ids: inputINN
-          .trim()
-          .split(", ")
-          .join(" ")
-          .split("/")
-          .join(" ")
-          .split(" "),
+        inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
         active: true,
         scoringmodel_id: models.find(
           (el) => el.model_name === scoringModel.scoring_model
@@ -128,7 +126,7 @@ const PipelinePage = () => {
     axios
       .get("http://127.0.0.1:8000/api/scoring_model/")
       .then((res) => {
-        console.log(res.data.data)
+        console.log("Получение моделей", res.data.data)
         // console.log(res.data.data[0].model_name)
         // console.log(res.data.data[0].id)
         // setScoringModels(res.data.data)
@@ -160,10 +158,10 @@ const PipelinePage = () => {
         <div className="col-md-auto">
           <MyButton>Статические данные</MyButton>
         </div>
-        
+
         <div className="col-md-auto">
           <MyButton className={open ? "btn-primary" : ""} onClick={toggle}>
-          Расчет скоринга
+            Расчет скоринга
           </MyButton>
         </div>
         <div className="col-md-auto">
