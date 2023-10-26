@@ -21,7 +21,7 @@ from django.db import transaction, connection
 import os
 from django.http import HttpResponse
 
-from import_export import mixins
+# from import_export import mixins
 from django.views.generic.list import ListView
 
 
@@ -29,8 +29,8 @@ from django.views.generic.list import ListView
 def DownloadTryViewSet(request):
     # model = ImportedAttributes
     # if request.method == 'POST':
-    attr = ImportedAttributes.objects.all()
-    resource = ImportedAttributesResource()
+    attr = InnRes.objects.all()
+    resource = InnResResource()
     ds = resource.export(attr)
 
     response = HttpResponse(ds.xlsx, content_type='text/xlsx')
@@ -828,7 +828,7 @@ def StartScoringViewSet(request):
 #----------------
 # СПРАВОЧНИКИ
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def ManagerViewSet(request):
     if request.method == 'GET':
         managers = Manager.objects.all().order_by('id')
@@ -840,7 +840,7 @@ def ManagerViewSet(request):
         return Response({'data': serializer.data})
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def RegionViewSet(request):
     if request.method == 'GET':
         regions = Region.objects.all().order_by('id')
@@ -852,7 +852,7 @@ def RegionViewSet(request):
         return Response({'data': serializer.data})
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def SupportMeasureViewSet(request):
     if request.method == 'GET':
         supp_measure = SupportMeasure.objects.all().order_by('id')
@@ -864,7 +864,7 @@ def SupportMeasureViewSet(request):
         return Response({'data': serializer.data})
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def ReviewStageViewSet(request):
     if request.method == 'GET':
         review_stage = ReviewStage.objects.all().order_by('id')
@@ -876,7 +876,7 @@ def ReviewStageViewSet(request):
         return Response({'data': serializer.data})
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def DebtTypeViewSet(request):
     if request.method == 'GET':
         dept_type = DebtType.objects.all().order_by('id')
@@ -888,7 +888,7 @@ def DebtTypeViewSet(request):
         return Response({'data': serializer.data})
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def CategoryViewSet(request):
     if request.method == 'GET':
         categories = Category.objects.all().order_by('id')
@@ -900,7 +900,7 @@ def CategoryViewSet(request):
         return Response({'data': serializer.data})
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def ApplicantStatusViewSet(request):
     if request.method == 'GET':
         app_status = ApplicantStatus.objects.all().order_by('id')
@@ -912,7 +912,7 @@ def ApplicantStatusViewSet(request):
         return Response({'data': serializer.data})
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def InformationSourceTypeViewSet(request):
     if request.method == 'GET':
         info_source_types = InformationSourceType.objects.all().order_by('id')
@@ -924,7 +924,7 @@ def InformationSourceTypeViewSet(request):
         return Response({'data': serializer.data})
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def PositiveDecisionViewSet(request):
     if request.method == 'GET':
         pos_decisions = PositiveDecision.objects.all().order_by('id')
@@ -936,7 +936,7 @@ def PositiveDecisionViewSet(request):
         return Response({'data': serializer.data})
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def NegativeDecisionViewSet(request):
     if request.method == 'GET':
         neg_decisions = NegativeDecision.objects.all().order_by('id')
@@ -946,4 +946,69 @@ def NegativeDecisionViewSet(request):
                 many=True
                 )
         return Response({'data': serializer.data})
+
+#---------------------
+
+#---------------------
+# MAIN
+
+@api_view(['GET'])
+def ClientRepresentativeViewSet(request):
+    if request.method == 'GET':
+        neg_decisions = ClientRepresentative.objects.all().order_by('id')
+        serializer = ClientRepresentativeSerializer(
+                neg_decisions,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
+    
+
+@api_view(['GET'])
+def InformationSourceViewSet(request):
+    if request.method == 'GET':
+        neg_decisions = InformationSource.objects.all().order_by('id')
+        serializer = InformationSourceSerializer(
+                neg_decisions,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
+
+
+@api_view(['GET'])
+def ComplianceCriteriaViewSet(request):
+    if request.method == 'GET':
+        neg_decisions = ComplianceCriteria.objects.all().order_by('id')
+        serializer = ComplianceCriteriaSerializer(
+                neg_decisions,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
+
+
+@api_view(['GET'])
+def KPIViewSet(request):
+    if request.method == 'GET':
+        neg_decisions = KPI.objects.all().order_by('id')
+        serializer = KPISerializer(
+                neg_decisions,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
+
+
+@api_view(['GET'])
+def ClientViewSet(request):
+    if request.method == 'GET':
+        neg_decisions = Client.objects.all().order_by('id')
+        serializer = ClientSerializer(
+                neg_decisions,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
+
 #---------------------

@@ -12,6 +12,7 @@ from .views import *
 
 urlpatterns = [
     # re_path('', include(router.urls)),
+    ### Constructor URLS ####################################################################################
     re_path(r"^files/$", FilesListViewSet, name='files'),
     re_path(r"^attributes/$", ImportedAttributesListViewSet, name='attributes'),
 
@@ -49,4 +50,10 @@ urlpatterns = [
     re_path(r"^crm_pos_decision/$", PositiveDecisionViewSet, name="crm_pos_decision"),
     re_path(r"^crm_neg_decision/$", NegativeDecisionViewSet, name="crm_neg_decision"),
     #----------------
+
+    #---------------------
+    # MAIN
+
+    re_path(r"^crm_client/$", ClientViewSet, name="crm_client"),
+    #---------------------
 ]

@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 import uuid
 from simple_history.models import HistoricalRecords
@@ -178,15 +179,15 @@ class ImportedAttributes(models.Model):
         db_table = "imported_attributes"
         verbose_name = "imported_attribute"
 
-    def str(self):
-        return self.inn
+    def __str__(self):
+        return self.np_name
 
 
 class MainCatalog(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default=uuid.uuid4,
                             editable=False,)
-    author_id = models.CharField(max_length=125)
+    author_id = models.CharField(max_length=125, blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     date_from = models.DateTimeField(null=True)
     origin_name = models.CharField(max_length=250, blank=True)
@@ -208,7 +209,7 @@ class MainCatalogFields(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default=uuid.uuid4,
                             editable=False,)
-    author_id = models.CharField(max_length=125)
+    author_id = models.CharField(max_length=125, blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     date_from = models.DateTimeField(null=True)
     date_to = models.DateTimeField(null=True)
@@ -340,7 +341,7 @@ class CountedAttributesNew(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default=uuid.uuid4,
                             editable=False,)
-    author_id = models.CharField(max_length=125)
+    author_id = models.CharField(max_length=125, blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=False)
     inn = models.IntegerField(null=False)
@@ -472,10 +473,11 @@ class Manager(models.Model):   # Manager - Менеджер площадки
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
-    first_name = models.CharField(max_length=255)
-    second_name = models.CharField(max_length=255)
-    patronymic = models.CharField(max_length=255)
-    job_title = models.CharField(max_length=255)
+    created_date = models.DateTimeField(auto_now_add=True)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    second_name = models.CharField(max_length=255, blank=True, null=True)
+    patronymic = models.CharField(max_length=255, blank=True, null=True)
+    job_title = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         db_table ='manager'
@@ -488,7 +490,8 @@ class Region(models.Model):   # Region - Регион
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
-    region = models.CharField(max_length=255)
+    created_date = models.DateTimeField(auto_now_add=True)
+    region = models.CharField(max_length=255, blank=True, null=True)
     region_number = models.IntegerField()
 
     class Meta:
@@ -502,7 +505,8 @@ class SupportMeasure(models.Model):   # SupportMeasure мера поддержк
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
-    category_type = models.CharField(max_length=255)
+    created_date = models.DateTimeField(auto_now_add=True)
+    category_type = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         db_table ='supp_measure'
@@ -515,7 +519,8 @@ class ReviewStage(models.Model): # ReviewStage - Стадия рассмотре
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
-    stage = models.CharField(max_length=255)  
+    created_date = models.DateTimeField(auto_now_add=True)
+    stage = models.CharField(max_length=255, blank=True, null=True)  
 
     class Meta:
         db_table ='review_stage'
@@ -528,7 +533,8 @@ class DebtType(models.Model):   #  DebtType - тип долга
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
-    type = models.CharField(max_length=255)
+    created_date = models.DateTimeField(auto_now_add=True)
+    type = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         db_table ='debt_type'
@@ -541,7 +547,8 @@ class Category(models.Model):   # Category - Категория
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
-    type = models.CharField(max_length=255)
+    created_date = models.DateTimeField(auto_now_add=True)
+    type = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         db_table ='category'
@@ -554,7 +561,8 @@ class ApplicantStatus(models.Model):    #  ApplicantStatus - Статус зая
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
-    status = models.CharField(max_length=255)
+    created_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         db_table ='appl_status'
@@ -567,7 +575,8 @@ class InformationSourceType(models.Model):   # InformationSource - Тип ист
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
-    type = models.CharField(max_length=255)
+    created_date = models.DateTimeField(auto_now_add=True)
+    type = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         db_table ='inform_source_type'
@@ -580,7 +589,8 @@ class PositiveDecision(models.Model):    # KPI -> PositiveDecision
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
-    positive_decision = models.CharField(max_length=255)
+    created_date = models.DateTimeField(auto_now_add=True)
+    positive_decision = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         db_table ='pos_decision'
@@ -593,7 +603,8 @@ class NegativeDecision(models.Model):    # KPI -> PositiveDecision
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
-    negative_decision = models.CharField(max_length=255)
+    created_date = models.DateTimeField(auto_now_add=True)
+    negative_decision = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         db_table ='neg_decision'
@@ -610,13 +621,14 @@ class ClientRepresentative(models.Model): # Представитель клие�
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
-    representative_first_name = models.CharField(max_length=255)
-    representative_second_name = models.CharField(max_length=255)
-    representative_patronymic = models.CharField(max_length=255)
-    representative_position = models.CharField(max_length=255) # Должность представителя
+    created_date = models.DateTimeField(auto_now_add=True)
+    representative_first_name = models.CharField(max_length=255, blank=True, null=True)
+    representative_second_name = models.CharField(max_length=255, blank=True, null=True)
+    representative_patronymic = models.CharField(max_length=255, blank=True, null=True)
+    representative_position = models.CharField(max_length=255, blank=True, null=True) # Должность представителя
     representative_phone = models.CharField(max_length=20) # Телефон представителя
-    representative_email = models.CharField(max_length=255) # Почта представителя
-    control_point = models.CharField(max_length=255) # Контрольная точка
+    representative_email = models.CharField(max_length=255, blank=True, null=True) # Почта представителя
+    control_point = models.CharField(max_length=255, blank=True, null=True) # Контрольная точка
 
     class Meta:
         db_table ='client_representative'
@@ -629,9 +641,10 @@ class InformationSource(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
+    created_date = models.DateTimeField(auto_now_add=True)
     info_source_type_id = models.ForeignKey(InformationSourceType, on_delete=models.CASCADE)
     info_source_date = models.DateTimeField()
-    info_source_number = models.CharField(max_length=255)
+    info_source_number = models.CharField(max_length=255, blank=True, null=True)
     
     class Meta:
         db_table ='inform_source'
@@ -644,6 +657,7 @@ class ComplianceCriteria(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
+    created_date = models.DateTimeField(auto_now_add=True)
     debt_amount = models.IntegerField() # Сумма задолженности
     debt_type = models.ForeignKey(DebtType, on_delete=models.CASCADE) # Тип долга
     category = models.ForeignKey(Category, on_delete=models.CASCADE) # Категория
@@ -662,16 +676,17 @@ class KPI(models.Model): # KPI вид решения
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
+    created_date = models.DateTimeField(auto_now_add=True)
     positive_decision_type = models.ForeignKey(PositiveDecision, on_delete=models.CASCADE)  # Вид положительного решения
-    positive_decision_date = models.DateField()  # Дата положительного решения
-    measure_provided_duration = models.IntegerField()  # На сколько предоставлена мера
-    oiv_request_sender = models.CharField(max_length=255)  # От кого ходатайство ОИВ (для МС)
+    positive_decision_date = models.DateField(blank=True, null=True)  # Дата положительного решения
+    measure_provided_duration = models.IntegerField(blank=True, null=True)  # На сколько предоставлена мера
+    oiv_request_sender = models.CharField(max_length=255, blank=True, null=True)  # От кого ходатайство ОИВ (для МС)
     negative_decision_type = models.ForeignKey(NegativeDecision, on_delete=models.CASCADE)  # Вид отрицательного решения
-    settled_debt_amount = models.IntegerField()  # Сумма урегулированной задолженности
+    settled_debt_amount = models.IntegerField(blank=True, null=True)  # Сумма урегулированной задолженности
     
-    received_amount_budget = models.IntegerField()  # Сумма поступившая в бюджет
-    overdue_debt_amount = models.IntegerField()  # Просроченная задолженность сумма
-    technical_overdue_debt_amount = models.IntegerField()  # Сумма технической просроченной задолженности
+    received_amount_budget = models.IntegerField(blank=True, null=True)  # Сумма поступившая в бюджет
+    overdue_debt_amount = models.IntegerField(blank=True, null=True)  # Просроченная задолженность сумма
+    technical_overdue_debt_amount = models.IntegerField(blank=True, null=True)  # Сумма технической просроченной задолженности
 
     # next_commitment_date = models.DateField()  # Ближайший срок исполнения обязательства - пойдет на СВЯЗКУ
     # installment_delayed_amount = models.IntegerField()  # Не вступило в силу рассрочка/отсрочка - пойдет на СВЯЗКУ
@@ -687,9 +702,11 @@ class FieldsOfPositiveDecisions(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
-    origin = models.CharField(max_length=255) # Название в БД
+    created_date = models.DateTimeField(auto_now_add=True)
+    origin = models.CharField(max_length=255, blank=True, null=True) # Название в БД
     description = models.CharField(max_length=255, blank=True, null=True) # Название в реальности
     positive_decision = models.ForeignKey(PositiveDecision, on_delete=models.CASCADE) # К какому решению пренадлежат поля
+    type_of_fields = models.CharField(max_length=255, blank=True, null=True) # значения 0 - string 1 - datetime, 2 - int, 3 - float, 4 - boolean
 
     class Meta:
         db_table ='positive_decision_fields'
@@ -702,6 +719,7 @@ class KpiPositiveDecisionFields(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
+    created_date = models.DateTimeField(auto_now_add=True)
     kpi = models.ForeignKey(KPI, on_delete=models.CASCADE)
     fields_of_pos_decision = models.ForeignKey(FieldsOfPositiveDecisions, on_delete=models.CASCADE)
     value = models.CharField(max_length=255, blank=True, null=True)
@@ -718,9 +736,10 @@ class Client(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
-    first_name = models.CharField(max_length=255)
-    second_name = models.CharField(max_length=255)
-    patronymic = models.CharField(max_length=255)
+    created_date = models.DateTimeField(auto_now_add=True)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    second_name = models.CharField(max_length=255, blank=True, null=True)
+    patronymic = models.CharField(max_length=255, blank=True, null=True)
     inn = models.IntegerField() # ИНН
     # registration_date = models.DateTimeField() это, наверное,  ClientRepresentative.control_point 
     region = models.ForeignKey(Region, on_delete=models.CASCADE)
@@ -728,12 +747,12 @@ class Client(models.Model):
     applicant_status = models.ForeignKey(ApplicantStatus, on_delete=models.CASCADE) # Статус заявителя
     information_source = models.ForeignKey(InformationSource, on_delete=models.CASCADE) # Источник информации
     representitive_client = models.ForeignKey(ClientRepresentative, on_delete=models.CASCADE) # Представитель клиента
-    support_measure = models.ForeignKey(SupportMeasure, on_delete=models.CASCADE) # Мера поддержки
+    # support_measure = models.ForeignKey(SupportMeasure, on_delete=models.CASCADE) # Мера поддержки
     compliance_criteria = models.ForeignKey(ComplianceCriteria, on_delete=models.CASCADE) # Мера поддержки
-    first_meeting_date = models.DateField() # Дата первой встречи
-    event_date = models.DateField() # Дата наступления события
-    event_description = models.TextField() # Описание события
-    kpi = models.ForeignKey(KPI, on_delete=models.CASCADE) # Мера поддержки
+    first_meeting_date = models.DateField(blank=True, null=True) # Дата первой встречи
+    event_date = models.DateTimeField(blank=True, null=True) # Дата наступления события
+    event_description = models.TextField(blank=True, null=True) # Описание события
+    kpi = models.ForeignKey(KPI, on_delete=models.CASCADE) # 
     
     class Meta:
         db_table ='client'
