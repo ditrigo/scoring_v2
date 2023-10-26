@@ -5,7 +5,6 @@ import axios from "axios"
 
 const ResultMarkersView = () => {
   const { inn } = useParams()
-  const [markers, setMarkers] = useState([])
   const [results, setResults] = useState([])
   const [result, setResult] = useState([])
 
@@ -13,7 +12,7 @@ const ResultMarkersView = () => {
     axios
       .get("http://127.0.0.1:8000/api/inn_res/")
       .then((res) => {
-        console.log(res.data.data)
+        console.log("Результаты в просмотре ", res.data.data)
         setResults(res.data.data)
         setResult((prevState) => [res.data.data.find((el) => el.inn === +inn)])
       })
@@ -45,6 +44,7 @@ const ResultMarkersView = () => {
         <table className="text-center table  table-bordered table-responsive">
           <thead>
             <tr>
+              <th scope="col">Название маркера</th>
               <th scope="col">Формула</th>
               <th scope="col">Баллы по ИНН {inn}</th>
             </tr>
@@ -54,6 +54,7 @@ const ResultMarkersView = () => {
               result[0].result_score.markers_and_values.map((el, index) => {
                 return (
                   <tr key={index}>
+                    <td className="text-center">Название маркера</td>
                     <td className="text-center">{el.formula}</td>
                     <td>{el.value}</td>
                   </tr>

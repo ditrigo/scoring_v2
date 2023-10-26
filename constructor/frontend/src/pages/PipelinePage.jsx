@@ -31,17 +31,17 @@ const PipelinePage = () => {
   // const [modalScoringResults, setModalScoringResults] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
 
+  const model =
+    models && models.find((el) => el.model_name === scoringModel.scoring_model)
+
   const doScoring = () => {
     console.log("Scoring...")
-    const model = models.find(
-      (el) => el.model_name === scoringModel.scoring_model
-    )
+
     console.log(model)
-    // model.inns = inputINN.split(", ").join(" ").split("/").join(" ").split(" ")
     const json = {
       model,
     }
-    console.log(json)
+    // console.log(json)
     axios
       .post("http://127.0.0.1:8000/api/start_scoring/", json)
       .then((resp) => {
@@ -68,7 +68,7 @@ const PipelinePage = () => {
         author_id: "Denis",
       })
       .then(function (response) {
-        console.log(response)
+        console.log("Сделать связку", response)
         setDisabledBtn("btn btn-outline-primary disabled")
         setIsSaved(true)
       })
