@@ -66,40 +66,6 @@ class InnResResource(resources.ModelResource):
         skip_unchanged = True
         import_id_fields  = ('inn')
 
-    def after_export(self, queryset, data, *args, **kwargs):
-        df = pd.DataFrame(list(data))
-        # data = df
-        print(df)
-
-        columns = list(data.headers ) + [ "formula", "value"]
-        print(columns)
-        rows_new_df = []
-        for row in range(len(df)):
-        #     print(df.iloc[row]["result_score"], "\n")
-        #     print(df.iloc[row].values, '\n')
-        #     print(len(pd.json_normalize(json.loads(df.iloc[row]["result_score"]), "markers_and_values")))
-        #     print(pd.json_normalize(json.loads(df.iloc[row]["result_score"]), "markers_and_values"))
-            for marker in range(len(pd.json_normalize(json.loads(df.iloc[row]["result_score"]), "markers_and_values").values)):
-                values_marker = pd.json_normalize(json.loads(df.iloc[row]["result_score"]), "markers_and_values").values[marker]
-        #         print(pd.json_normalize(json.loads(df.iloc[row]["result_score"]), "markers_and_values").values[marker])
-                x = df.iloc[row].values
-                x = np.append(x, values_marker)
-                rows_new_df.append(x)
-                
-        # print("Total result\n")
-        # print(rows_new_df)
-        # print("Total OTHER result\n")
-        # print(x)
-        # for i in rows_new_df:
-        #     print(i[0], '\n')
-        #     pd.json_normalize(json.loads(inn_res_data.get_col(6)[0]), 
-        #                         "markers_and_values" )
-
-        data = Dataset(pd.DataFrame(rows_new_df))
-
-
-        return super().after_export(queryset, data, *args, **kwargs)
-
 class InnResAdmin(ImportExportModelAdmin):
     resorce_classes = [InnResResource]
     list_display = ('id', 

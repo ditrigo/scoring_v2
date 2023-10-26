@@ -6,7 +6,8 @@ import DatePicker from "react-datepicker"
 import axios from "axios"
 import "react-datepicker/dist/react-datepicker.css"
 import SelectField from "../components/CrmPage/Form/SelectField"
-// import MyModal from "../components/ScoringPage/MyModal/MyModal"
+import MyModal from "../components/ScoringPage/MyModal/MyModal"
+import { Link } from "react-router-dom"
 // import ResultTable from "../components/PiplinePage/ResultTable"
 // import { Link } from "react-router-dom"
 
@@ -30,6 +31,9 @@ const PipelinePage = () => {
   // const [modalScoringResults, setModalScoringResults] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
 
+  const model =
+    models && models.find((el) => el.model_name === scoringModel.scoring_model)
+
   const doScoring = () => {
     console.log("Scoring...")
     setScoringOptions([])
@@ -39,9 +43,9 @@ const PipelinePage = () => {
     )
     console.log(model)
     const json = {
-      model
+      model,
     }
-    console.log(json)
+    // console.log(json)
     axios
       .post("http://127.0.0.1:8000/api/start_scoring/", json)
       .then((resp) => {
@@ -60,13 +64,7 @@ const PipelinePage = () => {
   async function handleSaveData() {
     axios
       .post("http://127.0.0.1:8000/api/inn_res/create_relation/", {
-        inn_ids: inputINN
-          .trim()
-          .split(", ")
-          .join(" ")
-          .split("/")
-          .join(" ")
-          .split(" "),
+        inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
         active: true,
         scoringmodel_id: models.find(
           (el) => el.model_name === scoringModel.scoring_model
@@ -74,7 +72,7 @@ const PipelinePage = () => {
         author_id: "Denis",
       })
       .then(function (response) {
-        console.log(response)
+        console.log("Сделать связку", response)
         setDisabledBtn("btn btn-outline-primary disabled")
         setIsSaved(true)
       })
@@ -129,7 +127,7 @@ const PipelinePage = () => {
     axios
       .get("http://127.0.0.1:8000/api/scoring_model/")
       .then((res) => {
-        console.log(res.data.data)
+        console.log("Получение моделей", res.data.data)
         // console.log(res.data.data[0].model_name)
         // console.log(res.data.data[0].id)
         // setScoringModels(res.data.data)
@@ -285,11 +283,11 @@ const PipelinePage = () => {
                 Запустить скоринг
               </MyButton>
             </div>
-            {/* <div className="col-md-auto">
+            <div className="col-md-auto">
               <Link to="/results">
                 <MyButton>Журнал скоринга</MyButton>
               </Link>
-            </div> */}
+            </div>
             <div className="col-md-auto">
               <MyButton
                 className={disabledBtn}
