@@ -230,7 +230,6 @@ class MainCatalogFields(models.Model):
         return f"{self.origin}"
 
 
-# TODO переименовать на маркеры - их 40шт
 class MarkersAttributes(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default=uuid.uuid4,
@@ -660,9 +659,61 @@ class ComplianceCriteria(models.Model):
 
 
 class KPI(models.Model): # KPI вид решения
-    pass 
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    positive_decision_type = models.ForeignKey(PositiveDecision, on_delete=models.CASCADE)  # Вид положительного решения
+    positive_decision_date = models.DateField()  # Дата положительного решения
+    measure_provided_duration = models.IntegerField()  # На сколько предоставлена мера
+    oiv_request_sender = models.CharField(max_length=255)  # От кого ходатайство ОИВ (для МС)
+    negative_decision_type = models.ForeignKey(NegativeDecision, on_delete=models.CASCADE)  # Вид отрицательного решения
+    settled_debt_amount = models.IntegerField()  # Сумма урегулированной задолженности
+    
+    received_amount_budget = models.IntegerField()  # Сумма поступившая в бюджет
+    overdue_debt_amount = models.IntegerField()  # Просроченная задолженность сумма
+    technical_overdue_debt_amount = models.IntegerField()  # Сумма технической просроченной задолженности
+
+    # next_commitment_date = models.DateField()  # Ближайший срок исполнения обязательства - пойдет на СВЯЗКУ
+    # installment_delayed_amount = models.IntegerField()  # Не вступило в силу рассрочка/отсрочка - пойдет на СВЯЗКУ
+
+    class Meta:
+        db_table ='kpi'
+ 
+    def __str__(self):
+        return f"{self.oiv_request_sender} - KPI"
 
 
+class FieldsOfPositiveDecisions(models.Model):
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    origin = models.CharField(max_length=255) # Название в БД
+    description = models.CharField(max_length=255, blank=True, null=True) # Название в реальности
+    positive_decision = models.ForeignKey(PositiveDecision, on_delete=models.CASCADE) # К какому решению пренадлежат поля
+
+    class Meta:
+        db_table ='positive_decision_fields'
+ 
+    def __str__(self):
+        return f"{self.origin}"
+
+
+class KpiPositiveDecisionFields(models.Model):
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    kpi = models.ForeignKey(KPI, on_delete=models.CASCADE)
+    fields_of_pos_decision = models.ForeignKey(FieldsOfPositiveDecisions, on_delete=models.CASCADE)
+    value = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        db_table ='kpi_positive_decision_fields'
+ 
+    def __str__(self):
+        return f"{self.value}"
+
+
+# TODO На юзера навесить ресурс для дальнейшего скачивания данных
 class Client(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
@@ -679,8 +730,10 @@ class Client(models.Model):
     representitive_client = models.ForeignKey(ClientRepresentative, on_delete=models.CASCADE) # Представитель клиента
     support_measure = models.ForeignKey(SupportMeasure, on_delete=models.CASCADE) # Мера поддержки
     compliance_criteria = models.ForeignKey(ComplianceCriteria, on_delete=models.CASCADE) # Мера поддержки
+    first_meeting_date = models.DateField() # Дата первой встречи
+    event_date = models.DateField() # Дата наступления события
+    event_description = models.TextField() # Описание события
     kpi = models.ForeignKey(KPI, on_delete=models.CASCADE) # Мера поддержки
-    
     
     class Meta:
         db_table ='client'
