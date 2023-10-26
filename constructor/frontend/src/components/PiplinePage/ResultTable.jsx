@@ -5,8 +5,10 @@ import Moment from "moment"
 import localization from "moment/locale/ru"
 import { Link } from "react-router-dom"
 
+
 const ResultTable = ({ getLinkMarkers }) => {
   const [results, setResults] = useState([])
+  const FileDownload = require('js-file-download');
 
   async function getResults() {
     axios
@@ -19,18 +21,60 @@ const ResultTable = ({ getLinkMarkers }) => {
         console.log(e)
       })
   }
+
   useEffect(() => {
     getResults()
   }, [])
 
+  async function downLoadResults() {
+    axios
+      ({
+        url: "http://localhost:8000/api/download/",
+        method: 'GET',
+        responseType: 'blob'
+      } 
+      )
+      .then((res) => {
+        FileDownload(res.data, 'ScotringResults.xlsx')
+        // console.log("Результаты в таблице", res.data.data)
+        // setResults(res.data.data)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }
+
   return (
     <>
       <div
-        className="container mt-5 mb-5"
+        className="container mt-3 mb-5"
         style={{
           overflow: "auto",
         }}
       >
+        <div className="row">
+
+          <div className="col-md-auto m-2">
+            <Link
+              to="/pipeline"
+              className="mb-2"
+            >
+              <MyButton
+                className="btn btn-outline-secondary mt-2"
+                onClick={() => { }}
+              >
+                На модуль выдачи результатов
+              </MyButton>
+            </Link>
+          </div>
+          <div className="col-md-auto m-0">
+            <MyButton
+              onClick={downLoadResults}
+            >
+              Выгрузить данные
+            </MyButton>
+          </div>
+        </div>
         <table className="text-center table  table-bordered table-responsive">
           <thead>
             <tr>
@@ -67,14 +111,7 @@ const ResultTable = ({ getLinkMarkers }) => {
         {/* <MyButton className="btn-outline-primary mt-2 mr-4" onClick={() => { }}>
           Подтвердить
         </MyButton> */}
-        <Link to="/pipeline">
-          <MyButton
-            className="btn btn-outline-secondary mt-2"
-            onClick={() => {}}
-          >
-            На модуль выдачи результатов
-          </MyButton>
-        </Link>
+
       </div>
     </>
   )

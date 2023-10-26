@@ -25,10 +25,6 @@ from django.http import HttpResponse
 from django.views.generic.list import ListView
 
 
-# @api_view(['POST'])
-
-
-
 # Uploaded files into DataBase
 @api_view(['GET', 'POST'])
 def FilesListViewSet(request):  # (viewsets.ModelViewSet):
@@ -698,7 +694,7 @@ def DownloadTryViewSet(request):
     ds = resource.export(attr)
 
     response = HttpResponse(ds.xlsx, content_type='text/xlsx')
-    response['Content-Disposition'] = 'attachment; filename="books.xlsx"'
+    response['Content-Disposition'] = 'attachment; filename="ScotringResults.xlsx"'
     return response
 
 
