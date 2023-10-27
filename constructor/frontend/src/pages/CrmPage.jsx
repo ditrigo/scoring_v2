@@ -6,6 +6,7 @@ import ContentRows from "../components/CrmPage/Form/ContentRows"
 import { Link } from "react-router-dom"
 import MyInput from "../components/UI/MyInput/MyInput"
 import MyButton from "../components/UI/MyButton/MyButton"
+import SelectSearchField from "../components/CrmPage/Form/SelectSearchField"
 
 const CrmPage = () => {
   const [users, setUsers] = useState()
@@ -23,12 +24,12 @@ const CrmPage = () => {
     // Добавил проверку через тернарный оператор, чтоб не падал в ошибку от пустых users
     filtredUsers = users
       ? users.filter((el) => {
-        if (Number.isInteger(+searchValue)) {
-          return el.INN.includes(searchValue)
-        } else {
-          return el.manager.toLowerCase().includes(searchValue.toLowerCase())
-        }
-      })
+          if (Number.isInteger(+searchValue)) {
+            return el.INN.includes(searchValue)
+          } else {
+            return el.manager.toLowerCase().includes(searchValue.toLowerCase())
+          }
+        })
       : null
   } catch (e) {
     console.log(e)
@@ -38,8 +39,7 @@ const CrmPage = () => {
     <div className="container mr-5 mt-3 mb-3">
       <div className="row">
         <div className="col">
-          <form
-            className="">
+          <form className="">
             {/* d-flex align-items-center */}
             <MyInput
               type="text"
@@ -57,17 +57,10 @@ const CrmPage = () => {
           </Link>
           </button>   */}
 
-          <Link
-            to="/newclient"
-            className="">
-            <MyButton
-            >
-              Новый клиент
-            </MyButton>
+          <Link to="/newclient" className="">
+            <MyButton>Новый клиент</MyButton>
           </Link>
-
         </div>
-
       </div>
       {users ? (
         <>

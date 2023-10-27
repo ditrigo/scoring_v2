@@ -83,12 +83,12 @@
   z-index: 1;
 } */
 
-.text {
+/* .text {
   z-index: 1;
-}
-#react-select-29-listbox {
+} */
+/* #react-select-29-listbox {
   z-index: 100;
-}
+} */
 
 div[id*="listbox"] {
   z-index: 100;
