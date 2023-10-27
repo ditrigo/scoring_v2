@@ -3,6 +3,10 @@ from import_export import resources
 from import_export.admin import ImportExportActionModelAdmin, ImportExportModelAdmin
 from simple_history.admin import SimpleHistoryAdmin
 from .models import *
+import pandas as pd
+import numpy as np
+import json
+from tablib import Dataset
 
 
 class ImportedAttributesResource(resources.ModelResource):
@@ -33,15 +37,15 @@ class ImportedAttributesResource(resources.ModelResource):
     #     return super().skip_row(instance, original, row,
     #     import_validation_errors=import_validation_errors)
 
-class CsvAttributesAdmin(ImportExportModelAdmin):
-    resorce_classes = [ImportedAttributes]
+class ImportedAttributesAdmin(ImportExportModelAdmin):
+    resorce_classes = [ImportedAttributesResource]
     list_display = ('id', 
                     'uuid', 
                     'inn',
                     'created_date', 
                     'np_name', 
                     'report_date')
-admin.site.register(ImportedAttributes, CsvAttributesAdmin)
+admin.site.register(ImportedAttributes, ImportedAttributesAdmin)
 
 # class CountedAttrFormulaAdmin(admin.ModelAdmin):
 #     search_fields = ('uuid', )
@@ -56,8 +60,51 @@ admin.site.register(ImportedAttributes, CsvAttributesAdmin)
 #                     'sql_query', 
 #                     'nested_level')
 # admin.site.register(CountedAttrFormula, CountedAttrFormulaAdmin)
+class InnResResource(resources.ModelResource):
+    class Meta:
+        model = InnRes
+        skip_unchanged = True
+        import_id_fields  = ('inn')
 
-admin.site.register(InnRes)
+    def after_export(self, queryset, data, *args, **kwargs):
+        print(queryset)
+        print(data)
+        new_data = Dataset()
+        inn_res_data = data
+
+        rows_new_df = []
+        for row in range(len(pd.json_normalize(json.loads(inn_res_data.get_col(6)[0]), "markers_and_values" ).values)-1):
+
+            num_markers = len(pd.json_normalize(json.loads(inn_res_data.get_col(6)[0]), "markers_and_values" ).values)
+
+            values_marker = pd.json_normalize(json.loads(inn_res_data.get_col(6)[row]), "markers_and_values").values
+            for num_marker in range(len(values_marker)):
+                x = list(inn_res_data[row])
+                x = np.append(x, values_marker[num_marker])
+                rows_new_df.append(x)
+
+        arr = []
+        for row in rows_new_df:
+            for idx in row:
+                print("idx", idx)
+                arr.append(idx)
+            
+            new_data.append(arr)
+            arr=[]
+        
+        new_data.headers = inn_res_data.headers + [ "formula", "value"]
+        data.dict = new_data.dict
+        return super().after_export(queryset, data, *args, **kwargs)
+
+class InnResAdmin(ImportExportModelAdmin):
+    resorce_classes = [InnResResource]
+    list_display = ('id', 
+                    'uuid', 
+                    'inn',
+                    'created_date'
+                    )
+admin.site.register(InnRes, InnResAdmin)
+
 admin.site.register(FileAttributes)
 admin.site.register(MainCatalog)
 admin.site.register(MainCatalogFields)
@@ -78,3 +125,46 @@ class MarkersAttributesAdmin(admin.ModelAdmin):
         obj.author = request.user
         super().save_model(request, obj, form, change)
 admin.site.register(MarkersAttributes, MarkersAttributesAdmin)
+
+
+### CRM DATA REGISTER ###########################################################################################
+
+#----------------
+# СПРАВОЧНИКИ
+
+admin.site.register(Manager)
+admin.site.register(Region)
+admin.site.register(SupportMeasure)
+admin.site.register(ReviewStage)
+admin.site.register(DebtType)
+admin.site.register(Category)
+admin.site.register(ApplicantStatus)
+admin.site.register(InformationSourceType)
+admin.site.register(PositiveDecision)
+admin.site.register(NegativeDecision)
+#---------------------
+
+#---------------------
+# MAIN
+admin.site.register(ClientRepresentative)
+admin.site.register(InformationSource)
+admin.site.register(ComplianceCriteria)
+admin.site.register(KPI)
+admin.site.register(FieldsOfPositiveDecisions)
+admin.site.register(KpiPositiveDecisionFields)
+
+class ClientResource(resources.ModelResource):
+    class Meta:
+        model = InnRes
+        skip_unchanged = True
+        import_id_fields  = ('inn')
+
+class ClientAdmin(ImportExportModelAdmin):
+    resorce_classes = [InnResResource]
+    list_display = ('id', 
+                    'uuid', 
+                    'inn',
+                    'created_date'
+                    )
+admin.site.register(Client, ClientAdmin)
+#---------------------

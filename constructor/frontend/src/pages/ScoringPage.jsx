@@ -107,6 +107,19 @@ const ScoringPage = () => {
     setModels(models.filter((item) => item.id !== id))
   }
 
+  const deleteMarker = (id) => {
+    axios
+      .delete(`http://127.0.0.1:8000/api/marker_attributes/${id}`)
+      .then((res) => {
+        console.log(res.data)
+        console.log(res)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+      setMarkers(markers.filter((item) => item.id !== id))
+  }
+
   // get/post path/api/counted_attributes
   async function getMarkers() {
     axios
@@ -285,7 +298,7 @@ const ScoringPage = () => {
                         </td> */}
                           <td>
                             <button
-                              // onClick={() => deleteModel(model.id)}
+                              onClick={() => deleteMarker(marker.id)}
                               className="btn btn-outline-danger"
                             >
                               Удалить

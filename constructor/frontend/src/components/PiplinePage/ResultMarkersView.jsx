@@ -20,6 +20,7 @@ const ResultMarkersView = () => {
         console.log(e)
       })
   }
+
   useEffect(() => {
     getResults()
   }, [])
@@ -27,11 +28,6 @@ const ResultMarkersView = () => {
   useEffect(() => {
     setResult((prevState) => [results.find((el) => el.inn === +inn)])
   }, [results])
-
-  //   const formula =
-  //     results &&
-  //     results.find((el) => el.inn === +inn)?.result_score?.markers_and_values
-  //   console.log("result", result && result[0].result_score.markers_and_values)
 
   return (
     <>
@@ -51,7 +47,7 @@ const ResultMarkersView = () => {
           </thead>
           <tbody>
             {result[0] &&
-              result[0].result_score.markers_and_values.map((el, index) => {
+              result[0].result_score?.markers_and_values.map((el, index) => {
                 return (
                   <tr key={index}>
                     <td className="text-center">Название маркера</td>

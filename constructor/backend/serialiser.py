@@ -64,7 +64,6 @@ class ScoringModelSerializer(serializers.ModelSerializer):
 #----------------
 # СПРАВОЧНИКИ
 
-
 class ManagerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manager
@@ -123,3 +122,66 @@ class NegativeDecisionSerializer(serializers.ModelSerializer):
     class Meta:
         model = NegativeDecision
         fields = "__all__"
+
+#---------------------
+
+#---------------------
+# MAIN
+
+class ClientRepresentativeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClientRepresentative
+        fields = "__all__"
+
+
+class InformationSourceSerializer(serializers.ModelSerializer):
+    info_source_type_id = InformationSourceTypeSerializer(many=False, read_only=True)
+    class Meta:
+        model = InformationSource
+        fields = "__all__"
+
+
+class ComplianceCriteriaSerializer(serializers.ModelSerializer):
+    debt_type = DebtTypeSerializer(many=False, read_only=True)
+    category = CategorySerializer(many=False, read_only=True)
+    support_measure = SupportMeasureSerializer(many=False, read_only=True)
+    class Meta:
+        model = ComplianceCriteria
+        fields = "__all__"
+
+
+class KPISerializer(serializers.ModelSerializer):
+    positive_decision_type = PositiveDecisionSerializer(many=False, read_only=True)
+    negative_decision_type = NegativeDecisionSerializer(many=False, read_only=True)
+    class Meta:
+        model = KPI
+        fields = "__all__"
+
+
+class FieldsOfPositiveDecisionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FieldsOfPositiveDecisions
+        fields = "__all__"
+
+
+class KpiPositiveDecisionFieldsSerializer(serializers.ModelSerializer):
+    kpi = KPISerializer(many=True, read_only=True)
+    fields_of_pos_decision = FieldsOfPositiveDecisionsSerializer(many=True, read_only=True)
+    class Meta:
+        model = KpiPositiveDecisionFields
+        fields = "__all__"
+
+
+class ClientSerializer(serializers.ModelSerializer):
+    region = RegionSerializer(many=False, read_only=True)
+    manager = ManagerSerializer(many=False, read_only=True)
+    applicant_status = ApplicantStatusSerializer(many=False, read_only=True)
+    information_source = InformationSourceSerializer(many=False, read_only=True)
+    representitive_client = ClientRepresentativeSerializer(many=False, read_only=True)
+    compliance_criteria = ComplianceCriteriaSerializer(many=False, read_only=True)
+    kpi = KPISerializer(many=False, read_only=True)
+    class Meta:
+        model = Client
+        fields = "__all__"
+
+#---------------------

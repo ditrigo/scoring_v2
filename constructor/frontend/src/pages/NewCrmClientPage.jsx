@@ -3,31 +3,261 @@ import api from "../api"
 import TextField from "../components/CrmPage/Form/textField"
 import Divider from "../components/CrmPage/Form/Divider"
 import { Link, useParams } from "react-router-dom"
-import SelectField from "../components/CrmPage/Form/SelectField"
-import Select from "react-select"
+import axios from "axios"
+import { validator } from "../components/utils/validator"
+import SelectSearchField from "../components/CrmPage/Form/SelectSearchField"
 
-const NewCrmClientPage = () => {
+const NewClientPage = () => {
   const params = useParams()
-  //   console.log(params)
-  const [firstData, setFirstData] = useState()
   const [users, setUsers] = useState()
-  const [regions, setRegions] = useState()
+  const [errors, setErrors] = useState({})
 
-  const [usersData, setUsersData] = useState({})
+  const [clienData, setClientData] = useState({})
+  const [regions, setRegions] = useState({})
+  const [support, setSupport] = useState({})
+  const [stage, setStage] = useState({})
+  const [category, setCategory] = useState({})
+  const [status, setStatus] = useState({})
+  const [sources, setSources] = useState({})
+  const [positive, setPositive] = useState({})
+  const [negative, setNegative] = useState({})
+  const [type, setType] = useState({})
+  const [managers, setManagers] = useState({})
 
-  const handleChangeSelect = (target) => {
+  const transformData = (data, keyInNativeObj, keyName) => {
+    const result = data.map((el) => ({
+      id: el.id,
+      label: el[keyInNativeObj],
+      value: el[keyInNativeObj],
+      name: keyName,
+    }))
+    return result
+  }
+
+  const transformManagersData = (data) => {
+    const result = data.map((el) => ({
+      id: el.id,
+      label: `${el.second_name} ${el.first_name}. ${el.patronymic}. ${el.job_title}`,
+      value: `${el.second_name} ${el.first_name}. ${el.patronymic}. ${el.job_title}`,
+      name: "managers",
+    }))
+    return result
+  }
+
+  const transformRegionsData = (data) => {
+    const result = data.map((el) => ({
+      id: el.id,
+      label: `${el.region_number} ${el.region}`,
+      value: `${el.region_number} ${el.region}`,
+      name: "regions",
+    }))
+    return result
+  }
+
+  function getTransformedData(endPoint, setDataState, keyInNativeObj, keyName) {
+    axios
+      .get(`http://127.0.0.1:8000/api/${endPoint}/`)
+      .then((res) => {
+        // console.log(res.data)
+        setDataState(transformData(res.data.data, keyInNativeObj, keyName))
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }
+
+  useEffect(() => {
+    getTransformedData(
+      "crm_supp_measure",
+      setSupport,
+      "category_type",
+      "support"
+    )
+    getTransformedData("crm_review_stage", setStage, "stage", "stage")
+    getTransformedData("crm_category", setCategory, "type", "category")
+    getTransformedData("crm_applicant_status", setStatus, "status", "status")
+    getTransformedData("crm_info_source_type", setSources, "type", "sources")
+    getTransformedData(
+      "crm_pos_decision",
+      setPositive,
+      "positive_decision",
+      "positive"
+    )
+    getTransformedData(
+      "crm_neg_decision",
+      setNegative,
+      "negative_decision",
+      "negative"
+    )
+    getTransformedData("crm_dept_type", setType, "type", "type")
+
+    axios
+      .get(`http://127.0.0.1:8000/api/crm_managers/`)
+      .then((res) => {
+        setManagers(transformManagersData(res.data.data))
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+
+    axios
+      .get(`http://127.0.0.1:8000/api/crm_region/`)
+      .then((res) => {
+        setRegions(transformRegionsData(res.data.data))
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }, [])
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    alert("Отправка данных на сервер")
+    setClientData({})
+  }
+
+  const handleCancle = (e) => {
+    e.preventDefault()
+    setClientData({})
+  }
+
+  const handleChange = (target) => {
     console.log(target)
-    setUsersData((prevState) => ({
+    setClientData((prevState) => ({
       ...prevState,
       [target.name]: target.value,
     }))
   }
 
+  const validatorConfig = {
+    // test: {
+    //   isRequired: {
+    //     message: "Это поле обязательно для заполнения",
+    //   },
+    // },
+
+    status: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+
+    category: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+
+    stage: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+
+    support: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+
+    regions: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    name: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    INN: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    dateAppealsToMIDUOL: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    dateEventOccurance: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    deptSum: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    descr: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    type: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+  }
+
+  const isValid = Object.keys(errors).length === 0
+
+  // TEST
   const [testData, setTestData] = useState({
     test: "",
-    risk: "",
+    solvencyRisk: "",
+    sources: "",
+    managers: "",
+    status: "",
+    type: "",
+    category: "",
+    positive: "",
+    stage: "",
+    negative: "",
+    support: "",
+    PRD: "",
+    regions: "",
+    name: "",
+    INN: "",
+    dateAppealsToMIDUOL: "",
+    dateEventOccurance: "",
+    deptSum: "",
+    descr: "",
+    activity: "",
+    sourceNumber: "",
+    representativeNameEndTitle: "",
+    representativeNumber: "",
+    representativeMail: "",
+    notes: "",
+    termMesureNecessary: "",
+    firstMeetDate: "",
+    termMesure: "",
+    petitionAuthor: "",
+    settledDebtAmount: "",
+    amountReceivedIntoBudget: "",
+    nearestDateForFulfillment: "",
+    notInForce: "",
+    caseNumber: "",
+    courtMCApprovalDate: "",
+    amountOfClaimsMC: "",
+    MCexpirationDate: "",
+    amountOfFulfilledObligations: "",
+    sum: "",
+    amountOfTechnicalOverdueDebt: "",
+    pledgeOfProperty: "",
+    surety: "",
+    bankGuarantee: "",
+    deptorDirectionDate: "",
+    garantorDirectionDate: "",
+    pledgetorDirectionDate: "",
+    checkPoint: "",
+    activityRisk: "",
+    assetsTypeRisk: "",
   })
   const [testApi, setTestApi] = useState()
+
   const handleChangeTest = (target) => {
     console.log(target)
 
@@ -36,469 +266,479 @@ const NewCrmClientPage = () => {
       [target.name]: target.value,
     }))
   }
-  const riskList = [
-    { label: "Высокий риск", value: "Высокий риск" },
-    { label: "Средний риск", value: "Средний риск" },
-    { label: "Низкий риск", value: "Низкий риск" },
+
+  // const type = [
+  //   { label: "Текущий", value: "Текущий", name: "type" },
+  //   { label: "будущий", value: "будущий", name: "type" },
+  //   { label: "Поручение", value: "Поручение", name: "type" },
+  // ]
+
+  const solvencyRisk = [
+    { label: "Высокий риск", value: "Высокий риск", name: "solvencyRisk" },
+    { label: "Средний риск", value: "Средний риск", name: "solvencyRisk" },
+    { label: "Низкий риск", value: "Низкий риск", name: "solvencyRisk" },
+  ]
+  const activityRisk = [
+    { label: "Высокий риск", value: "Высокий риск", name: "activityRisk" },
+    { label: "Средний риск", value: "Средний риск", name: "activityRisk" },
+    { label: "Низкий риск", value: "Низкий риск", name: "activityRisk" },
+  ]
+  const assetsTypeRisk = [
+    { label: "Высокий риск", value: "Высокий риск", name: "assetsTypeRisk" },
+    { label: "Средний риск", value: "Средний риск", name: "assetsTypeRisk" },
+    { label: "Низкий риск", value: "Низкий риск", name: "assetsTypeRisk" },
   ]
 
-  useEffect(() => {
-    api.firstData.fetchAll().then((data) => {
-      setFirstData(data)
-    })
+  // const sources = [
+  //   { label: "ТНО, ФНС", value: "ТНО, ФНС", name: "sources" },
+  //   {
+  //     label: "Входящие звонки",
+  //     value: "Входящие звонки",
+  //     name: "sources",
+  //   },
+  //   { label: "РГ", value: "РГ", name: "sources" },
+  // ]
+  // const managers = [
+  //   { label: "Бабасов П.Н.", value: "Бабасов П.Н.", name: "managers" },
+  //   {
+  //     label: "Бойченко И.А.",
+  //     value: "Бойченко И.А.",
+  //     name: "managers",
+  //   },
+  //   {
+  //     label: "Емельянова Е.А.",
+  //     value: "Емельянова Е.А.",
+  //     name: "managers",
+  //   },
+  // ]
+  // const status = [
+  //   { label: "должник", value: "должник", name: "status" },
+  //   { label: "кредитор", value: "кредитор", name: "status" },
+  // ]
 
+  // const category = [
+  //   {
+  //     label: "системообразующее",
+  //     value: "системообразующее",
+  //     name: "category",
+  //   },
+  //   {
+  //     label: "градообразующее",
+  //     value: "градообразующее",
+  //     name: "category",
+  //   },
+  // ]
+
+  // const stage = [
+  //   {
+  //     label: "Получено обращение",
+  //     value: "Получено обращение",
+  //     name: "stage",
+  //   },
+  //   {
+  //     label: "Проведено первое совещание",
+  //     value: "Проведено первое совещание",
+  //     name: "stage",
+  //   },
+  //   {
+  //     label: "Истребованы документы",
+  //     value: "Истребованы документы",
+  //     name: "stage",
+  //   },
+  // ]
+
+  // const support = [
+  //   {
+  //     label: "отсрочка / рассрочка (ст. 64 НК РФ)",
+  //     value: "отсрочка / рассрочка (ст. 64 НК РФ)",
+  //     name: "support",
+  //   },
+  //   {
+  //     label: "отлагательные меры",
+  //     value: "отлагательные меры",
+  //     name: "support",
+  //   },
+  //   {
+  //     label: "отлагательные меры + МС",
+  //     value: "отлагательные меры + МС",
+  //     name: "support",
+  //   },
+  // ]
+
+  // const regions = [
+  //   {
+  //     number: 1,
+  //     label: "1 Республика Адыгея",
+  //     value: "1 Республика Адыгея",
+  //     name: "regions",
+  //   },
+  //   {
+  //     number: 2,
+  //     label: " 2 Республика Башкортостан",
+  //     value: " 2 Республика Башкортостан",
+  //     name: "regions",
+  //   },
+  // ]
+
+  const PRD = [
+    {
+      label: "МИДУОЛ",
+      value: "МИДУОЛ",
+      name: "PRD",
+    },
+    {
+      label: "РП Республика Коми",
+      value: "РП Республика Коми",
+      name: "PRD",
+    },
+    {
+      label: "РП Республика Карелия",
+      value: "РП Республика Карелия",
+      name: "PRD",
+    },
+  ]
+  // const negative = [
+  //   {
+  //     label:
+  //       "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство",
+  //     value:
+  //       "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство",
+  //     name: "negative",
+  //   },
+  //   {
+  //     label: "отказ - не требуется помощь, стабильное финансовое состояние",
+  //     value: "отказ - не требуется помощь, стабильное финансовое состояние",
+  //     name: "negative",
+  //   },
+  //   {
+  //     label: "отказ – не исполнение регламента деятельности ПРД",
+  //     value: "отказ – не исполнение регламента деятельности ПРД",
+  //     name: "negative",
+  //   },
+  // ]
+  // const positive = [
+  //   { label: "МС", value: "МС", name: "positive" },
+  //   { label: "Рассрочка", value: "Рассрочка", name: "positive" },
+  //   {
+  //     label: "отлагательные меры",
+  //     value: "отлагательные меры",
+  //     name: "positive",
+  //   },
+  // ]
+
+  useEffect(() => {
     api.users.fetchAll().then((data) => {
       setUsers(data)
-    })
-    api.regions.fetchAll().then((data) => {
-      setRegions(data)
     })
     api.testFiedls.fetchAll().then((data) => {
       setTestApi(data)
     })
   }, [])
-  useEffect(() => {
-    testApi && setTestData(testApi[0])
-  }, [testApi])
 
-  function getCurrentUser(users) {
-    const user = users.filter((el) => el.id === +params.id)
-    return user
-  }
-  // ТУТ ПЕРЕДАЕТСЯ ПУСТОЙ USER - вылетает с нераспознанными свойствами
-  // Теперь ок. Добавил корректное условие (не params, a params.id)
   useEffect(() => {
     if (params.id && users) {
-      const user = getCurrentUser(users)[0]
-      // console.log("Текущий ", user)
-
-      setUsersData(() => ({
-        INN: user.INN,
-        clientName: user.clientName,
-        region: user.region,
-        status: user.status,
-        manager: user.manager,
-      }))
-
-      //   ((prevState) => ({
-      //     ...prevState,
-      //     [target.name]: target.value,
-      //   }))
+      testApi && setTestData(testApi[0])
     }
-    // console.log("usersData B useEffect ", usersData)
-  }, [users])
+  }, [testApi])
 
-  //   if (params.id && users) {
-  //     const user = getCurrentUser(users)[0]
-  //     console.log("Текущий ", user)
+  useEffect(() => {
+    validate()
+  }, [testData])
 
-  //     setUsersData({
-  //       INN: user.INN,
-  //       clientName: user.clientName,
-  //       region: user.region,
-  //       status: user.status,
-  //       manager: user.manager,
-  //     })
-  //   }
-
-  // console.log("usersData ВНЕ useEffect ", usersData)
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    alert("Отправка данных на сервер")
-    setUsersData({})
-    // Показать изменение на странице (стейт пустеет, а ничего на странице не обновляется)
-    console.log(usersData)
+  const validate = () => {
+    const errors = validator(testData, validatorConfig)
+    setErrors(errors)
+    return Object.keys(errors).length === 0
   }
 
-  const handleCancle = (e) => {
-    e.preventDefault()
-    setUsersData({})
-    // Добавить переход по history?
-  }
+  const firstData = [
+    { id: 10, name: "Источник информации. Номер", key: "sourceNumber" },
+    {
+      id: 13,
+      name: "Представитель клиента. ФИО, должность",
+      key: "representativeNameEndTitle",
+    },
+    {
+      id: 14,
+      name: "Представитель клиента. Телефон",
+      key: "representativeNumber",
+    },
+    { id: 15, name: "Представитель клиента. Почта", key: "representativeMail" },
+    { id: 20, name: "Вид деятельности", key: "activity" },
+    { id: 22, name: "Примечания", key: "notes" },
+    {
+      id: 23,
+      name: "Срок, на который необходимо предоставить меры",
+      key: "termMesureNecessary",
+    },
+    { id: 26, name: "Дата первой встречи", key: "firstMeetDate" },
 
-  const handleChange = (target) => {
-    console.log(target)
-    setUsersData((prevState) => ({
-      ...prevState,
-      [target.name]: target.value,
-    }))
-  }
+    {
+      id: 31,
+      name: "На сколько предоставлена мера (в месяцах)",
+      key: "termMesure",
+    },
+    { id: 33, name: "От кого ходатайство (для МС)", key: "petitionAuthor" },
+    {
+      id: 34,
+      name: "Сумма урегулированной задолжности (тыс руб)",
+      key: "settledDebtAmount",
+    },
+    {
+      id: 35,
+      name: "Сумма, поступившая в бюджет (тыс руб)",
+      key: "amountReceivedIntoBudget",
+    },
+    {
+      id: 37,
+      name: "Близжайший срок исполнения обязательства (до какого момента отложены меры)",
+      key: "nearestDateForFulfillment ",
+    },
+    {
+      id: 39,
+      name: "Не вступило в силу рассрочка/отсрочка (тыс руб)",
+      key: "notInForce",
+    },
+    { id: 41, name: "Номер дела", key: "caseNumber" },
+    { id: 42, name: "Дата утверждения МС судом", key: "courtMCApprovalDate" },
+    {
+      id: 43,
+      name: "Сумма требований, вошедших в МС",
+      key: "amountOfClaimsMC",
+    },
+    { id: 44, name: "Дата окончания МС", key: "MCexpirationDate" },
+    {
+      id: 45,
+      name: "Сумма исполненных обязательств (тыс руб)",
+      key: "amountOfFulfilledObligations",
+    },
+    { id: 47, name: "Сумма (тыс руб)", key: "sum" },
+    {
+      id: 48,
+      name: "Сумма технической просроченной задолженности (тыс руб)",
+      key: "amountOfTechnicalOverdueDebt",
+    },
+    { id: 51, name: "Залог имущества (тыс руб)", key: "pledgeOfProperty" },
+    { id: 52, name: "Поручительство (тыс руб)", key: "surety" },
+    { id: 53, name: "Банковская гарантия (тыс руб)", key: "bankGuarantee" },
 
-  const handleDate = (e) => {
-    console.log("Календарь ", e.target.value)
-  }
-
-  const sources = [
-    { label: "ТНО, ФНС    ", value: "ТНО, ФНС    ", name: "source" },
     {
-      label: "Входящие звонки    ",
-      value: "Входящие звонки    ",
-      name: "source",
+      id: 55,
+      name: "Дата направления ДОЛЖНИКУ уведомления (претензии)",
+      key: "deptorDirectionDate",
     },
-    { label: "РГ    ", value: "РГ    ", name: "source" },
+    {
+      id: 56,
+      name: "Дата направления ПОРУЧИТЕЛЮ уведомления (претензии)",
+      key: "garantorDirectionDate",
+    },
+    {
+      id: 57,
+      name: "Дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)",
+      key: "pledgetorDirectionDate",
+    },
+    { id: 62, name: "Контрольная точка", key: "checkPoint" },
   ]
-  const menegers = [
-    { label: "Бабасов П.Н.", value: "Бабасов П.Н.", name: "source" },
-    { label: "Бойченко И.А.    ", value: "Бойченко И.А.    ", name: "source" },
-    {
-      label: "Емельянова Е.А.    ",
-      value: "Емельянова Е.А.    ",
-      name: "meneger",
-    },
-  ]
-  const status = [
-    { label: "должник    ", value: "должник    ", name: "source" },
-    { label: "кредитор    ", value: "кредитор    ", name: "source" },
-  ]
-  const type = [
-    { label: "Текущий", value: "Текущий", name: "source" },
-    { label: "будущий", value: "будущий", name: "source" },
-    { label: "Поручение", value: "Поручение", name: "source" },
-  ]
-  const category = [
-    {
-      label: "системообразующее    ",
-      value: "системообразующее    ",
-      name: "source",
-    },
-    {
-      label: "градообразующее    ",
-      value: "градообразующее    ",
-      name: "source",
-    },
-    {
-      label: "стратегическое    ",
-      value: "стратегическое    ",
-      name: "source",
-    },
-  ]
-  const positive = [
-    { label: "МС    ", value: "МС    ", name: "source" },
-    { label: "Рассрочка    ", value: "Рассрочка    ", name: "source" },
-    {
-      label: "отлагательные меры    ",
-      value: "отлагательные меры    ",
-      name: "source",
-    },
-  ]
-  const stage = [
-    {
-      label: "Получено обращение     ",
-      value: "Получено обращение     ",
-      name: "source",
-    },
-    {
-      label: "Проведено первое совещание     ",
-      value: "Проведено первое совещание     ",
-      name: "source",
-    },
-    {
-      label: "Истребованы документы",
-      value: "Истребованы документы",
-      name: "source",
-    },
-  ]
-  const negative = [
-    {
-      label:
-        "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство     ",
-      value:
-        "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство     ",
-      name: "source",
-    },
-    {
-      label:
-        "отказ - не требуется помощь, стабильное финансовое состояние     ",
-      value:
-        "отказ - не требуется помощь, стабильное финансовое состояние     ",
-      name: "source",
-    },
-    {
-      label: "отказ – не исполнение регламента деятельности ПРД     ",
-      value: "отказ – не исполнение регламента деятельности ПРД     ",
-      name: "source",
-    },
-  ]
-  const support = [
-    {
-      label: "отсрочка / рассрочка (ст. 64 НК РФ)    ",
-      value: "отсрочка / рассрочка (ст. 64 НК РФ)    ",
-      name: "source",
-    },
-    {
-      label: "отлагательные меры    ",
-      value: "отлагательные меры    ",
-      name: "source",
-    },
-    {
-      label: "отлагательные меры + МС    ",
-      value: "отлагательные меры + МС",
-      name: "source",
-    },
-  ]
-  const PRD = [
-    {
-      label: "МИДУОЛ",
-      value: "МИДУОЛ",
-      name: "source",
-    },
-    {
-      label: "РП Республика Коми",
-      value: "РП Республика Коми",
-      name: "source",
-    },
-    {
-      label: "РП Республика Карелия      ",
-      value: "РП Республика Карелия",
-      name: "source",
-    },
-  ]
+  // TEST
 
   return (
     <div className="container mt-3">
       <div className="row">
-        <SelectField
-          label="label select"
-          defaultOption="Выберите"
-          name="risk"
-          options={riskList}
-          onChange={handleChangeTest}
-          value={testData.risk}
-        />
-
-        <TextField
-          label="label tex"
-          name="test"
-          value={testData.test}
-          onChange={handleChangeTest}
-        />
-
-        <div className="col-md-12">
-          <div className="card p-4">
+        <div className="col-md-12 mb-4">
+          <div className="card p-2">
             <form>
-              {/* {firstData &&
-        firstData.map((el) => {
-          if (el.name) {
-            return (
-              <TextField
-                key={el.id}
-                label={el.name}
-                name={el.name}
-                value={usersData.name}
-                onChange={handleChange}
-              />
-            )
-          } else if (el.title) {
-            return (
-              <div key={el.id}>
-                <h3 className="text-center mt-5">{el.title}</h3>
+              <div>
+                <h3 className="text-center mt-2">Данные клиента</h3>
                 <Divider />
               </div>
-            )
-          }
-        })} */}
+              {/* <SelectSearchField
+                options={riskList}
+                onChange={handleChangeTest}
+                name="risk"
+                error={errors.risk}
+                label="New label select"
+                placeholder={testData.risk}
+              /> */}
+              <SelectSearchField
+                options={solvencyRisk}
+                onChange={handleChangeTest}
+                name="solvencyRisk"
+                error={errors.solvencyRisk}
+                label="Платежеспособность"
+                placeholder={testData.solvencyRisk}
+              />
+              <SelectSearchField
+                options={regions}
+                onChange={handleChangeTest}
+                name="regions"
+                error={errors.regions}
+                label="Регион"
+                placeholder={testData.regions}
+              />
+              <SelectSearchField
+                options={status}
+                onChange={handleChangeTest}
+                name="status"
+                error={errors.status}
+                label="Статус заявителя"
+                placeholder={testData.status}
+              />
+              <SelectSearchField
+                options={category}
+                onChange={handleChangeTest}
+                name="category"
+                error={errors.category}
+                label="Категория"
+                placeholder={testData.category}
+              />
+              <SelectSearchField
+                options={support}
+                onChange={handleChangeTest}
+                name="support"
+                error={errors.support}
+                label="Мера поддержки запрашиваемая клиентом"
+                placeholder={testData.support}
+              />
+              <SelectSearchField
+                options={sources}
+                onChange={handleChangeTest}
+                name="sources"
+                error={errors.sources}
+                label="Источник информации"
+                placeholder={testData.sources}
+              />
+              <SelectSearchField
+                options={stage}
+                onChange={handleChangeTest}
+                name="stage"
+                error={errors.stage}
+                label="Стадия рассмотрения"
+                placeholder={testData.stage}
+              />
+              <SelectSearchField
+                options={managers}
+                onChange={handleChangeTest}
+                name="managers"
+                error={errors.managers}
+                label="Менеджер"
+                placeholder={testData.managers}
+              />
+              <SelectSearchField
+                options={positive}
+                onChange={handleChangeTest}
+                name="positive"
+                error={errors.positive}
+                label="Положительное решение"
+                placeholder={testData.positive}
+              />
+              <SelectSearchField
+                options={negative}
+                onChange={handleChangeTest}
+                name="negative"
+                error={errors.negative}
+                label="Отрицательное решение"
+                placeholder={testData.negative}
+              />
+              <SelectSearchField
+                options={PRD}
+                onChange={handleChangeTest}
+                name="PRD"
+                error={errors.PRD}
+                label="Представительсво РПД"
+                placeholder={testData.PRD}
+              />
+              <SelectSearchField
+                options={type}
+                onChange={handleChangeTest}
+                name="type"
+                error={errors.type}
+                label="Тип долга"
+                placeholder={testData.type}
+              />
+              <SelectSearchField
+                options={activityRisk}
+                onChange={handleChangeTest}
+                name="activityRisk"
+                error={errors.activityRisk}
+                label="Деловая активность (риск)"
+                placeholder={testData.activityRisk}
+              />
+              <SelectSearchField
+                options={assetsTypeRisk}
+                onChange={handleChangeTest}
+                name="assetsTypeRisk"
+                error={errors.assetsTypeRisk}
+                label="Вид активов (риск)"
+                placeholder={testData.assetsTypeRisk}
+              />
 
-              {firstData &&
-                firstData.map((el) => {
-                  if (el.name) {
-                    if (el.type === "risk") {
-                      return (
-                        <SelectField
-                          key={el.id}
-                          label={el.name}
-                          defaultOption="Выберите"
-                          name={el.name}
-                          options={riskList}
-                          onChange={handleChange}
-                          value={usersData.name}
-                        />
-                      )
-                    }
-                    // else if (el.type === "date") {
-                    //   return (
-                    //     <input
-                    //       type={el.type}
-                    //       name={el.name}
-                    //       value={usersData.date}
-                    //       onChange={(e) => {
-                    //         handleDate(e)
-                    //       }}
-                    //     ></input>
-                    //   )
-                    // }
-                    else if (el.name === "Регион") {
-                      return (
-                        <div className="mb-2">
-                          <label className="form-label">Регион</label>
-                          <Select
-                            options={regions}
-                            onChange={handleChangeSelect}
-                            name="region"
-                            placeholder="Выберите"
-                          />
-                        </div>
-                      )
-                    } else if (el.name === "Менеджер") {
-                      return (
-                        <div className="mb-2">
-                          <label className="form-label">Менеджер</label>
-                          <Select
-                            options={menegers}
-                            onChange={handleChangeSelect}
-                            name="meneger"
-                            placeholder="Выберите"
-                          />
-                        </div>
-                      )
-                    } else if (el.name === "Представительсво ПРД") {
-                      return (
-                        <div className="mb-2">
-                          <label className="form-label">
-                            Представительсво ПРД
-                          </label>
-                          <Select
-                            options={PRD}
-                            onChange={handleChangeSelect}
-                            name="PRD"
-                            placeholder="Выберите"
-                          />
-                        </div>
-                      )
-                    } else if (el.name === "source") {
-                      return (
-                        <div className="mb-2">
-                          <label className="form-label">
-                            Письмо/поручение/список
-                          </label>
-                          <Select
-                            options={sources}
-                            onChange={handleChangeSelect}
-                            name="source"
-                            placeholder="Выберите"
-                          />
-                        </div>
-                      )
-                    } else if (el.name === "Статус заявителя") {
-                      return (
-                        <div className="mb-2">
-                          <label className="form-label">Статус заявителя</label>
-                          <Select
-                            options={status}
-                            onChange={handleChangeSelect}
-                            name="Статус заявителя"
-                            placeholder="Выберите"
-                          />
-                        </div>
-                      )
-                    } else if (el.name === "Тип долга") {
-                      return (
-                        <div className="mb-2">
-                          <label className="form-label">Тип долга</label>
-                          <Select
-                            options={type}
-                            onChange={handleChangeSelect}
-                            name="Тип долга"
-                            placeholder="Выберите"
-                          />
-                        </div>
-                      )
-                    } else if (el.name === "Категория") {
-                      return (
-                        <div className="mb-2">
-                          <label className="form-label">Категория</label>
-                          <Select
-                            options={category}
-                            onChange={handleChangeSelect}
-                            name="Категория"
-                            placeholder="Выберите"
-                          />
-                        </div>
-                      )
-                    } else if (
-                      el.name === "Мера поддержки, запрашиваемая клиентом"
-                    ) {
-                      return (
-                        <div className="mb-2">
-                          <label className="form-label">
-                            Мера поддержки, запрашиваемая клиентом
-                          </label>
-                          <Select
-                            options={support}
-                            onChange={handleChangeSelect}
-                            name="Мера поддержки, запрашиваемая клиентом"
-                            placeholder="Выберите"
-                          />
-                        </div>
-                      )
-                    } else if (el.name === "Вид положительного решения") {
-                      return (
-                        <div className="mb-2">
-                          <label className="form-label">
-                            Вид положительного решения
-                          </label>
-                          <Select
-                            options={positive}
-                            onChange={handleChangeSelect}
-                            name="Вид положительного решения"
-                            placeholder="Выберите"
-                          />
-                        </div>
-                      )
-                    } else if (el.name === "Вид отрицательного решения") {
-                      return (
-                        <div className="mb-2">
-                          <label className="form-label">
-                            Вид отрицательного решения
-                          </label>
-                          <Select
-                            options={negative}
-                            onChange={handleChangeSelect}
-                            name="Вид отрицательного решения"
-                            placeholder="Выберите"
-                          />
-                        </div>
-                      )
-                    } else if (el.name === "Стадия рассмотрения") {
-                      return (
-                        <div className="mb-2">
-                          <label className="form-label">
-                            Стадия рассмотрения
-                          </label>
-                          <Select
-                            options={stage}
-                            onChange={handleChangeSelect}
-                            name="Стадия рассмотрения"
-                            placeholder="Выберите"
-                          />
-                        </div>
-                      )
-                    } else {
-                      return (
-                        <TextField
-                          key={el.id}
-                          label={el.name}
-                          name={el.name}
-                          value={usersData.name}
-                          onChange={handleChange}
-                        />
-                      )
-                    }
-                  } else if (el.title) {
-                    return (
-                      <div key={el.id}>
-                        <h3 className="text-center mt-2">{el.title}</h3>
-                        <Divider />
-                      </div>
-                    )
-                  }
-                })}
-
-              <div className="row row-centered mb-2 colored">
+              {/* <TextField
+                label="label tex"
+                name="test"
+                value={testData.test}
+                onChange={handleChangeTest}
+                error={errors.test}
+              /> */}
+              <TextField
+                label="Нименование клиента"
+                name="name"
+                value={testData.name}
+                onChange={handleChangeTest}
+                error={errors.name}
+              />
+              <TextField
+                label="ИНН"
+                name="INN"
+                value={testData.INN}
+                onChange={handleChangeTest}
+                error={errors.INN}
+              />
+              <TextField
+                label="Сумма задолженности"
+                name="deptSum"
+                value={testData.deptSum}
+                onChange={handleChangeTest}
+                error={errors.deptSum}
+              />
+              <TextField
+                label="Описание события"
+                name="descr"
+                value={testData.descr}
+                onChange={handleChangeTest}
+                error={errors.descr}
+              />
+              <TextField
+                label="Дата обращения в МИДУОЛ"
+                name="dateAppealsToMIDUOL"
+                value={testData.dateAppealsToMIDUOL}
+                onChange={handleChangeTest}
+                error={errors.dateAppealsToMIDUOL}
+              />
+              <TextField
+                label="Дата наступления события"
+                name="dateEventOccurance"
+                value={testData.dateEventOccurance}
+                onChange={handleChangeTest}
+                error={errors.dadateEventOccurancete2}
+              />
+              {firstData.map((el) => {
+                return (
+                  <TextField
+                    key={el.id}
+                    label={el.name}
+                    name={el.key}
+                    value={testData.key}
+                    onChange={handleChangeTest}
+                    error={errors.key}
+                  />
+                )
+              })}
+              <div className="row row-centered  colored">
                 <button
                   type="submit"
                   className="btn btn-primary w-25 mx-auto m-2 col-sm-3"
                   onClick={handleSubmit}
+                  disabled={!isValid}
                 >
                   Сохранить
                 </button>
@@ -520,15 +760,4 @@ const NewCrmClientPage = () => {
   )
 }
 
-export default NewCrmClientPage
-
-{
-  /* <SelectField
-              label="Выбери важность"
-              defaultOption="Выберите..."
-              name="importance"
-              options={importanceList}
-              onChange={handleChange}
-              value={data.importance}
-            /> */
-}
+export default NewClientPage
