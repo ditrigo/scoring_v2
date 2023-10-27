@@ -26,7 +26,7 @@ const SelectSearchField = ({
           placeholder={placeholder}
           className={getInputClasses()}
         />
-        {error && <div className="invalid-feedback ">{error}</div>}
+        {error && <div className="invalid-feedback">{error}</div>}
       </div>
     </div>
   )
