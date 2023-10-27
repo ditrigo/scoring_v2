@@ -36,7 +36,8 @@ const PipelinePage = () => {
 
   const doScoring = () => {
     console.log("Scoring...")
-
+    setScoringOptions([])
+    getModels()
     console.log(model)
     const json = {
       model,

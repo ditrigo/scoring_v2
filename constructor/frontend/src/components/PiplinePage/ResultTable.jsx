@@ -48,7 +48,7 @@ const ResultTable = ({ getLinkMarkers }) => {
                 return (
                   <tr key={index}>
                     <td>Пустое имя модели</td>
-                    <td>{"Пустое имя автора" || el.author_id}</td>
+                    <td>{"Тестовый пользователь" || el.author_id}</td>
                     <td>
                       {Moment(el.created_date)
                         .locale("rus", localization)
