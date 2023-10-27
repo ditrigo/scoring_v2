@@ -19,7 +19,7 @@ const NewClientPage = () => {
   const [users, setUsers] = useState()
   const [errors, setErrors] = useState({})
 
-  const [clienData, setClientData] = useState({})
+  const [clientData, setClientData] = useState({})
   const [regions, setRegions] = useState({})
   const [support, setSupport] = useState({})
   const [stage, setStage] = useState({})
@@ -85,7 +85,59 @@ const NewClientPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     alert("Отправка данных на сервер")
-    setClientData({})
+    console.log(testData)
+    // setClientData({})
+    setTestData({
+      test: "",
+      solvencyRisk: "",
+      sources: "",
+      managers: "",
+      status: "",
+      type: "",
+      category: "",
+      positive: "",
+      stage: "",
+      negative: "",
+      support: "",
+      PRD: "",
+      regions: "",
+      name: "",
+      INN: "",
+      dateAppealsToMIDUOL: "",
+      dateEventOccurance: "",
+      deptSum: "",
+      descr: "",
+      activity: "",
+      sourceNumber: "",
+      representativeNameEndTitle: "",
+      representativeNumber: "",
+      representativeMail: "",
+      notes: "",
+      termMesureNecessary: "",
+      firstMeetDate: "",
+      termMesure: "",
+      petitionAuthor: "",
+      settledDebtAmount: "",
+      amountReceivedIntoBudget: "",
+      nearestDateForFulfillment: "",
+      notInForce: "",
+      caseNumber: "",
+      courtMCApprovalDate: "",
+      amountOfClaimsMC: "",
+      MCexpirationDate: "",
+      amountOfFulfilledObligations: "",
+      sum: "",
+      amountOfTechnicalOverdueDebt: "",
+      pledgeOfProperty: "",
+      surety: "",
+      bankGuarantee: "",
+      deptorDirectionDate: "",
+      garantorDirectionDate: "",
+      pledgetorDirectionDate: "",
+      checkPoint: "",
+      activityRisk: "",
+      assetsTypeRisk: "",
+    })
   }
 
   const handleCancle = (e) => {
@@ -156,7 +208,7 @@ const NewClientPage = () => {
   const [testApi, setTestApi] = useState()
 
   const handleChangeTest = (target) => {
-    console.log(target)
+    // console.log(target)
 
     setTestData((prevState) => ({
       ...prevState,
@@ -397,7 +449,7 @@ const NewClientPage = () => {
                 name="dateEventOccurance"
                 value={testData.dateEventOccurance}
                 onChange={handleChangeTest}
-                error={errors.dadateEventOccurancete2}
+                error={errors.dateEventOccurance}
               />
               {firstData.map((el) => {
                 return (
