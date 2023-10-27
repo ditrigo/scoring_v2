@@ -1,0 +1,78 @@
+version: '3.8'
+# Поднимаем пять сервисов: django, node, rabbitMQ, postgres, nginx
+services:
+  django:
+    #говорим что build будет из dockerfile который располагается ./constructor/django_project/
+    build: ./constructor/
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./api:/constructor
+    command: bash -c "python manage.py runserver 0.0.0.0:8000"
+    # имя контейнера
+    container_name: djangocontainer
+  
+  web:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/frontend
+    container_name: reactcontainer
+
+
+
+
+
+    # # перезапускать контейнер при завершении выполнения работы или при аварийном завершении
+    # restart: always
+    # # проброс портов внутрь контейнера, 8000 порт на хост машине будет проброшен внутрь контейнера на такой же 8000 порт
+    # expose:
+    #   - 8000
+    # # команда при старте контейнера
+    # command: >
+    #   sh -c "nohup python worker.py & nohup python manage.py my_command & python manage.py runserver 0.0.0.0:8000"
+    # depends_on:
+    #   - postgres
+    #   - rmq
+    # # Для статики мы подключаем два volume (чтобы при перезапуске наши данные не пропадали)), создадим их ниже.
+    # volumes:
+    #   - ./django/django_project:/usr/src/app/
+    #   - django_static_volume:/usr/src/app/static
+    #   - django_media_volume:/usr/src/app/media
+    # # подключаем к сети myNetwork (в целом не обязательно, но до кучи чтоб было)
+    # networks:
+    #   - myNetwork
+    # env_file:
+    #   - ./.env
+
+
+  
+  # # Сервис нашей БД
+  # postgres:
+  #   # Так же разворачиваем с готового контейнера
+  #   image: postgres:15-alpine
+  #   container_name: postgresdb
+  #   # Чтобы наши данные не пропадали при перезапуске подключсим volume
+  #   volumes:
+  #     - postgres_volume:/var/lib/postgresql/data/
+  #   # Переменные окружения. их надо будет передавать в django.
+  #   environment:
+  #     - POSTGRES_USER=admin
+  #     - POSTGRES_PASSWORD=strong_password
+  #     - POSTGRES_DB=django_db
+  #   # Сеть
+  #   networks:
+  #     - myNetwork
+  
+
+# создаём два volume для статики
+volumes:
+  # postgres_volume:
+  django_static_volume:
+  django_media_volume:
+
+# создаём сеть.
+networks:
+  myNetwork:
+    driver: bridge
