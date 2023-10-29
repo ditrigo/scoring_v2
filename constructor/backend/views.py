@@ -453,35 +453,39 @@ def CatalogFieldsListViewSet(request):
 def CatalogsListViewSet(request):
     permission_classes = (IsAuthenticated,)
     if request.method == 'GET':
-        data = []
-        nextPage = 1
-        previousPage = 1
+        # data = []
+        # nextPage = 1
+        # previousPage = 1
         fields = MainCatalog.objects.all().order_by('id')
-        page = request.GET.get('page', 1)
-        paginator = Paginator(fields, 10)
-        try:
-            data = paginator.page(page)
-        except PageNotAnInteger:
-            data = paginator.page(1)
-        except EmptyPage:
-            data = paginator.page(paginator.num_pages)
+        # page = request.GET.get('page', 1)
+        # paginator = Paginator(fields, 10)
+        # try:
+        #     data = paginator.page(page)
+        # except PageNotAnInteger:
+        #     data = paginator.page(1)
+        # except EmptyPage:
+        #     data = paginator.page(paginator.num_pages)
 
         serializer = MainCatalogSerializer(
-            data, context={'request': request}, many=True)
-        if data.has_next():
-            nextPage = data.next_page_number()
-        if data.has_previous():
-            previousPage = data.previous_page_number()
+            fields,
+            # data, 
+            context={'request': request}, 
+            many=True)
+        # if data.has_next():
+        #     nextPage = data.next_page_number()
+        # if data.has_previous():
+        #     previousPage = data.previous_page_number()
 
         return Response({'data': serializer.data,
-                         'count': paginator.count,
-                         'numpages': paginator.num_pages,
-                         'nextlink': '/api/catalogs/?page=' + str(nextPage),
-                         'prevlink': '/api/catalogs/?page=' + str(previousPage)})
+                        #  'count': paginator.count,
+                        #  'numpages': paginator.num_pages,
+                        #  'nextlink': '/api/catalogs/?page=' + str(nextPage),
+                        #  'prevlink': '/api/catalogs/?page=' + str(previousPage)
+                         })
     elif request.method == 'POST':
         serializer = MainCatalogSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(author_id=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -557,35 +561,39 @@ def MarkersAttributesDetailViewSet(request, pk):
 @api_view(['GET', 'POST'])
 def ScoringModelListViewSet(request):
     if request.method == 'GET':
-        data = []
-        nextPage = 1
-        previousPage = 1
+        # data = []
+        # nextPage = 1
+        # previousPage = 1
         score_model = ScoringModel.objects.all().order_by('id')
-        page = request.GET.get('page', 1)
-        paginator = Paginator(score_model, 10)
-        try:
-            data = paginator.page(page)
-        except PageNotAnInteger:
-            data = paginator.page(1)
-        except EmptyPage:
-            data = paginator.page(paginator.num_pages)
+        # page = request.GET.get('page', 1)
+        # paginator = Paginator(score_model, 10)
+        # try:
+        #     data = paginator.page(page)
+        # except PageNotAnInteger:
+        #     data = paginator.page(1)
+        # except EmptyPage:
+        #     data = paginator.page(paginator.num_pages)
 
         serializer = ScoringModelSerializer(
-            data, context={'request': request}, many=True)
-        if data.has_next():
-            nextPage = data.next_page_number()
-        if data.has_previous():
-            previousPage = data.previous_page_number()
+            score_model,
+            # data, 
+            context={'request': request}, 
+            many=True)
+        # if data.has_next():
+        #     nextPage = data.next_page_number()
+        # if data.has_previous():
+        #     previousPage = data.previous_page_number()
 
         return Response({'data': serializer.data,
-                         'count': paginator.count,
-                         'numpages': paginator.num_pages,
-                         'nextlink': '/api/catalog_fields/?page=' + str(nextPage),
-                         'prevlink': '/api/catalog_fields/?page=' + str(previousPage)})
+                        #  'count': paginator.count,
+                        #  'numpages': paginator.num_pages,
+                        #  'nextlink': '/api/catalog_fields/?page=' + str(nextPage),
+                        #  'prevlink': '/api/catalog_fields/?page=' + str(previousPage)
+                         })
     elif request.method == 'POST':
         serializer = ScoringModelSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(author_id=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

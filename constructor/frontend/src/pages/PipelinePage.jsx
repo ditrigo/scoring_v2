@@ -45,7 +45,6 @@ const PipelinePage = () => {
     const json = {
       model,
     }
-    // console.log(json)
     axios
       .post("http://127.0.0.1:8000/api/start_scoring/", json)
       .then((resp) => {
@@ -75,6 +74,10 @@ const PipelinePage = () => {
         console.log("Сделать связку", response)
         setDisabledBtn("btn btn-outline-primary disabled")
         setIsSaved(true)
+        setModels([])
+        setScoringOptions([])
+        console.log("models in handleSaveData", models)
+        getModels()
       })
       .catch(function (error) {
         console.log(error)

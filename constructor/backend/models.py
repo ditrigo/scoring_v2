@@ -210,6 +210,10 @@ class MainCatalogFields(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4,
                             editable=False,)
     author_id = models.CharField(max_length=125, blank=True, null=True)
+    # author = models.ForeignKey(
+    #     settings.AUTH_USER_MODEL,
+    #     on_delete=models.CASCADE
+    # )
     created_date = models.DateTimeField(auto_now_add=True)
     date_from = models.DateTimeField(null=True)
     date_to = models.DateTimeField(null=True)
