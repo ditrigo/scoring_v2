@@ -56,32 +56,35 @@ const SearchBar = ({
       <div className="row">
         {/* <div className="row"> */}
         <form
-        className="" 
-        onSubmit={handleSubmit} >
+          className="pl-12 pr-12"
+          onSubmit={handleSubmit} >
           <div className="row">
             {/* <MarkersTable /> */}
             <div onClick={toggleExpanded}>
               <div
-                className={`row font-semibold cursor-pointer ${expanded ? "up-arrow" : "down-arrow"
-                  }`}
+                className={`row m-0 font-semibold cursor-pointer ${expanded ? "up-arrow" : "down-arrow"}`}
               >
                 {selections.length
                   ? selections.map((_, i) => (
-                    <span 
-                    className="row"
-                    key={i}>
-                      {i ? ", " : null}
-                      {attributes[i].name_marker_attr}
-                    </span>
+                    <div className="row">
+                      <span
+                        className=""
+                        key={i}>
+                        {i ? ", " : null}
+                        {attributes[i].name_marker_attr}
+                      </span>
+                    </div>
                   ))
                   : "Маркеры не выбраны"}
               </div>
             </div>
+            <div className="row">
+            </div>
             {expanded && (
-              <div className="">
+              <div className="m-0">
                 {attributes.map((attribute, index) => (
                   <label
-                    className="custom-select custom-select-lg mb-3"
+                    className="custom-select custom-select-lg mb-3 mr-3"
                     key={index}
                   >
                     <input
@@ -89,7 +92,7 @@ const SearchBar = ({
                       name={attribute.id}
                       value={attribute.name_marker_attr}
                       onChange={handleChange}
-                      className="m-3 cursor-pointer"
+                      className=" mr-3 cursor-pointer"
                     />
                     {attribute.name_marker_attr}
                   </label>
@@ -98,7 +101,7 @@ const SearchBar = ({
             )}
           </div>
           <div className="row">
-            <div className="row mb-2">
+            <div className="row m-0 mb-2">
               <MyButton
                 type="submit"
                 className={statusButton === "AP" ? "disabled" : ""}
@@ -107,7 +110,7 @@ const SearchBar = ({
                 Утвердить
               </MyButton>
             </div>
-            <div className="row mb-2">
+            <div className="row m-0 mb-2">
               <MyButton
                 type="submit"
                 className={statusButton === "AP" ? "disabled" : ""}
@@ -120,7 +123,7 @@ const SearchBar = ({
             {/* <MyButton type="button" onClick={() => setModal(true)}>
                 Добавить новый маркер
               </MyButton> */}
-            <div className="row">
+            <div className="row m-0">
               <Link
                 to={`/scoring`}
                 className="btn btn-outline-secondary"
@@ -128,7 +131,6 @@ const SearchBar = ({
                 Выйти
               </Link>
             </div>
-
           </div>
         </form>
         {/* </div> */}

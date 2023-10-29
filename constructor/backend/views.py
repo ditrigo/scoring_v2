@@ -829,6 +829,59 @@ def StartScoringViewSet(request):
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['POST'])
+def StartTestScoringViewSet(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        rank = 0.0 
+        inn_list, marker_formula_list = [], []
+        for key, value in data["model"].items():
+            if key == "inns":
+                for val in value:
+                    # print(val)
+                    for k, v in val.items():
+                        # print("inns.keys", k ,"inns.values", v)
+                        if k == "inn":
+                            inn_list.append(v)
+            elif key == "marker_id":
+                for val in value:
+                    # print(val)
+                    for k, v in val.items():
+                        # print("marker_id.keys", k ,"marker_id.values", v)
+                        if k == "py_query":
+                            marker_formula_list.append(v)
+        
+    #     dict_markers = {}
+    #     list_markers = []
+    #     for inn in inn_list:
+    #         for formula in marker_formula_list:
+    #             try:
+    #                 imported_attributes = ImportedAttributes.objects.get(inn=inn)
+    #                 counted_attributes = CountedAttributesNew.objects.get(inn=inn)
+    #             except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
+    #                 continue
+    #             value = eval(formula)
+    #             list_markers.append({'formula': formula, "value": value})
+                
+    #             rank += value
+
+    #         total_json = {
+    #             "markers_and_values": list_markers,
+    #             "total_rank": rank
+    #         }
+    #         dict_markers.update(total_json)
+    #         print(dict_markers)
+    #         InnRes.objects.filter(inn=inn).update(result_score=dict_markers) 
+    #         dict_markers = {}
+
+    #     return JsonResponse({'message': 'Results were updated '}, status=200)
+
+    # return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
 
 ### CRM VIEWS ###########################################################################################
 

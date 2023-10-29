@@ -198,6 +198,11 @@ const PipelinePage = () => {
         <div className="col-md-auto">
           <MyButton>Выписка СКУАД</MyButton>
         </div>
+        <div className="col-md-auto">
+          <Link to="/results">
+            <MyButton>Журнал скоринга</MyButton>
+          </Link>
+        </div>
         {/* <div className="col-md-auto">
           <Link to="/results">
             <MyButton>Журнал скоринга</MyButton>
@@ -310,11 +315,11 @@ const PipelinePage = () => {
                 Запустить скоринг
               </MyButton>
             </div>
-            <div className="col-md-auto">
+            {/* <div className="col-md-auto">
               <Link to="/results">
                 <MyButton>Журнал скоринга</MyButton>
               </Link>
-            </div>
+            </div> */}
             <div className="col-md-auto">
               <MyButton
                 className={disabledBtn}
