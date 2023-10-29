@@ -32,7 +32,7 @@ const ModelForm = ({ create, models, getLinkMarkers }) => {
     e.preventDefault()
     const newModel = {
       ...model,
-      author_id: "Denis",
+      author_id: "Тестовый пользователь",
       status: "DF",
       version: 1,
       active: true,
