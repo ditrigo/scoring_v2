@@ -13,7 +13,7 @@ const TestScoringForm = ({ model, modelId }) => {
   const [updatedModel, setUpdatedModel] = useState()
 
   const isDisabled = model.model_name && inputINN
-  const isDisabledScoring = model.model_name && inputINN && isSaved
+  const isDisabledScoring = model.model_name && inputINN //&& isSaved
 
   const handleChangeINN = (e) => {
     setInputINN(e.target.value)
@@ -44,7 +44,7 @@ const TestScoringForm = ({ model, modelId }) => {
     }
 
     await axios
-      .post("http://127.0.0.1:8000/api/start_scoring/", json)
+      .post("http://127.0.0.1:8000/api/start_test_scoring/", json)
       .then((resp) => {
         getModels()
         setInputINN("")
@@ -57,25 +57,25 @@ const TestScoringForm = ({ model, modelId }) => {
       })
   }
 
-  async function handleSaveData() {
-    await axios
-      .post("http://127.0.0.1:8000/api/inn_res/create_relation/", {
-        inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
-        active: true,
-        scoringmodel_id: modelId,
-        author_id: "Denis",
-      })
-      .then(function (response) {
-        console.log("Сделать связку ", response.data)
-        setDisabledBtn("btn btn-outline-primary disabled")
-        setIsSaved(true)
-        // setModels([])
-        getModels()
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
-  }
+  // async function handleSaveData() {
+  //   await axios
+  //     .post("http://127.0.0.1:8000/api/inn_res/create_relation/", {
+  //       inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
+  //       active: true,
+  //       scoringmodel_id: modelId,
+  //       author_id: "Denis",
+  //     })
+  //     .then(function (response) {
+  //       console.log("Сделать связку ", response.data)
+  //       setDisabledBtn("btn btn-outline-primary disabled")
+  //       setIsSaved(true)
+  //       // setModels([])
+  //       getModels()
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error)
+  //     })
+  // }
 
   useEffect(() => {
     getModels()
@@ -145,7 +145,7 @@ const TestScoringForm = ({ model, modelId }) => {
             Запустить скоринг
           </MyButton>
         </div>
-        <div className="col-md-auto">
+        {/* <div className="col-md-auto">
           <MyButton
             className={disabledBtn}
             disabled={!isDisabled}
@@ -153,7 +153,7 @@ const TestScoringForm = ({ model, modelId }) => {
           >
             Сохранить связку параметров
           </MyButton>
-        </div>
+        </div> */}
       </div>
       <div className="row">
         <h3 className="mt-4">Тестовый результат:</h3>

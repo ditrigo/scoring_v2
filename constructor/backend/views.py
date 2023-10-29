@@ -852,8 +852,8 @@ def StartTestScoringViewSet(request):
                         if k == "py_query":
                             marker_formula_list.append(v)
         
-    #     dict_markers = {}
-    #     list_markers = []
+        # dict_markers = {}
+        list_markers, total_json_array = [], []
         for inn in inn_list:
             for formula in marker_formula_list:
                 try:
@@ -862,25 +862,22 @@ def StartTestScoringViewSet(request):
                 except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
                     continue
                 value = eval(formula)
-    #             list_markers.append({'formula': formula, "value": value})
-                
-    #             rank += value
+                list_markers.append({'formula': formula, "value": value })
+                rank += value
 
-    #         total_json = {
-    #             "markers_and_values": list_markers,
-    #             "total_rank": rank
-    #         }
-    #         dict_markers.update(total_json)
-    #         print(dict_markers)
-    #         InnRes.objects.filter(inn=inn).update(result_score=dict_markers) 
-    #         dict_markers = {}
+            total_json = {
+                "markers_and_values": list_markers,
+                "total_rank": rank,
+                "inn": inn
+            }
+            total_json_array.append(total_json)
+        # print(total_json_array)
 
-    #     return JsonResponse({'message': 'Results were updated '}, status=200)
+        return JsonResponse({'message': 'Results were updated', 
+                             "response": total_json_array}, 
+                             status=200)
 
-    # return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
-
-
-
+    return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
 
 
 ### CRM VIEWS ###########################################################################################
