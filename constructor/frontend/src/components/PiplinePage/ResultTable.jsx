@@ -68,12 +68,14 @@ const ResultTable = ({ getLinkMarkers }) => {
           overflow: "auto",
         }}
       >
-        <div className="row">
-          <div className="col-md-auto m-2">
-            <Link to="/pipeline" className="mb-2">
+        <div className="row  mb-3">
+          <div className="col-md-auto">
+            <Link to="/pipeline"
+              // className="mb-2"
+              >
               <MyButton
-                className="btn btn-outline-secondary mt-2"
-                onClick={() => {}}
+                className="btn btn-outline-secondary"
+                // onClick={() => { }}
               >
                 На модуль выдачи результатов
               </MyButton>
