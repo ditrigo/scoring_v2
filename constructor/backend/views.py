@@ -833,7 +833,7 @@ def StartScoringViewSet(request):
 def StartTestScoringViewSet(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
-        
+
         rank = 0.0 
         inn_list, marker_formula_list = [], []
         for key, value in data["model"].items():
@@ -854,14 +854,14 @@ def StartTestScoringViewSet(request):
         
     #     dict_markers = {}
     #     list_markers = []
-    #     for inn in inn_list:
-    #         for formula in marker_formula_list:
-    #             try:
-    #                 imported_attributes = ImportedAttributes.objects.get(inn=inn)
-    #                 counted_attributes = CountedAttributesNew.objects.get(inn=inn)
-    #             except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
-    #                 continue
-    #             value = eval(formula)
+        for inn in inn_list:
+            for formula in marker_formula_list:
+                try:
+                    imported_attributes = ImportedAttributes.objects.get(inn=inn)
+                    counted_attributes = CountedAttributesNew.objects.get(inn=inn)
+                except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
+                    continue
+                value = eval(formula)
     #             list_markers.append({'formula': formula, "value": value})
                 
     #             rank += value
