@@ -77,7 +77,7 @@ const ResultTable = ({ getLinkMarkers }) => {
                 className="btn btn-outline-secondary"
                 // onClick={() => { }}
               >
-                На модуль выдачи результатов
+                Модуль выдачи результатов
               </MyButton>
             </Link>
           </div>
