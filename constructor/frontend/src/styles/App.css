@@ -79,14 +79,19 @@
   background-color: white;
 }
 
-.select {
-  z-index: 10;
-}
-.text.input-group {
+/* .is-invalid {
   z-index: 1;
-}
-.has-validation {
-  z-index: 0;
+} */
+
+/* .text {
+  z-index: 1;
+} */
+/* #react-select-29-listbox {
+  z-index: 100;
+} */
+
+div[id*="listbox"] {
+  z-index: 100;
 }
 
 /* ROMA VERSION*/

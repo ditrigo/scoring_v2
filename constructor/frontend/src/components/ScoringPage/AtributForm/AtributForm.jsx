@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from "react";
-import MyButton from "../../UI/MyButton/MyButton";
-import MyInput from "../../UI/MyInput/MyInput";
-import Select from "react-select";
-import axios from "axios";
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-
+import React, { useState, useEffect } from "react"
+import MyButton from "../../UI/MyButton/MyButton"
+import MyInput from "../../UI/MyInput/MyInput"
+import Select from "react-select"
+import axios from "axios"
+import { CopyToClipboard } from "react-copy-to-clipboard"
 
 const AtributForm = ({ create, setVisible }) => {
   const [marker, setMarker] = useState({
     name_marker_attr: "",
     attr_formulas: "",
-  });
-  const [importedAttributes, setImportedAttributes] = useState([]);
-  const [countedAttributes, setCountedAttributes] = useState([]);
+  })
+  const [importedAttributes, setImportedAttributes] = useState([])
+  const [countedAttributes, setCountedAttributes] = useState([])
   const [copiedValue, setCopiedValue] = useState({
-    value: '',
+    value: "",
     copied: false,
   })
 
@@ -25,34 +24,34 @@ const AtributForm = ({ create, setVisible }) => {
 
   const handleChangeSelect = (target) => {
     // Накинуть копирование элементов в формулы
-    console.log("target", target);
+    console.log("target", target)
     setCopiedValue({ value: target.value })
     // setCountedAttributes((prevState) => ({
     //   ...prevState,
     //   [target.name]: target.value,
     // }))
     console.log(copiedValue)
-  };
+  }
   // console.log(copiedValue)
 
   const handleCancle = (e) => {
-    e.preventDefault();
-    setVisible(false);
-  };
+    e.preventDefault()
+    setVisible(false)
+  }
 
   const addNewMarker = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     const newMarker = {
       ...marker,
       description: "some description",
       nested_level: 1,
-      author_id: "Gr",
-    };
+      author_id: "Тестовый пользователь",
+    }
 
-    create(newMarker);
+    create(newMarker)
 
-    setMarker({ name_marker_attr: "", attr_formulas: "" });
-  };
+    setMarker({ name_marker_attr: "", attr_formulas: "" })
+  }
 
   async function getAttributes() {
     axios
@@ -70,9 +69,7 @@ const AtributForm = ({ create, setVisible }) => {
                   // " - " +
                   element.description,
                 value:
-                  element.main_catalog_id.origin_name +
-                  "." +
-                  element.origin,
+                  element.main_catalog_id.origin_name + "." + element.origin,
                 // +
                 // "." +
                 // element.origin +
@@ -85,7 +82,7 @@ const AtributForm = ({ create, setVisible }) => {
                   " - " +
                   element.description,
               },
-            ]);
+            ])
           } else if (
             element.main_catalog_id.origin_name === "imported_attributes"
           ) {
@@ -99,32 +96,29 @@ const AtributForm = ({ create, setVisible }) => {
                   // " - " +
                   element.description,
                 value:
-                  element.main_catalog_id.origin_name +
-                  "." +
-                  element.origin,
+                  element.main_catalog_id.origin_name + "." + element.origin,
                 // +
                 // " - " +
                 // element.description,
                 name:
                   element.main_catalog_id.origin_name +
                   "." +
-                  element.origin
-                  +
+                  element.origin +
                   " - " +
                   element.description,
               },
-            ]);
+            ])
           }
-        });
+        })
       })
       .catch((e) => {
-        console.log(e);
-      });
+        console.log(e)
+      })
     // console.log("attr", countedAttributes);
   }
   useEffect(() => {
-    getAttributes();
-  }, []);
+    getAttributes()
+  }, [])
 
   return (
     <div className="container">
@@ -170,16 +164,14 @@ const AtributForm = ({ create, setVisible }) => {
         </div>
         <div className="row-md-auto mb-3">
           {/* <div className="col"> */}
-            <CopyToClipboard
-              text={copiedValue.value}
+          <CopyToClipboard
+            text={copiedValue.value}
             // onCopy={() => this.setState({ copied: true })}
-            >
-              <MyButton
-                onClick={(e) => e.preventDefault()}
-              >
-                Нажмите, чтобы скопировать
-              </MyButton>
-            </CopyToClipboard>
+          >
+            <MyButton onClick={(e) => e.preventDefault()}>
+              Нажмите, чтобы скопировать
+            </MyButton>
+          </CopyToClipboard>
           {/* </div> */}
         </div>
         <MyInput
@@ -212,7 +204,7 @@ const AtributForm = ({ create, setVisible }) => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default AtributForm;
+export default AtributForm

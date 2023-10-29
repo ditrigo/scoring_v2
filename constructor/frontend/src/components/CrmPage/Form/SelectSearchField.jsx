@@ -18,7 +18,7 @@ const SelectSearchField = ({
       <label className="form-label" htmlFor={name}>
         {label}
       </label>
-      <div className="input-group mb-3 has-validation">
+      <div className=" mb-3 has-validation">
         <Select
           options={options}
           onChange={onChange}
@@ -26,7 +26,7 @@ const SelectSearchField = ({
           placeholder={placeholder}
           className={getInputClasses()}
         />
-        {error && <div className="invalid-feedback ">{error}</div>}
+        {error && <div className="invalid-feedback">{error}</div>}
       </div>
     </div>
   )

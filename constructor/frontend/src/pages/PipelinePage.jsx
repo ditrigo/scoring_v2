@@ -31,13 +31,36 @@ const PipelinePage = () => {
   // const [modalScoringResults, setModalScoringResults] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
 
-  const model =
-    models && models.find((el) => el.model_name === scoringModel.scoring_model)
+  // const model =
+  //   models && models.find((el) => el.model_name === scoringModel.scoring_model)
 
   const doScoring = () => {
     console.log("Scoring...")
+    console.log("before", models)
     setScoringOptions([])
-    getModels()
+    setModels([])
+    axios
+      .get("http://127.0.0.1:8000/api/scoring_model/")
+      .then((res) => {
+        console.log("Получение моделей", res.data.data)
+        // console.log(res.data.data[0].model_name)
+        // console.log(res.data.data[0].id)
+        // setScoringModels(res.data.data)
+        // setSelectScoringModelOptions(res.data.data)
+        setModels(res.data.data)
+        res.data.data.forEach((modelpass) => {
+          if (modelpass.status === "AP") {
+            setScoringOptions((current) => [
+              ...current,
+              { label: modelpass.model_name, value: modelpass.model_name },
+            ])
+          }
+        })
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+    console.log("after ", models)
     const model = models.find(
       (el) => el.model_name === scoringModel.scoring_model
     )
@@ -55,6 +78,7 @@ const PipelinePage = () => {
       .catch((err) => {
         console.log(err)
       })
+    console.log("after axios", models)
   }
 
   const isDisabled = scoringModel.scoring_model && inputINN

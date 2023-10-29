@@ -6,18 +6,138 @@ import { Link, useParams } from "react-router-dom"
 import axios from "axios"
 import { validator } from "../components/utils/validator"
 import SelectSearchField from "../components/CrmPage/Form/SelectSearchField"
+import {
+  firstData,
+  getTransformedData,
+  transformManagersData,
+  transformRegionsData,
+  validatorConfig,
+} from "../components/utils/crmHelper"
 
 const NewClientPage = () => {
   const params = useParams()
   const [users, setUsers] = useState()
   const [errors, setErrors] = useState({})
 
-  const [clienData, setClientData] = useState({})
+  const [clientData, setClientData] = useState({})
+  const [regions, setRegions] = useState({})
+  const [support, setSupport] = useState({})
+  const [stage, setStage] = useState({})
+  const [category, setCategory] = useState({})
+  const [status, setStatus] = useState({})
+  const [sources, setSources] = useState({})
+  const [positive, setPositive] = useState({})
+  const [negative, setNegative] = useState({})
+  const [type, setType] = useState({})
+  const [managers, setManagers] = useState({})
+  const isValid = Object.keys(errors).length === 0
+
+  const validate = () => {
+    const errors = validator(testData, validatorConfig)
+    setErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
+  useEffect(() => {
+    getTransformedData(
+      "crm_supp_measure",
+      setSupport,
+      "category_type",
+      "support"
+    )
+    getTransformedData("crm_review_stage", setStage, "stage", "stage")
+    getTransformedData("crm_category", setCategory, "type", "category")
+    getTransformedData("crm_applicant_status", setStatus, "status", "status")
+    getTransformedData("crm_info_source_type", setSources, "type", "sources")
+    getTransformedData(
+      "crm_pos_decision",
+      setPositive,
+      "positive_decision",
+      "positive"
+    )
+    getTransformedData(
+      "crm_neg_decision",
+      setNegative,
+      "negative_decision",
+      "negative"
+    )
+    getTransformedData("crm_dept_type", setType, "type", "type")
+
+    axios
+      .get(`http://127.0.0.1:8000/api/crm_managers/`)
+      .then((res) => {
+        setManagers(transformManagersData(res.data.data))
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+
+    axios
+      .get(`http://127.0.0.1:8000/api/crm_region/`)
+      .then((res) => {
+        setRegions(transformRegionsData(res.data.data))
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault()
     alert("Отправка данных на сервер")
-    setClientData({})
+    console.log(testData)
+    // setClientData({})
+    setTestData({
+      test: "",
+      solvencyRisk: "",
+      sources: "",
+      managers: "",
+      status: "",
+      type: "",
+      category: "",
+      positive: "",
+      stage: "",
+      negative: "",
+      support: "",
+      PRD: "",
+      regions: "",
+      name: "",
+      INN: "",
+      dateAppealsToMIDUOL: "",
+      dateEventOccurance: "",
+      deptSum: "",
+      descr: "",
+      activity: "",
+      sourceNumber: "",
+      representativeNameEndTitle: "",
+      representativeNumber: "",
+      representativeMail: "",
+      notes: "",
+      termMesureNecessary: "",
+      firstMeetDate: "",
+      termMesure: "",
+      petitionAuthor: "",
+      settledDebtAmount: "",
+      amountReceivedIntoBudget: "",
+      nearestDateForFulfillment: "",
+      notInForce: "",
+      caseNumber: "",
+      courtMCApprovalDate: "",
+      amountOfClaimsMC: "",
+      MCexpirationDate: "",
+      amountOfFulfilledObligations: "",
+      sum: "",
+      amountOfTechnicalOverdueDebt: "",
+      pledgeOfProperty: "",
+      surety: "",
+      bankGuarantee: "",
+      deptorDirectionDate: "",
+      garantorDirectionDate: "",
+      pledgetorDirectionDate: "",
+      checkPoint: "",
+      activityRisk: "",
+      assetsTypeRisk: "",
+    })
   }
 
   const handleCancle = (e) => {
@@ -32,112 +152,6 @@ const NewClientPage = () => {
       [target.name]: target.value,
     }))
   }
-
-  const getServerData = (url, func) => {
-    axios
-      .get(url)
-      .then((res) => {
-        // setModels(res.data.data)
-        func(res.data)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-  }
-
-  // useEffect(() => {
-  //   getServerData("http://127.0.0.1:8000/api/crm_managers/", console.log)
-  //   getServerData("http://127.0.0.1:8000/api/crm_region/", console.log)
-  //   getServerData("http://127.0.0.1:8000/api/crm_supp_measure/", console.log)
-  //   getServerData("http://127.0.0.1:8000/api/crm_review_stage/", console.log)
-  //   getServerData("http://127.0.0.1:8000/api/crm_category/", console.log)
-  //   getServerData(
-  //     "http://127.0.0.1:8000/api/crm_applicant_status/",
-  //     console.log
-  //   )
-  //   getServerData(
-  //     "http://127.0.0.1:8000/api/crm_info_source_type/",
-  //     console.log
-  //   )
-  //   getServerData("http://127.0.0.1:8000/api/crm_pos_decision/", console.log)
-  //   getServerData("http://127.0.0.1:8000/api/crm_neg_decision/", console.log)
-  //   getServerData("http://127.0.0.1:8000/api/crm_dept_type/", console.log)
-  // }, [])
-
-  const validatorConfig = {
-    // test: {
-    //   isRequired: {
-    //     message: "Это поле обязательно для заполнения",
-    //   },
-    // },
-
-    status: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-
-    category: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-
-    stage: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-
-    supprot: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-
-    regions: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-    name: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-    INN: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-    dateAppealsToMIDUOL: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-    dateEventOccurance: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-    deptSum: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-    descr: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-    type: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-  }
-
-  const isValid = Object.keys(errors).length === 0
 
   // TEST
   const [testData, setTestData] = useState({
@@ -194,19 +208,13 @@ const NewClientPage = () => {
   const [testApi, setTestApi] = useState()
 
   const handleChangeTest = (target) => {
-    console.log(target)
+    // console.log(target)
 
     setTestData((prevState) => ({
       ...prevState,
       [target.name]: target.value,
     }))
   }
-
-  const type = [
-    { label: "Текущий", value: "Текущий", name: "type" },
-    { label: "будущий", value: "будущий", name: "type" },
-    { label: "Поручение", value: "Поручение", name: "type" },
-  ]
 
   const solvencyRisk = [
     { label: "Высокий риск", value: "Высокий риск", name: "solvencyRisk" },
@@ -224,97 +232,6 @@ const NewClientPage = () => {
     { label: "Низкий риск", value: "Низкий риск", name: "assetsTypeRisk" },
   ]
 
-  const sources = [
-    { label: "ТНО, ФНС", value: "ТНО, ФНС", name: "sources" },
-    {
-      label: "Входящие звонки",
-      value: "Входящие звонки",
-      name: "sources",
-    },
-    { label: "РГ", value: "РГ", name: "sources" },
-  ]
-  const managers = [
-    { label: "Бабасов П.Н.", value: "Бабасов П.Н.", name: "managers" },
-    {
-      label: "Бойченко И.А.",
-      value: "Бойченко И.А.",
-      name: "managers",
-    },
-    {
-      label: "Емельянова Е.А.",
-      value: "Емельянова Е.А.",
-      name: "managers",
-    },
-  ]
-  const status = [
-    { label: "должник", value: "должник", name: "status" },
-    { label: "кредитор", value: "кредитор", name: "status" },
-  ]
-
-  const category = [
-    {
-      label: "системообразующее",
-      value: "системообразующее",
-      name: "category",
-    },
-    {
-      label: "градообразующее",
-      value: "градообразующее",
-      name: "category",
-    },
-  ]
-
-  const stage = [
-    {
-      label: "Получено обращение",
-      value: "Получено обращение",
-      name: "stage",
-    },
-    {
-      label: "Проведено первое совещание",
-      value: "Проведено первое совещание",
-      name: "stage",
-    },
-    {
-      label: "Истребованы документы",
-      value: "Истребованы документы",
-      name: "stage",
-    },
-  ]
-
-  const support = [
-    {
-      label: "отсрочка / рассрочка (ст. 64 НК РФ)",
-      value: "отсрочка / рассрочка (ст. 64 НК РФ)",
-      name: "support",
-    },
-    {
-      label: "отлагательные меры",
-      value: "отлагательные меры",
-      name: "support",
-    },
-    {
-      label: "отлагательные меры + МС",
-      value: "отлагательные меры + МС",
-      name: "support",
-    },
-  ]
-
-  const regions = [
-    {
-      number: 1,
-      label: "1 Республика Адыгея",
-      value: "1 Республика Адыгея",
-      name: "regions",
-    },
-    {
-      number: 2,
-      label: " 2 Республика Башкортостан",
-      value: " 2 Республика Башкортостан",
-      name: "regions",
-    },
-  ]
-
   const PRD = [
     {
       label: "МИДУОЛ",
@@ -330,34 +247,6 @@ const NewClientPage = () => {
       label: "РП Республика Карелия",
       value: "РП Республика Карелия",
       name: "PRD",
-    },
-  ]
-  const negative = [
-    {
-      label:
-        "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство",
-      value:
-        "отказ – невозможность восстановления платежеспособности – безальтернативное банкротство",
-      name: "negative",
-    },
-    {
-      label: "отказ - не требуется помощь, стабильное финансовое состояние",
-      value: "отказ - не требуется помощь, стабильное финансовое состояние",
-      name: "negative",
-    },
-    {
-      label: "отказ – не исполнение регламента деятельности ПРД",
-      value: "отказ – не исполнение регламента деятельности ПРД",
-      name: "negative",
-    },
-  ]
-  const positive = [
-    { label: "МС", value: "МС", name: "positive" },
-    { label: "Рассрочка", value: "Рассрочка", name: "positive" },
-    {
-      label: "отлагательные меры",
-      value: "отлагательные меры",
-      name: "positive",
     },
   ]
 
@@ -380,100 +269,6 @@ const NewClientPage = () => {
     validate()
   }, [testData])
 
-  const validate = () => {
-    const errors = validator(testData, validatorConfig)
-    setErrors(errors)
-    return Object.keys(errors).length === 0
-  }
-
-  const firstData = [
-    { id: 10, name: "Источник информации. Номер", key: "sourceNumber" },
-    {
-      id: 13,
-      name: "Представитель клиента. ФИО, должность",
-      key: "representativeNameEndTitle",
-    },
-    {
-      id: 14,
-      name: "Представитель клиента. Телефон",
-      key: "representativeNumber",
-    },
-    { id: 15, name: "Представитель клиента. Почта", key: "representativeMail" },
-    { id: 20, name: "Вид деятельности", key: "activity" },
-    { id: 22, name: "Примечания", key: "notes" },
-    {
-      id: 23,
-      name: "Срок, на который необходимо предоставить меры",
-      key: "termMesureNecessary",
-    },
-    { id: 26, name: "Дата первой встречи", key: "firstMeetDate" },
-
-    {
-      id: 31,
-      name: "На сколько предоставлена мера (в месяцах)",
-      key: "termMesure",
-    },
-    { id: 33, name: "От кого ходатайство (для МС)", key: "petitionAuthor" },
-    {
-      id: 34,
-      name: "Сумма урегулированной задолжности (тыс руб)",
-      key: "settledDebtAmount",
-    },
-    {
-      id: 35,
-      name: "Сумма, поступившая в бюджет (тыс руб)",
-      key: "amountReceivedIntoBudget",
-    },
-    {
-      id: 37,
-      name: "Близжайший срок исполнения обязательства (до какого момента отложены меры)",
-      key: "nearestDateForFulfillment ",
-    },
-    {
-      id: 39,
-      name: "Не вступило в силу рассрочка/отсрочка (тыс руб)",
-      key: "notInForce",
-    },
-    { id: 41, name: "Номер дела", key: "caseNumber" },
-    { id: 42, name: "Дата утверждения МС судом", key: "courtMCApprovalDate" },
-    {
-      id: 43,
-      name: "Сумма требований, вошедших в МС",
-      key: "amountOfClaimsMC",
-    },
-    { id: 44, name: "Дата окончания МС", key: "MCexpirationDate" },
-    {
-      id: 45,
-      name: "Сумма исполненных обязательств (тыс руб)",
-      key: "amountOfFulfilledObligations",
-    },
-    { id: 47, name: "Сумма (тыс руб)", key: "sum" },
-    {
-      id: 48,
-      name: "Сумма технической просроченной задолженности (тыс руб)",
-      key: "amountOfTechnicalOverdueDebt",
-    },
-    { id: 51, name: "Залог имущества (тыс руб)", key: "pledgeOfProperty" },
-    { id: 52, name: "Поручительство (тыс руб)", key: "surety" },
-    { id: 53, name: "Банковская гарантия (тыс руб)", key: "bankGuarantee" },
-
-    {
-      id: 55,
-      name: "Дата направления ДОЛЖНИКУ уведомления (претензии)",
-      key: "deptorDirectionDate",
-    },
-    {
-      id: 56,
-      name: "Дата направления ПОРУЧИТЕЛЮ уведомления (претензии)",
-      key: "garantorDirectionDate",
-    },
-    {
-      id: 57,
-      name: "Дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)",
-      key: "pledgetorDirectionDate",
-    },
-    { id: 62, name: "Контрольная точка", key: "checkPoint" },
-  ]
   // TEST
 
   return (
@@ -654,7 +449,7 @@ const NewClientPage = () => {
                 name="dateEventOccurance"
                 value={testData.dateEventOccurance}
                 onChange={handleChangeTest}
-                error={errors.dadateEventOccurancete2}
+                error={errors.dateEventOccurance}
               />
               {firstData.map((el) => {
                 return (
