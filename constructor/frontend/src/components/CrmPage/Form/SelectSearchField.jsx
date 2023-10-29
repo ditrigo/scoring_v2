@@ -18,7 +18,7 @@ const SelectSearchField = ({
       <label className="form-label" htmlFor={name}>
         {label}
       </label>
-      <div className=" mb-3 has-validation">
+      <div className="mb-3 has-validation">
         <Select
           options={options}
           onChange={onChange}

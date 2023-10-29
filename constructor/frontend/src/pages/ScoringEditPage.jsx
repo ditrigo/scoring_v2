@@ -67,6 +67,7 @@ const ScoringEdit = () => {
       nameModel={state.models.model_name}
       idModel={state.models.id}
       statusModel={state.models.status}
+      model={state.models}
     />
     // </div>
   )

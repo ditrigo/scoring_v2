@@ -3,8 +3,8 @@ import "./SearchBar.module.css"
 import MyButton from "../../UI/MyButton/MyButton"
 import { Link } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.css"
-import MyModal from "../../ScoringPage/MyModal/MyModal"
-import MyEditForm from "../MyEditForm/MyEditForm"
+// import MyModal from "../../ScoringPage/MyModal/MyModal"
+// import MyEditForm from "../MyEditForm/MyEditForm"
 import MarkersTable from "../MarkersTable/MarkersTable"
 // import "bootstrap/dist/js/bootstrap.js";
 
@@ -14,6 +14,7 @@ const SearchBar = ({
   nameModel,
   idModel,
   statusModel,
+  model,
 }) => {
   const [expanded, setExpanded] = useState(false)
   const [selections, setSelections] = useState([])
@@ -51,7 +52,7 @@ const SearchBar = ({
     <div className="container mt-10">
       <div className="row">
         <h3>Добавление элементов для модели {nameModel}</h3>
-        <MarkersTable modelId={idModel} />
+        <MarkersTable modelId={idModel} model={model} />
       </div>
       <div className="row">
         {/* <div className="row"> */}

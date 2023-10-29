@@ -12,7 +12,7 @@ const ResultMarkersView = () => {
     axios
       .get("http://127.0.0.1:8000/api/inn_res/")
       .then((res) => {
-        console.log("Результаты в просмотре ", res.data.data)
+        // console.log("Результаты в просмотре ", res.data.data)
         setResults(res.data.data)
         setResult((prevState) => [res.data.data.find((el) => el.inn === +inn)])
       })
