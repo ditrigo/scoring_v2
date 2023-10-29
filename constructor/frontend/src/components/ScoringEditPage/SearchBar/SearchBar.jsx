@@ -3,8 +3,8 @@ import "./SearchBar.module.css"
 import MyButton from "../../UI/MyButton/MyButton"
 import { Link } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.css"
-import MyModal from "../../ScoringPage/MyModal/MyModal"
-import MyEditForm from "../MyEditForm/MyEditForm"
+// import MyModal from "../../ScoringPage/MyModal/MyModal"
+// import MyEditForm from "../MyEditForm/MyEditForm"
 import MarkersTable from "../MarkersTable/MarkersTable"
 // import "bootstrap/dist/js/bootstrap.js";
 
@@ -14,6 +14,7 @@ const SearchBar = ({
   nameModel,
   idModel,
   statusModel,
+  model,
 }) => {
   const [expanded, setExpanded] = useState(false)
   const [selections, setSelections] = useState([])
@@ -51,29 +52,26 @@ const SearchBar = ({
     <div className="container mt-10">
       <div className="row">
         <h3>Добавление элементов для модели {nameModel}</h3>
-        <MarkersTable modelId={idModel} />
+        <MarkersTable modelId={idModel} model={model} />
       </div>
       <div className="row">
         {/* <div className="row"> */}
-        <form
-        className="" 
-        onSubmit={handleSubmit} >
+        <form className="" onSubmit={handleSubmit}>
           <div className="row">
             {/* <MarkersTable /> */}
             <div onClick={toggleExpanded}>
               <div
-                className={`row font-semibold cursor-pointer ${expanded ? "up-arrow" : "down-arrow"
-                  }`}
+                className={`row font-semibold cursor-pointer ${
+                  expanded ? "up-arrow" : "down-arrow"
+                }`}
               >
                 {selections.length
                   ? selections.map((_, i) => (
-                    <span 
-                    className="row"
-                    key={i}>
-                      {i ? ", " : null}
-                      {attributes[i].name_marker_attr}
-                    </span>
-                  ))
+                      <span className="row" key={i}>
+                        {i ? ", " : null}
+                        {attributes[i].name_marker_attr}
+                      </span>
+                    ))
                   : "Маркеры не выбраны"}
               </div>
             </div>
@@ -121,14 +119,10 @@ const SearchBar = ({
                 Добавить новый маркер
               </MyButton> */}
             <div className="row">
-              <Link
-                to={`/scoring`}
-                className="btn btn-outline-secondary"
-              >
+              <Link to={`/scoring`} className="btn btn-outline-secondary">
                 Выйти
               </Link>
             </div>
-
           </div>
         </form>
         {/* </div> */}
