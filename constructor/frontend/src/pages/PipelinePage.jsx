@@ -247,8 +247,8 @@ const PipelinePage = () => {
               </table>
             </div>
           </div>
-          <div className="row  m-0 p-0">
-            <div className="col-md-auto p-0 m-0">
+          <div className="row p-0">
+            <div className="col-md-auto p-0 ">
               {/* <MyButton onClick={() => setModalScoringResults(true)}>
                 Запустить скоринг
               </MyButton> */}
