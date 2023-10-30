@@ -47,6 +47,7 @@ const PipelinePage = () => {
         // console.log(res.data.data[0].id)
         // setScoringModels(res.data.data)
         // setSelectScoringModelOptions(res.data.data)
+        console.log("axios doScoring")
         setModels(res.data.data)
         res.data.data.forEach((modelpass) => {
           if (modelpass.status === "AP") {
