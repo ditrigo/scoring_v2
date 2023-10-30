@@ -7,12 +7,12 @@ import axios from "axios"
 const TestScoringForm = ({ model, modelId }) => {
   const [inputINN, setInputINN] = useState("")
   const [startDate, setStartDate] = useState(new Date())
-  const [isSaved, setIsSaved] = useState(false)
-  const [disabledBtn, setDisabledBtn] = useState("")
+  // const [isSaved, setIsSaved] = useState(false)
+  // const [disabledBtn, setDisabledBtn] = useState("")
   const [models, setModels] = useState([])
   const [updatedModel, setUpdatedModel] = useState()
 
-  const isDisabled = model.model_name && inputINN
+  // const isDisabled = model.model_name && inputINN
   const isDisabledScoring = model.model_name && inputINN //&& isSaved
 
   const handleChangeINN = (e) => {
@@ -24,7 +24,7 @@ const TestScoringForm = ({ model, modelId }) => {
       .get("http://127.0.0.1:8000/api/scoring_model/")
       .then((res) => {
         setModels([])
-        console.log("getModels", res.data.data)
+        // console.log("getModels", res.data.data)
         setModels(res.data.data)
       })
       .catch((e) => {
@@ -35,17 +35,31 @@ const TestScoringForm = ({ model, modelId }) => {
   const doTestScoring = async () => {
     console.log("Scoring test...")
 
-    const modelFromServer = models.find(
+    let modelFromServer = models.find(
       (el) => el.model_name === model.model_name
     )
+
+    modelFromServer.inns = [
+      {
+        id: 5,
+        uuid: "cfb8682c-f108-4ab3-93ea-82308c116b1b",
+        author_id: "",
+        created_date: "2023-10-25T14:15:37.108874Z",
+        active: false,
+        inn: 4,
+        result_score: null,
+      },
+    ]
 
     const json = {
       model: modelFromServer,
     }
+    console.log("json", json)
 
     await axios
       .post("http://127.0.0.1:8000/api/start_test_scoring/", json)
       .then((resp) => {
+        console.log(resp)
         getModels()
         setInputINN("")
       })
@@ -119,7 +133,7 @@ const TestScoringForm = ({ model, modelId }) => {
                   />
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td>Вид отчетности</td>
                 <td>
                   <select
@@ -134,7 +148,7 @@ const TestScoringForm = ({ model, modelId }) => {
                     <option value="2">Обновленная</option>
                   </select>
                 </td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
         </div>
@@ -167,14 +181,15 @@ const TestScoringForm = ({ model, modelId }) => {
               </tr>
             </thead>
             <tbody>
-              {updatedModel.inns.map((inn) => {
-                return (
-                  <tr>
-                    <td>{inn.inn}</td>
-                    <td>{inn.result_score?.total_rank}</td>
-                  </tr>
-                )
-              })}
+              {/* {updatedModel &&
+                updatedModel.inns.map((inn) => {
+                  return (
+                    <tr>
+                      <td>{inn.inn}</td>
+                      <td>{inn.result_score?.total_rank}</td>
+                    </tr>
+                  )
+                })} */}
             </tbody>
           </table>
         )}

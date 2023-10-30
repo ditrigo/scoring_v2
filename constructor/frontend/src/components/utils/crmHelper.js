@@ -1,4 +1,5 @@
 import axios from "axios"
+import configFile from "../../config.json"
 
 export const transformData = (data, keyInNativeObj, keyName) => {
   const result = data.map((el) => ({
@@ -17,9 +18,10 @@ export function getTransformedData(
   keyName
 ) {
   axios
-    .get(`http://127.0.0.1:8000/api/${endPoint}/`)
+    // .get(`http://127.0.0.1:8000/api/${endPoint}/`)
+    .get(`${configFile.apiEndPoint}/${endPoint}/`)
     .then((res) => {
-      // console.log(res.data)
+      console.log(res.data)
       setDataState(transformData(res.data.data, keyInNativeObj, keyName))
     })
     .catch((e) => {

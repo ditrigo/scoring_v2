@@ -8,8 +8,10 @@ import "react-datepicker/dist/react-datepicker.css"
 import SelectField from "../components/CrmPage/Form/SelectField"
 // import MyModal from "../components/ScoringPage/MyModal/MyModal"
 import { Link } from "react-router-dom"
+import modelService from "../services/model.service"
 // import ResultTable from "../components/PiplinePage/ResultTable"
 // import { Link } from "react-router-dom"
+import configFile from "../config.json"
 
 const PipelinePage = () => {
   const [open, setOpen] = useState(true)
@@ -28,52 +30,42 @@ const PipelinePage = () => {
   const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
   const [scoringOptions, setScoringOptions] = useState([])
   const [disabledBtn, setDisabledBtn] = useState("")
-  // const [modalScoringResults, setModalScoringResults] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
   const isDisabled = scoringModel.scoring_model && inputINN
   const isDisabledScoring = scoringModel.scoring_model && inputINN && isSaved
 
-  async function getModels() {
-    await axios
-      .get("http://127.0.0.1:8000/api/scoring_model/")
-      .then((res) => {
-        setModels([])
-        setScoringOptions([])
-        console.log("getModels", res.data.data)
-        setModels(res.data.data)
-        res.data.data.forEach((modelpass) => {
-          if (modelpass.status === "AP") {
-            setScoringOptions((current) => [
-              ...current,
-              { label: modelpass.model_name, value: modelpass.model_name },
-            ])
-          }
-        })
+  const getModels = async () => {
+    try {
+      const { data } = await modelService.get()
+      setModels([])
+      setScoringOptions([])
+      setModels(data)
+      data.forEach((modelpass) => {
+        if (modelpass.status === "AP") {
+          setScoringOptions((current) => [
+            ...current,
+            { label: modelpass.model_name, value: modelpass.model_name },
+          ])
+        }
       })
-      .catch((e) => {
-        console.log(e)
-      })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const doScoring = async () => {
     console.log("Scoring...")
-
     const model = models.find(
       (el) => el.model_name === scoringModel.scoring_model
     )
-
-    console.log("find ", model)
-
     const json = {
       model,
     }
 
     await axios
-      .post("http://127.0.0.1:8000/api/start_scoring/", json)
+      .post(`${configFile.apiEndPoint}/start_scoring/`, json)
       .then((resp) => {
         getModels()
-
-        console.log("resp do scoring: ", resp.data.message)
         setInputINN("")
         setScoringModel({ scoring_model: "" })
       })
@@ -84,7 +76,7 @@ const PipelinePage = () => {
 
   async function handleSaveData() {
     await axios
-      .post("http://127.0.0.1:8000/api/inn_res/create_relation/", {
+      .post(`${configFile.apiEndPoint}/inn_res/create_relation/`, {
         inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
         active: true,
         scoringmodel_id: models.find(
@@ -127,7 +119,6 @@ const PipelinePage = () => {
 
   return (
     <div className="container mt-3 mb-4">
-      {/* <div className="row"> */}
       <div className="row">
         <div className="col-md-auto">
           <MyButton>Статические данные</MyButton>
@@ -149,13 +140,7 @@ const PipelinePage = () => {
             <MyButton>Журнал скоринга</MyButton>
           </Link>
         </div>
-        {/* <div className="col-md-auto">
-          <Link to="/results">
-            <MyButton>Журнал скоринга</MyButton>
-          </Link>
-        </div> */}
       </div>
-      {/* </div> */}
 
       {open && (
         <div className="container p-0">
@@ -172,23 +157,12 @@ const PipelinePage = () => {
                   <tr>
                     <td>ИНН</td>
                     <td>
-                      {/* <table> */}
-                      {/* <thead> */}
-                      {/* <tr> */}
-                      {/* <td> */}
                       <MyInput
                         value={inputINN}
                         onChange={(e) => handleChangeINN(e)}
                         type="text"
                         placeholder="Вставьте список ИНН"
                       ></MyInput>
-                      {/* </td> */}
-                      {/* <td>
-                            <MyInput placeholder="Выражение"></MyInput>
-                          </td> */}
-                      {/* </tr> */}
-                      {/* </thead> */}
-                      {/* </table> */}
                     </td>
                   </tr>
                   <tr>
@@ -202,18 +176,6 @@ const PipelinePage = () => {
                         onChange={handleChange}
                         value={scoringModel.scoring_model}
                       />
-                      {/* <select
-                      className="form-select"
-                      aria-label="Default select example"
-                      defaultValue="0"
-                    >
-                      <option value="0" disabled>
-                        Выбрать модель для скоринга
-                      </option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </select> */}
                     </td>
                   </tr>
                   <tr>
@@ -249,10 +211,6 @@ const PipelinePage = () => {
           </div>
           <div className="row justify-content-start m-0 p-0">
             <div className="col-md-auto p-0">
-              {/* <MyButton onClick={() => setModalScoringResults(true)}>
-                Запустить скоринг
-              </MyButton> */}
-
               <MyButton
                 disabled={!isDisabledScoring}
                 // onClick={() => setModalScoringResults(true)}
@@ -261,11 +219,7 @@ const PipelinePage = () => {
                 Запустить скоринг
               </MyButton>
             </div>
-            {/* <div className="col-md-auto">
-              <Link to="/results">
-                <MyButton>Журнал скоринга</MyButton>
-              </Link>
-            </div> */}
+
             <div className="col-md-auto">
               <MyButton
                 className={disabledBtn}

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react"
 import "../styles/App.css"
 import "bootstrap/dist/css/bootstrap.css"
 import MyButton from "../components/UI/MyButton/MyButton"
-import axios from "axios"
 import ModelForm from "../components/ScoringPage/ModelForm/ModelForm"
 import MyModal from "../components/ScoringPage/MyModal/MyModal"
 import { Link } from "react-router-dom"
 import AtributForm from "../components/ScoringPage/AtributForm/AtributForm"
-import MyInput from "../components/UI/MyInput/MyInput"
 import Moment from "moment"
 import localization from "moment/locale/ru"
+import modelService from "../services/model.service"
+import markerSrvice from "../services/marker.service"
 
 const ScoringPage = () => {
   const [models, setModels] = useState([])
@@ -24,20 +24,17 @@ const ScoringPage = () => {
     return status === "AP" ? "Утвержден" : "Черновик"
   }
 
-  async function getModels() {
-    axios
-      .get("http://127.0.0.1:8000/api/scoring_model/")
-      .then((res) => {
-        setModels(res.data.data)
-        // console.log(res.data.data.id)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+  const getModels = async () => {
+    try {
+      const { data } = await modelService.get()
+      // console.log("from service ", data)
+      setModels(data)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   useEffect(() => {
-    // console.log("useEffect")
     getModels()
   }, [])
 
@@ -45,44 +42,35 @@ const ScoringPage = () => {
     findMarkers.forEach((el) => {
       linkMarkers.push(el)
     })
-    // console.log(" getLinkMarkers linkMarkers", linkMarkers)
   }
 
   async function postModel(newModel) {
-    return axios
-      .post("http://127.0.0.1:8000/api/scoring_model/", {
+    try {
+      const data = await modelService.post({
         author_id: newModel.author_id,
         description: newModel.description,
         model_name: newModel.model_name,
         status: newModel.status,
         version: newModel.version,
       })
-      .then(function (response) {
-        // console.log("postModel response", response)
-        // console.log("postModel response.data.id", response.data.id)
-        setModels([...models, response.data])
-        return response.data.id
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+      console.log("new model: ", data)
+      setModels([...models, data])
+      return data.id
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   async function postLinkMarkerAndModel(modelIdForLink) {
-    // console.log("postLinkMarkerAndModel")
-    // console.log("linkMarkers", linkMarkers)
-    // console.log("modelIdForLink", modelIdForLink)
-    axios
-      .post("http://127.0.0.1:8000/api/marker_attributes/create_relation/", {
+    try {
+      const data = await markerSrvice.postCreateRelation(`create_relation/`, {
         counted_attr_ids: linkMarkers,
         scoring_model_id: modelIdForLink,
       })
-      .then(function (response) {
-        console.log(response)
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+      console.log(data)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const createModel = (newModel) => {
@@ -94,67 +82,48 @@ const ScoringPage = () => {
     setModal(false)
   }
 
-  const deleteModel = (id) => {
-    axios
-      .delete(`http://127.0.0.1:8000/api/scoring_model/${id}`)
-      .then((res) => {
-        console.log(res.data)
-        console.log(res)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-    setModels(models.filter((item) => item.id !== id))
+  async function deleteModel(id) {
+    try {
+      const { data } = await modelService.delete(id)
+      // console.log(data)
+      if (!data) setModels(models.filter((item) => item.id !== id))
+    } catch (err) {
+      console.log(err)
+    }
   }
 
-  const deleteMarker = (id) => {
-    axios
-      .delete(`http://127.0.0.1:8000/api/marker_attributes/${id}`)
-      .then((res) => {
-        console.log(res.data)
-        console.log(res)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-      setMarkers(markers.filter((item) => item.id !== id))
+  async function deleteMarker(id) {
+    try {
+      const { data } = await markerSrvice.delete(id)
+      // console.log(data)
+      if (!data) setMarkers(markers.filter((item) => item.id !== id))
+    } catch (err) {
+      console.log(err)
+    }
   }
 
-  // get/post path/api/counted_attributes
   async function getMarkers() {
-    axios
-      .get("http://127.0.0.1:8000/api/marker_attributes/")
-      .then((res) => {
-        // console.log("in getMarker ", res.data.data)
-        // console.log("in getMarker ", res.data.data.id)
-        setMarkers(res.data.data)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+    try {
+      const { data } = await markerSrvice.get()
+      setMarkers(data)
+    } catch (e) {
+      console.log(e)
+    }
   }
-
-  useEffect(() => {
-    // console.log("useEffect in getAtr")
-    getMarkers()
-  }, [])
 
   async function postMarkers(newAtr) {
-    axios
-      .post("http://127.0.0.1:8000/api/marker_attributes/", {
+    try {
+      const data = await markerSrvice.post({
         name_marker_attr: newAtr.name_marker_attr,
         attr_formulas: newAtr.attr_formulas,
         description: newAtr.description,
         nested_level: newAtr.nested_level,
         author_id: newAtr.author_id,
       })
-      .then(function (response) {
-        console.log(response)
-        setMarkers([...markers, response.data])
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+      setMarkers([...markers, data])
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const createMarker = (newMarker) => {
@@ -162,6 +131,10 @@ const ScoringPage = () => {
     postMarkers(newMarker)
     setModalMarker(false)
   }
+
+  useEffect(() => {
+    getMarkers()
+  }, [])
 
   return (
     <div className="container mt-3 mb-4">
@@ -245,50 +218,46 @@ const ScoringPage = () => {
       {/* <div className="container mt-5"> */}
       <div className="row mt-5">
         <div className="col-md-12">
-          
-            <div className="card">
-              <div className="card-header">
-                <h4>
-                  Маркеры
-                  <button
-                    onClick={() => setModalMarker(true)}
-                    className="btn btn-outline-primary float-end"
-                  >
-                    Добавить маркер
-                  </button>
-                </h4>
-              </div>
-              <div className="card-body">
-
-                <table className="table table-striped">
-                  <thead>
-                    <tr>
-                      <th scope="col">Наименование маркера</th>
-                      <th>Автор</th>
-                      <th>Дата изменения</th>
-                      <th>Формула маркера</th>
-                      {/* <th>Просмотр</th> */}
-                      <th></th> 
-                      {/* Удалить */}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {markers.map((marker) => {
-                      return (
-                        <tr key={marker.id}>
-                          <td>{marker.name_marker_attr}</td>
-                          <td>{marker.author_id}</td>
-                          <td>
-                            {Moment(marker.created_date)
-                              .locale("rus", localization)
-                              .format("LLL")}
-                          </td>
-                          <td
-                          style={{wordBreak:"break-word"}}
-                          >
-                            {marker.attr_formulas}
-                            </td>
-                          {/* <td>
+          <div className="card">
+            <div className="card-header">
+              <h4>
+                Маркеры
+                <button
+                  onClick={() => setModalMarker(true)}
+                  className="btn btn-outline-primary float-end"
+                >
+                  Добавить маркер
+                </button>
+              </h4>
+            </div>
+            <div className="card-body">
+              <table className="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Наименование маркера</th>
+                    <th>Автор</th>
+                    <th>Дата изменения</th>
+                    <th>Формула маркера</th>
+                    {/* <th>Просмотр</th> */}
+                    <th></th>
+                    {/* Удалить */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {markers.map((marker) => {
+                    return (
+                      <tr key={marker.id}>
+                        <td>{marker.name_marker_attr}</td>
+                        <td>{marker.author_id}</td>
+                        <td>
+                          {Moment(marker.created_date)
+                            .locale("rus", localization)
+                            .format("LLL")}
+                        </td>
+                        <td style={{ wordBreak: "break-word" }}>
+                          {marker.attr_formulas}
+                        </td>
+                        {/* <td>
                           <Link
                           // to={`/scoring/${marker.id}/edit`}
                           // state={{ models: marker }}
@@ -296,24 +265,21 @@ const ScoringPage = () => {
                             <MyButton>Просмотр</MyButton>
                           </Link>
                         </td> */}
-                          <td>
-                            <button
-                              onClick={() => deleteMarker(marker.id)}
-                              className="btn btn-outline-danger"
-                            >
-                              Удалить
-                            </button>
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-
-              </div>
+                        <td>
+                          <button
+                            onClick={() => deleteMarker(marker.id)}
+                            className="btn btn-outline-danger"
+                          >
+                            Удалить
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
             </div>
-          
-
+          </div>
         </div>
       </div>
       {/* </div> */}

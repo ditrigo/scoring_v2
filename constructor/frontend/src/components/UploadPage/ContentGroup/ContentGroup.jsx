@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.css";
-import axios from "axios";
-import MyButton from "../../UI/MyButton/MyButton";
-import "../../../styles/App.css";
-import Table from "../../Table";
-import HistoryDownloadTable from "../../HistoryDownloadTable";
+import React, { useEffect, useState } from "react"
+import "bootstrap/dist/css/bootstrap.css"
+import axios from "axios"
+import MyButton from "../../UI/MyButton/MyButton"
+import "../../../styles/App.css"
+import Table from "../../Table"
+import HistoryDownloadTable from "../../HistoryDownloadTable"
+import configFile from "../../../config.json"
 
 const ContentGroup = () => {
-  const [view, setView] = useState("log");
-  const [attributes, setAttributes] = useState([]);
-  const [logAttributs, setLogAttributs] = useState();
+  const [view, setView] = useState("log")
+  const [attributes, setAttributes] = useState([])
+  const [logAttributs, setLogAttributs] = useState()
 
   const [uploadColumns, setUploadColumns] = useState([
     { name: "Id", path: "id", isVisible: true },
     { name: "Дата загрузки", isVisible: true },
     { name: "ИНН", isVisible: true },
     { name: "Дата отчета", isVisible: true },
-  ]);
+  ])
 
   const [logColumns, setLogColumns] = useState([
     { name: "Название", isVisible: true },
@@ -25,11 +26,11 @@ const ContentGroup = () => {
     { name: "Общее количество строк", isVisible: true },
     { name: "Пропущенные строки", isVisible: true },
     { name: "Новые строки", isVisible: true },
-  ]);
+  ])
 
   async function getFilesAttributes() {
     axios
-      .get("http://127.0.0.1:8000/api/files/")
+      .get(`${configFile.apiEndPoint}/files/`)
       .then((res) => {
         setLogAttributs(res.data.data)
         console.log("getFilesAttributes", res.data.data)
@@ -37,7 +38,7 @@ const ContentGroup = () => {
       .catch((e) => {
         console.log(e)
       })
-  } 
+  }
 
   useEffect(() => {
     getFilesAttributes()
@@ -45,18 +46,18 @@ const ContentGroup = () => {
 
   async function getfiles() {
     axios
-      .get("http://127.0.0.1:8000/api/attributes/")
+      .get(`${configFile.apiEndPoint}/attributes/`)
       .then((res) => {
-        setAttributes(res.data.data);
+        setAttributes(res.data.data)
       })
       .catch((e) => {
-        console.log(e);
-      });
+        console.log(e)
+      })
   }
 
   useEffect(() => {
-    getfiles();
-  }, []);
+    getfiles()
+  }, [])
 
   return (
     <div
@@ -150,7 +151,7 @@ const ContentGroup = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ContentGroup;
+export default ContentGroup
