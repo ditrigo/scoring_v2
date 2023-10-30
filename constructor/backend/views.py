@@ -593,7 +593,7 @@ def ScoringModelListViewSet(request):
     elif request.method == 'POST':
         serializer = ScoringModelSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(author_id=request.user)
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

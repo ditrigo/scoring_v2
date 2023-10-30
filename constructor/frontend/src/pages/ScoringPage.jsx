@@ -259,7 +259,6 @@ const ScoringPage = () => {
                 </h4>
               </div>
               <div className="card-body">
-
                 <table className="table table-striped">
                   <thead>
                     <tr>
@@ -309,11 +308,8 @@ const ScoringPage = () => {
                     })}
                   </tbody>
                 </table>
-
               </div>
             </div>
-          
-
         </div>
       </div>
       {/* </div> */}
