@@ -5,9 +5,10 @@ const TableHeader = () => {
     <thead>
       <tr>
         <th scope="col">П\П</th>
+        <th scope="col">Представительсво ПРД</th>
         <th scope="col">Менеджер площадки</th>
         <th scope="col">Наименование клиента</th>
-        <th scope="col">Представительсво ПРД</th>
+        
         <th scope="col">ИНН</th>
         <th scope="col">Регион</th>
         <th scope="col">Статус заявителя</th>

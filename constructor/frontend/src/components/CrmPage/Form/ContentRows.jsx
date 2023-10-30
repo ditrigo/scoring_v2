@@ -15,11 +15,12 @@ const ContentRows = ({ users }) => {
       return (
         <tr key={el.id} role="button">
           <th scope="row">{el.id}</th>
+          <td>{el.PRD}</td>
           <td>
             <Link to={"/newclient/" + el.id}>{el.manager}</Link>
           </td>
           <td>{el.clientName}</td>
-          <td>{el.PRD}</td>
+          
           <td>{el.INN}</td>
           <td>{el.region}</td>
           <td>{el.status}</td>
