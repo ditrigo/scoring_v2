@@ -6,13 +6,14 @@ const TextField = ({ label, name, value, onChange, error }) => {
   }
 
   const getInputClasses = () => {
-    return "form-control mt-1 mr-2" + (error ? " is-invalid" : "")
+    return "text form-control mt-1 mr-2" + (error ? " is-invalid" : "")
   }
 
   return (
     <div className="mb-4 p-2">
       <label htmlFor={name}>{label}</label>
-      <div className="text input-group mb-3 has-validation">
+      {/* <div className=" input-group mb-3 has-validation"> Убрал input-gruop для того, чтоб не было наланения поверх других полей*/}
+      <div className="mb-3 has-validation">
         <input
           className={getInputClasses()}
           type="text"

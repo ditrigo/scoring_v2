@@ -188,11 +188,11 @@ const AtributForm = ({ create, setVisible }) => {
               Сохранить
             </MyButton>
           </div>
-          <div className="col-md-auto">
+          {/* <div className="col-md-auto">
             <MyButton className="btn-outline-primary disabled">
               Валидация формулы маркера
             </MyButton>
-          </div>
+          </div> */}
           <div className="col-md-auto">
             <MyButton
               className="btn btn-outline-secondary"

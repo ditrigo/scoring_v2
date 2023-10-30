@@ -47,13 +47,8 @@ const ResultTable = ({ getLinkMarkers }) => {
     axios
       .get("http://127.0.0.1:8000/api/scoring_model/")
       .then((res) => {
-        console.log("Получение моделей resTab", res.data.data)
-        // console.log(res.data.data[0].model_name)
-        // console.log(res.data.data[0].id)
-        // setScoringModels(res.data.data)
-        // setSelectScoringModelOptions(res.data.data)
+        // console.log("Получение моделей resTab", res.data.data)
         setModels(res.data.data)
-        console.log("resTab", models)
       })
       .catch((e) => {
         console.log(e)
@@ -68,14 +63,16 @@ const ResultTable = ({ getLinkMarkers }) => {
           overflow: "auto",
         }}
       >
-        <div className="row">
-          <div className="col-md-auto m-2">
-            <Link to="/pipeline" className="mb-2">
-              <MyButton
-                className="btn btn-outline-secondary mt-2"
-                onClick={() => {}}
+        <div className="row  mb-3">
+          <div className="col-md-auto">
+            <Link to="/pipeline"
+              // className="mb-2"
               >
-                На модуль выдачи результатов
+              <MyButton
+                className="btn btn-outline-secondary"
+                // onClick={() => { }}
+              >
+                Модуль выдачи результатов
               </MyButton>
             </Link>
           </div>
@@ -96,32 +93,36 @@ const ResultTable = ({ getLinkMarkers }) => {
             {models &&
               models.map((el, index) => {
                 return (
-                  <tr key={index}>
-                    <td>
-                      {/* <Link to={"/results/" + el.model_name}> */}
-                      {"Тестовое имя" && el.model_name}
-                      {/* </Link> */}
-                    </td>
-                    <td>{"Тестовый пользователь" && el.author_id}</td>
-                    <td>
-                      {Moment(el.created_date)
-                        .locale("rus", localization)
-                        .format("LLL")}
-                    </td>
-                    <td>
-                      {el.inns &&
-                        el.inns.map((el, index) => {
+                  el.inns.length !== 0 && (
+                    <tr key={index}>
+                      <td>
+                        {/* <Link to={"/results/" + el.model_name}> */}
+                        {"Тестовое имя" && el.model_name}
+                        {/* </Link> */}
+                      </td>
+                      <td>{"Тестовый пользователь" && el.author_id}</td>
+                      <td>
+                        {Moment(el.created_date)
+                          .locale("rus", localization)
+                          .format("LLL")}
+                      </td>
+                      <td>
+                        {el.inns.map((el, index) => {
                           // const rank = el.result_score?.total_rank
                           return (
                             <p className="text-center" key={index}>
                               ИНН{" "}
-                              <Link to={"/results/" + el.inn}>{el.inn}</Link> С
-                              общим результатом {el?.result_score?.total_rank}
+                              <Link to={"/results/" + el.inn}>{el.inn}</Link> с
+                              общим результатом{" "}
+                              <span className="text-success">
+                                {el?.result_score?.total_rank}
+                              </span>
                             </p>
                           )
                         })}
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
+                  )
                 )
               })}
 

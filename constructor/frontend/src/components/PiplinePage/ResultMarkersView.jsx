@@ -12,7 +12,7 @@ const ResultMarkersView = () => {
     axios
       .get("http://127.0.0.1:8000/api/inn_res/")
       .then((res) => {
-        console.log("Результаты в просмотре ", res.data.data)
+        // console.log("Результаты в просмотре ", res.data.data)
         setResults(res.data.data)
         setResult((prevState) => [res.data.data.find((el) => el.inn === +inn)])
       })
@@ -32,12 +32,45 @@ const ResultMarkersView = () => {
   return (
     <>
       <div
-        className="container mt-5 mb-5"
+        className="container  mt-3"
         style={{
           overflow: "auto",
         }}
       >
-        <table className="text-center table  table-bordered table-responsive">
+        <div className="row mb-3">
+          <Link to="/results">
+            <MyButton
+              className="btn btn-outline-secondary mt-2"
+              onClick={() => { }}
+            >
+              К таблице результатов
+            </MyButton>
+          </Link>
+        </div>
+        <div className="row m-0">
+          <table className="text-center table  table-bordered table-responsive">
+            <thead>
+              <tr>
+                <th scope="col">Название маркера</th>
+                <th scope="col">Формула</th>
+                <th scope="col">Баллы по ИНН {inn}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {result[0] &&
+                result[0].result_score?.markers_and_values.map((el, index) => {
+                  return (
+                    <tr key={index}>
+                      <td className="text-center">Название маркера</td>
+                      <td className="text-center">{el.formula}</td>
+                      <td>{el.value}</td>
+                    </tr>
+                  )
+                })}
+            </tbody>
+          </table>
+        </div>
+        {/* <table className="text-center table  table-bordered table-responsive">
           <thead>
             <tr>
               <th scope="col">Название маркера</th>
@@ -57,15 +90,15 @@ const ResultMarkersView = () => {
                 )
               })}
           </tbody>
-        </table>
-        <Link to="/results">
+        </table> */}
+        {/* <Link to="/results">
           <MyButton
             className="btn btn-outline-secondary mt-2"
             onClick={() => {}}
           >
             К таблице результатов
           </MyButton>
-        </Link>
+        </Link> */}
       </div>
     </>
   )
