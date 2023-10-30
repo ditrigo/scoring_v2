@@ -126,7 +126,7 @@ const PipelinePage = () => {
   }, [])
 
   return (
-    <div className="container mt-3 mb-4">
+    <div className="container mt-3 mb-3">
       {/* <div className="row"> */}
       <div className="row">
         <div className="col-md-auto">
@@ -159,7 +159,7 @@ const PipelinePage = () => {
 
       {open && (
         <div className="container p-0">
-          <div className="row">
+          <div className="row m-0">
             <div className="card-body table-responsive-lg">
               <table className="table text-left table-bordered mt-3">
                 <thead>
@@ -247,7 +247,7 @@ const PipelinePage = () => {
               </table>
             </div>
           </div>
-          <div className="row p-0">
+          <div className="row m-0 p-0">
             <div className="col-md-auto p-0 ">
               {/* <MyButton onClick={() => setModalScoringResults(true)}>
                 Запустить скоринг
