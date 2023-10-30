@@ -856,19 +856,23 @@ def StartTestScoringViewSet(request):
         # dict_markers = {}
         list_markers, total_json_array = [], []
         for inn in inn_list:
+            # print("INN", inn)
             try:
+                # print("TRY")
                 imported_attributes = ImportedAttributes.objects.get(inn=inn)
                 counted_attributes = CountedAttributesNew.objects.get(inn=inn)
             except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
+                # print("EXCEPT")
                 continue
             for formula in marker_formula_list:
-                print(formula)
+                # print("FORMULA", formula)
                 # try:
                 #     imported_attributes = ImportedAttributes.objects.get(inn=inn)
                 #     counted_attributes = CountedAttributesNew.objects.get(inn=inn)
                 # except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
                 #     continue
                 value = eval(formula)
+                # print("VALUE", value)
                 list_markers.append({'formula': formula, "value": value })
                 rank += value
 
@@ -877,7 +881,11 @@ def StartTestScoringViewSet(request):
                 "total_rank": rank,
                 "inn": inn
             }
+
             total_json_array.append(total_json)
+            # print(total_json_array)
+            list_markers = []
+            rank = 0
         print(total_json_array)
 
         return JsonResponse({'message': 'Results were updated', 

@@ -199,7 +199,7 @@ const TestScoringForm = ({ model, modelId }) => {
                     </td>
                     <td>
                       {info.markers_and_values.map((el, index) => {
-                        console.log("el", el);
+                        // console.log("el", el);
                         return <tr key={index}>{el.value}</tr>;
                       })}
                     </td>
