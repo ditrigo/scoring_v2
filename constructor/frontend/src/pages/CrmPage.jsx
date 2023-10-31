@@ -6,7 +6,6 @@ import ContentRows from "../components/CrmPage/Form/ContentRows"
 import { Link } from "react-router-dom"
 import MyInput from "../components/UI/MyInput/MyInput"
 import MyButton from "../components/UI/MyButton/MyButton"
-import SelectSearchField from "../components/CrmPage/Form/SelectSearchField"
 
 const CrmPage = () => {
   const [users, setUsers] = useState()

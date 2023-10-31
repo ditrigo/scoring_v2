@@ -3,34 +3,43 @@ import axios from "axios"
 import MyButton from "../components/UI/MyButton/MyButton"
 import "bootstrap/dist/css/bootstrap.css"
 import "../styles/App.css"
+import configFile from "../config.json"
 
 const LoginPage = ({ setIsAuth }) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [err, settErr] = useState("")
+  // console.log(configFile.apiEndPoint)
 
   // Create the submit method.
   const submit = async (e) => {
-    e.preventDefault()
-    const user = {
-      username: username,
-      password: password,
+    try {
+      e.preventDefault()
+      const user = {
+        username: username,
+        password: password,
+      }
+      // Create the POST requuest
+      const { data } = await axios.post(
+        `${configFile.apiEndPoint}/token/`,
+        user,
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+        { withCredentials: true }
+      )
+      // Initialize the access & refresh token in localstorage.
+      localStorage.clear()
+      localStorage.setItem("access_token", data.access)
+      localStorage.setItem("refresh_token", data.refresh)
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${data["access"]}`
+      window.location.href = "/upload"
+    } catch (err) {
+      console.log(err)
+      settErr(err)
     }
-    // Create the POST requuest
-    const { data } = await axios.post(
-      "http://localhost:8000/api/token/",
-      user,
-      {
-        headers: { "Content-Type": "application/json" },
-      },
-      { withCredentials: true }
-    )
-
-    // Initialize the access & refresh token in localstorage.
-    localStorage.clear()
-    localStorage.setItem("access_token", data.access)
-    localStorage.setItem("refresh_token", data.refresh)
-    axios.defaults.headers.common["Authorization"] = `Bearer ${data["access"]}`
-    window.location.href = "/upload"
   }
 
   return (
@@ -51,7 +60,7 @@ const LoginPage = ({ setIsAuth }) => {
             />
           </div>
 
-          <div className="form-group mt-3">
+          <div className="form-group mt-3 mb-3">
             <label>Пароль</label>
             <input
               name="password"
@@ -63,6 +72,11 @@ const LoginPage = ({ setIsAuth }) => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          {err && (
+            <span className="text-danger">
+              Ошибка авторизации. Проверьте правильность набранных данных.
+            </span>
+          )}
           <div className="d-grid gap-2 mt-3">
             <MyButton type="submit" className="btn btn-primary">
               Подтвердить

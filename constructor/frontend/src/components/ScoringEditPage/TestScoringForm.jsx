@@ -1,44 +1,56 @@
-import React, { useEffect, useState } from "react";
-import MyInput from "../UI/MyInput/MyInput";
-import ReactDatePicker from "react-datepicker";
-import MyButton from "../UI/MyButton/MyButton";
-import axios from "axios";
+import React, { useEffect, useState } from "react"
+import MyInput from "../UI/MyInput/MyInput"
+import ReactDatePicker from "react-datepicker"
+import MyButton from "../UI/MyButton/MyButton"
+import axios from "axios"
+import modelService from "../../services/model.service"
+import configFile from "../../config.json"
 
 const TestScoringForm = ({ model, modelId }) => {
-  const [inputINN, setInputINN] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
-  const [isSaved, setIsSaved] = useState(false);
-  const [disabledBtn, setDisabledBtn] = useState("");
-  const [models, setModels] = useState([]);
-  const [updatedModel, setUpdatedModel] = useState();
-  const [json_response, setJson_response] = useState();
+  const [inputINN, setInputINN] = useState("")
+  const [startDate, setStartDate] = useState(new Date())
+  const [isSaved, setIsSaved] = useState(false)
+  const [disabledBtn, setDisabledBtn] = useState("")
+  const [models, setModels] = useState([])
+  const [updatedModel, setUpdatedModel] = useState()
+  const [json_response, setJson_response] = useState()
 
-  const isDisabled = model.model_name && inputINN;
-  const isDisabledScoring = model.model_name && inputINN; //&& isSaved
+  const isDisabled = model.model_name && inputINN
+  const isDisabledScoring = model.model_name && inputINN //&& isSaved
 
   const handleChangeINN = (e) => {
-    setInputINN(e.target.value);
-  };
+    setInputINN(e.target.value)
+  }
+
+  // async function getModels() {
+  //   await axios
+  //     .get("http://127.0.0.1:8000/api/scoring_model/")
+  //     .then((res) => {
+  //       setModels([])
+  //       console.log("getModels", res.data.data)
+  //       setModels(res.data.data)
+  //     })
+  //     .catch((e) => {
+  //       console.log(e)
+  //     })
+  // }
 
   async function getModels() {
-    await axios
-      .get("http://127.0.0.1:8000/api/scoring_model/")
-      .then((res) => {
-        setModels([]);
-        console.log("getModels", res.data.data);
-        setModels(res.data.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    try {
+      const { data } = await modelService.get()
+      setModels([])
+      setModels(data)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const doTestScoring = async () => {
-    console.log("Scoring test...");
+    console.log("Scoring test...")
 
-    const modelFromServer = models.find(
+    let modelFromServer = models.find(
       (el) => el.model_name === model.model_name
-    );
+    )
     // modelFromServer.inns =
     //    inputINN.split(", ").join(" ").split("/").join(" ").split(" ")
     // ;
@@ -49,30 +61,28 @@ const TestScoringForm = ({ model, modelId }) => {
       .join(" ")
       .split(" ")
       .forEach((inn) => {
-        modelFromServer.inns.push({ inn: inn });
-      });
+        modelFromServer.inns.push({ inn: inn })
+      })
 
     const json = {
       model: modelFromServer,
-    };
-    console.log("json", json);
+    }
+    // console.log("json", json)
     await axios
-      .post("http://127.0.0.1:8000/api/start_test_scoring/", json)
+      .post(`${configFile.apiEndPoint}/start_test_scoring/`, json)
       .then((resp) => {
-        getModels();
-        setInputINN("");
-        console.log("doTestScoring RESP", resp.data.response);
-        setJson_response(resp.data.response);
+        getModels()
+        setInputINN("")
+        // console.log("doTestScoring RESP", resp.data.response)
+        setJson_response(resp.data.response)
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err)
       })
       .finally(() => {
-        setUpdatedModel(
-          models.find((el) => el.model_name === model.model_name)
-        );
-      });
-  };
+        setUpdatedModel(models.find((el) => el.model_name === model.model_name))
+      })
+  }
 
   // async function handleSaveData() {
   //   await axios
@@ -80,7 +90,7 @@ const TestScoringForm = ({ model, modelId }) => {
   //       inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
   //       active: true,
   //       scoringmodel_id: modelId,
-  //       author_id: "Denis",
+  //       author_id: "Тестовый пользователь",
   //     })
   //     .then(function (response) {
   //       console.log("Сделать связку ", response.data)
@@ -95,8 +105,8 @@ const TestScoringForm = ({ model, modelId }) => {
   // }
 
   useEffect(() => {
-    getModels();
-  }, []);
+    getModels()
+  }, [])
 
   return (
     <div className="container p-0">
@@ -136,7 +146,7 @@ const TestScoringForm = ({ model, modelId }) => {
                   />
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td>Вид отчетности</td>
                 <td>
                   <select
@@ -151,7 +161,7 @@ const TestScoringForm = ({ model, modelId }) => {
                     <option value="2">Обновленная</option>
                   </select>
                 </td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
         </div>
@@ -185,7 +195,6 @@ const TestScoringForm = ({ model, modelId }) => {
               </tr>
             </thead>
             <tbody>
-              
               {json_response.map((info, index) => {
                 return (
                   <tr key={index}>
@@ -193,18 +202,18 @@ const TestScoringForm = ({ model, modelId }) => {
                     <td>{info.total_rank}</td>
                     <td>
                       {info.markers_and_values.map((el, index) => {
-                        console.log("el", el);
-                        return <tr key={index}>{el.formula}</tr>;
+                        console.log("el", el)
+                        return <tr key={index}>{el.formula}</tr>
                       })}
                     </td>
                     <td>
                       {info.markers_and_values.map((el, index) => {
                         // console.log("el", el);
-                        return <tr key={index}>{el.value}</tr>;
+                        return <tr key={index}>{el.value}</tr>
                       })}
                     </td>
                   </tr>
-                );
+                )
               })}
             </tbody>
           </table>
@@ -237,7 +246,7 @@ const TestScoringForm = ({ model, modelId }) => {
           })} */}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TestScoringForm;
+export default TestScoringForm

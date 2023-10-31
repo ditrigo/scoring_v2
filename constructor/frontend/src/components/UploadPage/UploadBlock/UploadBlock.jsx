@@ -1,5 +1,6 @@
 import axios from "axios"
 import React, { useRef, useState } from "react"
+import configFile from "../../../config.json"
 
 const UploadBlock = ({ uploadedFiles, setUploadedFiles }) => {
   // const [drag, setDrag] = useState(false)
@@ -24,7 +25,7 @@ const UploadBlock = ({ uploadedFiles, setUploadedFiles }) => {
     for (let file in files) {
       console.log(files[file])
       setUploadedFiles(files[file])
-      axios.post("http://127.0.0.1:8000/api/attributes/", files[file])
+      axios.post(`${configFile.apiEndPoint}/attributes/`, files[file])
     }
 
     // const formData = new FormData()

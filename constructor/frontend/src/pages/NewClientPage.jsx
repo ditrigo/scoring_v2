@@ -13,6 +13,7 @@ import {
   transformRegionsData,
   validatorConfig,
 } from "../components/utils/crmHelper"
+import configFile from "../config.json"
 
 const NewClientPage = () => {
   const params = useParams()
@@ -30,6 +31,7 @@ const NewClientPage = () => {
   const [negative, setNegative] = useState({})
   const [type, setType] = useState({})
   const [managers, setManagers] = useState({})
+
   const isValid = Object.keys(errors).length === 0
 
   const validate = () => {
@@ -64,7 +66,7 @@ const NewClientPage = () => {
     getTransformedData("crm_dept_type", setType, "type", "type")
 
     axios
-      .get(`http://127.0.0.1:8000/api/crm_managers/`)
+      .get(`${configFile.apiEndPoint}/crm_managers/`)
       .then((res) => {
         setManagers(transformManagersData(res.data.data))
       })
@@ -73,7 +75,7 @@ const NewClientPage = () => {
       })
 
     axios
-      .get(`http://127.0.0.1:8000/api/crm_region/`)
+      .get(`${configFile.apiEndPoint}/crm_region/`)
       .then((res) => {
         setRegions(transformRegionsData(res.data.data))
       })
@@ -136,7 +138,7 @@ const NewClientPage = () => {
       pledgetorDirectionDate: "",
       checkPoint: "",
       activityRisk: "",
-      assetsTypeRisk: "",
+      withdrawalOfAssetsRisk: "",
     })
   }
 
@@ -203,7 +205,7 @@ const NewClientPage = () => {
     pledgetorDirectionDate: "",
     checkPoint: "",
     activityRisk: "",
-    assetsTypeRisk: "",
+    withdrawalOfAssetsRisk: "",
   })
   const [testApi, setTestApi] = useState()
 
@@ -226,10 +228,22 @@ const NewClientPage = () => {
     { label: "Средний риск", value: "Средний риск", name: "activityRisk" },
     { label: "Низкий риск", value: "Низкий риск", name: "activityRisk" },
   ]
-  const assetsTypeRisk = [
-    { label: "Высокий риск", value: "Высокий риск", name: "assetsTypeRisk" },
-    { label: "Средний риск", value: "Средний риск", name: "assetsTypeRisk" },
-    { label: "Низкий риск", value: "Низкий риск", name: "assetsTypeRisk" },
+  const withdrawalOfAssetsRisk = [
+    {
+      label: "Высокий риск",
+      value: "Высокий риск",
+      name: "withdrawalOfAssetsRisk",
+    },
+    {
+      label: "Средний риск",
+      value: "Средний риск",
+      name: "withdrawalOfAssetsRisk",
+    },
+    {
+      label: "Низкий риск",
+      value: "Низкий риск",
+      name: "withdrawalOfAssetsRisk",
+    },
   ]
 
   const PRD = [
@@ -374,7 +388,7 @@ const NewClientPage = () => {
                 onChange={handleChangeTest}
                 name="PRD"
                 error={errors.PRD}
-                label="Представительсво РПД"
+                label="Представительсво ПРД"
                 placeholder={testData.PRD}
               />
               <SelectSearchField
@@ -394,12 +408,12 @@ const NewClientPage = () => {
                 placeholder={testData.activityRisk}
               />
               <SelectSearchField
-                options={assetsTypeRisk}
+                options={withdrawalOfAssetsRisk}
                 onChange={handleChangeTest}
-                name="assetsTypeRisk"
-                error={errors.assetsTypeRisk}
-                label="Вид активов (риск)"
-                placeholder={testData.assetsTypeRisk}
+                name="withdrawalOfAssetsRisk"
+                error={errors.withdrawalOfAssetsRisk}
+                label="Вывод активов (риск)"
+                placeholder={testData.withdrawalOfAssetsRisk}
               />
 
               {/* <TextField
@@ -410,7 +424,7 @@ const NewClientPage = () => {
                 error={errors.test}
               /> */}
               <TextField
-                label="Нименование клиента"
+                label="Наименование клиента"
                 name="name"
                 value={testData.name}
                 onChange={handleChangeTest}

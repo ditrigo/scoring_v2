@@ -1,12 +1,13 @@
 import { useEffect } from "react"
 import axios from "axios"
+import configFile from "../config.json"
 
 const LogoutPage = () => {
   useEffect(() => {
     ;(async () => {
       try {
         const { data } = await axios.post(
-          "http://localhost:8000/api/logout/",
+          `${configFile.apiEndPoint}/api/logout/`,
           {
             refresh_token: localStorage.getItem("refresh_token"),
           },

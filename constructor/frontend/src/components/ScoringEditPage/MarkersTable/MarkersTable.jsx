@@ -4,6 +4,7 @@ import MyButton from "../../UI/MyButton/MyButton"
 import axios from "axios"
 import MyInput from "../../UI/MyInput/MyInput.jsx"
 import TestScoringForm from "../../ScoringEditPage/TestScoringForm"
+import modelService from "../../../services/model.service"
 // import moment from "moment"
 // import localization from "moment/locale/ru"
 
@@ -14,40 +15,50 @@ const MarkersTable = ({ modelId, model }) => {
   const [modalMarkerView, setModalMarkerView] = useState(false)
   const [markerDetail, setMarkerDetail] = useState([{ name: "", formula: "" }])
 
+  // async function getLinkedMarkers() {
+  //   axios
+  //     .get(`http://127.0.0.1:8000/api/scoring_model/${modelId}`)
+  //     .then((res) => {
+  //       console.log("in getMarker ", res.data.data.marker_id)
+  //       setLinkedMarkers(res.data.data.marker_id)
+  //     })
+  //     .catch((e) => {
+  //       console.log(e)
+  //     })
+  // }
+
   async function getLinkedMarkers() {
-    axios
-      .get(`http://127.0.0.1:8000/api/scoring_model/${modelId}`)
-      .then((res) => {
-        // console.log("in getMarker ", res.data.data.marker_id)
-        setLinkedMarkers(res.data.data.marker_id)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+    try {
+      const { data } = await modelService.getLinkedMarkers(modelId)
+      console.log("from service ", data.marker_id)
+      setLinkedMarkers(data.marker_id)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
-  async function postMarkers(newAtr) {
-    axios
-      .post("http://127.0.0.1:8000/api/marker_attributes/", {
-        name_marker_attr: newAtr.name_marker_attr,
-        attr_formulas: newAtr.attr_formulas,
-        description: newAtr.description,
-        nested_level: newAtr.nested_level,
-        author_id: newAtr.author_id,
-      })
-      .then(function (response) {
-        console.log(response)
-        setMarkers([...markers, response.data])
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
-  }
+  // async function postMarkers(newAtr) {
+  //   axios
+  //     .post("http://127.0.0.1:8000/api/marker_attributes/", {
+  //       name_marker_attr: newAtr.name_marker_attr,
+  //       attr_formulas: newAtr.attr_formulas,
+  //       description: newAtr.description,
+  //       nested_level: newAtr.nested_level,
+  //       author_id: newAtr.author_id,
+  //     })
+  //     .then(function (response) {
+  //       console.log(response)
+  //       setMarkers([...markers, response.data])
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error)
+  //     })
+  // }
 
-  const doTestScoring = () => {
-    // setMarkers([...Markers, newMarker])
-    setModalTestScoring(false)
-  }
+  // const doTestScoring = () => {
+  //   // setMarkers([...Markers, newMarker])
+  //   setModalTestScoring(false)
+  // }
 
   useEffect(() => {
     getLinkedMarkers()

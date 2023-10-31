@@ -4,6 +4,7 @@ import MyInput from "../../UI/MyInput/MyInput"
 import Select from "react-select"
 import axios from "axios"
 import { CopyToClipboard } from "react-copy-to-clipboard"
+import configFile from "../../../config.json"
 
 const AtributForm = ({ create, setVisible }) => {
   const [marker, setMarker] = useState({
@@ -43,7 +44,7 @@ const AtributForm = ({ create, setVisible }) => {
     e.preventDefault()
     const newMarker = {
       ...marker,
-      description: "some description",
+      description: "Description",
       nested_level: 1,
       author_id: "Тестовый пользователь",
     }
@@ -55,7 +56,7 @@ const AtributForm = ({ create, setVisible }) => {
 
   async function getAttributes() {
     axios
-      .get("http://127.0.0.1:8000/api/catalog_fields/")
+      .get(`${configFile.apiEndPoint}/catalog_fields/`)
       .then((res) => {
         res.data.data.forEach((element) => {
           if (element.main_catalog_id.origin_name === "counted_attributes") {

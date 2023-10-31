@@ -2,27 +2,19 @@ import "../../../index.css"
 import { InboxOutlined } from "@ant-design/icons"
 import type { UploadProps } from "antd"
 import { message, Upload } from "antd"
-import axios from "axios"
 import React from "react"
+import configFile from "../../../config.json"
 
 const { Dragger } = Upload
 
 const props: UploadProps = {
   name: "filename", // это название колонки в БД
   multiple: true,
-  action: "http://127.0.0.1:8000/api/attributes/", // путь куда передавать данные
+  action: `${configFile.apiEndPoint}/attributes/`, // путь куда передавать данные
   onChange(info) {
     const { status } = info.file
     if (status !== "uploading") {
       console.log("vot", info.file)
-      // axios
-      //   .post("http://127.0.0.1:8000/api/files/", info.file)
-      //   .then(function (response) {
-      //     console.log(response)
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error)
-      //   })
     }
     if (status === "done") {
       message.success(`${info.file.name} файл загружен успешно.`)

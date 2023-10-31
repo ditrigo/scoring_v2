@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import MyButton from "../UI/MyButton/MyButton"
 import axios from "axios"
+import configFile from "../../config.json"
 
 const ResultMarkersView = () => {
   const { inn } = useParams()
@@ -10,7 +11,7 @@ const ResultMarkersView = () => {
 
   async function getResults() {
     axios
-      .get("http://127.0.0.1:8000/api/inn_res/")
+      .get(`${configFile.apiEndPoint}/inn_res/`)
       .then((res) => {
         // console.log("Результаты в просмотре ", res.data.data)
         setResults(res.data.data)
@@ -41,7 +42,7 @@ const ResultMarkersView = () => {
           <Link to="/results">
             <MyButton
               className="btn btn-outline-secondary mt-2"
-              onClick={() => { }}
+              onClick={() => {}}
             >
               К таблице результатов
             </MyButton>

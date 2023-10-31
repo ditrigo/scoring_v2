@@ -1,32 +1,33 @@
-import React, { useEffect, useState } from "react";
-import MyButton from "../../UI/MyButton/MyButton";
-import "bootstrap/dist/css/bootstrap.css";
-import axios from "axios";
-import "../../../styles/App.css";
+import React, { useEffect, useState } from "react"
+import MyButton from "../../UI/MyButton/MyButton"
+import "bootstrap/dist/css/bootstrap.css"
+import axios from "axios"
+import "../../../styles/App.css"
+import configFile from "../../../config.json"
 
 const ButtonGroup = () => {
-  const [open, setOPen] = useState(false);
-  const [attributes, setAttributes] = useState([]);
+  const [open, setOPen] = useState(false)
+  const [attributes, setAttributes] = useState([])
 
   const toggle = () => {
-    setOPen(!open);
-  };
+    setOPen(!open)
+  }
 
   async function getfiles() {
     axios
-      .get("http://127.0.0.1:8000/api/attributes/")
+      .get(`${configFile.apiEndPoint}/attributes/`)
       .then((res) => {
-        console.log(res.data.data);
-        setAttributes(res.data.data);
+        console.log(res.data.data)
+        setAttributes(res.data.data)
       })
       .catch((e) => {
-        console.log(e);
-      });
+        console.log(e)
+      })
   }
 
   useEffect(() => {
-    getfiles();
-  }, []);
+    getfiles()
+  }, [])
 
   return (
     <div className="container-bttns">
@@ -66,17 +67,17 @@ const ButtonGroup = () => {
                     <td>{file.inn}</td>
                     <td>{file.report_date}</td>
                   </tr>
-                );
+                )
               })}
             </tbody>
           </table>
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ButtonGroup;
+export default ButtonGroup
 
 // import React, { useEffect, useState } from 'react';
 // import MyButton from '../../UI/MyButton/MyButton';
