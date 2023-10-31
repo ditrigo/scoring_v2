@@ -1,30 +1,41 @@
-import axios from "axios";
+import axios from "axios"
+import configFile from "../config.json"
 
 // axios.defaults.baseURL = 'http://localhost:8000/api/';
 
-let refresh = false;
+let refresh = false
 
-axios.interceptors.response.use(resp => resp, async error => {
+axios.interceptors.response.use(
+  (resp) => resp,
+  async (error) => {
     if (error.response.status === 401 && !refresh) {
-        refresh = true;
+      refresh = true
 
-        console.log(localStorage.getItem('refresh_token'))
-        const response = await axios.post('http://localhost:8000/token/refresh/', {
-            refresh: localStorage.getItem('refresh_token')
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }, { withCredentials: true });
+      console.log(localStorage.getItem("refresh_token"))
+      const response = await axios.post(
+        `${configFile.apiEndPoint}/token/refresh/`,
+        {
+          refresh: localStorage.getItem("refresh_token"),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+        { withCredentials: true }
+      )
 
-        if (response.status === 200) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data['access']}`;
-            localStorage.setItem('access_token', response.data.access);
-            localStorage.setItem('refresh_token', response.data.refresh);
+      if (response.status === 200) {
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data["access"]}`
+        localStorage.setItem("access_token", response.data.access)
+        localStorage.setItem("refresh_token", response.data.refresh)
 
-            return axios(error.config);
-        }
+        return axios(error.config)
+      }
     }
-    refresh = false;
-    return error;
-});
+    refresh = false
+    return error
+  }
+)
