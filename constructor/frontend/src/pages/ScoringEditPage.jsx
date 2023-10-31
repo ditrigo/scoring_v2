@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import "bootstrap/dist/css/bootstrap.css"
-import axios from "axios"
+// import axios from "axios"
 // import MyButton from "../components/UI/MyButton/MyButton";
 // import { Link } from "react-router-dom";
 import SearchBar from "../components/ScoringEditPage/SearchBar/SearchBar"
@@ -13,7 +13,7 @@ const ScoringEdit = () => {
   // const [markers, setMarkers] = useState([])
 
   const { state } = useLocation()
-  console.log(state)
+  // console.log(state)
 
   // async function getCountedAttributes() {
   //   axios
@@ -57,7 +57,7 @@ const ScoringEdit = () => {
     try {
       const data = await modelService.put(state.models.id, {
         status: status,
-        author_id: "Den", // TODO CHANGE REAL SYSTEM USER. NOT HARD CODE !!
+        author_id: "Тестовый пользователь", // TODO CHANGE REAL SYSTEM USER. NOT HARD CODE !!
       })
       console.log(data)
     } catch (e) {

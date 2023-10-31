@@ -70,154 +70,154 @@ def FilesListViewSet(request):  # (viewsets.ModelViewSet):
 
 def InsertValuesToCountedAttributes():
 
-    def calculate_counted_attributes(csv_attributes):
-        inn = csv_attributes.inn
+    def calculate_counted_attributes(imported_attributes):
+        inn = imported_attributes.inn
         # print(inn)
-        other_property = csv_attributes.s_1150_4 - csv_attributes.pru_cad_cost_amt - csv_attributes.lru_cad_cost_amt - csv_attributes.lru_cad_cost_amt_6monthago if csv_attributes.s_1150_4 - \
-            csv_attributes.pru_cad_cost_amt - csv_attributes.lru_cad_cost_amt - csv_attributes.lru_cad_cost_amt_6monthago > 0 else 0
+        other_property = imported_attributes.s_1150_4 - imported_attributes.pru_cad_cost_amt - imported_attributes.lru_cad_cost_amt - imported_attributes.lru_cad_cost_amt_6monthago if imported_attributes.s_1150_4 - \
+            imported_attributes.pru_cad_cost_amt - imported_attributes.lru_cad_cost_amt - imported_attributes.lru_cad_cost_amt_6monthago > 0 else 0
         # print(other_property)
-        clr = csv_attributes.s_1500_4 - \
-            csv_attributes.s_1530_4 if csv_attributes.s_1500_4 - \
-            csv_attributes.s_1530_4 != 0 else 0
+        clr = imported_attributes.s_1500_4 - \
+            imported_attributes.s_1530_4 if imported_attributes.s_1500_4 - \
+            imported_attributes.s_1530_4 != 0 else 0
         # print(clr)
-        solvency_ratio = csv_attributes.s_1200_4 / \
-            (csv_attributes.s_1500_4 + csv_attributes.s_1400_4) if csv_attributes.s_1500_4 + \
-            csv_attributes.s_1400_4 != 0 else 0
+        solvency_ratio = imported_attributes.s_1200_4 / \
+            (imported_attributes.s_1500_4 + imported_attributes.s_1400_4) if imported_attributes.s_1500_4 + \
+            imported_attributes.s_1400_4 != 0 else 0
         # print(solvency_ratio)
-        autonomy_ratio = csv_attributes.s_1300_4 / \
-            csv_attributes.s_1600_4 if csv_attributes.s_1600_4 != 0 else 0
+        autonomy_ratio = imported_attributes.s_1300_4 / \
+            imported_attributes.s_1600_4 if imported_attributes.s_1600_4 != 0 else 0
         # print(autonomy_ratio)
-        perc_coverage_ratio = csv_attributes.s_2400_4 / \
-            csv_attributes.s_2330_4 if csv_attributes.s_2330_4 != 0 else 0
+        perc_coverage_ratio = imported_attributes.s_2400_4 / \
+            imported_attributes.s_2330_4 if imported_attributes.s_2330_4 != 0 else 0
         # print(perc_coverage_ratio)
-        assets_return = csv_attributes.s_2400_4 / \
-            csv_attributes.s_1600_4 if csv_attributes.s_1600_4 != 0 else 0
+        assets_return = imported_attributes.s_2400_4 / \
+            imported_attributes.s_1600_4 if imported_attributes.s_1600_4 != 0 else 0
         # print(assets_return)
-        dolg_in_balance = csv_attributes.dolg / \
-            csv_attributes.s_1600_4 if csv_attributes.s_1600_4 != 0 else 0
+        dolg_in_balance = imported_attributes.dolg / \
+            imported_attributes.s_1600_4 if imported_attributes.s_1600_4 != 0 else 0
         # print(dolg_in_balance)
-        return_on_equity = csv_attributes.s_2400_4 / ((csv_attributes.s_1300_4 + csv_attributes.s_1300_5) / 2) * \
-            100 if csv_attributes.s_1300_4 + csv_attributes.s_1300_5 != 0 else 0
+        return_on_equity = imported_attributes.s_2400_4 / ((imported_attributes.s_1300_4 + imported_attributes.s_1300_5) / 2) * \
+            100 if imported_attributes.s_1300_4 + imported_attributes.s_1300_5 != 0 else 0
         # print(return_on_equity)
-        fin_leverage = (csv_attributes.s_1500_4 + csv_attributes.s_1400_4) / \
-            csv_attributes.s_1300_4 if csv_attributes.s_1300_4 != 0 else 0
+        fin_leverage = (imported_attributes.s_1500_4 + imported_attributes.s_1400_4) / \
+            imported_attributes.s_1300_4 if imported_attributes.s_1300_4 != 0 else 0
         # print(fin_leverage)
-        dolg_ebit = (csv_attributes.s_1410_4 + csv_attributes.s_1510_4 - csv_attributes.s_1240_4 - csv_attributes.s_1250_4) / (csv_attributes.s_2110_4 - csv_attributes.s_2120_4 - csv_attributes.s_2210_4 - csv_attributes.s_2220_4 + csv_attributes.s_2310_4 + csv_attributes.s_2320_4 +
-                                                                                                                               csv_attributes.s_2340_4 - csv_attributes.s_2350_4) if (csv_attributes.s_2110_4 - csv_attributes.s_2120_4 - csv_attributes.s_2210_4 - csv_attributes.s_2220_4 + csv_attributes.s_2310_4 + csv_attributes.s_2320_4 + csv_attributes.s_2340_4 - csv_attributes.s_2350_4) != 0 else 0
+        dolg_ebit = (imported_attributes.s_1410_4 + imported_attributes.s_1510_4 - imported_attributes.s_1240_4 - imported_attributes.s_1250_4) / (imported_attributes.s_2110_4 - imported_attributes.s_2120_4 - imported_attributes.s_2210_4 - imported_attributes.s_2220_4 + imported_attributes.s_2310_4 + imported_attributes.s_2320_4 +
+                                                                                                                               imported_attributes.s_2340_4 - imported_attributes.s_2350_4) if (imported_attributes.s_2110_4 - imported_attributes.s_2120_4 - imported_attributes.s_2210_4 - imported_attributes.s_2220_4 + imported_attributes.s_2310_4 + imported_attributes.s_2320_4 + imported_attributes.s_2340_4 - imported_attributes.s_2350_4) != 0 else 0
         # print("dolg_ebit", dolg_ebit)
-        turnover = csv_attributes.s_2110_4 / \
-            ((csv_attributes.s_1600_4 + csv_attributes.s_1600_5) /
-             2) if csv_attributes.s_1600_4 + csv_attributes.s_1600_5 != 0 else 0
+        turnover = imported_attributes.s_2110_4 / \
+            ((imported_attributes.s_1600_4 + imported_attributes.s_1600_5) /
+             2) if imported_attributes.s_1600_4 + imported_attributes.s_1600_5 != 0 else 0
         # print(turnover)
-        turnover_in_credit = (csv_attributes.s_1520_4 + csv_attributes.s_1520_5) / (csv_attributes.s_1230_4 +
-                                                                                    csv_attributes.s_1230_5) if csv_attributes.s_1230_4 + csv_attributes.s_1230_5 != 0 else 0
+        turnover_in_credit = (imported_attributes.s_1520_4 + imported_attributes.s_1520_5) / (imported_attributes.s_1230_4 +
+                                                                                    imported_attributes.s_1230_5) if imported_attributes.s_1230_4 + imported_attributes.s_1230_5 != 0 else 0
         # print(turnover_in_credit)
-        repay_fund = (csv_attributes.account_balance_SKUAD + csv_attributes.pru_cad_cost_amt + csv_attributes.lru_cad_cost_amt - csv_attributes.cad_cost_amt_inpledge +
-                      csv_attributes.s_1230_4 * 0.0861 + csv_attributes.ts_cad_cost_amt + other_property) / (csv_attributes.s_1520_4 * 1.069) if csv_attributes.s_1520_4 != 0 else 0
+        repay_fund = (imported_attributes.account_balance_SKUAD + imported_attributes.pru_cad_cost_amt + imported_attributes.lru_cad_cost_amt - imported_attributes.cad_cost_amt_inpledge +
+                      imported_attributes.s_1230_4 * 0.0861 + imported_attributes.ts_cad_cost_amt + other_property) / (imported_attributes.s_1520_4 * 1.069) if imported_attributes.s_1520_4 != 0 else 0
         # print(repay_fund)
-        invest_coverage_ratio = (csv_attributes.s_1300_4 + csv_attributes.s_1400_4) / \
-            csv_attributes.s_1600_4 if csv_attributes.s_1600_4 != 0 else 0
+        invest_coverage_ratio = (imported_attributes.s_1300_4 + imported_attributes.s_1400_4) / \
+            imported_attributes.s_1600_4 if imported_attributes.s_1600_4 != 0 else 0
         # print(invest_coverage_ratio)
-        equity_capital_ratio = (csv_attributes.s_1300_4 - csv_attributes.s_1100_4) / \
-            csv_attributes.s_1200_4 if csv_attributes.s_1200_4 != 0 else 0
+        equity_capital_ratio = (imported_attributes.s_1300_4 - imported_attributes.s_1100_4) / \
+            imported_attributes.s_1200_4 if imported_attributes.s_1200_4 != 0 else 0
         # print(equity_capital_ratio)
-        stock_avail_ration = (csv_attributes.s_1300_4 - csv_attributes.s_1100_4) / \
-            csv_attributes.s_1210_4 if csv_attributes.s_1210_4 != 0 else 0
+        stock_avail_ration = (imported_attributes.s_1300_4 - imported_attributes.s_1100_4) / \
+            imported_attributes.s_1210_4 if imported_attributes.s_1210_4 != 0 else 0
         # print(stock_avail_ration)
-        quick_liquid_ratio = (csv_attributes.s_1230_4 + csv_attributes.s_1240_4 + csv_attributes.s_1250_4) / \
-            csv_attributes.s_1210_4 if csv_attributes.s_1500_4 != 0 else 0
+        quick_liquid_ratio = (imported_attributes.s_1230_4 + imported_attributes.s_1240_4 + imported_attributes.s_1250_4) / \
+            imported_attributes.s_1210_4 if imported_attributes.s_1500_4 != 0 else 0
         # print(quick_liquid_ratio)
-        asset_dinam_1 = csv_attributes.s_1600_4 - csv_attributes.s_1600_5
+        asset_dinam_1 = imported_attributes.s_1600_4 - imported_attributes.s_1600_5
         # print(asset_dinam_1)
-        asset_dinam_2 = csv_attributes.s_1600_5 - csv_attributes.s_1600_4_2yearago
+        asset_dinam_2 = imported_attributes.s_1600_5 - imported_attributes.s_1600_4_2yearago
         # print(asset_dinam_2)
-        asset_dinam_3 = csv_attributes.s_1600_4_2yearago - csv_attributes.s_1600_5_2yearago
+        asset_dinam_3 = imported_attributes.s_1600_4_2yearago - imported_attributes.s_1600_5_2yearago
         # print("asset_dinam_3", asset_dinam_3)
-        profit_dinam_1 = csv_attributes.s_2400_4 - csv_attributes.s_2400_5
+        profit_dinam_1 = imported_attributes.s_2400_4 - imported_attributes.s_2400_5
         # print(profit_dinam_1)
-        profit_dinam_2 = csv_attributes.s_2400_5 - csv_attributes.s_2400_4
+        profit_dinam_2 = imported_attributes.s_2400_5 - imported_attributes.s_2400_4
         # print(profit_dinam_2)
-        profit_dinam_3 = csv_attributes.s_2400_4 - csv_attributes.s_2400_5_2yearago
+        profit_dinam_3 = imported_attributes.s_2400_4 - imported_attributes.s_2400_5_2yearago
         # print(profit_dinam_3)
-        k_5_154 = csv_attributes.s_1200_4 / \
-            csv_attributes.s_1500_4 if csv_attributes.s_1500_4 != 0 else 0
+        k_5_154 = imported_attributes.s_1200_4 / \
+            imported_attributes.s_1500_4 if imported_attributes.s_1500_4 != 0 else 0
         # print(k_5_154)
-        k_6_155 = csv_attributes.s_1300_4 / (csv_attributes.s_1510_4 + csv_attributes.s_1400_4 + csv_attributes.s_1550_4 +
-                                             csv_attributes.s_1520_4) if csv_attributes.s_1510_4 + csv_attributes.s_1400_4 + csv_attributes.s_1550_4 + csv_attributes.s_1520_4 != 0 else 0
+        k_6_155 = imported_attributes.s_1300_4 / (imported_attributes.s_1510_4 + imported_attributes.s_1400_4 + imported_attributes.s_1550_4 +
+                                             imported_attributes.s_1520_4) if imported_attributes.s_1510_4 + imported_attributes.s_1400_4 + imported_attributes.s_1550_4 + imported_attributes.s_1520_4 != 0 else 0
         # print(k_6_155)
-        k_7_156 = (csv_attributes.s_2400_4 + csv_attributes.s_2330_4 + csv_attributes.s_2410_4) / \
-            csv_attributes.s_2330_4 if csv_attributes.s_2330_4 != 0 else 0
+        k_7_156 = (imported_attributes.s_2400_4 + imported_attributes.s_2330_4 + imported_attributes.s_2410_4) / \
+            imported_attributes.s_2330_4 if imported_attributes.s_2330_4 != 0 else 0
         # print(k_7_156)
-        k_8_157 = csv_attributes.s_2200_4 / \
-            csv_attributes.s_1100_4 if csv_attributes.s_1100_4 != 0 else 0
+        k_8_157 = imported_attributes.s_2200_4 / \
+            imported_attributes.s_1100_4 if imported_attributes.s_1100_4 != 0 else 0
         # print(k_8_157)
-        k_9_158 = csv_attributes.s_1300_4 / \
-            csv_attributes.s_1600_4 if csv_attributes.s_1600_4 != 0 else 0
+        k_9_158 = imported_attributes.s_1300_4 / \
+            imported_attributes.s_1600_4 if imported_attributes.s_1600_4 != 0 else 0
         # print(k_9_158)
-        k_10_159 = (csv_attributes.s_1400_4 + csv_attributes.s_1500_4) / \
-            csv_attributes.s_1300_4 if csv_attributes.s_1300_4 != 0 else 0
+        k_10_159 = (imported_attributes.s_1400_4 + imported_attributes.s_1500_4) / \
+            imported_attributes.s_1300_4 if imported_attributes.s_1300_4 != 0 else 0
         # print(k_10_159)
-        property_sum = csv_attributes.pru_cad_cost_amt + \
-            csv_attributes.lru_cad_cost_amt + csv_attributes.ts_cad_cost_amt
+        property_sum = imported_attributes.pru_cad_cost_amt + \
+            imported_attributes.lru_cad_cost_amt + imported_attributes.ts_cad_cost_amt
         # print("property_sum ", property_sum)
-        k_1_161 = (csv_attributes.enforce_ntfinish_sum_wthtax + csv_attributes.dolg) * \
-            100 / csv_attributes.s_1520_4 - 100 if csv_attributes.s_1520_4 != 0 else 0
+        k_1_161 = (imported_attributes.enforce_ntfinish_sum_wthtax + imported_attributes.dolg) * \
+            100 / imported_attributes.s_1520_4 - 100 if imported_attributes.s_1520_4 != 0 else 0
         # print(k_1_161)
-        k_2_162 = csv_attributes.s_1210_4 * 100 / csv_attributes.s_1150_4 - \
-            100 if csv_attributes.s_1150_4 != 0 else 0
+        k_2_162 = imported_attributes.s_1210_4 * 100 / imported_attributes.s_1150_4 - \
+            100 if imported_attributes.s_1150_4 != 0 else 0
         # print("k_2_162", k_2_162)
-        k_3_163 = (csv_attributes.npo_2_010_year + csv_attributes.npo_4_010 + csv_attributes.npo_5_060) * \
-            100 / csv_attributes.s_2110_4 - 100 if csv_attributes.s_2110_4 != 0 else 0
+        k_3_163 = (imported_attributes.npo_2_010_year + imported_attributes.npo_4_010 + imported_attributes.npo_5_060) * \
+            100 / imported_attributes.s_2110_4 - 100 if imported_attributes.s_2110_4 != 0 else 0
         # print("k_3_163", k_3_163)
-        k_4_164 = 100 if (csv_attributes.s_1510_4 + csv_attributes.s_1410_4) == 0 and csv_attributes.cad_cost_amt_inpledge > 0 else (
-            csv_attributes.cad_cost_amt_inpledge * 100 / (csv_attributes.s_1510_4 + csv_attributes.s_1410_4) - 100)
+        k_4_164 = 100 if (imported_attributes.s_1510_4 + imported_attributes.s_1410_4) == 0 and imported_attributes.cad_cost_amt_inpledge > 0 else (
+            imported_attributes.cad_cost_amt_inpledge * 100 / (imported_attributes.s_1510_4 + imported_attributes.s_1410_4) - 100)
         # print("k_4_164", k_4_164)
-        revenue_dinam = 100 if csv_attributes.npo_2_020_thisyear > 0 and csv_attributes.npo_2_020_lastyear != 0 else (
-            (csv_attributes.npo_2_020_thisyear - csv_attributes.npo_2_020_lastyear) * 100 / csv_attributes.npo_2_020_lastyear - 100) if csv_attributes.npo_2_020_lastyear != 0 else 0
+        revenue_dinam = 100 if imported_attributes.npo_2_020_thisyear > 0 and imported_attributes.npo_2_020_lastyear != 0 else (
+            (imported_attributes.npo_2_020_thisyear - imported_attributes.npo_2_020_lastyear) * 100 / imported_attributes.npo_2_020_lastyear - 100) if imported_attributes.npo_2_020_lastyear != 0 else 0
         # print("revenue_dinam ", revenue_dinam)
-        # print(f"""account_balance_SKUAD {csv_attributes.account_balance_SKUAD}\nproperty_sum{property_sum}\ns_1230_4{csv_attributes.s_1230_4}
-        #         \nother_property{other_property}\ns_1210_4{csv_attributes.s_1210_4}\nnpo_2_060_year{csv_attributes.npo_2_060_year}
-        #         \nstcontract_amount{csv_attributes.stcontract_amount}\ndolg{csv_attributes.dolg}\nrazryv_1stlink_sum{csv_attributes.razryv_1stlink_sum}\nenforce_ntfinish_sum_wthtax{csv_attributes.enforce_ntfinish_sum_wthtax}"""
+        # print(f"""account_balance_SKUAD {imported_attributes.account_balance_SKUAD}\nproperty_sum{property_sum}\ns_1230_4{imported_attributes.s_1230_4}
+        #         \nother_property{other_property}\ns_1210_4{imported_attributes.s_1210_4}\nnpo_2_060_year{imported_attributes.npo_2_060_year}
+        #         \nstcontract_amount{imported_attributes.stcontract_amount}\ndolg{imported_attributes.dolg}\nrazryv_1stlink_sum{imported_attributes.razryv_1stlink_sum}\nenforce_ntfinish_sum_wthtax{imported_attributes.enforce_ntfinish_sum_wthtax}"""
         #       )
         
-        current_business_value = (csv_attributes.account_balance_SKUAD + property_sum + csv_attributes.s_1230_4 * 0.0861 + other_property + csv_attributes.s_1210_4 +
-                                  csv_attributes.npo_2_060_year + csv_attributes.stcontract_amount - csv_attributes.dolg - csv_attributes.razryv_1stlink_sum - csv_attributes.enforce_ntfinish_sum_wthtax) / 1000000
+        current_business_value = (imported_attributes.account_balance_SKUAD + property_sum + imported_attributes.s_1230_4 * 0.0861 + other_property + imported_attributes.s_1210_4 +
+                                  imported_attributes.npo_2_060_year + imported_attributes.stcontract_amount - imported_attributes.dolg - imported_attributes.razryv_1stlink_sum - imported_attributes.enforce_ntfinish_sum_wthtax) / 1000000
         # print(current_business_value)
-        # print(csv_attributes.account_balance_SKUAD, 
-            #   property_sum, csv_attributes.s_1230_4, 
-            #   other_property, csv_attributes.s_1210_4, 
-            #   csv_attributes.npo_2_060_year,
-            #   csv_attributes.stcontract_amount, 
-            #   csv_attributes.dolg, 
-            #   csv_attributes.razryv_1stlink_sum,
-            #   csv_attributes.enforce_ntfinish_sum_wthtax)
+        # print(imported_attributes.account_balance_SKUAD, 
+            #   property_sum, imported_attributes.s_1230_4, 
+            #   other_property, imported_attributes.s_1210_4, 
+            #   imported_attributes.npo_2_060_year,
+            #   imported_attributes.stcontract_amount, 
+            #   imported_attributes.dolg, 
+            #   imported_attributes.razryv_1stlink_sum,
+            #   imported_attributes.enforce_ntfinish_sum_wthtax)
         
-        liquid_business_value = ((csv_attributes.pru_cad_cost_amt + csv_attributes.lru_cad_cost_amt + csv_attributes.ts_cad_cost_amt)
-                                 * 0.2 + csv_attributes.s_1230_4 * 0.0861 + other_property * 0.2) / 1000000
+        liquid_business_value = ((imported_attributes.pru_cad_cost_amt + imported_attributes.lru_cad_cost_amt + imported_attributes.ts_cad_cost_amt)
+                                 * 0.2 + imported_attributes.s_1230_4 * 0.0861 + other_property * 0.2) / 1000000
         # print(liquid_business_value)
-        repay_fund_lender = ((csv_attributes.account_balance_SKUAD + (csv_attributes.pru_cad_cost_amt + csv_attributes.lru_cad_cost_amt + csv_attributes.ts_cad_cost_amt) * 0.2 + csv_attributes.s_1230_4 * 0.0861 +
-                              other_property * 0.2) * 100) / (csv_attributes.s_1500_4 + csv_attributes.s_1400_4 + csv_attributes.dolg) if (csv_attributes.s_1500_4 + csv_attributes.s_1400_4 + csv_attributes.dolg) != 0 else 0
+        repay_fund_lender = ((imported_attributes.account_balance_SKUAD + (imported_attributes.pru_cad_cost_amt + imported_attributes.lru_cad_cost_amt + imported_attributes.ts_cad_cost_amt) * 0.2 + imported_attributes.s_1230_4 * 0.0861 +
+                              other_property * 0.2) * 100) / (imported_attributes.s_1500_4 + imported_attributes.s_1400_4 + imported_attributes.dolg) if (imported_attributes.s_1500_4 + imported_attributes.s_1400_4 + imported_attributes.dolg) != 0 else 0
         # print(repay_fund_lender)
-        need_capital = ((csv_attributes.s_1300_5 / csv_attributes.s_1300_4) / 1000000 - csv_attributes.s_1300_4 / 1000000) if csv_attributes.s_1300_4 != 0 and (
-            (csv_attributes.s_1300_5 / csv_attributes.s_1300_4) < 0 or (csv_attributes.s_1300_5 / csv_attributes.s_1300_4) > 3) else 0
+        need_capital = ((imported_attributes.s_1300_5 / imported_attributes.s_1300_4) / 1000000 - imported_attributes.s_1300_4 / 1000000) if imported_attributes.s_1300_4 != 0 and (
+            (imported_attributes.s_1300_5 / imported_attributes.s_1300_4) < 0 or (imported_attributes.s_1300_5 / imported_attributes.s_1300_4) > 3) else 0
         # print(need_capital)
-        need_capital_dp = ((csv_attributes.s_1410_4 / csv_attributes.s_1300_4) / 1000000 - csv_attributes.s_1300_4 / 1000000) if csv_attributes.s_1300_4 != 0 and (
-            (csv_attributes.s_1410_4 / csv_attributes.s_1300_4) < 0 or (csv_attributes.s_1410_4 / csv_attributes.s_1300_4) > 3) else 0
+        need_capital_dp = ((imported_attributes.s_1410_4 / imported_attributes.s_1300_4) / 1000000 - imported_attributes.s_1300_4 / 1000000) if imported_attributes.s_1300_4 != 0 and (
+            (imported_attributes.s_1410_4 / imported_attributes.s_1300_4) < 0 or (imported_attributes.s_1410_4 / imported_attributes.s_1300_4) > 3) else 0
         # print(need_capital_dp)
-        ebitda = csv_attributes.npo_2_010_year + csv_attributes.npo_2_020_year - \
-            csv_attributes.npo_2_030_year - csv_attributes.npo_2_040_year
+        ebitda = imported_attributes.npo_2_010_year + imported_attributes.npo_2_020_year - \
+            imported_attributes.npo_2_030_year - imported_attributes.npo_2_040_year
         # print(ebitda)
-        dolg_score = csv_attributes.s_1520_4 + \
-            csv_attributes.s_1450_4 + csv_attributes.s_1550_4
+        dolg_score = imported_attributes.s_1520_4 + \
+            imported_attributes.s_1450_4 + imported_attributes.s_1550_4
         # print(dolg_score)
-        dolg_dp = csv_attributes.s_1410_4 + csv_attributes.s_1450_4 + \
-            csv_attributes.s_1510_4 + csv_attributes.s_1520_4
+        dolg_dp = imported_attributes.s_1410_4 + imported_attributes.s_1450_4 + \
+            imported_attributes.s_1510_4 + imported_attributes.s_1520_4
         # print(dolg_dp)
-        need_capital_rub = (csv_attributes.account_balance_SKUAD + property_sum + csv_attributes.s_1230_4 * 0.0861 + other_property + csv_attributes.s_1210_4 +
-                            csv_attributes.npo_2_060_year + csv_attributes.stcontract_amount - csv_attributes.dolg - csv_attributes.razryv_1stlink_sum - csv_attributes.enforce_ntfinish_sum_wthtax) / 1000
+        need_capital_rub = (imported_attributes.account_balance_SKUAD + property_sum + imported_attributes.s_1230_4 * 0.0861 + other_property + imported_attributes.s_1210_4 +
+                            imported_attributes.npo_2_060_year + imported_attributes.stcontract_amount - imported_attributes.dolg - imported_attributes.razryv_1stlink_sum - imported_attributes.enforce_ntfinish_sum_wthtax) / 1000
         # print(need_capital_rub)
-        need_capital_dp_rub = ((csv_attributes.pru_cad_cost_amt + csv_attributes.lru_cad_cost_amt + csv_attributes.ts_cad_cost_amt)
-                               * 0.2 + csv_attributes.s_1230_4 * 0.0861 + other_property * 0.2) / 1000
+        need_capital_dp_rub = ((imported_attributes.pru_cad_cost_amt + imported_attributes.lru_cad_cost_amt + imported_attributes.ts_cad_cost_amt)
+                               * 0.2 + imported_attributes.s_1230_4 * 0.0861 + other_property * 0.2) / 1000
         # print(need_capital_dp_rub)
 
         CountedAttributesNew.objects.create(
@@ -593,7 +593,7 @@ def ScoringModelListViewSet(request):
     elif request.method == 'POST':
         serializer = ScoringModelSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(author_id=request.user)
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -794,7 +794,7 @@ def StartScoringViewSet(request):
                             marker_formula_list.append(v)
         
         # print(inn_list)
-        # print(marker_formula_list)
+        print(marker_formula_list)
         # print(CsvAttributes.objects.get(inn=inn_list[0]).np_name)
 
         dict_markers = {}
@@ -806,6 +806,7 @@ def StartScoringViewSet(request):
                     counted_attributes = CountedAttributesNew.objects.get(inn=inn)
                 except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
                     continue
+                print("VALUE",value)
                 value = eval(formula)
                 list_markers.append({'formula': formula, "value": value})
                 
@@ -855,13 +856,23 @@ def StartTestScoringViewSet(request):
         # dict_markers = {}
         list_markers, total_json_array = [], []
         for inn in inn_list:
+            # print("INN", inn)
+            try:
+                # print("TRY")
+                imported_attributes = ImportedAttributes.objects.get(inn=inn)
+                counted_attributes = CountedAttributesNew.objects.get(inn=inn)
+            except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
+                # print("EXCEPT")
+                continue
             for formula in marker_formula_list:
-                try:
-                    imported_attributes = ImportedAttributes.objects.get(inn=inn)
-                    counted_attributes = CountedAttributesNew.objects.get(inn=inn)
-                except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
-                    continue
+                # print("FORMULA", formula)
+                # try:
+                #     imported_attributes = ImportedAttributes.objects.get(inn=inn)
+                #     counted_attributes = CountedAttributesNew.objects.get(inn=inn)
+                # except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
+                #     continue
                 value = eval(formula)
+                # print("VALUE", value)
                 list_markers.append({'formula': formula, "value": value })
                 rank += value
 
@@ -870,8 +881,12 @@ def StartTestScoringViewSet(request):
                 "total_rank": rank,
                 "inn": inn
             }
+
             total_json_array.append(total_json)
-        # print(total_json_array)
+            # print(total_json_array)
+            list_markers = []
+            rank = 0
+        print(total_json_array)
 
         return JsonResponse({'message': 'Results were updated', 
                              "response": total_json_array}, 

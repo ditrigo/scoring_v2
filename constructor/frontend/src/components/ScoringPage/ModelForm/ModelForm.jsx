@@ -55,7 +55,7 @@ const ModelForm = ({ create, models, getLinkMarkers }) => {
     const newModel = {
       model_name: model.model_name,
       description: model.description,
-      author_id: "Denis",
+      author_id: "Тестовый пользователь",
       status: "DF",
       version: 1,
       active: true,
@@ -97,7 +97,6 @@ const ModelForm = ({ create, models, getLinkMarkers }) => {
         </MyButton>
       </form>
     </div>
-
   )
 }
 

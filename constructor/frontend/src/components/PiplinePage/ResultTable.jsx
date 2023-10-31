@@ -4,6 +4,8 @@ import axios from "axios"
 import Moment from "moment"
 import localization from "moment/locale/ru"
 import { Link } from "react-router-dom"
+import modelService from "../../services/model.service"
+import configFile from "../../config.json"
 
 const ResultTable = ({ getLinkMarkers }) => {
   const [results, setResults] = useState([])
@@ -13,9 +15,9 @@ const ResultTable = ({ getLinkMarkers }) => {
 
   async function getResults() {
     axios
-      .get("http://127.0.0.1:8000/api/inn_res/")
+      .get(`${configFile.apiEndPoint}/inn_res/`)
       .then((res) => {
-        console.log("Результаты в таблице", res.data.data)
+        // console.log("Результаты в таблице", res.data.data)
         setResults(res.data.data)
       })
       .catch((e) => {
@@ -25,7 +27,7 @@ const ResultTable = ({ getLinkMarkers }) => {
 
   async function downLoadResults() {
     axios({
-      url: "http://localhost:8000/api/download/",
+      url: `${configFile.apiEndPoint}/download/`,
       method: "GET",
       responseType: "blob",
     })
@@ -43,16 +45,26 @@ const ResultTable = ({ getLinkMarkers }) => {
     getModels()
   }, [])
 
-  async function getModels() {
-    axios
-      .get("http://127.0.0.1:8000/api/scoring_model/")
-      .then((res) => {
-        // console.log("Получение моделей resTab", res.data.data)
-        setModels(res.data.data)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+  // async function getModels() {
+  //   axios
+  //     .get("http://127.0.0.1:8000/api/scoring_model/")
+  //     .then((res) => {
+  //       // console.log("Получение моделей resTab", res.data.data)
+  //       setModels(res.data.data)
+  //     })
+  //     .catch((e) => {
+  //       console.log(e)
+  //     })
+  // }
+
+  const getModels = async () => {
+    try {
+      const { data } = await modelService.get()
+      // console.log("from service ", data)
+      setModels(data)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
@@ -65,9 +77,10 @@ const ResultTable = ({ getLinkMarkers }) => {
       >
         <div className="row  mb-3">
           <div className="col-md-auto">
-            <Link to="/pipeline"
+            <Link
+              to="/pipeline"
               // className="mb-2"
-              >
+            >
               <MyButton
                 className="btn btn-outline-secondary"
                 // onClick={() => { }}

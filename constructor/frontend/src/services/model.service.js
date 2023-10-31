@@ -11,6 +11,10 @@ const modelService = {
     const { data } = await httpService.post(modelEndPoint, payload)
     return data
   },
+  getLinkedMarkers: async (id) => {
+    const { data } = await httpService.get(modelEndPoint + id)
+    return data
+  },
   delete: async (id) => {
     const { data } = await httpService.delete(modelEndPoint + id)
     return data

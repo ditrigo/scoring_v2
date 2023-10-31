@@ -21,7 +21,7 @@ export function getTransformedData(
     // .get(`http://127.0.0.1:8000/api/${endPoint}/`)
     .get(`${configFile.apiEndPoint}/${endPoint}/`)
     .then((res) => {
-      console.log(res.data)
+      console.log(`${endPoint} `, res.data)
       setDataState(transformData(res.data.data, keyInNativeObj, keyName))
     })
     .catch((e) => {

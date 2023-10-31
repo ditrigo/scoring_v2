@@ -82,7 +82,7 @@ const PipelinePage = () => {
         scoringmodel_id: models.find(
           (el) => el.model_name === scoringModel.scoring_model
         ).id,
-        author_id: "Denis",
+        author_id: "Тестовый пользователь",
       })
       .then(function (response) {
         console.log("Сделать связку ", response.data)
@@ -90,7 +90,7 @@ const PipelinePage = () => {
         setIsSaved(true)
         setModels([])
         setScoringOptions([])
-        console.log("models in handleSaveData", models)
+        // console.log("models in handleSaveData", models)
         getModels()
       })
       .catch(function (error) {
@@ -118,10 +118,11 @@ const PipelinePage = () => {
   }, [])
 
   return (
-    <div className="container mt-3 mb-4">
+    <div className="container mt-3 mb-3">
+      {/* <div className="row"> */}
       <div className="row">
         <div className="col-md-auto">
-          <MyButton>Статические данные</MyButton>
+          <MyButton disabled>Статические данные</MyButton>
         </div>
 
         <div className="col-md-auto">
@@ -130,10 +131,10 @@ const PipelinePage = () => {
           </MyButton>
         </div>
         <div className="col-md-auto">
-          <MyButton>Результаты модели</MyButton>
+          <MyButton disabled>Результаты модели</MyButton>
         </div>
         <div className="col-md-auto">
-          <MyButton>Выписка СКУАД</MyButton>
+          <MyButton disabled>Выписка СКУАД</MyButton>
         </div>
         <div className="col-md-auto">
           <Link to="/results">
@@ -144,73 +145,93 @@ const PipelinePage = () => {
 
       {open && (
         <div className="container p-0">
-          <div className="row">
-            <div className="table-responsive-lg">
-              <table className="table text-left table-bordered mt-3">
-                <thead>
-                  <tr>
-                    <th scope="col">Атрибут</th>
-                    <th>Условие фильтра</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>ИНН</td>
-                    <td>
-                      <MyInput
-                        value={inputINN}
-                        onChange={(e) => handleChangeINN(e)}
-                        type="text"
-                        placeholder="Вставьте список ИНН"
-                      ></MyInput>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Модель скоринга</td>
-                    <td>
-                      <SelectField
-                        label=""
-                        defaultOption="Выбрать модель для скоринга"
-                        name="scoring_model"
-                        options={scoringOptions}
-                        onChange={handleChange}
-                        value={scoringModel.scoring_model}
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Отчетная дата</td>
-                    <td>
-                      <DatePicker
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
-                        isClearable
-                        placeholderText="I have been cleared!"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Вид отчетности</td>
-                    <td>
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                        defaultValue="0"
-                      >
-                        <option value="0" disabled>
-                          Выбрать вид отчетности
-                        </option>
-                        <option value="1">Первичная</option>
-                        <option value="2">Обновленная</option>
-                      </select>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+          <div className="row-md-auto m-0">
+            <div className="card mt-3">
+              <div className="card-header">
+                <h4>Расчет скоринга</h4>
+              </div>
+              <div className="card-body">
+                <table className="table  table-striped ">
+                  <thead>
+                    <tr>
+                      <th scope="col">Атрибут</th>
+                      <th scope="col">Условие фильтра</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>ИНН</td>
+                      <td>
+                        {/* <table> */}
+                        {/* <thead> */}
+                        {/* <tr> */}
+                        {/* <td> */}
+                        <MyInput
+                          value={inputINN}
+                          onChange={(e) => handleChangeINN(e)}
+                          type="text"
+                          placeholder="Вставьте список ИНН"
+                        ></MyInput>
+                        {/* </td> */}
+                        {/* <td>
+                            <MyInput placeholder="Выражение"></MyInput>
+                          </td> */}
+                        {/* </tr> */}
+                        {/* </thead> */}
+                        {/* </table> */}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Модель скоринга</td>
+                      <td>
+                        <SelectField
+                          label=""
+                          defaultOption="Выбрать модель для скоринга"
+                          name="scoring_model"
+                          options={scoringOptions}
+                          onChange={handleChange}
+                          value={scoringModel.scoring_model}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Отчетная дата</td>
+                      <td>
+                        <DatePicker
+                          selected={startDate}
+                          onChange={(date) => setStartDate(date)}
+                          isClearable
+                          placeholderText="I have been cleared!"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Вид отчетности</td>
+                      <td>
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                          defaultValue="0"
+                        >
+                          <option value="0" disabled>
+                            Выбрать вид отчетности
+                          </option>
+                          <option value="1">Первичная</option>
+                          <option value="2">Обновленная</option>
+                        </select>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-          <div className="row justify-content-start m-0 p-0">
-            <div className="col-md-auto p-0">
+          <div className="row m-0 p-0 mt-3">
+            <div className="col-md-auto p-0 ">
+              {/* <MyButton onClick={() => setModalScoringResults(true)}>
+                Запустить скоринг
+              </MyButton> */}
+
               <MyButton
                 disabled={!isDisabledScoring}
                 // onClick={() => setModalScoringResults(true)}

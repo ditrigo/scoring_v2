@@ -3,33 +3,46 @@ import MyInput from "../UI/MyInput/MyInput"
 import ReactDatePicker from "react-datepicker"
 import MyButton from "../UI/MyButton/MyButton"
 import axios from "axios"
+import modelService from "../../services/model.service"
+import configFile from "../../config.json"
 
 const TestScoringForm = ({ model, modelId }) => {
   const [inputINN, setInputINN] = useState("")
   const [startDate, setStartDate] = useState(new Date())
-  // const [isSaved, setIsSaved] = useState(false)
-  // const [disabledBtn, setDisabledBtn] = useState("")
+  const [isSaved, setIsSaved] = useState(false)
+  const [disabledBtn, setDisabledBtn] = useState("")
   const [models, setModels] = useState([])
   const [updatedModel, setUpdatedModel] = useState()
+  const [json_response, setJson_response] = useState()
 
-  // const isDisabled = model.model_name && inputINN
+  const isDisabled = model.model_name && inputINN
   const isDisabledScoring = model.model_name && inputINN //&& isSaved
 
   const handleChangeINN = (e) => {
     setInputINN(e.target.value)
   }
 
+  // async function getModels() {
+  //   await axios
+  //     .get("http://127.0.0.1:8000/api/scoring_model/")
+  //     .then((res) => {
+  //       setModels([])
+  //       console.log("getModels", res.data.data)
+  //       setModels(res.data.data)
+  //     })
+  //     .catch((e) => {
+  //       console.log(e)
+  //     })
+  // }
+
   async function getModels() {
-    await axios
-      .get("http://127.0.0.1:8000/api/scoring_model/")
-      .then((res) => {
-        setModels([])
-        // console.log("getModels", res.data.data)
-        setModels(res.data.data)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+    try {
+      const { data } = await modelService.get()
+      setModels([])
+      setModels(data)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const doTestScoring = async () => {
@@ -38,30 +51,30 @@ const TestScoringForm = ({ model, modelId }) => {
     let modelFromServer = models.find(
       (el) => el.model_name === model.model_name
     )
-
-    modelFromServer.inns = [
-      {
-        id: 5,
-        uuid: "cfb8682c-f108-4ab3-93ea-82308c116b1b",
-        author_id: "",
-        created_date: "2023-10-25T14:15:37.108874Z",
-        active: false,
-        inn: 4,
-        result_score: null,
-      },
-    ]
+    // modelFromServer.inns =
+    //    inputINN.split(", ").join(" ").split("/").join(" ").split(" ")
+    // ;
+    inputINN
+      .split(", ")
+      .join(" ")
+      .split("/")
+      .join(" ")
+      .split(" ")
+      .forEach((inn) => {
+        modelFromServer.inns.push({ inn: inn })
+      })
 
     const json = {
       model: modelFromServer,
     }
-    console.log("json", json)
-
+    // console.log("json", json)
     await axios
-      .post("http://127.0.0.1:8000/api/start_test_scoring/", json)
+      .post(`${configFile.apiEndPoint}/start_test_scoring/`, json)
       .then((resp) => {
-        console.log(resp)
         getModels()
         setInputINN("")
+        // console.log("doTestScoring RESP", resp.data.response)
+        setJson_response(resp.data.response)
       })
       .catch((err) => {
         console.log(err)
@@ -77,7 +90,7 @@ const TestScoringForm = ({ model, modelId }) => {
   //       inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
   //       active: true,
   //       scoringmodel_id: modelId,
-  //       author_id: "Denis",
+  //       author_id: "Тестовый пользователь",
   //     })
   //     .then(function (response) {
   //       console.log("Сделать связку ", response.data)
@@ -176,20 +189,32 @@ const TestScoringForm = ({ model, modelId }) => {
             <thead>
               <tr>
                 <th scope="col">ИНН</th>
-
-                <th scope="col">Результат</th>
+                <th scope="col">Итоговый результат</th>
+                <th scope="col">Формулы</th>
+                <th scope="col">Значения</th>
               </tr>
             </thead>
             <tbody>
-              {/* {updatedModel &&
-                updatedModel.inns.map((inn) => {
-                  return (
-                    <tr>
-                      <td>{inn.inn}</td>
-                      <td>{inn.result_score?.total_rank}</td>
-                    </tr>
-                  )
-                })} */}
+              {json_response.map((info, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{info.inn}</td>
+                    <td>{info.total_rank}</td>
+                    <td>
+                      {info.markers_and_values.map((el, index) => {
+                        console.log("el", el)
+                        return <tr key={index}>{el.formula}</tr>
+                      })}
+                    </td>
+                    <td>
+                      {info.markers_and_values.map((el, index) => {
+                        // console.log("el", el);
+                        return <tr key={index}>{el.value}</tr>
+                      })}
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         )}
