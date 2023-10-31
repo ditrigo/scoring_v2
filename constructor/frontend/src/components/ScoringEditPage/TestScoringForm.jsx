@@ -67,7 +67,7 @@ const TestScoringForm = ({ model, modelId }) => {
     const json = {
       model: modelFromServer,
     }
-    // console.log("json", json)
+    console.log("json", json)
     await axios
       .post(`${configFile.apiEndPoint}/start_test_scoring/`, json)
       .then((resp) => {

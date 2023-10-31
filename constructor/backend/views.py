@@ -68,7 +68,7 @@ def FilesListViewSet(request):  # (viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def InsertValuesToCountedAttributes():
+def InsertValuesToCountedAttributes(imported_attributes_list):
 
     def calculate_counted_attributes(imported_attributes):
         inn = imported_attributes.inn
@@ -269,7 +269,8 @@ def InsertValuesToCountedAttributes():
             need_capital_dp_rub=need_capital_dp_rub
         )
 
-    imported_attributes_list = ImportedAttributes.objects.all()
+
+    # imported_attributes_list = ImportedAttributes.objects.filter(created_date__contains=datetime.date.today())
 
     imported_attributes_with_error = []
     for imported_attributes in imported_attributes_list:
@@ -386,8 +387,11 @@ def ImportedAttributesListViewSet(request):  # (viewsets.ModelViewSet):
             filesize = request.FILES['filename'].size,
         )       
         
+        # inns_list_for_counted = ImportedAttributes.objects.filter(created_date__contains=datetime.date.today())
+        # print(inns_list_for_counted)
+
         if result.totals[RowResult.IMPORT_TYPE_NEW]:
-            InsertValuesToCountedAttributes()
+            InsertValuesToCountedAttributes(ImportedAttributes.objects.filter(created_date__contains=datetime.date.today()))
 
         os.remove("./media/store/"+str(filename.name))
         return Response(
@@ -856,23 +860,23 @@ def StartTestScoringViewSet(request):
         # dict_markers = {}
         list_markers, total_json_array = [], []
         for inn in inn_list:
-            # print("INN", inn)
+            print("INN", inn)
             try:
-                # print("TRY")
+                print("TRY")
                 imported_attributes = ImportedAttributes.objects.get(inn=inn)
                 counted_attributes = CountedAttributesNew.objects.get(inn=inn)
             except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
-                # print("EXCEPT")
+                print("EXCEPT")
                 continue
             for formula in marker_formula_list:
-                # print("FORMULA", formula)
+                print("FORMULA", formula)
                 # try:
                 #     imported_attributes = ImportedAttributes.objects.get(inn=inn)
                 #     counted_attributes = CountedAttributesNew.objects.get(inn=inn)
                 # except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
                 #     continue
                 value = eval(formula)
-                # print("VALUE", value)
+                print("VALUE", value)
                 list_markers.append({'formula': formula, "value": value })
                 rank += value
 
@@ -883,7 +887,7 @@ def StartTestScoringViewSet(request):
             }
 
             total_json_array.append(total_json)
-            # print(total_json_array)
+            print(total_json_array)
             list_markers = []
             rank = 0
         print(total_json_array)
