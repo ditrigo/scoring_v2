@@ -51,36 +51,40 @@ const SearchBar = ({
   return (
     <div className="container mt-10">
       <div className="row">
-        <h3>Добавление элементов для модели {nameModel}</h3>
+        <h3>Добавление элементов для модели: {nameModel}</h3>
         <MarkersTable modelId={idModel} model={model} />
       </div>
       <div className="row">
         {/* <div className="row"> */}
-        <form
-          className="pl-12 pr-12"
-          onSubmit={handleSubmit} >
+        <form className="pl-12 pr-12" onSubmit={handleSubmit}>
           <div className="row">
             {/* <MarkersTable /> */}
-            <div onClick={toggleExpanded}>
+            <div>
               <div
-                className={`row m-0 font-semibold cursor-pointer ${expanded ? "up-arrow" : "down-arrow"}`}
+                className={`row m-0 font-semibold cursor-pointer ${
+                  expanded ? "up-arrow" : "down-arrow"
+                }`}
               >
-                {selections.length
-                  ? selections.map((_, i) => (
+                {selections.length ? (
+                  selections.map((_, i) => (
                     <div className="row">
-                      <span
-                        className=""
-                        key={i}>
+                      <span className="" key={i}>
                         {i ? ", " : null}
                         {attributes[i].name_marker_attr}
                       </span>
                     </div>
                   ))
-                  : "Маркеры не выбраны"}
+                ) : (
+                  <div className="w-50 mb-2 p-0">
+                    {" "}
+                    <MyButton onClick={toggleExpanded}>
+                      Выбрать маркеры
+                    </MyButton>
+                  </div>
+                )}
               </div>
             </div>
-            <div className="row">
-            </div>
+            <div className="row"></div>
             {expanded && (
               <div className="m-0">
                 {attributes.map((attribute, index) => (
@@ -125,10 +129,7 @@ const SearchBar = ({
                 Добавить новый маркер
               </MyButton> */}
             <div className="row m-0">
-              <Link
-                to={`/scoring`}
-                className="btn btn-outline-secondary"
-              >
+              <Link to={`/scoring`} className="btn btn-outline-secondary">
                 Выйти
               </Link>
             </div>
