@@ -466,14 +466,15 @@ const NewClientPage = () => {
                 error={errors.dateEventOccurance}
               />
               {firstData.map((el) => {
+                // console.log(key)
                 return (
                   <TextField
                     key={el.id}
                     label={el.name}
                     name={el.key}
-                    value={testData.key}
+                    value={testData[el.key]}
                     onChange={handleChangeTest}
-                    error={errors.key}
+                    error={errors[el.key]}
                   />
                 )
               })}

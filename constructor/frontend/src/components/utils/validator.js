@@ -30,11 +30,14 @@ export function validator(data, config) {
         statusValidate = data.length < config.value
         break
       }
-      case "count": {
-        const digitRegExp = /\d+/g
-        statusValidate = !digitRegExp.test(data)
+      case "max": {
+        statusValidate = +data > config.value
         break
       }
+      // case "count": {
+      //   statusValidate = data.length !== 12
+      //   break
+      // }
       default:
         break
     }

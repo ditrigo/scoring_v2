@@ -21,7 +21,7 @@ export function getTransformedData(
     // .get(`http://127.0.0.1:8000/api/${endPoint}/`)
     .get(`${configFile.apiEndPoint}/${endPoint}/`)
     .then((res) => {
-      console.log(`${endPoint} `, res.data)
+      // console.log(`${endPoint} `, res.data)
       setDataState(transformData(res.data.data, keyInNativeObj, keyName))
     })
     .catch((e) => {
@@ -123,6 +123,18 @@ export const validatorConfig = {
       message: "Это поле обязательно для заполнения",
     },
   },
+  termMesureNecessary: {
+    max: {
+      message: "Не более 36",
+      value: 36,
+    },
+  },
+  termMesure: {
+    max: {
+      message: "Не более 36",
+      value: 36,
+    },
+  },
 }
 
 export const firstData = [
@@ -165,7 +177,7 @@ export const firstData = [
   },
   {
     id: 37,
-    name: "Близжайший срок исполнения обязательства (до какого момента отложены меры)",
+    name: "Ближайший срок исполнения обязательства (до какого момента отложены меры)",
     key: "nearestDateForFulfillment ",
   },
   {
