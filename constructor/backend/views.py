@@ -34,7 +34,7 @@ def FilesListViewSet(request):  # (viewsets.ModelViewSet):
         # data = []
         # nextPage = 1
         # previousPage = 1
-        files = FileAttributes.objects.all().order_by('id')
+        files = FileAttributes.objects.all().order_by('-id')
         # page = request.GET.get('page', 1)
         # paginator = Paginator(files, 10)
         # try:
@@ -1110,13 +1110,9 @@ def ClientViewSet(request):
 @api_view(['POST'])
 def CreateRelationClient(request):
     if request.method == 'POST':
-        # print(request.data)
-        # print(request.data.get('region_id'))
         region = Region.objects.get(id=request.data.get('region_id'))
         manager = Manager.objects.get(id=request.data.get('manager_id'))
         applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status'))
-        # print(request.data.get('representitive_client_id'))
-        # print(request.data.get('representitive_client_id')["representative_first_name"])
 
         with transaction.atomic():
             serializer_body = ClientRepresentativeSerializer(data=request.data.get('representitive_client_id'))
@@ -1150,7 +1146,26 @@ def CreateRelationClient(request):
                 info_source_number = request.data.get('information_source_id')["info_source_number"],
             )
             information_source_id = InformationSource.objects.latest('id').id 
-            # print("information_source_id", information_source_id)
+
+        with transaction.atomic():
+            positive_decision_type = PositiveDecision.objects.get(id=request.data.get('kpi_id')["positive_decision_type"])
+            negative_decision_type = NegativeDecision.objects.get(id=request.data.get('kpi_id')["negative_decision_type"])
+            
+            KPI.objects.create(
+                positive_decision_type = positive_decision_type,
+                positive_decision_date = request.data.get('kpi_id')["positive_decision_date"],
+                measure_provided_duration = request.data.get('kpi_id')["measure_provided_duration"],
+                oiv_request_sender = request.data.get('kpi_id')["oiv_request_sender"],
+                negative_decision_type = negative_decision_type,
+                settled_debt_amount = request.data.get('kpi_id')["settled_debt_amount"],
+                received_amount_budget = request.data.get('kpi_id')["received_amount_budget"],
+                overdue_debt_amount = request.data.get('kpi_id')["overdue_debt_amount"],
+                technical_overdue_debt_amount = request.data.get('kpi_id')["technical_overdue_debt_amount"],
+                # info_source_type = info_source_type_id,
+                # info_source_date = request.data.get('information_source_id')["info_source_date"],
+                # info_source_number = request.data.get('information_source_id')["info_source_number"],
+            )
+            kpi_id = KPI.objects.latest('id').id 
 
         Client.objects.create(
             first_name = request.data.get('first_name'),
