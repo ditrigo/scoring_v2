@@ -33,6 +33,7 @@ urlpatterns = [
 
     re_path(r"^start_scoring/$", StartScoringViewSet, name="start_scoring"),
     re_path(r"^start_test_scoring/$", StartTestScoringViewSet, name="start_test_scoring"),
+    re_path(r"^get_formula_value/$", GetformulaValue, name="get_formula_value"), # тестовая апишка
 
     re_path(r"^download/$", DownloadTryViewSet, name="download"),
 
@@ -56,5 +57,6 @@ urlpatterns = [
     # MAIN
 
     re_path(r"^crm_client/$", ClientViewSet, name="crm_client"),
+    re_path(r"^crm_create_client/$", CreateRelationClient, name="crm_create_client"),
     #---------------------
 ]
