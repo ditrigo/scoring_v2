@@ -3,7 +3,8 @@ from django.db import models
 import uuid
 from simple_history.models import HistoricalRecords
 from .parser import sql_parser
-from .pyparser_main_3 import py_parser_main
+from .pyparser_main_3 import py_parser_main # Old version of parser
+from .pyparser import *
 # from simple_history import register
 # from author.decorators import with_author
 from django.contrib.auth.models import User
@@ -266,7 +267,8 @@ class MarkersAttributes(models.Model):
     # From CountedAttrFormula
     def save(self, *args, **kwargs):
         self.sql_query = sql_parser(self.attr_formulas)
-        self.py_query = py_parser_main(self.attr_formulas)
+        # self.py_query = py_parser_main(self.attr_formulas) # Old version of parser
+        self.py_query = pyparser(self.attr_formulas)
         super().save(*args, **kwargs)
 
 
@@ -646,7 +648,7 @@ class InformationSource(models.Model):
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
     created_date = models.DateTimeField(auto_now_add=True)
-    info_source_type_id = models.ForeignKey(InformationSourceType, on_delete=models.CASCADE)
+    info_source_type = models.ForeignKey(InformationSourceType, on_delete=models.CASCADE)
     info_source_date = models.DateTimeField()
     info_source_number = models.CharField(max_length=255, blank=True, null=True)
     
@@ -756,7 +758,7 @@ class Client(models.Model):
     first_meeting_date = models.DateField(blank=True, null=True) # Дата первой встречи
     event_date = models.DateTimeField(blank=True, null=True) # Дата наступления события
     event_description = models.TextField(blank=True, null=True) # Описание события
-    kpi = models.ForeignKey(KPI, on_delete=models.CASCADE) # 
+    kpi = models.ForeignKey(KPI, on_delete=models.CASCADE, blank=True, null=True) # 
     
     class Meta:
         db_table ='client'

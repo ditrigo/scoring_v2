@@ -20,6 +20,7 @@ from django.http import JsonResponse
 from django.db import transaction, connection
 import os
 from django.http import HttpResponse
+from .pyparser import *
 
 # from import_export import mixins
 from django.views.generic.list import ListView
@@ -503,7 +504,7 @@ def MarkersAttributesListViewSet(request):
         # paginator = None
         # next_page = None
         # previous_page = None
-        attributes = MarkersAttributes.objects.all().order_by('id')
+        attributes = MarkersAttributes.objects.all().order_by('-id')
         # paginator = Paginator(attributes, 10)
         # page = request.GET.get('page', 1)
         # try:
@@ -812,6 +813,12 @@ def StartScoringViewSet(request):
                     continue
                 print("VALUE",value)
                 value = eval(formula)
+                ####################
+                # TODO Добавить парсер для получения значения в формуле 
+
+
+
+                ####################
                 list_markers.append({'formula': formula, "value": value})
                 
                 rank += value
@@ -896,7 +903,19 @@ def StartTestScoringViewSet(request):
                              "response": total_json_array}, 
                              status=200)
 
-    return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
+    return JsonResponse({'success': False}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def GetformulaValue(request):
+
+    for k, v in request.data.items(): 
+        import_attr = ImportedAttributes.objects.all().get(inn=v)
+        print("import_attr -", import_attr)
+        print(ImportedAttributes.objects.values('id').get(inn=v))
+        print(ImportedAttributes.objects.values().get(inn=v))
+
+
 
 
 ### CRM VIEWS ###########################################################################################
@@ -1087,4 +1106,94 @@ def ClientViewSet(request):
                 )
         return Response({'data': serializer.data})
 
+
+@api_view(['POST'])
+def CreateRelationClient(request):
+    if request.method == 'POST':
+        # print(request.data)
+        # print(request.data.get('region_id'))
+        region = Region.objects.get(id=request.data.get('region_id'))
+        manager = Manager.objects.get(id=request.data.get('manager_id'))
+        applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status'))
+        # print(request.data.get('representitive_client_id'))
+        # print(request.data.get('representitive_client_id')["representative_first_name"])
+
+        with transaction.atomic():
+            serializer_body = ClientRepresentativeSerializer(data=request.data.get('representitive_client_id'))
+            if not serializer_body.is_valid():
+                transaction.set_rollback(True)
+                return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer_body.save()
+            representitive_client_id = ClientRepresentative.objects.latest('id').id
+        
+        with transaction.atomic():
+            category = Category.objects.get(id=request.data.get('compliance_data_id')["category"])
+            debt_type = DebtType.objects.get(id=request.data.get('compliance_data_id')["debt_type"])
+            support_measure = SupportMeasure.objects.get(id=request.data.get('compliance_data_id')["support_measure"])
+            
+            ComplianceCriteria.objects.create(
+                debt_amount = request.data.get('compliance_data_id')["debt_amount"],
+                debt_type = debt_type,
+                category = category,
+                support_measure = support_measure,
+                note = request.data.get('compliance_data_id')["note"],
+                support_duration = request.data.get('compliance_data_id')["support_duration"],
+            )
+            compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
+
+        with transaction.atomic():
+            info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
+            
+            InformationSource.objects.create(
+                info_source_type = info_source_type_id,
+                info_source_date = request.data.get('information_source_id')["info_source_date"],
+                info_source_number = request.data.get('information_source_id')["info_source_number"],
+            )
+            information_source_id = InformationSource.objects.latest('id').id 
+            # print("information_source_id", information_source_id)
+
+        Client.objects.create(
+            first_name = request.data.get('first_name'),
+            second_name = request.data.get('second_name'),
+            patronymic = request.data.get('patronymic'),
+            inn = request.data.get('inn'),
+            region = region,
+            manager = manager,
+            applicant_status = applicant_status,
+            information_source_id = information_source_id,
+            representitive_client_id = representitive_client_id,
+            compliance_criteria_id = compliance_criteria_id,
+            first_meeting_date = request.data.get('first_meeting_date'),
+            event_date = request.data.get('event_date'),
+            event_description = request.data.get('event_description'),
+            kpi_id = request.data.get('kpi_id'),
+        )
+        
+        # client_id = request.data.get('client_id')
+        # representitive_client_id = request.data.get('representitive_client_id')
+        # compliance_criteria_id = request.data.get('compliance_data_id')
+        # kpi_id = request.data.get('kpi_id')
+
+        # model_list = [
+        #     (Client, client_id, 'ClientModel'),
+        #     (ClientRepresentative, representitive_client_id, 'ClientRepresentative'),
+        #     (ComplianceCriteria, compliance_criteria_id, 'ComplianceCriteria'),
+        #     (KPI, kpi_id, 'KPI')
+        # ]
+        # for model, model_id, model_name in model_list:
+        #     try:
+        #         model_instance = model.objects.get(id=model_id)
+        #     except model.DoesNotExist:
+        #         return Response({'success': False, 'error': f'{model_name} не найдена'}, status=status.HTTP_404_NOT_FOUND)
+
+        # client_model = Client.objects.get(id=client_id)
+        # representitive_client_model = ClientRepresentative.objects.get(id=representitive_client_id)
+        # compliance_criteria_model = ComplianceCriteria.objects.get(id=compliance_criteria_id)
+        # kpi_model = KPI.objects.get(id=kpi_id)
+        # client_model.representitive_client.add(representitive_client_model)
+        # client_model.compliance_criteria.add(compliance_criteria_model)
+        # client_model.kpi.add(kpi_model)
+
+        return JsonResponse({'message': 'Relation created successfully'}, status=200)
+    return JsonResponse({'message': 'Invalid request method'}, status=400)
 #---------------------
