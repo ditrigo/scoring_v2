@@ -6,16 +6,17 @@ import axios from "axios"
 import modelService from "../../services/model.service"
 import configFile from "../../config.json"
 
-const TestScoringForm = ({ model, modelId }) => {
+const TestScoringForm = ({ model }) => {
   const [inputINN, setInputINN] = useState("")
   const [startDate, setStartDate] = useState(new Date())
-  const [isSaved, setIsSaved] = useState(false)
-  const [disabledBtn, setDisabledBtn] = useState("")
+  // const [isSaved, setIsSaved] = useState(false)
+  // const [disabledBtn, setDisabledBtn] = useState("")
   const [models, setModels] = useState([])
   const [updatedModel, setUpdatedModel] = useState()
   const [json_response, setJson_response] = useState()
+  const [err, setErr] = useState("")
 
-  const isDisabled = model.model_name && inputINN
+  // const isDisabled = model.model_name && inputINN
   const isDisabledScoring = model.model_name && inputINN //&& isSaved
 
   const handleChangeINN = (e) => {
@@ -47,6 +48,7 @@ const TestScoringForm = ({ model, modelId }) => {
 
   const doTestScoring = async () => {
     console.log("Scoring test...")
+    setErr("")
 
     let modelFromServer = models.find(
       (el) => el.model_name === model.model_name
@@ -76,8 +78,8 @@ const TestScoringForm = ({ model, modelId }) => {
         // console.log("doTestScoring RESP", resp.data.response)
         setJson_response(resp.data.response)
       })
-      .catch((err) => {
-        console.log(err)
+      .catch((error) => {
+        setErr(error)
       })
       .finally(() => {
         setUpdatedModel(models.find((el) => el.model_name === model.model_name))
@@ -172,6 +174,11 @@ const TestScoringForm = ({ model, modelId }) => {
             Запустить скоринг
           </MyButton>
         </div>
+        {err && (
+          <span className="text-danger p-0 mt-2">
+            Ошибка. Проверьте правильность формулы или наличие ИНН.
+          </span>
+        )}
         {/* <div className="col-md-auto">
           <MyButton
             className={disabledBtn}
@@ -195,7 +202,7 @@ const TestScoringForm = ({ model, modelId }) => {
               </tr>
             </thead>
             <tbody>
-              {json_response.map((info, index) => {
+              {json_response?.map((info, index) => {
                 return (
                   <tr key={index}>
                     <td>{info.inn}</td>

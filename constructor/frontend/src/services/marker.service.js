@@ -15,7 +15,7 @@ const markerSrvice = {
     const { data } = await httpService.delete(markerEndPoint + id)
     return data
   },
-  postCreateRelation: async (endPoint, payload, id) => {
+  postCreateRelation: async (endPoint, payload) => {
     const { data } = await httpService.post(markerEndPoint + endPoint, payload)
     return data
   },

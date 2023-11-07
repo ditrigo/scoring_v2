@@ -94,6 +94,9 @@ export const validatorConfig = {
     isRequired: {
       message: "Это поле обязательно для заполнения",
     },
+    // count: {
+    //   message: "ИНН должен содержать 10 или 12 символов",
+    // },
   },
   dateAppealsToMIDUOL: {
     isRequired: {

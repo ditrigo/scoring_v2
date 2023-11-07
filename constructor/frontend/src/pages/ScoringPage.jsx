@@ -10,6 +10,7 @@ import Moment from "moment"
 import localization from "moment/locale/ru"
 import modelService from "../services/model.service"
 import markerSrvice from "../services/marker.service"
+import MyInput from "../components/UI/MyInput/MyInput"
 
 const ScoringPage = () => {
   const [models, setModels] = useState([])
@@ -18,7 +19,17 @@ const ScoringPage = () => {
   const [markers, setMarkers] = useState([])
   const [modalMarker, setModalMarker] = useState(false)
   const [linkMarkers, setLinkMarkers] = useState([])
+  const [searchValue, setSearchValue] = useState("")
+
   // const [modelIdForLink, setModelIdForLink] = useState(0)
+
+  let filtredMarkers = markers
+    ? markers.filter((el) => {
+        return el.name_marker_attr
+          .toLowerCase()
+          .includes(searchValue.toLowerCase())
+      })
+    : null
 
   const getModelStatus = (status) => {
     return status === "AP" ? "Утвержден" : "Черновик"
@@ -231,6 +242,16 @@ const ScoringPage = () => {
               </h4>
             </div>
             <div className="card-body">
+              <div className="w-25">
+                {" "}
+                <MyInput
+                  type="text"
+                  placeholder="Введите название маркера"
+                  // className="form-group search__input mr-5"
+                  onChange={(event) => setSearchValue(event.target.value)}
+                />
+              </div>
+
               <table className="table table-striped">
                 <thead>
                   <tr>
@@ -244,7 +265,7 @@ const ScoringPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {markers.map((marker) => {
+                  {filtredMarkers.map((marker) => {
                     return (
                       <tr key={marker.id}>
                         <td>{marker.name_marker_attr}</td>

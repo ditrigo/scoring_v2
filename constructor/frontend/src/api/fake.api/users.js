@@ -4,7 +4,7 @@ export const users = [
     manager: "Панфилова И. О,",
     clientName: "ООО 'Розочка'",
     PRD: "МИДУОЛ",
-    INN: "345352342",
+    INN: "345345352342",
     region: "77 г. Москва",
     status: "Кредитор",
     support: "Мировое соглашение",
@@ -40,7 +40,7 @@ export const users = [
     clientName: "ИП Кур А. Р.",
     PRD: "МИДУОЛ",
 
-    INN: "16876168936",
+    INN: "168761689363",
     region: "Ростовская область",
     status: "Должник",
     support: "Рассрочка",
