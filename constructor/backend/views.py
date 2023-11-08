@@ -907,15 +907,73 @@ def StartTestScoringViewSet(request):
 
 
 @api_view(['POST'])
-def GetformulaValue(request):
+def StartScoring2ViewSet(request):
+    if request.method == 'POST':
 
-    for k, v in request.data.items(): 
-        import_attr = ImportedAttributes.objects.all().get(inn=v)
-        print("import_attr -", import_attr)
-        print(ImportedAttributes.objects.values('id').get(inn=v))
-        print(ImportedAttributes.objects.values().get(inn=v))
+        inn_list, marker_formula_list = [], []
+        for inn in request.data.get("model")["inns"]:
+            inn_list.append(inn["inn"])
+        for marker_formula in request.data.get("model")["marker_id"]:
+            marker_formula_list.append(marker_formula["py_query"])
 
+        rank = 0.0 
+        dict_markers = {}
+        list_markers = []
+        for inn in inn_list:
+            for formula in marker_formula_list:
+                try:
+                    imported_attributes = ImportedAttributes.objects.get(inn=inn)
+                    counted_attributes = CountedAttributesNew.objects.get(inn=inn)
+                except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
+                    continue
 
+                # print("\nformula IN FOR",formula)
+                # print("\nimported_attributes.dolg", imported_attributes.dolg)
+                # print("imported_attributes.s_1600_4", imported_attributes.s_1600_4)
+
+                if formula.startswith("Error"):
+                     list_markers.append({
+                         "formula": formula, 
+                         "value": 0,
+                         "error": formula,
+                         })
+                     rank += 0
+                else:
+                    try:
+                        counting_rank = eval(formula)
+                        list_markers.append({
+                                "formula": formula, 
+                                "value": counting_rank,
+                                "error": "",
+                                }) 
+                        rank += counting_rank
+                    except Exception as e:
+                        list_markers.append({
+                                "formula": formula, 
+                                "value": 0, 
+                                "error": f"{e}",
+                                })
+                        rank += 0
+
+                print("\nRANK", rank)
+                # inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
+                # inn_res.save()
+            total_json = {
+                "markers_and_values": list_markers,
+                "total_rank": rank
+            }
+            dict_markers.update(total_json)
+
+            print("\n")
+            print("dict_markers", dict_markers)
+        #     # InnRes.objects.filter(inn=inn).update(result_score=dict_markers) 
+        #     # InnRes.objects.create(markers_json=dict_markers)
+            dict_markers.clear()
+            list_markers = []
+            rank = 0.0 
+
+        return Response({'message': 'Results were updated '}, status=status.HTTP_200_OK)
+    return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
 
 
 ### CRM VIEWS ###########################################################################################
@@ -1161,9 +1219,6 @@ def CreateRelationClient(request):
                 received_amount_budget = request.data.get('kpi_id')["received_amount_budget"],
                 overdue_debt_amount = request.data.get('kpi_id')["overdue_debt_amount"],
                 technical_overdue_debt_amount = request.data.get('kpi_id')["technical_overdue_debt_amount"],
-                # info_source_type = info_source_type_id,
-                # info_source_date = request.data.get('information_source_id')["info_source_date"],
-                # info_source_number = request.data.get('information_source_id')["info_source_number"],
             )
             kpi_id = KPI.objects.latest('id').id 
 
