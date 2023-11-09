@@ -1337,7 +1337,7 @@ def UpdateRelationClient(request, pk):
     if request.method == 'POST':
 
         with transaction.atomic():
-            # try:
+            try:
 
                 region = Region.objects.get(id=request.data.get('region_id'))
                 manager = Manager.objects.get(id=request.data.get('manager_id'))
@@ -1418,8 +1418,8 @@ def UpdateRelationClient(request, pk):
                     event_description = request.data.get('event_description'),
                     # kpi_id = kpi_id,
                 )
-            # except:
-            #     return Response({'message': 'Некорректный ввод данных!'}, status=status.HTTP_400_BAD_REQUEST)
+            except:
+                return Response({'message': 'Некорректный ввод данных!'}, status=status.HTTP_400_BAD_REQUEST)
         
         return Response({'message': 'Клиент обновлен'}, status=status.HTTP_200_OK)
     return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)
