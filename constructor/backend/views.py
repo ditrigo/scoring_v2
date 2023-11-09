@@ -1,4 +1,5 @@
-import datetime
+# import datetime
+from datetime import date
 from django.urls import reverse
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -34,7 +35,7 @@ def FilesListViewSet(request):  # (viewsets.ModelViewSet):
         # data = []
         # nextPage = 1
         # previousPage = 1
-        files = FileAttributes.objects.all().order_by('id')
+        files = FileAttributes.objects.all().order_by('-id')
         # page = request.GET.get('page', 1)
         # paginator = Paginator(files, 10)
         # try:
@@ -392,9 +393,21 @@ def ImportedAttributesListViewSet(request):  # (viewsets.ModelViewSet):
         # print(inns_list_for_counted)
 
         if result.totals[RowResult.IMPORT_TYPE_NEW]:
-            InsertValuesToCountedAttributes(ImportedAttributes.objects.filter(created_date__contains=datetime.date.today()))
+            InsertValuesToCountedAttributes(ImportedAttributes.objects.filter(created_date__contains=date.today()))
 
-        os.remove("./media/store/"+str(filename.name))
+        def delete_files(directory):
+            try:
+                file_list = os.listdir(directory)
+                for filename in file_list:
+                    file_path = os.path.join(directory, filename) 
+                    if os.path.isfile(file_path): 
+                        os.remove(file_path)
+                return "Files deleted"
+            except:
+                return "Files wasn't deleted"
+        
+        delete_files("./media/store")
+
         return Response(
             data={"message": "Import successed",
                   "result_totals": f"{result.totals}",
@@ -679,6 +692,9 @@ def CreateRelationInnAndScoringModelViewSet(request):
                     ImportedAttributes.objects.get(inn=inn_id)
                 except ImportedAttributes.DoesNotExist:
                     continue
+                
+                if scoring_model.inns.filter(inn=inn_id).exists():
+                    continue
 
                 # try:
                 #     inn_res = InnRes.objects.get(inn=inn_id)
@@ -773,119 +789,221 @@ def InnAndResultsDetailViewSet(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
+# @api_view(['POST'])
+# def StartScoringViewSet(request):
+#     if request.method == 'POST':
+#         data = json.loads(request.body.decode('utf-8'))
+        
+#         rank = 0.0 
+#         inn_list, marker_formula_list = [], []
+#         for key, value in data["model"].items():
+#             # print("key -", key,"\nvalue - ", value)
+#             # print('\n')
+#             if key == "inns":
+#                 for val in value:
+#                     # print(val)
+#                     for k, v in val.items():
+#                         # print("inns.keys", k ,"inns.values", v)
+#                         if k == "inn":
+#                             inn_list.append(v)
+#             elif key == "marker_id":
+#                 for val in value:
+#                     # print(val)
+#                     for k, v in val.items():
+#                         # print("marker_id.keys", k ,"marker_id.values", v)
+#                         if k == "py_query":
+#                             marker_formula_list.append(v)
+        
+#         # print(inn_list)
+#         print(marker_formula_list)
+#         # print(CsvAttributes.objects.get(inn=inn_list[0]).np_name)
+
+#         dict_markers = {}
+#         list_markers = []
+#         for inn in inn_list:
+#             for formula in marker_formula_list:
+#                 try:
+#                     imported_attributes = ImportedAttributes.objects.get(inn=inn)
+#                     counted_attributes = CountedAttributesNew.objects.get(inn=inn)
+#                 except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
+#                     continue
+#                 print("VALUE",value)
+#                 value = eval(formula)
+#                 ####################
+#                 # TODO Добавить парсер для получения значения в формуле 
+
+
+
+#                 ####################
+#                 list_markers.append({'formula': formula, "value": value})
+                
+#                 rank += value
+#                 print(value)
+#                 # inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
+#                 # inn_res.save()
+
+#             total_json = {
+#                 "markers_and_values": list_markers,
+#                 "total_rank": rank
+#             }
+#             dict_markers.update(total_json)
+#             print(dict_markers)
+#             InnRes.objects.filter(inn=inn).update(result_score=dict_markers) 
+#             # InnRes.objects.create(markers_json=dict_markers)
+#             dict_markers = {}
+
+#         return JsonResponse({'message': 'Results were updated '}, status=200)
+
+#     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['POST'])
 def StartScoringViewSet(request):
     if request.method == 'POST':
-        data = json.loads(request.body.decode('utf-8'))
-        
-        rank = 0.0 
-        inn_list, marker_formula_list = [], []
-        for key, value in data["model"].items():
-            # print("key -", key,"\nvalue - ", value)
-            # print('\n')
-            if key == "inns":
-                for val in value:
-                    # print(val)
-                    for k, v in val.items():
-                        # print("inns.keys", k ,"inns.values", v)
-                        if k == "inn":
-                            inn_list.append(v)
-            elif key == "marker_id":
-                for val in value:
-                    # print(val)
-                    for k, v in val.items():
-                        # print("marker_id.keys", k ,"marker_id.values", v)
-                        if k == "py_query":
-                            marker_formula_list.append(v)
-        
-        # print(inn_list)
-        print(marker_formula_list)
-        # print(CsvAttributes.objects.get(inn=inn_list[0]).np_name)
 
+        inn_list, marker_formula_list = [], []
+        for inn in request.data.get("model")["inns"]:
+            inn_list.append(inn["inn"])
+        for marker_formula in request.data.get("model")["marker_id"]:
+            marker_formula_list.append(marker_formula["py_query"])
+
+        rank = 0.0 
         dict_markers = {}
         list_markers = []
         for inn in inn_list:
+            try:
+                imported_attributes = ImportedAttributes.objects.get(inn=inn)
+                counted_attributes = CountedAttributesNew.objects.get(inn=inn)
+            except (ImportedAttributes.DoesNotExist , CountedAttributesNew.DoesNotExist):
+                continue
             for formula in marker_formula_list:
-                try:
-                    imported_attributes = ImportedAttributes.objects.get(inn=inn)
-                    counted_attributes = CountedAttributesNew.objects.get(inn=inn)
-                except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
-                    continue
-                print("VALUE",value)
-                value = eval(formula)
-                ####################
-                # TODO Добавить парсер для получения значения в формуле 
+                # print("\nformula IN FOR",formula)
+                # print("\nimported_attributes.dolg", imported_attributes.dolg)
+                # print("imported_attributes.s_1600_4", imported_attributes.s_1600_4)
 
+                if formula.startswith("Error"):
+                     list_markers.append({
+                         "formula": formula, 
+                         "value": 0,
+                         "error": formula,
+                         })
+                     rank += 0
+                else:
+                    try:
+                        counting_rank = eval(formula)
+                        list_markers.append({
+                                "formula": formula, 
+                                "value": counting_rank,
+                                "error": "",
+                                }) 
+                        rank += counting_rank
+                    except Exception as e:
+                        list_markers.append({
+                                "formula": formula, 
+                                "value": 0, 
+                                "error": f"{e}",
+                                })
+                        rank += 0
 
-
-                ####################
-                list_markers.append({'formula': formula, "value": value})
-                
-                rank += value
-                print(value)
+                # print("\nRANK", rank)
                 # inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
                 # inn_res.save()
-
             total_json = {
                 "markers_and_values": list_markers,
                 "total_rank": rank
             }
             dict_markers.update(total_json)
-            print(dict_markers)
-            InnRes.objects.filter(inn=inn).update(result_score=dict_markers) 
-            # InnRes.objects.create(markers_json=dict_markers)
-            dict_markers = {}
 
-        return JsonResponse({'message': 'Results were updated '}, status=200)
+            # print("\n")
+            # print("dict_markers", dict_markers)
+            InnRes.objects.filter(inn=inn).update(result_score=dict_markers)
+        #     # InnRes.objects.create(markers_json=dict_markers)
+            dict_markers.clear()
+            list_markers = []
+            rank = 0.0 
 
+        return Response({'message': 'Results were updated '}, status=status.HTTP_200_OK)
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
 def StartTestScoringViewSet(request):
     if request.method == 'POST':
-        data = json.loads(request.body.decode('utf-8'))
+        # data = json.loads(request.body.decode('utf-8'))
 
         rank = 0.0 
+        # inn_list, marker_formula_list = [], []
+        # for key, value in data["model"].items():
+        #     if key == "inns":
+        #         for val in value:
+        #             # print(val)
+        #             for k, v in val.items():
+        #                 # print("inns.keys", k ,"inns.values", v)
+        #                 if k == "inn":
+        #                     inn_list.append(v)
+        #     elif key == "marker_id":
+        #         for val in value:
+        #             # print(val)
+        #             for k, v in val.items():
+        #                 # print("marker_id.keys", k ,"marker_id.values", v)
+        #                 if k == "py_query":
+        #                     marker_formula_list.append(v)
+
+
+        print(request.data)
         inn_list, marker_formula_list = [], []
-        for key, value in data["model"].items():
-            if key == "inns":
-                for val in value:
-                    # print(val)
-                    for k, v in val.items():
-                        # print("inns.keys", k ,"inns.values", v)
-                        if k == "inn":
-                            inn_list.append(v)
-            elif key == "marker_id":
-                for val in value:
-                    # print(val)
-                    for k, v in val.items():
-                        # print("marker_id.keys", k ,"marker_id.values", v)
-                        if k == "py_query":
-                            marker_formula_list.append(v)
-        
+        for inn in request.data.get("model")["inns"]:
+            inn_list.append(inn["inn"])
+        for marker_formula in request.data.get("model")["marker_id"]:
+            marker_formula_list.append(marker_formula["py_query"])
+        # print(inn_list)
+
         # dict_markers = {}
         list_markers, total_json_array = [], []
         for inn in inn_list:
-            print("INN", inn)
             try:
-                print("TRY")
+                # print("TRY")
                 imported_attributes = ImportedAttributes.objects.get(inn=inn)
                 counted_attributes = CountedAttributesNew.objects.get(inn=inn)
-            except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
-                print("EXCEPT")
+            except (ImportedAttributes.DoesNotExist , CountedAttributesNew.DoesNotExist):
+                # print("EXCEPT")
                 continue
+            # print("INN", inn)
             for formula in marker_formula_list:
-                print("FORMULA", formula)
+                # print("FORMULA", formula)
                 # try:
                 #     imported_attributes = ImportedAttributes.objects.get(inn=inn)
                 #     counted_attributes = CountedAttributesNew.objects.get(inn=inn)
                 # except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
                 #     continue
-                value = eval(formula)
-                print("VALUE", value)
-                list_markers.append({'formula': formula, "value": value })
-                rank += value
+                # value = eval(formula)
+                # print("VALUE", value)
+                # list_markers.append({'formula': formula, "value": value })
+                # rank += value
+
+                if formula.startswith("Error"):
+                     list_markers.append({
+                         "formula": formula, 
+                         "value": 0,
+                         "error": formula,
+                         })
+                     rank += 0
+                else:
+                    try:
+                        counting_rank = eval(formula)
+                        list_markers.append({
+                                "formula": formula, 
+                                "value": counting_rank,
+                                "error": "",
+                                }) 
+                        rank += counting_rank
+                    except Exception as e:
+                        list_markers.append({
+                                "formula": formula, 
+                                "value": 0, 
+                                "error": f"{e}",
+                                })
+                        rank += 0
 
             total_json = {
                 "markers_and_values": list_markers,
@@ -894,27 +1012,15 @@ def StartTestScoringViewSet(request):
             }
 
             total_json_array.append(total_json)
-            print(total_json_array)
+            # print(total_json_array)
             list_markers = []
             rank = 0
-        print(total_json_array)
+        # print(total_json_array)
 
-        return JsonResponse({'message': 'Results were updated', 
-                             "response": total_json_array}, 
-                             status=200)
-
-    return JsonResponse({'success': False}, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['POST'])
-def GetformulaValue(request):
-
-    for k, v in request.data.items(): 
-        import_attr = ImportedAttributes.objects.all().get(inn=v)
-        print("import_attr -", import_attr)
-        print(ImportedAttributes.objects.values('id').get(inn=v))
-        print(ImportedAttributes.objects.values().get(inn=v))
-
+        return Response({'message': 'Results were updated', 
+                         "response": total_json_array}, 
+                         status=status.HTTP_200_OK)
+    return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -1110,13 +1216,9 @@ def ClientViewSet(request):
 @api_view(['POST'])
 def CreateRelationClient(request):
     if request.method == 'POST':
-        # print(request.data)
-        # print(request.data.get('region_id'))
         region = Region.objects.get(id=request.data.get('region_id'))
         manager = Manager.objects.get(id=request.data.get('manager_id'))
         applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status'))
-        # print(request.data.get('representitive_client_id'))
-        # print(request.data.get('representitive_client_id')["representative_first_name"])
 
         with transaction.atomic():
             serializer_body = ClientRepresentativeSerializer(data=request.data.get('representitive_client_id'))
@@ -1150,7 +1252,23 @@ def CreateRelationClient(request):
                 info_source_number = request.data.get('information_source_id')["info_source_number"],
             )
             information_source_id = InformationSource.objects.latest('id').id 
-            # print("information_source_id", information_source_id)
+
+        with transaction.atomic():
+            positive_decision_type = PositiveDecision.objects.get(id=request.data.get('kpi_id')["positive_decision_type"])
+            negative_decision_type = NegativeDecision.objects.get(id=request.data.get('kpi_id')["negative_decision_type"])
+            
+            KPI.objects.create(
+                positive_decision_type = positive_decision_type,
+                positive_decision_date = request.data.get('kpi_id')["positive_decision_date"],
+                measure_provided_duration = request.data.get('kpi_id')["measure_provided_duration"],
+                oiv_request_sender = request.data.get('kpi_id')["oiv_request_sender"],
+                negative_decision_type = negative_decision_type,
+                settled_debt_amount = request.data.get('kpi_id')["settled_debt_amount"],
+                received_amount_budget = request.data.get('kpi_id')["received_amount_budget"],
+                overdue_debt_amount = request.data.get('kpi_id')["overdue_debt_amount"],
+                technical_overdue_debt_amount = request.data.get('kpi_id')["technical_overdue_debt_amount"],
+            )
+            kpi_id = KPI.objects.latest('id').id 
 
         Client.objects.create(
             first_name = request.data.get('first_name'),

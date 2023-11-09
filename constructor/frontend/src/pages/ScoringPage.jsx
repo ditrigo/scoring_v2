@@ -130,8 +130,12 @@ const ScoringPage = () => {
         nested_level: newAtr.nested_level,
         author_id: newAtr.author_id,
       })
-      setMarkers([...markers, data])
-    } catch (e) {
+      console.log("data", data)
+      setMarkers((prevState) => [...prevState, data])
+      console.log("markers", markers)
+      // setMarkers([...markers, data])
+    }
+    catch (e) {
       console.log(e)
     }
   }
@@ -256,7 +260,7 @@ const ScoringPage = () => {
                   <tr>
                     <th scope="col">Наименование маркера</th>
                     <th>Автор</th>
-                    <th>Дата изменения</th>
+                    <th>Дата создания</th>
                     <th>Формула маркера</th>
                     {/* <th>Просмотр</th> */}
                     <th></th>

@@ -11,6 +11,7 @@ def parser_expression(expression):
     i = 0
     cond_counter = 0
     res_counter = 0
+    blanket_counter = 0
 
     while i<len(expression):
 
@@ -26,20 +27,31 @@ def parser_expression(expression):
             cond_counter += 1
             i += 7
 
+        elif expression[i] == "(":
+
+            blanket_counter += 1
+
         elif expression[i] == ")":
 
-            if cond_counter == 1:
-                res2_end = i
-                result_1 = parser_expression(expression[res2_start:res2_end])
+            if blanket_counter == 0:
 
-                res.append("res2")
-                res.append(result_1)
+                if cond_counter == 1:
+                    res2_end = i
+                    result_1 = parser_expression(expression[res2_start:res2_end])
 
-                if expression[i+1:] != '':
-                    res.append("add_after")
-                    res.append(expression[i+1:])
+                    res.append("res2")
+                    res.append(result_1)
 
-            cond_counter -= 1
+                    if expression[i+1:] != '':
+                        res.append("add_after")
+                        res.append(expression[i+1:])
+
+                cond_counter -= 1
+
+            else:
+                blanket_counter -= 1
+
+            
 
         elif expression[i] == ";" and cond_counter == 1:
 
@@ -102,9 +114,11 @@ def generate_condition_string(expression):
 
 def pre_replace(expression):
 
-    expression = re.sub(r'(?<![<=>])=(?!=)', '==', expression)
+    expression = re.sub(r'(?<![<=>!])=(?!=)', '==', expression)
     expression = expression.replace("<>", "!=")
     expression = expression.replace(",", ".")
+    expression = expression.replace("||", " or ")
+    expression = expression.replace("ABS(", "abs(")
 
     while "И(" in expression or "ИЛИ(" in expression:
         i_and = expression.find("И(")
@@ -112,17 +126,47 @@ def pre_replace(expression):
 
         if i_and != -1 and (i_or == -1 or i_and < i_or):
             start = i_and
-            end = expression.find(")", start)
+            end = start + 2
+            open_count = 1
+
+            for i in range(start + 2, len(expression)):
+                if expression[i] == "(":
+                    open_count += 1
+                elif expression[i] == ")":
+                    open_count -= 1
+                    if open_count == 0:
+                        end = i
+                        break
+
             sub_expr = expression[start+2:end]
             sub_expr = sub_expr.replace(";", " and ")
             expression = expression[:start] + sub_expr + expression[end+1:]
 
         else:
             start = i_or
-            end = expression.find(")", start)
+            end = start + 4
+            open_count = 1
+
+            for i in range(start + 4, len(expression)):
+                if expression[i] == "(":
+                    open_count += 1
+                elif expression[i] == ")":
+                    open_count -= 1
+                    if open_count == 0:
+                        end = i
+                        break
+
             sub_expr = expression[start+4:end]
             sub_expr = sub_expr.replace(";", " or ")
             expression = expression[:start] + sub_expr + expression[end+1:]
+
+    while "НЕПОИСК(" in expression:
+        start = expression.find("НЕПОИСК(")
+        end = expression.find(")", start)
+        sub_expr = expression[start+8:end]
+        search_term, search_in = sub_expr.split(";")
+        replacement = f'{search_term} not in {search_in}'
+        expression = expression[:start] + replacement + expression[end+1:]
 
     while "ПОИСК(" in expression:
         start = expression.find("ПОИСК(")
@@ -153,7 +197,7 @@ def pre_replace(expression):
 
 def add_prefix(expression):
     def replace(match):
-        if match.group(0) not in {'if', 'else', 'and', 'or'}:
+        if match.group(0) not in {'if', 'else', 'and', 'or', 'not', 'in'}:
             return 'imported_attributes.' + match.group(0)
         else:
             return match.group(0)
@@ -164,7 +208,7 @@ def add_prefix(expression):
 
 
 def var_dict(expression):
-    reserved_keywords = {'if', 'else', 'and', 'or', 'datetime.today()'}
+    reserved_keywords = {'if', 'else', 'and', 'or', 'datetime.today()', 'not', 'in'}
     pattern = r'([a-zA-Z_]\w*)'
     modified_vars = {}
 
@@ -195,9 +239,25 @@ def replace_variables(expression, imported_attr):
 
 
 def pyparser(expression):
-    expression = pre_replace(expression)
-    expression = parser_expression(expression)
-    expression = generate_condition_string(expression)
-    expression = add_prefix(expression)
-    
+    try:
+        expression = pre_replace(expression)
+    except Exception as e:
+        return f"Error in pre_replace: {e}"
+
+    try:
+        expression = parser_expression(expression)
+    except Exception as e:
+        return f"Error in parser_expression: {e}"
+
+    try:
+        expression = generate_condition_string(expression)
+    except Exception as e:
+        return f"Error in generate_condition_string: {e}"
+
+    # try:
+    #     expression = add_prefix(expression)
+    # except Exception as e:
+    #     return f"Error in add_prefix: {e}"
+
     return expression
+

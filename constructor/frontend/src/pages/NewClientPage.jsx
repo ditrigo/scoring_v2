@@ -304,6 +304,14 @@ const NewClientPage = () => {
                 placeholder={testData.risk}
               /> */}
               <SelectSearchField
+                options={PRD}
+                onChange={handleChangeTest}
+                name="PRD"
+                error={errors.PRD}
+                label="Представительсво ПРД"
+                placeholder={testData.PRD}
+              />
+              <SelectSearchField
                 options={solvencyRisk}
                 onChange={handleChangeTest}
                 name="solvencyRisk"
@@ -383,14 +391,14 @@ const NewClientPage = () => {
                 label="Отрицательное решение"
                 placeholder={testData.negative}
               />
-              <SelectSearchField
+              {/* <SelectSearchField
                 options={PRD}
                 onChange={handleChangeTest}
                 name="PRD"
                 error={errors.PRD}
                 label="Представительсво ПРД"
                 placeholder={testData.PRD}
-              />
+              /> */}
               <SelectSearchField
                 options={type}
                 onChange={handleChangeTest}

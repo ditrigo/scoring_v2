@@ -32,8 +32,9 @@ urlpatterns = [
     re_path(r"^inn_res/(?P<pk>[0-9]+)$", InnAndResultsDetailViewSet, name="inn_and_results_detail"),
 
     re_path(r"^start_scoring/$", StartScoringViewSet, name="start_scoring"),
+    # re_path(r"^start_2scoring/$", StartScoring2ViewSet, name="start_2scoring"),
     re_path(r"^start_test_scoring/$", StartTestScoringViewSet, name="start_test_scoring"),
-    re_path(r"^get_formula_value/$", GetformulaValue, name="get_formula_value"), # тестовая апишка
+    # re_path(r"^get_formula_value/$", GetformulaValue, name="get_formula_value"), # тестовая апишка
 
     re_path(r"^download/$", DownloadTryViewSet, name="download"),
 
