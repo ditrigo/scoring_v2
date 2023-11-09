@@ -1,4 +1,5 @@
-import datetime
+# import datetime
+from datetime import date
 from django.urls import reverse
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -392,9 +393,21 @@ def ImportedAttributesListViewSet(request):  # (viewsets.ModelViewSet):
         # print(inns_list_for_counted)
 
         if result.totals[RowResult.IMPORT_TYPE_NEW]:
-            InsertValuesToCountedAttributes(ImportedAttributes.objects.filter(created_date__contains=datetime.date.today()))
+            InsertValuesToCountedAttributes(ImportedAttributes.objects.filter(created_date__contains=date.today()))
 
-        os.remove("./media/store/"+str(filename.name))
+        def delete_files(directory):
+            try:
+                file_list = os.listdir(directory)
+                for filename in file_list:
+                    file_path = os.path.join(directory, filename) 
+                    if os.path.isfile(file_path): 
+                        os.remove(file_path)
+                return "Files deleted"
+            except:
+                return "Files wasn't deleted"
+        
+        delete_files("./media/store")
+
         return Response(
             data={"message": "Import successed",
                   "result_totals": f"{result.totals}",
@@ -773,35 +786,85 @@ def InnAndResultsDetailViewSet(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
+# @api_view(['POST'])
+# def StartScoringViewSet(request):
+#     if request.method == 'POST':
+#         data = json.loads(request.body.decode('utf-8'))
+        
+#         rank = 0.0 
+#         inn_list, marker_formula_list = [], []
+#         for key, value in data["model"].items():
+#             # print("key -", key,"\nvalue - ", value)
+#             # print('\n')
+#             if key == "inns":
+#                 for val in value:
+#                     # print(val)
+#                     for k, v in val.items():
+#                         # print("inns.keys", k ,"inns.values", v)
+#                         if k == "inn":
+#                             inn_list.append(v)
+#             elif key == "marker_id":
+#                 for val in value:
+#                     # print(val)
+#                     for k, v in val.items():
+#                         # print("marker_id.keys", k ,"marker_id.values", v)
+#                         if k == "py_query":
+#                             marker_formula_list.append(v)
+        
+#         # print(inn_list)
+#         print(marker_formula_list)
+#         # print(CsvAttributes.objects.get(inn=inn_list[0]).np_name)
+
+#         dict_markers = {}
+#         list_markers = []
+#         for inn in inn_list:
+#             for formula in marker_formula_list:
+#                 try:
+#                     imported_attributes = ImportedAttributes.objects.get(inn=inn)
+#                     counted_attributes = CountedAttributesNew.objects.get(inn=inn)
+#                 except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
+#                     continue
+#                 print("VALUE",value)
+#                 value = eval(formula)
+#                 ####################
+#                 # TODO Добавить парсер для получения значения в формуле 
+
+
+
+#                 ####################
+#                 list_markers.append({'formula': formula, "value": value})
+                
+#                 rank += value
+#                 print(value)
+#                 # inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
+#                 # inn_res.save()
+
+#             total_json = {
+#                 "markers_and_values": list_markers,
+#                 "total_rank": rank
+#             }
+#             dict_markers.update(total_json)
+#             print(dict_markers)
+#             InnRes.objects.filter(inn=inn).update(result_score=dict_markers) 
+#             # InnRes.objects.create(markers_json=dict_markers)
+#             dict_markers = {}
+
+#         return JsonResponse({'message': 'Results were updated '}, status=200)
+
+#     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['POST'])
 def StartScoringViewSet(request):
     if request.method == 'POST':
-        data = json.loads(request.body.decode('utf-8'))
-        
-        rank = 0.0 
-        inn_list, marker_formula_list = [], []
-        for key, value in data["model"].items():
-            # print("key -", key,"\nvalue - ", value)
-            # print('\n')
-            if key == "inns":
-                for val in value:
-                    # print(val)
-                    for k, v in val.items():
-                        # print("inns.keys", k ,"inns.values", v)
-                        if k == "inn":
-                            inn_list.append(v)
-            elif key == "marker_id":
-                for val in value:
-                    # print(val)
-                    for k, v in val.items():
-                        # print("marker_id.keys", k ,"marker_id.values", v)
-                        if k == "py_query":
-                            marker_formula_list.append(v)
-        
-        # print(inn_list)
-        print(marker_formula_list)
-        # print(CsvAttributes.objects.get(inn=inn_list[0]).np_name)
 
+        inn_list, marker_formula_list = [], []
+        for inn in request.data.get("model")["inns"]:
+            inn_list.append(inn["inn"])
+        for marker_formula in request.data.get("model")["marker_id"]:
+            marker_formula_list.append(marker_formula["py_query"])
+
+        rank = 0.0 
         dict_markers = {}
         list_markers = []
         for inn in inn_list:
@@ -809,35 +872,55 @@ def StartScoringViewSet(request):
                 try:
                     imported_attributes = ImportedAttributes.objects.get(inn=inn)
                     counted_attributes = CountedAttributesNew.objects.get(inn=inn)
-                except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
+                except (ImportedAttributes.DoesNotExist , CountedAttributesNew.DoesNotExist):
                     continue
-                print("VALUE",value)
-                value = eval(formula)
-                ####################
-                # TODO Добавить парсер для получения значения в формуле 
 
+                # print("\nformula IN FOR",formula)
+                # print("\nimported_attributes.dolg", imported_attributes.dolg)
+                # print("imported_attributes.s_1600_4", imported_attributes.s_1600_4)
 
+                if formula.startswith("Error"):
+                     list_markers.append({
+                         "formula": formula, 
+                         "value": 0,
+                         "error": formula,
+                         })
+                     rank += 0
+                else:
+                    try:
+                        counting_rank = eval(formula)
+                        list_markers.append({
+                                "formula": formula, 
+                                "value": counting_rank,
+                                "error": "",
+                                }) 
+                        rank += counting_rank
+                    except Exception as e:
+                        list_markers.append({
+                                "formula": formula, 
+                                "value": 0, 
+                                "error": f"{e}",
+                                })
+                        rank += 0
 
-                ####################
-                list_markers.append({'formula': formula, "value": value})
-                
-                rank += value
-                print(value)
+                # print("\nRANK", rank)
                 # inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
                 # inn_res.save()
-
             total_json = {
                 "markers_and_values": list_markers,
                 "total_rank": rank
             }
             dict_markers.update(total_json)
-            print(dict_markers)
-            InnRes.objects.filter(inn=inn).update(result_score=dict_markers) 
-            # InnRes.objects.create(markers_json=dict_markers)
-            dict_markers = {}
 
-        return JsonResponse({'message': 'Results were updated '}, status=200)
+            # print("\n")
+            # print("dict_markers", dict_markers)
+            InnRes.objects.filter(inn=inn).update(result_score=dict_markers)
+        #     # InnRes.objects.create(markers_json=dict_markers)
+            dict_markers.clear()
+            list_markers = []
+            rank = 0.0 
 
+        return Response({'message': 'Results were updated '}, status=status.HTTP_200_OK)
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -905,75 +988,6 @@ def StartTestScoringViewSet(request):
 
     return JsonResponse({'success': False}, status=status.HTTP_400_BAD_REQUEST)
 
-
-@api_view(['POST'])
-def StartScoring2ViewSet(request):
-    if request.method == 'POST':
-
-        inn_list, marker_formula_list = [], []
-        for inn in request.data.get("model")["inns"]:
-            inn_list.append(inn["inn"])
-        for marker_formula in request.data.get("model")["marker_id"]:
-            marker_formula_list.append(marker_formula["py_query"])
-
-        rank = 0.0 
-        dict_markers = {}
-        list_markers = []
-        for inn in inn_list:
-            for formula in marker_formula_list:
-                try:
-                    imported_attributes = ImportedAttributes.objects.get(inn=inn)
-                    counted_attributes = CountedAttributesNew.objects.get(inn=inn)
-                except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
-                    continue
-
-                # print("\nformula IN FOR",formula)
-                # print("\nimported_attributes.dolg", imported_attributes.dolg)
-                # print("imported_attributes.s_1600_4", imported_attributes.s_1600_4)
-
-                if formula.startswith("Error"):
-                     list_markers.append({
-                         "formula": formula, 
-                         "value": 0,
-                         "error": formula,
-                         })
-                     rank += 0
-                else:
-                    try:
-                        counting_rank = eval(formula)
-                        list_markers.append({
-                                "formula": formula, 
-                                "value": counting_rank,
-                                "error": "",
-                                }) 
-                        rank += counting_rank
-                    except Exception as e:
-                        list_markers.append({
-                                "formula": formula, 
-                                "value": 0, 
-                                "error": f"{e}",
-                                })
-                        rank += 0
-
-                print("\nRANK", rank)
-                # inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
-                # inn_res.save()
-            total_json = {
-                "markers_and_values": list_markers,
-                "total_rank": rank
-            }
-            dict_markers.update(total_json)
-
-            print("\n")
-            print("dict_markers", dict_markers)
-        #     # InnRes.objects.filter(inn=inn).update(result_score=dict_markers) 
-        #     # InnRes.objects.create(markers_json=dict_markers)
-            dict_markers.clear()
-            list_markers = []
-            rank = 0.0 
-
-        return Response({'message': 'Results were updated '}, status=status.HTTP_200_OK)
-    return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
 
 
 ### CRM VIEWS ###########################################################################################
