@@ -1310,4 +1310,25 @@ def CreateRelationClient(request):
         
         return Response({'message': 'Клиент создан'}, status=status.HTTP_200_OK)
     return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def DetailRelationClient(request, pk):
+    if request.method == 'GET':
+
+        client = Client.objects.get(id=pk)
+        client_data = ClientSerializer(client)
+    
+        if client.kpi != None:
+            fields_of_positive_decision = None
+            # Если тип не выбран, то и полей нет
+            if client.kpi.positive_decision_type != None:
+                fields_of_positive_decision = KpiPositiveDecisionFieldsSerializer(KpiPositiveDecisionFields.objects.filter(kpi=client.kpi.id), many=True)
+
+        data = {}
+        data.update(client_data.data)
+        data['fields_of_positive_decision'] = fields_of_positive_decision.data
+
+        return Response({'data': data}, status=status.HTTP_200_OK)
+        
+    return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)
 #---------------------

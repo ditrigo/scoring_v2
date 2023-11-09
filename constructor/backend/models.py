@@ -656,7 +656,7 @@ class InformationSource(models.Model):
         db_table ='inform_source'
  
     def __str__(self):
-        return self.info_source_number
+        return f'({self.id}) {self.info_source_number}'
 
 
 class ComplianceCriteria(models.Model):
