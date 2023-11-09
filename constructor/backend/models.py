@@ -640,7 +640,7 @@ class ClientRepresentative(models.Model): # Представитель клие�
         db_table ='client_representative'
  
     def __str__(self):
-        return f"{self.first_name} {self.second_name}"
+        return f"{self.representative_first_name} {self.representative_second_name}"
     
 
 class InformationSource(models.Model):
@@ -675,7 +675,7 @@ class ComplianceCriteria(models.Model):
         db_table ='compliance_criteria'
  
     def __str__(self):
-        return f"{self.client.name} - {self.debt_type}"
+        return f"{self.debt_type}"
 
 
 class KPI(models.Model): # KPI вид решения
@@ -683,11 +683,11 @@ class KPI(models.Model): # KPI вид решения
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
     created_date = models.DateTimeField(auto_now_add=True)
-    positive_decision_type = models.ForeignKey(PositiveDecision, on_delete=models.CASCADE)  # Вид положительного решения
+    positive_decision_type = models.ForeignKey(PositiveDecision, on_delete=models.CASCADE, null=True, blank=True)  # Вид положительного решения
     positive_decision_date = models.DateField(blank=True, null=True)  # Дата положительного решения
     measure_provided_duration = models.IntegerField(blank=True, null=True)  # На сколько предоставлена мера
     oiv_request_sender = models.CharField(max_length=255, blank=True, null=True)  # От кого ходатайство ОИВ (для МС)
-    negative_decision_type = models.ForeignKey(NegativeDecision, on_delete=models.CASCADE)  # Вид отрицательного решения
+    negative_decision_type = models.ForeignKey(NegativeDecision, on_delete=models.CASCADE, null=True, blank=True)  # Вид отрицательного решения
     settled_debt_amount = models.IntegerField(blank=True, null=True)  # Сумма урегулированной задолженности
     
     received_amount_budget = models.IntegerField(blank=True, null=True)  # Сумма поступившая в бюджет
@@ -734,7 +734,7 @@ class KpiPositiveDecisionFields(models.Model):
         db_table ='kpi_positive_decision_fields'
  
     def __str__(self):
-        return f"{self.value}"
+        return f"{self.kpi}: ({self.fields_of_pos_decision} - {self.value})"
 
 
 # TODO На юзера навесить ресурс для дальнейшего скачивания данных

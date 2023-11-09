@@ -1147,6 +1147,17 @@ def NegativeDecisionViewSet(request):
                 many=True
                 )
         return Response({'data': serializer.data})
+    
+@api_view(['GET'])
+def FieldsOfPositiveDecisionsViewSet(request, pk):
+    if request.method == 'GET':
+        fields = FieldsOfPositiveDecisions.objects.filter(positive_decision=PositiveDecision.objects.get(id=pk)).order_by('id')
+        serializer = FieldsOfPositiveDecisionsSerializer(
+                fields,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
 
 #---------------------
 
@@ -1216,102 +1227,87 @@ def ClientViewSet(request):
 @api_view(['POST'])
 def CreateRelationClient(request):
     if request.method == 'POST':
-        region = Region.objects.get(id=request.data.get('region_id'))
-        manager = Manager.objects.get(id=request.data.get('manager_id'))
-        applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status'))
 
         with transaction.atomic():
-            serializer_body = ClientRepresentativeSerializer(data=request.data.get('representitive_client_id'))
-            if not serializer_body.is_valid():
-                transaction.set_rollback(True)
-                return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
-            serializer_body.save()
-            representitive_client_id = ClientRepresentative.objects.latest('id').id
+            try:
+
+                region = Region.objects.get(id=request.data.get('region_id'))
+                manager = Manager.objects.get(id=request.data.get('manager_id'))
+                applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status'))
+
+                serializer_body = ClientRepresentativeSerializer(data=request.data.get('representitive_client_id'))
+                if not serializer_body.is_valid():
+                    transaction.set_rollback(True)
+                    return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                serializer_body.save()
+                representitive_client_id = ClientRepresentative.objects.latest('id').id
+            
+                category = Category.objects.get(id=request.data.get('compliance_data_id')["category"])
+                debt_type = DebtType.objects.get(id=request.data.get('compliance_data_id')["debt_type"])
+                support_measure = SupportMeasure.objects.get(id=request.data.get('compliance_data_id')["support_measure"])
+                
+                ComplianceCriteria.objects.create(
+                    debt_amount = request.data.get('compliance_data_id')["debt_amount"],
+                    debt_type = debt_type,
+                    category = category,
+                    support_measure = support_measure,
+                    note = request.data.get('compliance_data_id')["note"],
+                    support_duration = request.data.get('compliance_data_id')["support_duration"],
+                )
+                compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
+
+                info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
+                
+                InformationSource.objects.create(
+                    info_source_type = info_source_type_id,
+                    info_source_date = request.data.get('information_source_id')["info_source_date"],
+                    info_source_number = request.data.get('information_source_id')["info_source_number"],
+                )
+                information_source_id = InformationSource.objects.latest('id').id 
+                
+                kpi_id = None
+                if request.data.get('kpi_id') != None:
+                    serializer_kpi = KPISerializer(data=request.data.get('kpi_id'))
+                    if not serializer_kpi.is_valid():
+                        transaction.set_rollback(True)
+                        return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                    
+                    serializer_kpi.save()
+                    
+
+                    kpi_id = KPI.objects.latest('id').id
+
+                    if request.data.get('fields_of_positive_decision') != None and \
+                        request.data.get('kpi_id')['positive_decision_type'] != None:
+                        data_fields = request.data.get('fields_of_positive_decision')
+                        for fields in data_fields:
+                            fields['kpi'] = kpi_id
+                            serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
+                            if not serializer_fields_of_positive.is_valid():
+                                transaction.set_rollback(True)
+                                return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                        
+                            serializer_fields_of_positive.save()
+
+                Client.objects.create(
+                    first_name = request.data.get('first_name'),
+                    second_name = request.data.get('second_name'),
+                    patronymic = request.data.get('patronymic'),
+                    inn = request.data.get('inn'),
+                    region = region,
+                    manager = manager,
+                    applicant_status = applicant_status,
+                    information_source_id = information_source_id,
+                    representitive_client_id = representitive_client_id,
+                    compliance_criteria_id = compliance_criteria_id,
+                    first_meeting_date = request.data.get('first_meeting_date'),
+                    event_date = request.data.get('event_date'),
+                    event_description = request.data.get('event_description'),
+                    kpi_id = kpi_id,
+                )
+            except:
+                return Response({'message': 'Некорректный ввод данных!'}, status=status.HTTP_400_BAD_REQUEST)
         
-        with transaction.atomic():
-            category = Category.objects.get(id=request.data.get('compliance_data_id')["category"])
-            debt_type = DebtType.objects.get(id=request.data.get('compliance_data_id')["debt_type"])
-            support_measure = SupportMeasure.objects.get(id=request.data.get('compliance_data_id')["support_measure"])
-            
-            ComplianceCriteria.objects.create(
-                debt_amount = request.data.get('compliance_data_id')["debt_amount"],
-                debt_type = debt_type,
-                category = category,
-                support_measure = support_measure,
-                note = request.data.get('compliance_data_id')["note"],
-                support_duration = request.data.get('compliance_data_id')["support_duration"],
-            )
-            compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
-
-        with transaction.atomic():
-            info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
-            
-            InformationSource.objects.create(
-                info_source_type = info_source_type_id,
-                info_source_date = request.data.get('information_source_id')["info_source_date"],
-                info_source_number = request.data.get('information_source_id')["info_source_number"],
-            )
-            information_source_id = InformationSource.objects.latest('id').id 
-
-        with transaction.atomic():
-            positive_decision_type = PositiveDecision.objects.get(id=request.data.get('kpi_id')["positive_decision_type"])
-            negative_decision_type = NegativeDecision.objects.get(id=request.data.get('kpi_id')["negative_decision_type"])
-            
-            KPI.objects.create(
-                positive_decision_type = positive_decision_type,
-                positive_decision_date = request.data.get('kpi_id')["positive_decision_date"],
-                measure_provided_duration = request.data.get('kpi_id')["measure_provided_duration"],
-                oiv_request_sender = request.data.get('kpi_id')["oiv_request_sender"],
-                negative_decision_type = negative_decision_type,
-                settled_debt_amount = request.data.get('kpi_id')["settled_debt_amount"],
-                received_amount_budget = request.data.get('kpi_id')["received_amount_budget"],
-                overdue_debt_amount = request.data.get('kpi_id')["overdue_debt_amount"],
-                technical_overdue_debt_amount = request.data.get('kpi_id')["technical_overdue_debt_amount"],
-            )
-            kpi_id = KPI.objects.latest('id').id 
-
-        Client.objects.create(
-            first_name = request.data.get('first_name'),
-            second_name = request.data.get('second_name'),
-            patronymic = request.data.get('patronymic'),
-            inn = request.data.get('inn'),
-            region = region,
-            manager = manager,
-            applicant_status = applicant_status,
-            information_source_id = information_source_id,
-            representitive_client_id = representitive_client_id,
-            compliance_criteria_id = compliance_criteria_id,
-            first_meeting_date = request.data.get('first_meeting_date'),
-            event_date = request.data.get('event_date'),
-            event_description = request.data.get('event_description'),
-            kpi_id = request.data.get('kpi_id'),
-        )
-        
-        # client_id = request.data.get('client_id')
-        # representitive_client_id = request.data.get('representitive_client_id')
-        # compliance_criteria_id = request.data.get('compliance_data_id')
-        # kpi_id = request.data.get('kpi_id')
-
-        # model_list = [
-        #     (Client, client_id, 'ClientModel'),
-        #     (ClientRepresentative, representitive_client_id, 'ClientRepresentative'),
-        #     (ComplianceCriteria, compliance_criteria_id, 'ComplianceCriteria'),
-        #     (KPI, kpi_id, 'KPI')
-        # ]
-        # for model, model_id, model_name in model_list:
-        #     try:
-        #         model_instance = model.objects.get(id=model_id)
-        #     except model.DoesNotExist:
-        #         return Response({'success': False, 'error': f'{model_name} не найдена'}, status=status.HTTP_404_NOT_FOUND)
-
-        # client_model = Client.objects.get(id=client_id)
-        # representitive_client_model = ClientRepresentative.objects.get(id=representitive_client_id)
-        # compliance_criteria_model = ComplianceCriteria.objects.get(id=compliance_criteria_id)
-        # kpi_model = KPI.objects.get(id=kpi_id)
-        # client_model.representitive_client.add(representitive_client_model)
-        # client_model.compliance_criteria.add(compliance_criteria_model)
-        # client_model.kpi.add(kpi_model)
-
-        return JsonResponse({'message': 'Relation created successfully'}, status=200)
-    return JsonResponse({'message': 'Invalid request method'}, status=400)
+        return Response({'message': 'Клиент создан'}, status=status.HTTP_200_OK)
+    return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)
 #---------------------
