@@ -79,6 +79,9 @@
   background-color: white;
 }
 
+.tableContent {
+  font-size: 12px;
+}
 /* .is-invalid {
   z-index: 1;
 } */

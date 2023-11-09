@@ -17,6 +17,7 @@ const NumericRow = () => {
       <td>12</td>
       <td>13</td>
       <td>14</td>
+      <td>15</td>
     </tr>
   )
 }

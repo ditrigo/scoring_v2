@@ -121,14 +121,19 @@ const ResultTable = ({ getLinkMarkers }) => {
                       </td>
                       <td>
                         {el.inns.map((el, index) => {
-                          // const rank = el.result_score?.total_rank
                           return (
                             <p className="text-center" key={index}>
                               ИНН{" "}
-                              <Link to={"/results/" + el.inn}>{el.inn}</Link> с
-                              общим результатом{" "}
+                              {el?.result_score?.total_rank ? (
+                                <Link to={"/results/" + el.inn}>{el.inn}</Link>
+                              ) : (
+                                el.inn
+                              )}{" "}
+                              с общим результатом{" "}
                               <span className="text-success">
-                                {el?.result_score?.total_rank}
+                                {el?.result_score?.total_rank
+                                  ? el?.result_score?.total_rank
+                                  : "-"}
                               </span>
                             </p>
                           )

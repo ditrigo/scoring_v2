@@ -94,9 +94,11 @@ export const validatorConfig = {
     isRequired: {
       message: "Это поле обязательно для заполнения",
     },
-    // count: {
-    //   message: "ИНН должен содержать 10 или 12 символов",
-    // },
+    count: {
+      message:
+        "ИНН должен содержать 12 символов. Если ИНН состоит из 10, то поставьте впереди два нуля",
+      value: 12,
+    },
   },
   dateAppealsToMIDUOL: {
     isRequired: {
@@ -141,8 +143,13 @@ export const firstData = [
   { id: 10, name: "Источник информации. Номер", key: "sourceNumber" },
   {
     id: 13,
-    name: "Представитель клиента. ФИО, должность",
-    key: "representativeNameEndTitle",
+    name: "Представитель клиента. ФИО",
+    key: "representativeName",
+  },
+  {
+    id: 63,
+    name: "Представитель клиента. Должность",
+    key: "representativeTitle",
   },
   {
     id: 14,

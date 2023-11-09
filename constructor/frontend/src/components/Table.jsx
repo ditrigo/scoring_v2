@@ -2,14 +2,22 @@ import React, { useState } from "react"
 import _ from "lodash"
 import Moment from "moment"
 import localization from "moment/locale/ru"
+import MyInput from "./UI/MyInput/MyInput"
 // import 'https://momentjs.com/downloads/moment-with-locales.min.js';
 
 const Table = ({ attributes, columns, setColumns }) => {
   const [sortType, setSortType] = useState({ path: "name", order: "asc" })
+  const [searchValue, setSearchValue] = useState("")
 
   const sortedAttributes = _.orderBy(attributes, sortType.path, sortType.order)
-  // console.log("header: ", columns)
-  // console.log("body: ", sortedAttributes)
+  // console.log(sortedAttributes)
+
+  let searchedAttributes = sortedAttributes
+    ? sortedAttributes.filter((el) => {
+        console.log(el.inn)
+        return String(el.inn).includes(searchValue)
+      })
+    : sortedAttributes
 
   const handleSort = (item) => {
     if (sortType.path === item) {
@@ -75,6 +83,7 @@ const Table = ({ attributes, columns, setColumns }) => {
         >
           Фильтрация колонок таблицы
         </button>
+
         <ul
           className="dropdown-menu"
           aria-labelledby="dropdownMenuClickableInside"
@@ -93,8 +102,15 @@ const Table = ({ attributes, columns, setColumns }) => {
           ))}
         </ul>
       </div>
-
-      <table className="table  table-bordered mt-4">
+      <div className="mt-4">
+        <MyInput
+          type="text"
+          placeholder="Введите ИНН"
+          // className="form-group search__input mr-5"
+          onChange={(event) => setSearchValue(event.target.value)}
+        />
+      </div>
+      <table className="table  table-bordered mt-4 tableContent">
         <thead>
           <tr>
             {columns
@@ -117,7 +133,7 @@ const Table = ({ attributes, columns, setColumns }) => {
         </thead>
 
         <tbody>
-          {sortedAttributes.map((file) => (
+          {searchedAttributes.map((file) => (
             <tr key={file.id}>
               {columns[0].isVisible && (
                 <td className="d-flex justify-content-center align-items-center">
