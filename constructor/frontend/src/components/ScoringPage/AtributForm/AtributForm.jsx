@@ -175,14 +175,22 @@ const AtributForm = ({ create, setVisible }) => {
           </CopyToClipboard>
           {/* </div> */}
         </div>
-        <MyInput
+        <textarea
+          placeholder="Формула"
+          className="w-100 textarea"
+          value={marker.attr_formulas}
+          onChange={(e) =>
+            setMarker({ ...marker, attr_formulas: e.target.value })
+          }
+        ></textarea>
+        {/* <MyInput
           value={marker.attr_formulas}
           onChange={(e) =>
             setMarker({ ...marker, attr_formulas: e.target.value })
           }
           type="text"
           placeholder="Формула"
-        />
+        /> */}
         <div className="row mt-3">
           <div className="col-md-auto">
             <MyButton className="btn-outline-primary" onClick={addNewMarker}>

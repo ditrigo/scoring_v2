@@ -11,6 +11,7 @@ const CrmPage = () => {
   const [users, setUsers] = useState()
   const [searchValue, setSearchValue] = useState("")
   let filtredUsers = []
+
   try {
     useEffect(() => {
       api.users.fetchAll().then((data) => {
@@ -50,12 +51,6 @@ const CrmPage = () => {
         </div>
 
         <div className="col-md-auto mt-1 mb-1">
-          {/* <button className="btn btn-primary w-50 mx-auto col">
-          <Link to="/newclient" className="nav-link m-2">
-            Новый клиент
-          </Link>
-          </button>   */}
-
           <Link to="/newclient" className="">
             <MyButton>Новый клиент</MyButton>
           </Link>
@@ -70,7 +65,7 @@ const CrmPage = () => {
                 <div className="card-body">
                   {" "}
                   <div className="table-responsive">
-                    <table className="table">
+                    <table className="table tableContent">
                       <TableHeader />
                       <tbody>
                         <NumericRow />

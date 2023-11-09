@@ -82,6 +82,10 @@
 .tableContent {
   font-size: 12px;
 }
+
+.textarea {
+  border: #456 1px solid;
+}
 /* .is-invalid {
   z-index: 1;
 } */

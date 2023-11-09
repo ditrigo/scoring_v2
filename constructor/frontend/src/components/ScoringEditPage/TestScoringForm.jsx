@@ -40,9 +40,8 @@ const TestScoringForm = ({ model }) => {
     let modelFromServer = models.find(
       (el) => el.model_name === model.model_name
     )
-    // modelFromServer.inns =
-    //    inputINN.split(", ").join(" ").split("/").join(" ").split(" ")
-    // ;
+    modelFromServer.inns = []
+
     inputINN
       .split(", ")
       .join(" ")
@@ -52,8 +51,6 @@ const TestScoringForm = ({ model }) => {
       .forEach((inn) => {
         modelFromServer.inns.push({ inn: inn })
       })
-
-    console.log(inputINN.split(", ").join(" ").split("/").join(" ").split(" "))
 
     const json = {
       model: modelFromServer,
