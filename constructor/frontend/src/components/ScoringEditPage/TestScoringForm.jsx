@@ -53,6 +53,8 @@ const TestScoringForm = ({ model }) => {
         modelFromServer.inns.push({ inn: inn })
       })
 
+    console.log(inputINN.split(", ").join(" ").split("/").join(" ").split(" "))
+
     const json = {
       model: modelFromServer,
     }

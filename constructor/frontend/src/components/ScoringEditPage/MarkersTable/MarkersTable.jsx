@@ -8,26 +8,26 @@ import modelService from "../../../services/model.service"
 // import moment from "moment"
 // import localization from "moment/locale/ru"
 
-const MarkersTable = ({ modelId, model }) => {
+const MarkersTable = ({ modelId, model, linkedMarkers }) => {
   const [markers, setMarkers] = useState([])
-  const [linkedMarkers, setLinkedMarkers] = useState([])
+  // const [linkedMarkers, setLinkedMarkers] = useState([])
   const [modalTestScoring, setModalTestScoring] = useState(false)
   const [modalMarkerView, setModalMarkerView] = useState(false)
   const [markerDetail, setMarkerDetail] = useState([{ name: "", formula: "" }])
 
-  async function getLinkedMarkers() {
-    try {
-      const { data } = await modelService.getLinkedMarkers(modelId)
-      // console.log("from service ", data.marker_id)
-      setLinkedMarkers(data.marker_id)
-    } catch (e) {
-      console.log(e)
-    }
-  }
+  // async function getLinkedMarkers() {
+  //   try {
+  //     const { data } = await modelService.getLinkedMarkers(modelId)
+  //     // console.log("from service ", data.marker_id)
+  //     setLinkedMarkers(data.marker_id)
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
 
-  useEffect(() => {
-    getLinkedMarkers()
-  }, [])
+  // useEffect(() => {
+  //   getLinkedMarkers()
+  // }, [])
 
   const showMarkerDetail = (marker) => {
     setModalMarkerView(true)

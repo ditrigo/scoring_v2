@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import "./SearchBar.module.css"
 import MyButton from "../../UI/MyButton/MyButton"
 import { Link } from "react-router-dom"
@@ -6,8 +6,6 @@ import "bootstrap/dist/css/bootstrap.css"
 // import MyModal from "../../ScoringPage/MyModal/MyModal"
 // import MyEditForm from "../MyEditForm/MyEditForm"
 import MarkersTable from "../MarkersTable/MarkersTable"
-import modelService from "../../../services/model.service"
-// import "bootstrap/dist/js/bootstrap.js";
 
 const SearchBar = ({
   attributes,
@@ -16,14 +14,11 @@ const SearchBar = ({
   idModel,
   statusModel,
   model,
-  changeFlag,
+  linkedMarkers,
 }) => {
   const [expanded, setExpanded] = useState(false)
   const [selections, setSelections] = useState([])
   const [statusButton, setStatusButton] = useState(statusModel)
-  // const [flag, setFlag] = useState(0)
-  // const [models, setModels] = useState([])
-  // const [currentModel, setCurrentModel] = useState({})
 
   // const [modal, setModal] = useState(false)
 
@@ -34,21 +29,6 @@ const SearchBar = ({
       setExpanded(false)
     }
   }
-
-  // const getModels = async () => {
-  //   try {
-  //     const { data } = await modelService.get()
-  //     setModels(data)
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   getModels()
-  //   const model = models && models.find((el) => el.id === idModel)
-  //   setCurrentModel(model)
-  // }, [])
 
   const handleChange = (event) => {
     console.log(event.target.name)
@@ -64,7 +44,6 @@ const SearchBar = ({
     e.preventDefault()
     setStatusButton(status)
     postLink(selections, status)
-    changeFlag()
   }
 
   return (
@@ -72,7 +51,11 @@ const SearchBar = ({
       {
         <div className="row">
           <h3>Добавление элементов для модели: {nameModel}</h3>
-          <MarkersTable modelId={idModel} model={model} />
+          <MarkersTable
+            modelId={idModel}
+            model={model}
+            linkedMarkers={linkedMarkers}
+          />
         </div>
       }
       <div className="row">

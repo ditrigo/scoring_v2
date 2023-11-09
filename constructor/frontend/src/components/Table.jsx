@@ -14,7 +14,7 @@ const Table = ({ attributes, columns, setColumns }) => {
 
   let searchedAttributes = sortedAttributes
     ? sortedAttributes.filter((el) => {
-        console.log(el.inn)
+        // console.log(el.inn)
         return String(el.inn).includes(searchValue)
       })
     : sortedAttributes
