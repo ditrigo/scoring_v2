@@ -34,10 +34,10 @@ export function validator(data, config) {
         statusValidate = +data > config.value
         break
       }
-      // case "count": {
-      //   statusValidate = data.length !== 12
-      //   break
-      // }
+      case "count": {
+        statusValidate = data.length !== config.value
+        break
+      }
       default:
         break
     }

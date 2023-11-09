@@ -23,19 +23,6 @@ const TestScoringForm = ({ model }) => {
     setInputINN(e.target.value)
   }
 
-  // async function getModels() {
-  //   await axios
-  //     .get("http://127.0.0.1:8000/api/scoring_model/")
-  //     .then((res) => {
-  //       setModels([])
-  //       console.log("getModels", res.data.data)
-  //       setModels(res.data.data)
-  //     })
-  //     .catch((e) => {
-  //       console.log(e)
-  //     })
-  // }
-
   async function getModels() {
     try {
       const { data } = await modelService.get()

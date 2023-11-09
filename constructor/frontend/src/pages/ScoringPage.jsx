@@ -38,7 +38,6 @@ const ScoringPage = () => {
   const getModels = async () => {
     try {
       const { data } = await modelService.get()
-      // console.log("from service ", data)
       setModels(data)
     } catch (e) {
       console.log(e)
@@ -208,7 +207,7 @@ const ScoringPage = () => {
                             onClick={() => deleteModel(model.id)}
                             className={
                               model.status === "AP"
-                                ? "btn btn-outline-danger disabled"
+                                ? "btn btn-outline-danger "
                                 : "btn btn-outline-danger"
                             }
                           >

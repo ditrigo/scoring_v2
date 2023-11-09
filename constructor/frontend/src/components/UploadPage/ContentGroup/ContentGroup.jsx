@@ -33,7 +33,7 @@ const ContentGroup = () => {
       .get(`${configFile.apiEndPoint}/files/`)
       .then((res) => {
         setLogAttributs(res.data.data)
-        console.log("getFilesAttributes", res.data.data)
+        // console.log("getFilesAttributes", res.data.data)
       })
       .catch((e) => {
         console.log(e)

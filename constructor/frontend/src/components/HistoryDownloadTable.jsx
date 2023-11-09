@@ -60,25 +60,15 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
   }
 
   function formatBytes(bytes, decimals = 2) {
-    if (!+bytes) return "0 Bytes";
+    if (!+bytes) return "0 Bytes"
 
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = [
-      "Bytes",
-      "KB",
-      "MB",
-      "GB",
-      "TB",
-      "PB",
-      "EB",
-      "ZB",
-      "YB",
-    ];
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
 
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
 
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
   }
 
   return (
@@ -114,14 +104,14 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
         </ul>
       </div>
 
-      <table className="table align-middle table-bordered mt-4">
+      <table className="table align-middle table-bordered mt-4 tableContent">
         <thead>
           <tr>
             {columns
               ?.filter((e) => e.isVisible)
               ?.map((column, index) => (
                 <th
-                  style={{textAlign:"center", paddingTop:"0px"}}
+                  style={{ textAlign: "center", paddingTop: "0px" }}
                   key={index}
                   scope="col"
                   onClick={
@@ -140,23 +130,35 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
         <tbody>
           {sortedAttributes.map((file) => (
             <tr key={file.id}>
-              {columns[0].isVisible && 
-              <td
-              style={{wordBreak:"break-word"}} 
-              >{decodeURI(file.filename.split('/')[5])}</td>}
+              {columns[0].isVisible && (
+                <td
+                  className="tableContent"
+                  style={{ wordBreak: "break-word" }}
+                >
+                  {decodeURI(file.filename.split("/")[5])}
+                </td>
+              )}
               {columns[1].isVisible && (
-                <td>
+                <td className="tableContent">
                   {Moment(file.created_date)
                     .locale("rus", localization)
                     .format("LLL")}
                 </td>
               )}
 
-              {columns[2].isVisible && <td>{formatBytes(file.filesize)}</td>}
+              {columns[2].isVisible && (
+                <td className="tableContent">{formatBytes(file.filesize)}</td>
+              )}
 
-              {columns[3].isVisible && <td>{file.import_total_rows}</td>}
-              {columns[4].isVisible && <td>{file.import_update_rows}</td>}
-              {columns[5].isVisible && <td>{file.import_new_rows}</td>}
+              {columns[3].isVisible && (
+                <td className="tableContent">{file.import_total_rows}</td>
+              )}
+              {columns[4].isVisible && (
+                <td className="tableContent">{file.import_update_rows}</td>
+              )}
+              {columns[5].isVisible && (
+                <td className="tableContent">{file.import_new_rows}</td>
+              )}
 
               {/* unload_date ??? */}
             </tr>

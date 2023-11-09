@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import "./SearchBar.module.css"
 import MyButton from "../../UI/MyButton/MyButton"
 import { Link } from "react-router-dom"
@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.css"
 // import MyModal from "../../ScoringPage/MyModal/MyModal"
 // import MyEditForm from "../MyEditForm/MyEditForm"
 import MarkersTable from "../MarkersTable/MarkersTable"
+import modelService from "../../../services/model.service"
 // import "bootstrap/dist/js/bootstrap.js";
 
 const SearchBar = ({
@@ -15,11 +16,16 @@ const SearchBar = ({
   idModel,
   statusModel,
   model,
+  changeFlag,
 }) => {
   const [expanded, setExpanded] = useState(false)
   const [selections, setSelections] = useState([])
   const [statusButton, setStatusButton] = useState(statusModel)
-  const [modal, setModal] = useState(false)
+  // const [flag, setFlag] = useState(0)
+  // const [models, setModels] = useState([])
+  // const [currentModel, setCurrentModel] = useState({})
+
+  // const [modal, setModal] = useState(false)
 
   const toggleExpanded = () => {
     if (!expanded) {
@@ -28,6 +34,21 @@ const SearchBar = ({
       setExpanded(false)
     }
   }
+
+  // const getModels = async () => {
+  //   try {
+  //     const { data } = await modelService.get()
+  //     setModels(data)
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   getModels()
+  //   const model = models && models.find((el) => el.id === idModel)
+  //   setCurrentModel(model)
+  // }, [])
 
   const handleChange = (event) => {
     console.log(event.target.name)
@@ -40,48 +61,38 @@ const SearchBar = ({
   }
 
   const handleSubmit = (e, status) => {
-    // setStatusButton(status)
-    // console.log("status", status)
     e.preventDefault()
-    // console.log("Submitted. Values are submitted", selections)
     setStatusButton(status)
     postLink(selections, status)
+    changeFlag()
   }
 
   return (
     <div className="container mt-10">
-      <div className="row">
-        <h3>Добавление элементов для модели: {nameModel}</h3>
-        <MarkersTable modelId={idModel} model={model} />
-      </div>
+      {
+        <div className="row">
+          <h3>Добавление элементов для модели: {nameModel}</h3>
+          <MarkersTable modelId={idModel} model={model} />
+        </div>
+      }
       <div className="row">
         {/* <div className="row"> */}
         <form className="pl-12 pr-12" onSubmit={handleSubmit}>
           <div className="row">
-            {/* <MarkersTable /> */}
             <div>
               <div
                 className={`row m-0 font-semibold cursor-pointer ${
                   expanded ? "up-arrow" : "down-arrow"
                 }`}
               >
-                {selections.length ? (
-                  selections.map((_, i) => (
-                    <div className="row">
-                      <span className="" key={i}>
-                        {i ? ", " : null}
-                        {attributes[i].name_marker_attr}
-                      </span>
-                    </div>
-                  ))
-                ) : (
+                {
                   <div className="w-50 mb-2 p-0">
                     {" "}
                     <MyButton onClick={toggleExpanded}>
                       Выбрать маркеры
                     </MyButton>
                   </div>
-                )}
+                }
               </div>
             </div>
             <div className="row"></div>
@@ -125,9 +136,6 @@ const SearchBar = ({
               </MyButton>
             </div>
 
-            {/* <MyButton type="button" onClick={() => setModal(true)}>
-                Добавить новый маркер
-              </MyButton> */}
             <div className="row m-0">
               <Link to={`/scoring`} className="btn btn-outline-secondary">
                 Выйти
@@ -137,10 +145,6 @@ const SearchBar = ({
         </form>
         {/* </div> */}
       </div>
-      {/*<MyModal visible={modal} setVisible={setModal}>
-        <MyEditForm />
-         <ModelForm create={createModel} /> 
-      </MyModal>*/}
     </div>
   )
 }
