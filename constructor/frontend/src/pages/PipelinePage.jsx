@@ -202,6 +202,7 @@ const PipelinePage = () => {
                           onChange={(date) => setStartDate(date)}
                           isClearable
                           placeholderText="I have been cleared!"
+                          dateFormat="dd/MM/yyyy"
                         />
                       </td>
                     </tr>
