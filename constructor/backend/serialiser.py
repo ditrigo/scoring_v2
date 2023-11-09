@@ -151,8 +151,8 @@ class ComplianceCriteriaSerializer(serializers.ModelSerializer):
 
 
 class KPISerializer(serializers.ModelSerializer):
-    positive_decision_type = PositiveDecisionSerializer(many=False, read_only=True)
-    negative_decision_type = NegativeDecisionSerializer(many=False, read_only=True)
+    # positive_decision_type = PositiveDecisionSerializer(many=False, read_only=True)
+    # negative_decision_type = NegativeDecisionSerializer(many=False, read_only=True)
     class Meta:
         model = KPI
         fields = "__all__"
@@ -165,8 +165,6 @@ class FieldsOfPositiveDecisionsSerializer(serializers.ModelSerializer):
 
 
 class KpiPositiveDecisionFieldsSerializer(serializers.ModelSerializer):
-    kpi = KPISerializer(many=True, read_only=True)
-    fields_of_pos_decision = FieldsOfPositiveDecisionsSerializer(many=True, read_only=True)
     class Meta:
         model = KpiPositiveDecisionFields
         fields = "__all__"
