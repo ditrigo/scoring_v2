@@ -189,6 +189,7 @@ const TestScoringForm = ({ model }) => {
                 <th scope="col">Итоговый результат</th>
                 <th scope="col">Формулы</th>
                 <th scope="col">Значения</th>
+                <th scope="col">Ошибки</th>
               </tr>
             </thead>
             <tbody>
@@ -197,16 +198,30 @@ const TestScoringForm = ({ model }) => {
                   <tr key={index}>
                     <td>{info.inn}</td>
                     <td>{info.total_rank}</td>
-                    <td>
+                    <td >
                       {info.markers_and_values.map((el, index) => {
-                        console.log("el", el)
-                        return <tr key={index}>{el.formula}</tr>
+                        // console.log("el", el)
+                        return <tr style={{ "borderBottom": "1pt solid black" }} key={index}>{index + 1} : {el.formula}</tr>
                       })}
                     </td>
                     <td>
                       {info.markers_and_values.map((el, index) => {
                         // console.log("el", el);
-                        return <tr key={index}>{el.value}</tr>
+                        return <tr style={{ "borderBottom": "1pt solid black" }} key={index}>
+                          <tr>
+                            {index + 1} : {el.value} 
+                          </tr>
+                        </tr>
+                      })}
+                    </td>
+                    <td>
+                      {info.markers_and_values.map((el, index) => {
+                        // console.log("el", el);
+                        return <tr style={{ "borderBottom": "1pt solid black" }} key={index}>
+                          
+                            {index + 1} : {el.error}
+                          
+                        </tr>
                       })}
                     </td>
                   </tr>

@@ -1312,6 +1312,7 @@ def CreateRelationClient(request):
         return Response({'message': 'Клиент создан'}, status=status.HTTP_200_OK)
     return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 def DetailRelationClient(request, pk):
     if request.method == 'GET':
@@ -1332,6 +1333,7 @@ def DetailRelationClient(request, pk):
         return Response({'data': data}, status=status.HTTP_200_OK)
         
     return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 def UpdateRelationClient(request, pk):
