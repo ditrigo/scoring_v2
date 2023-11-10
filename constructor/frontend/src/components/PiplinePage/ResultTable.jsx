@@ -124,7 +124,7 @@ const ResultTable = ({ getLinkMarkers }) => {
                           return (
                             <p className="text-center" key={index}>
                               ИНН{" "}
-                              {el ? (
+                              {el.result_score ? (
                                 <Link to={"/results/" + el.inn}>{el.inn}</Link>
                               ) : (
                                 el.inn

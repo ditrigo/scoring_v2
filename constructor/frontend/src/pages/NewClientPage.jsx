@@ -466,13 +466,7 @@ const NewClientPage = () => {
                 onChange={handleChangeTest}
                 error={errors.dateAppealsToMIDUOL}
               />
-              <TextField
-                label="Дата наступления события"
-                name="dateEventOccurance"
-                value={testData.dateEventOccurance}
-                onChange={handleChangeTest}
-                error={errors.dateEventOccurance}
-              />
+
               {firstData.map((el) => {
                 // console.log(key)
                 return (

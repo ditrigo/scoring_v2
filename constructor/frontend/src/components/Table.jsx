@@ -14,8 +14,14 @@ const Table = ({ attributes, columns, setColumns }) => {
 
   let searchedAttributes = sortedAttributes
     ? sortedAttributes.filter((el) => {
-        console.log(el.inn)
-        return String(el.inn).includes(searchValue)
+        if (Number.isInteger(+searchValue)) {
+        }
+        return (
+          Moment(el.report_date)
+            .locale("rus", localization)
+            .format("LLL")
+            .includes(searchValue) || String(el.inn).includes(searchValue)
+        )
       })
     : sortedAttributes
 
@@ -105,7 +111,7 @@ const Table = ({ attributes, columns, setColumns }) => {
       <div className="mt-4">
         <MyInput
           type="text"
-          placeholder="Введите ИНН"
+          placeholder="Введите ИНН или дату отчета"
           // className="form-group search__input mr-5"
           onChange={(event) => setSearchValue(event.target.value)}
         />

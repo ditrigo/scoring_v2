@@ -10,14 +10,22 @@ import modelService from "../services/model.service"
 
 const ScoringEdit = () => {
   const [countedAttributes, setCountedAttributes] = useState([])
-  // const [markers, setMarkers] = useState([])
-  let [flag, setFlag] = useState(0)
+  const [models, setModels] = useState([])
+  const [currentModel, setCurrentModel] = useState({})
+  const [linkedMarkers, setLinkedMarkers] = useState([])
 
   const { state } = useLocation()
 
-  const changeFlag = () => {
-    setFlag(flag++)
-    console.log(flag)
+  const getModels = async () => {
+    try {
+      const { data } = await modelService.get()
+      data.find((el) => el.id === state.models.id)
+      setCurrentModel(data.find((el) => el.id === state.models.id))
+
+      setModels(data)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   async function getMarkers() {
@@ -29,8 +37,20 @@ const ScoringEdit = () => {
     }
   }
 
+  async function getLinkedMarkers() {
+    try {
+      const { data } = await modelService.getLinkedMarkers(state.models.id)
+      // console.log("from service ", data.marker_id)
+      setLinkedMarkers(data.marker_id)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   useEffect(() => {
     getMarkers()
+    getModels()
+    getLinkedMarkers()
   }, [])
 
   async function changeModelStatusById(status) {
@@ -57,7 +77,11 @@ const ScoringEdit = () => {
           scoring_model_id: state.models.id,
         }
       )
-      console.log(data)
+      console.log(newLinkModelAndAttributes)
+      setModels([])
+      setCurrentModel({})
+      getModels()
+      getLinkedMarkers()
     } catch (e) {
       console.log(e)
     }
@@ -65,17 +89,21 @@ const ScoringEdit = () => {
     changeModelStatusById(statusButton)
   }
 
+  useEffect(() => {
+    console.log("hi from effect")
+  }, [linkedMarkers])
+
   return (
     // <div className="container">
     <SearchBar
-      changeFlag={changeFlag}
       // attributes={markers}
       attributes={countedAttributes}
       postLink={postModelAndAttributes}
       nameModel={state.models.model_name}
       idModel={state.models.id}
       statusModel={state.models.status}
-      model={state.models}
+      model={currentModel}
+      linkedMarkers={linkedMarkers}
     />
     // </div>
   )

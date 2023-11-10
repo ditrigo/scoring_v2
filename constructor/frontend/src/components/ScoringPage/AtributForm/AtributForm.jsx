@@ -17,6 +17,7 @@ const AtributForm = ({ create, setVisible }) => {
     value: "",
     copied: false,
   })
+  const [balancedError, setBalancedError] = useState("")
 
   // const handleClick = (e) => {
   //   e.preventDefault();
@@ -40,18 +41,52 @@ const AtributForm = ({ create, setVisible }) => {
     setVisible(false)
   }
 
-  const addNewMarker = (e) => {
-    e.preventDefault()
-    const newMarker = {
-      ...marker,
-      description: "Description",
-      nested_level: 1,
-      author_id: "Тестовый пользователь",
+  function isBalanced(string) {
+    console.log(
+      "🚀 ~ file: AtributForm.jsx:44 ~ isBalanced ~ isBalanced:",
+      isBalanced
+    )
+    const start = "{[("
+    const end = "}])"
+    const queue = []
+
+    const map = {
+      "}": "{",
+      "]": "[",
+      ")": "(",
     }
 
-    create(newMarker)
+    for (let i = 0; i < string.length; i++) {
+      const char = string[i]
 
-    setMarker({ name_marker_attr: "", attr_formulas: "" })
+      if (start.includes(char)) {
+        queue.push(char)
+      } else if (end.includes(char)) {
+        const last = queue.pop()
+        if (map[char] !== last) return false
+      }
+    }
+    return !queue.length
+  }
+
+  const addNewMarker = (e) => {
+    e.preventDefault()
+    // console.log("balanced: ", isBalanced(marker.attr_formulas))
+    if (isBalanced(marker.attr_formulas)) {
+      setBalancedError("")
+      const newMarker = {
+        ...marker,
+        description: "Description",
+        nested_level: 1,
+        author_id: "Тестовый пользователь",
+      }
+
+      create(newMarker)
+
+      setMarker({ name_marker_attr: "", attr_formulas: "" })
+    } else {
+      setBalancedError("Скобки не сбалансированы!")
+    }
   }
 
   async function getAttributes() {
@@ -175,15 +210,24 @@ const AtributForm = ({ create, setVisible }) => {
           </CopyToClipboard>
           {/* </div> */}
         </div>
-        <MyInput
+        <textarea
+          placeholder="Формула"
+          className="w-100 textarea"
+          value={marker.attr_formulas}
+          onChange={(e) =>
+            setMarker({ ...marker, attr_formulas: e.target.value })
+          }
+        ></textarea>
+        {/* <MyInput
           value={marker.attr_formulas}
           onChange={(e) =>
             setMarker({ ...marker, attr_formulas: e.target.value })
           }
           type="text"
           placeholder="Формула"
-        />
+        /> */}
         <div className="row mt-3">
+          {balancedError && <p className="text-danger">{balancedError}</p>}
           <div className="col-md-auto">
             <MyButton className="btn-outline-primary" onClick={addNewMarker}>
               Сохранить

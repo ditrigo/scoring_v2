@@ -105,11 +105,7 @@ export const validatorConfig = {
       message: "Это поле обязательно для заполнения",
     },
   },
-  dateEventOccurance: {
-    isRequired: {
-      message: "Это поле обязательно для заполнения",
-    },
-  },
+
   deptSum: {
     isRequired: {
       message: "Это поле обязательно для заполнения",
