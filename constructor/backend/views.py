@@ -1459,29 +1459,31 @@ def import_db_to_file(request):
             df.to_excel(writer, sheet_name='Выгрузка', index=False, startrow=3, header=False)
             sheet = writer.sheets['Выгрузка']
 
-            sheet.merge_range('A1:D1', 'Общие сведения')
-            sheet.merge_range('E1:N1', 'Первичные учетные данные (+)')
-            sheet.merge_range('O1:T1', 'Критерии соответствия клиентским требованиям (маркеры) (+)')
-            sheet.merge_range('U1:W1', 'Согласительные мероприятия (+)')
-            sheet.merge_range('X1:AM1', 'Ключевые показатели эффективности (KPI) (+)')
+            cell_format_header = writer.book.add_format({'bold': True, 'align': 'center', 'border':1, 'text_wrap': True})
 
-            sheet.merge_range('G2:I2', 'Источник информации')
-            sheet.merge_range('J2:M2', 'Представители клиента')
-            sheet.write('N2:N2', 'Контрольная точка')
-            sheet.merge_range('U2:W2', 'Контрольная точка')
-            sheet.merge_range('X2:AC2', 'Принятое решение')
-            sheet.merge_range('AE2:AF2', 'Просроченная задолженность')
-            sheet.write('AG2:AG2', 'Отлагательные меры')
-            sheet.write('AH2:AH2', 'Изменения сроков уплаты')
-            sheet.merge_range('AI2:AM2', 'Мировое соглашение (+)')
+            sheet.merge_range('A1:D1', 'Общие сведения', cell_format_header)
+            sheet.merge_range('E1:N1', 'Первичные учетные данные (+)', cell_format_header)
+            sheet.merge_range('O1:T1', 'Критерии соответствия клиентским требованиям (маркеры) (+)', cell_format_header)
+            sheet.merge_range('U1:W1', 'Согласительные мероприятия (+)', cell_format_header)
+            sheet.merge_range('X1:AM1', 'Ключевые показатели эффективности (KPI) (+)', cell_format_header)
 
-            sheet.merge_range('A2:A3', 'п/п')
+            sheet.merge_range('G2:I2', 'Источник информации', cell_format_header)
+            sheet.merge_range('J2:M2', 'Представители клиента', cell_format_header)
+            sheet.write('N2:N2', 'Контрольная точка', cell_format_header)
+            sheet.merge_range('U2:W2', 'Контрольная точка', cell_format_header)
+            sheet.merge_range('X2:AC2', 'Принятое решение', cell_format_header)
+            sheet.merge_range('AE2:AF2', 'Просроченная задолженность', cell_format_header)
+            sheet.write('AG2:AG2', 'Отлагательные меры', cell_format_header)
+            sheet.write('AH2:AH2', 'Изменения сроков уплаты', cell_format_header)
+            sheet.merge_range('AI2:AM2', 'Мировое соглашение (+)', cell_format_header)
+
+            sheet.merge_range('A2:A3', 'п/п', cell_format_header)
             for i in range(0, len(columns)):
                 if i in column_merg_ind:
                     sim = column_merge[column_merg_ind.index(i)]
-                    sheet.merge_range(f'{sim}2:{sim}3', columns[i])
+                    sheet.merge_range(f'{sim}2:{sim}3', columns[i], cell_format_header)
                 else:
-                    sheet.write(2, i+1, columns[i])
+                    sheet.write(2, i+1, columns[i], cell_format_header)
                 cell_format = writer.book.add_format({'text_wrap': True})
                 sheet.set_column(2, i+1, 18, cell_format)
 
