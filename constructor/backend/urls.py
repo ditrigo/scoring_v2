@@ -60,5 +60,7 @@ urlpatterns = [
 
     re_path(r"^crm_client/$", ClientViewSet, name="crm_client"),
     re_path(r"^crm_create_client/$", CreateRelationClient, name="crm_create_client"),
+    re_path(r"^crm_detail_relation_client/(?P<pk>[-\w]+)$", DetailRelationClient, name="crm_detail_relation_client"),
+    re_path(r"^crm_update_relation_client/(?P<pk>[-\w]+)$", UpdateRelationClient, name="crm_update_relation_client"),
     #---------------------
 ]
