@@ -55,6 +55,7 @@ const ResultMarkersView = () => {
                 <th scope="col">Название маркера</th>
                 <th scope="col">Формула</th>
                 <th scope="col">Баллы по ИНН {inn}</th>
+                <th scope="col">Ошибки</th>
               </tr>
             </thead>
             <tbody>
@@ -65,6 +66,7 @@ const ResultMarkersView = () => {
                       <td className="text-center">Название маркера</td>
                       <td className="text-center">{el.formula}</td>
                       <td>{el.value}</td>
+                      <td>{el.error}</td>
                     </tr>
                   )
                 })}
