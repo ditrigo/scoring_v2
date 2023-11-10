@@ -134,8 +134,7 @@ const ScoringPage = () => {
       setMarkers((prevState) => [...prevState, data])
       console.log("markers", markers)
       // setMarkers([...markers, data])
-    }
-    catch (e) {
+    } catch (e) {
       console.log(e)
     }
   }
@@ -211,7 +210,7 @@ const ScoringPage = () => {
                             onClick={() => deleteModel(model.id)}
                             className={
                               model.status === "AP"
-                                ? "btn btn-outline-danger "
+                                ? "btn btn-outline-danger disabled"
                                 : "btn btn-outline-danger"
                             }
                           >

@@ -40,8 +40,10 @@ const TestScoringForm = ({ model }) => {
     let modelFromServer = models.find(
       (el) => el.model_name === model.model_name
     )
+    // modelFromServer.inns =
+    //    inputINN.split(", ").join(" ").split("/").join(" ").split(" ")
+    // ;
     modelFromServer.inns = []
-
     inputINN
       .split(", ")
       .join(" ")
@@ -131,6 +133,8 @@ const TestScoringForm = ({ model }) => {
                     onChange={(date) => setStartDate(date)}
                     isClearable
                     placeholderText="I have been cleared!"
+                    dateFormat="dd/MM/yyyy"
+                    locale="rus"
                   />
                 </td>
               </tr>

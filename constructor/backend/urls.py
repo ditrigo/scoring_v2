@@ -52,6 +52,7 @@ urlpatterns = [
     re_path(r"^crm_info_source_type/$", InformationSourceTypeViewSet, name="crm_info_source_type"),
     re_path(r"^crm_pos_decision/$", PositiveDecisionViewSet, name="crm_pos_decision"),
     re_path(r"^crm_neg_decision/$", NegativeDecisionViewSet, name="crm_neg_decision"),
+    re_path(r"^crm_fields_of_positiv_decision/(?P<pk>[-\w]+)$", FieldsOfPositiveDecisionsViewSet, name="crm_fields_of_positiv_decision"),
     #----------------
 
     #---------------------

@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.css"
 // import MyModal from "../../ScoringPage/MyModal/MyModal"
 // import MyEditForm from "../MyEditForm/MyEditForm"
 import MarkersTable from "../MarkersTable/MarkersTable"
+import MyInput from "../../UI/MyInput/MyInput"
 
 const SearchBar = ({
   attributes,
@@ -19,8 +20,17 @@ const SearchBar = ({
   const [expanded, setExpanded] = useState(false)
   const [selections, setSelections] = useState([])
   const [statusButton, setStatusButton] = useState(statusModel)
+  const [searchValue, setSearchValue] = useState("")
 
   // const [modal, setModal] = useState(false)
+  console.log(attributes)
+  let filtredAttributes = attributes
+    ? attributes.filter((el) => {
+        return el.name_marker_attr
+          .toLowerCase()
+          .includes(searchValue.toLowerCase())
+      })
+    : attributes
 
   const toggleExpanded = () => {
     if (!expanded) {
@@ -81,7 +91,17 @@ const SearchBar = ({
             <div className="row"></div>
             {expanded && (
               <div className="m-0">
-                {attributes.map((attribute, index) => (
+                <div className="w-50">
+                  {" "}
+                  <MyInput
+                    type="text"
+                    placeholder="Название маркера"
+                    // className="form-group search__input mr-5"
+                    onChange={(event) => setSearchValue(event.target.value)}
+                  />
+                </div>
+
+                {filtredAttributes.map((attribute, index) => (
                   <label
                     className="custom-select custom-select-lg mb-3 mr-3"
                     key={index}

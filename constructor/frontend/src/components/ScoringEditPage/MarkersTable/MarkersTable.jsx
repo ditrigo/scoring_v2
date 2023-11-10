@@ -78,7 +78,9 @@ const MarkersTable = ({ modelId, model, linkedMarkers }) => {
                         </td>
                         <td>
                           <button
-                            // onClick={() => deleteModel(model.id)}
+                            onClick={() =>
+                              console.log("Удалить по id", marker.id)
+                            }
                             className="btn btn-outline-danger"
                           >
                             Удалить
