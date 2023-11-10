@@ -63,4 +63,5 @@ urlpatterns = [
     re_path(r"^crm_detail_relation_client/(?P<pk>[-\w]+)$", DetailRelationClient, name="crm_detail_relation_client"),
     re_path(r"^crm_update_relation_client/(?P<pk>[-\w]+)$", UpdateRelationClient, name="crm_update_relation_client"),
     #---------------------
+    re_path(r"^crm_import_db_to_file/$", import_db_to_file, name="import_db_to_file"),
 ]
