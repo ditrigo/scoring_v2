@@ -60,11 +60,11 @@ const CrmPage = () => {
         <>
           <div className="row mt-3">
             <div className="col-md-12">
-              <div className="card">
+              <div className="">
                 {/* <div className="card-header"></div> */}
                 <div className="card-body">
                   {" "}
-                  <div className="table-responsive">
+                  <div className="table crmTable">
                     <table className="table tableContent">
                       <TableHeader />
                       <tbody>
