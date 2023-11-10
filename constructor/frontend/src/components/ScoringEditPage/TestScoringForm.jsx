@@ -63,7 +63,7 @@ const TestScoringForm = ({ model }) => {
       .then((resp) => {
         getModels()
         setInputINN("")
-        // console.log("doTestScoring RESP", resp.data.response)
+        console.log("doTestScoring RESP", resp.data)
         setJson_response(resp.data.response)
       })
       .catch((error) => {

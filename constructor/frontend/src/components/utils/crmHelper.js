@@ -5,7 +5,7 @@ export const transformData = (data, keyInNativeObj, keyName) => {
   const result = data.map((el) => ({
     id: el.id,
     label: el[keyInNativeObj],
-    value: el[keyInNativeObj],
+    value: el.id,
     name: keyName,
   }))
   return result
@@ -33,8 +33,8 @@ export const transformManagersData = (data) => {
   const result = data.map((el) => ({
     id: el.id,
     label: `${el.second_name} ${el.first_name}. ${el.patronymic}. ${el.job_title}`,
-    value: `${el.second_name} ${el.first_name}. ${el.patronymic}. ${el.job_title}`,
-    name: "managers",
+    value: `${el.id}`,
+    name: "manager_id",
   }))
   return result
 }
@@ -43,8 +43,8 @@ export const transformRegionsData = (data) => {
   const result = data.map((el) => ({
     id: el.id,
     label: `${el.region_number} ${el.region}`,
-    value: `${el.region_number} ${el.region}`,
-    name: "regions",
+    value: `${el.id}`,
+    name: "region_id",
   }))
   return result
 }
@@ -55,8 +55,46 @@ export const validatorConfig = {
   //     message: "Это поле обязательно для заполнения",
   //   },
   // },
-
-  status: {
+  support_measure: {
+    isRequired: {
+      message: "Это поле обязательно для заполнения",
+    },
+  },
+  region_id: {
+    isRequired: {
+      message: "Это поле обязательно для заполнения",
+    },
+  },
+  first_name: {
+    isRequired: {
+      message: "Это поле обязательно для заполнения",
+    },
+  },
+  second_name: {
+    isRequired: {
+      message: "Это поле обязательно для заполнения",
+    },
+  },
+  patronymic: {
+    isRequired: {
+      message: "Это поле обязательно для заполнения",
+    },
+  },
+  inn: {
+    isRequired: {
+      message: "Это поле обязательно для заполнения",
+    },
+    count: {
+      message: "ИНН должен содержать от 10 символов.",
+      value: 10,
+    },
+  },
+  applicant_status: {
+    isRequired: {
+      message: "Это поле обязательно для заполнения",
+    },
+  },
+  PRD: {
     isRequired: {
       message: "Это поле обязательно для заполнения",
     },
@@ -67,37 +105,20 @@ export const validatorConfig = {
       message: "Это поле обязательно для заполнения",
     },
   },
-
+  event_description: {
+    isRequired: {
+      message: "Это поле обязательно для заполнения",
+    },
+  },
+  debt_type: {
+    isRequired: {
+      message: "Это поле обязательно для заполнения",
+    },
+  },
+  /////////////////////////////////////////////////////////////
   stage: {
     isRequired: {
       message: "Это поле обязательно для заполнения",
-    },
-  },
-
-  support: {
-    isRequired: {
-      message: "Это поле обязательно для заполнения",
-    },
-  },
-
-  regions: {
-    isRequired: {
-      message: "Это поле обязательно для заполнения",
-    },
-  },
-  name: {
-    isRequired: {
-      message: "Это поле обязательно для заполнения",
-    },
-  },
-  INN: {
-    isRequired: {
-      message: "Это поле обязательно для заполнения",
-    },
-    count: {
-      message:
-        "ИНН должен содержать 12 символов. Если ИНН состоит из 10, то поставьте впереди два нуля",
-      value: 12,
     },
   },
   dateAppealsToMIDUOL: {
@@ -105,18 +126,7 @@ export const validatorConfig = {
       message: "Это поле обязательно для заполнения",
     },
   },
-
   deptSum: {
-    isRequired: {
-      message: "Это поле обязательно для заполнения",
-    },
-  },
-  descr: {
-    isRequired: {
-      message: "Это поле обязательно для заполнения",
-    },
-  },
-  type: {
     isRequired: {
       message: "Это поле обязательно для заполнения",
     },
@@ -227,4 +237,184 @@ export const firstData = [
     key: "pledgetorDirectionDate",
   },
   { id: 62, name: "Контрольная точка", key: "checkPoint" },
+]
+
+export const inputsData = [
+  { label: "Предстаительство ПРД", key: "PRD?", type: "select", options: "" },
+  { label: "Наименование клиента", key: "", type: "title" },
+  { label: "Имя", key: "first_name", type: "text" },
+  { label: "Фамилия", key: "second_name", type: "text" },
+  { label: "Отчество", key: "patronimic", type: "text" },
+  { label: "ИНН", key: "inn", type: "text" },
+  { label: "Первичные учетные данные", key: "", type: "title" },
+  { label: "Регион", key: "region_id", type: "select" },
+  { label: "Менеджер", key: "manager_id", type: "select" },
+  { label: "Статус заявителя", key: "applicant_status", type: "select" },
+  { label: "Источник информации", key: "", type: "title" },
+  {
+    label: "Тип источника информации",
+    key: "info_source_type_id",
+    type: "select",
+  },
+  { label: "Дата источника информации", key: "info_source_date", type: "date" },
+  {
+    label: "Номер источника информации",
+    key: "info_source_number",
+    type: "text",
+  },
+  { label: "Представитель клиента", key: "", type: "title" },
+  { label: "Имя", key: "representative_first_name", type: "text" },
+  { label: "Фамилия", key: "representative_second_name", type: "text" },
+  { label: "Отчество", key: "representative_patronymic", type: "text" },
+  { label: "Должность", key: "representative_position", type: "text" },
+  { label: "Номер", key: "representative_phone", type: "text" },
+  { label: "Электронная почта", key: "representative_email", type: "text" },
+  { label: "Дата обращения в МИУДОЛ", key: "control_point", type: "date" },
+  {
+    label: "Критерии соответствия клиентским требованиям",
+    key: "",
+    type: "title",
+  },
+  { label: "Сумма задолженности", key: "debt_amount", type: "text" },
+  { label: "Тип долга", key: "debt_type", type: "select" },
+  { label: "Категория предприятия", key: "category", type: "select" },
+  {
+    label: "Мера поддержки, запрашиваемая клиентом",
+    key: "support_measure",
+    type: "select",
+  },
+  {
+    label:
+      "Примечание к описанию события в рамках огласительных меропрятий (гр.22)",
+    key: "note",
+    type: "text",
+  },
+  {
+    label: "Срок, на который необходимо предоставить меру поддержки",
+    key: "support_duration",
+    type: "text",
+  },
+  { label: "Согласительные меры", key: "", type: "title" },
+  {
+    label: "Дата первой встречи в рамках согласитлеьных мероприятий",
+    key: "first_meeting_date",
+    type: "date",
+  },
+  {
+    label: "Дата наступления события в рамках согласительных мероприятий",
+    key: "event_date",
+    type: "date",
+  },
+  {
+    label: "Описание события в рамках согласительных мероприятий",
+    key: "event_description",
+    type: "text",
+  },
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  { label: "Ключевые показатели эффективности (KPI)", key: "", type: "title" },
+  { label: "Принятое решение", key: "", type: "title" },
+  { label: "Вид положительного решения", key: "", type: "select" },
+  { label: "Дата принятия положительного решения", key: "", type: "date" },
+  {
+    label: "Срок, на который предоставляется мера поддержки",
+    key: "",
+    type: "text",
+  },
+  {
+    label: "Орган исполнительной власти, от которого поступило ходатайство",
+    key: "",
+    type: "text",
+  },
+  { label: "Вид отрицаетльного решения", key: "", type: "select" },
+  { label: "Сумма урегулированной задолженности", key: "", type: "text" },
+  { label: "Сумма, поступившая в бюджет", key: "", type: "text" },
+  { label: "Просроченная задолженность", key: "", type: "title" },
+  { label: "Сумма просроченной задолженности", key: "", type: "text" },
+  {
+    label: "Сумма тезнической просроченной задолженности",
+    key: "",
+    type: "text",
+  },
+  { label: "Отлагательные меры", key: "", type: "title" },
+  {
+    label:
+      "Ближайший срок исполнения обязательств при принятии отлагательных мер",
+    key: "",
+    type: "date",
+  },
+  { label: "Изменение сроков уплаты", key: "", type: "title" },
+  {
+    label:
+      "Сумма, не вступившая в силу при рассрочке/отсрочке при принятии меры «Изменение сроков уплаты»",
+    key: "",
+    type: "text",
+  },
+  { label: "Мировое соглашение", key: "", type: "title" },
+  {
+    label: 'Номер дела при принятии меры "Мировое соглашение"',
+    key: "",
+    type: "text",
+  },
+  {
+    label: "Дата утверждения мирового соглашения судом",
+    key: "",
+    type: "date",
+  },
+  {
+    label: "Сумма треований, вошедших в мировое соглашение",
+    key: "",
+    type: "text",
+  },
+  { label: "Дата окончания мирового соглашения", key: "", type: "date" },
+  {
+    label: "Сумма исполненных обязательств в рамках мирового соглашения",
+    key: "",
+    type: "text",
+  },
+  { label: "Вид предостовляемого обеспечения", key: "", type: "title" },
+  { label: "Предоставляемый залог имущества", key: "", type: "text" },
+  { label: "Предоставляемое поручительство", key: "", type: "text" },
+  { label: "Предоставляемая банковская гарантия", key: "", type: "text" },
+  { label: "Стадия рассмотрения", key: "", type: "select" },
+  {
+    label: "Проводимая работа в случае не исполнения предоставления меры",
+    key: "",
+    type: "title",
+  },
+  { label: "Дата направления уведомления должнику", key: "", type: "date" },
+  { label: "Дата направления уведомления поручителю", key: "", type: "date" },
+  { label: "Дата направления уведомления залогодателю", key: "", type: "date" },
+  { label: "Постконтроль", key: "", type: "title" },
+  {
+    label: "Выручка за прошедший отчетный период текущего года",
+    key: "",
+    type: "text",
+  },
+  { label: "Выручка за предыдущий год", key: "", type: "text" },
+  {
+    label: "Среднесписочная численность персонала за предыдущее полугодие",
+    key: "",
+    type: "text",
+  },
+  { label: "Активы за предыдущий год", key: "", type: "text" },
+  {
+    label:
+      'Сумма уплаченных налогов за текущий год согласно ИР "Расчет с бюджетом"',
+    key: "",
+    type: "text",
+  },
+  { label: "Стадия в процедуре банкротства", key: "", type: "text" },
+  {
+    label: 'Сумма долга ЕНС согласно ИР "Расчет с бюджетом"',
+    key: "",
+    type: "text",
+  },
+  { label: "Сумма ФОТ за предыдущее полугодие", key: "", type: "text" },
+  { label: "Прибыль за предыдущее полугодие", key: "", type: "text" },
+  { label: "Платежеспособность", key: "", type: "select" }, //risk
+  { label: "Текущая стоимость бизнеса", key: "", type: "text" },
+  { label: "Ликвидационная стоимость бизнеса", key: "", type: "text" },
+  { label: "Возвратность средств", key: "", type: "text" },
+  { label: "Потребность в оборотных средствах", key: "", type: "text" },
+  { label: "Ранг платежеспособности", key: "", type: "text" },
 ]
