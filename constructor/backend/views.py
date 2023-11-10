@@ -693,6 +693,7 @@ def CreateRelationInnAndScoringModelViewSet(request):
                 except ImportedAttributes.DoesNotExist:
                     continue
                 
+                ### Процесс отлаживания функцилнала - при наличии связки не создавать новой
                 if scoring_model.inns.filter(inn=inn_id).exists():
                     continue
 
