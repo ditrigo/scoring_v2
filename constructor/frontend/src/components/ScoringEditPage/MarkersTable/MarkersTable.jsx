@@ -37,6 +37,15 @@ const MarkersTable = ({ modelId, model, linkedMarkers }) => {
     })
   }
 
+  // http://127.0.0.1:8000/api/delete_marker/17/57
+  // async function deleteMarkerFromModel(markerId) {
+  //   try {
+  //     const { data } = await 
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
+
   return (
     <div className="container mb-4">
       <div className="row">
@@ -79,6 +88,7 @@ const MarkersTable = ({ modelId, model, linkedMarkers }) => {
                         <td>
                           <button
                             onClick={() =>
+                              // deleteMarkerFromModel(marker.id)
                               console.log("Удалить по id", marker.id)
                             }
                             className="btn btn-outline-danger"

@@ -27,7 +27,8 @@ urlpatterns = [
 
     re_path(r"^marker_attributes/create_relation/$", CreateRelationScoreModelAndMarkersAttributesViewSet, name="create_relation_cntd_attr_score_mdl"),
     re_path(r"^inn_res/create_relation/$", CreateRelationInnAndScoringModelViewSet, name="create_relation_inn_score_mdl"),
-    
+    re_path(r"^delete_marker/(?P<pk_model>[0-9]+)/(?P<pk_marker>[0-9]+)$", DeleteMarkerViewSet, name='delete_marker'),
+
     re_path(r"^inn_res/$", InnAndResultsListViewSet, name="inn_and_results"),
     re_path(r"^inn_res/(?P<pk>[0-9]+)$", InnAndResultsDetailViewSet, name="inn_and_results_detail"),
 

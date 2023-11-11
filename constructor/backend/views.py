@@ -514,7 +514,6 @@ def CatalogsListViewSet(request):
 @api_view(['GET', 'POST'])
 def MarkersAttributesListViewSet(request):
     permission_classes = (IsAuthenticated,)
-
     if request.method == 'GET':
         # data = None
         # paginator = None
@@ -577,6 +576,20 @@ def MarkersAttributesDetailViewSet(request, pk):
     elif request.method == 'DELETE':
         marker_id.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+def DeleteMarkerViewSet(request, pk_model, pk_marker):
+    if request.method == 'GET':
+
+        scoring_model = ScoringModel.objects.get(id=pk_model)
+        counted_attr = MarkersAttributes.objects.get(id=pk_marker)
+        scoring_model.marker_id.remove(counted_attr)
+        scoring_model.save()
+    
+        return Response({'message': 'Маркер удален'}, status=status.HTTP_200_OK)
+        
+    return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST'])
@@ -1151,7 +1164,8 @@ def NegativeDecisionViewSet(request):
                 many=True
                 )
         return Response({'data': serializer.data})
-    
+
+
 @api_view(['GET'])
 def FieldsOfPositiveDecisionsViewSet(request, pk):
     if request.method == 'GET':
@@ -1431,6 +1445,7 @@ def UpdateRelationClient(request, pk):
     return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)
 #---------------------
 
+
 @api_view(['GET'])
 def import_db_to_file(request):
 
@@ -1539,6 +1554,7 @@ def get_columns_to_query():
         "Дата окончания МС",
         "Сумма исполненных обязательств, тыс. руб."	
     ]
+
 
 def get_query_to_import():
 

@@ -248,10 +248,13 @@ class MarkersAttributes(models.Model):
     # scoring_name = models.ManyToManyField(ScoringModel, blank=True)
     # From CountedAttrFormula
     attr_formulas = models.CharField(max_length=250)
-    description = models.CharField(max_length=250)
+    description = models.CharField(max_length=250,blank=True, null=True)
     sql_query = models.TextField(blank=True, null=True)
     py_query = models.TextField(blank=True, null=True)
-    nested_level = models.IntegerField()
+    nested_level = models.IntegerField(blank=True, null=True)
+    
+    # Добавил новое поле для целевого значения формулы
+    target_formula_value = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         indexes = [
