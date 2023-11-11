@@ -197,8 +197,8 @@ const TestScoringForm = ({ model }) => {
                   <th scope="col">ИНН</th>
                   <th scope="col">Итоговый результат</th>
                   <th scope="col">Формулы</th>
-                  <th scope="col">Балл маркера</th>
                   <th scope="col">Значение маркера</th>
+                  <th scope="col">Балл маркера</th>
                   <th scope="col">Ошибки</th>
                 </tr>
               </thead>
@@ -218,9 +218,7 @@ const TestScoringForm = ({ model }) => {
                         {info.markers_and_values.map((el, index) => {
                           // console.log("el", el);
                           return <tr style={{ "borderBottom": "1pt solid black" }} key={index}>
-                            <tr>
-                              {index + 1} : {el.value}
-                            </tr>
+                            {index + 1} : {el.target_value}
                           </tr>
                         })}
                       </td>
@@ -228,7 +226,9 @@ const TestScoringForm = ({ model }) => {
                         {info.markers_and_values.map((el, index) => {
                           // console.log("el", el);
                           return <tr style={{ "borderBottom": "1pt solid black" }} key={index}>
-                            {index + 1} : {el.target_value}
+                            <tr>
+                              {index + 1} : {el.value}
+                            </tr>
                           </tr>
                         })}
                       </td>

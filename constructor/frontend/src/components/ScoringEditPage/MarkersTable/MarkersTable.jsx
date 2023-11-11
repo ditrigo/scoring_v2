@@ -5,6 +5,7 @@ import axios from "axios"
 import MyInput from "../../UI/MyInput/MyInput.jsx"
 import TestScoringForm from "../../ScoringEditPage/TestScoringForm"
 import modelService from "../../../services/model.service"
+import httpService from "../../../services/http.service.js"
 // import moment from "moment"
 // import localization from "moment/locale/ru"
 
@@ -38,13 +39,18 @@ const MarkersTable = ({ modelId, model, linkedMarkers }) => {
   }
 
   // http://127.0.0.1:8000/api/delete_marker/17/57
-  // async function deleteMarkerFromModel(markerId) {
-  //   try {
-  //     const { data } = await 
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }
+  async function deleteMarkerFromModel(markerId) {
+    try {
+      const { data } = await httpService.get(
+        `delete_marker/${modelId}/${markerId}`
+      )
+      linkedMarkers.filter((item) => item.id !== markerId)
+
+      console.log("linkedMarkers", linkedMarkers)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   return (
     <div className="container mb-4">
@@ -88,8 +94,7 @@ const MarkersTable = ({ modelId, model, linkedMarkers }) => {
                         <td>
                           <button
                             onClick={() =>
-                              // deleteMarkerFromModel(marker.id)
-                              console.log("Удалить по id", marker.id)
+                              deleteMarkerFromModel(marker.id)
                             }
                             className="btn btn-outline-danger"
                           >
