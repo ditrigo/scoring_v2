@@ -184,18 +184,19 @@ const TestScoringForm = ({ model }) => {
         {updatedModel && (
           <div
             className=" table-wrapper-scroll-y"
-            // style={{ "display": "block" }}
+          // style={{ "display": "block" }}
           >
             <table
               className="table text-center table-bordered table-responsive"
-              // style={{ "overflowY": "auto", "maxHeight":"300px" }}
+            // style={{ "overflowY": "auto", "maxHeight":"300px" }}
             >
               <thead>
                 <tr>
                   <th scope="col">ИНН</th>
                   <th scope="col">Итоговый результат</th>
                   <th scope="col">Формулы</th>
-                  <th scope="col">Значения</th>
+                  <th scope="col">Балл маркера</th>
+                  <th scope="col">Значение маркера</th>
                   <th scope="col">Ошибки</th>
                 </tr>
               </thead>
@@ -225,9 +226,15 @@ const TestScoringForm = ({ model }) => {
                         {info.markers_and_values.map((el, index) => {
                           // console.log("el", el);
                           return <tr style={{ "borderBottom": "1pt solid black" }} key={index}>
-
+                            {index + 1} : {el.target_value}
+                          </tr>
+                        })}
+                      </td>
+                      <td>
+                        {info.markers_and_values.map((el, index) => {
+                          // console.log("el", el);
+                          return <tr style={{ "borderBottom": "1pt solid black" }} key={index}>
                             {index + 1} : {el.error}
-
                           </tr>
                         })}
                       </td>
