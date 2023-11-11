@@ -50,11 +50,6 @@ export const transformRegionsData = (data) => {
 }
 
 export const validatorConfig = {
-  // test: {
-  //   isRequired: {
-  //     message: "Это поле обязательно для заполнения",
-  //   },
-  // },
   support_measure: {
     isRequired: {
       message: "Это поле обязательно для заполнения",
@@ -115,7 +110,29 @@ export const validatorConfig = {
       message: "Это поле обязательно для заполнения",
     },
   },
-  /////////////////////////////////////////////////////////////
+  debt_amount: {
+    maxCount: {
+      message: "Не больше 6 знаков",
+      value: 6,
+    },
+  },
+  // optional
+  positive_decision_date: {
+    isRequired: {
+      message: "Это поле обязательно для заполнения",
+    },
+  },
+  measure_provided_duration: {
+    isRequired: {
+      message: "Это поле обязательно для заполнения",
+    },
+  },
+  settled_debt_amount: {
+    isRequired: {
+      message: "Это поле обязательно для заполнения",
+    },
+  },
+  ///////////////////////////////////////////////////////////// для следущюих полей нет ключей! Создал пока свои!
   stage: {
     isRequired: {
       message: "Это поле обязательно для заполнения",

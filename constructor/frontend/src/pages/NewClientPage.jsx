@@ -7,11 +7,9 @@ import axios from "axios"
 import { validator } from "../components/utils/validator"
 import SelectSearchField from "../components/CrmPage/Form/SelectSearchField"
 import {
-  firstData,
   getTransformedData,
   transformManagersData,
   transformRegionsData,
-  validatorConfig,
 } from "../components/utils/crmHelper"
 import configFile from "../config.json"
 import ReactDatePicker from "react-datepicker"
@@ -72,6 +70,119 @@ const NewClientPage = () => {
     technical_overdue_debt_amount: "",
   })
 
+  let validatorConfig = {
+    support_measure: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    region_id: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    first_name: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    second_name: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    patronymic: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    inn: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+      count: {
+        message: "ИНН должен содержать от 10 символов.",
+        value: 10,
+      },
+    },
+    applicant_status: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    PRD: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+
+    category: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    event_description: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    debt_type: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    debt_amount: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    // optional
+    // positive_decision_date: {
+    //   isRequired: {
+    //     message: "Это поле обязательно для заполнения",
+    //   },
+    // },
+    // measure_provided_duration: {
+    //   isRequired: {
+    //     message: "Это поле обязательно для заполнения",
+    //   },
+    // },
+    // settled_debt_amount: {
+    //   isRequired: {
+    //     message: "Это поле обязательно для заполнения",
+    //   },
+    // },
+    ///////////////////////////////////////////////////////////// для следущюих полей нет ключей! Создал пока свои!
+    stage: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    dateAppealsToMIDUOL: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    deptSum: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    termMesureNecessary: {
+      max: {
+        message: "Не более 36",
+        value: 36,
+      },
+    },
+    termMesure: {
+      max: {
+        message: "Не более 36",
+        value: 36,
+      },
+    },
+  }
+
   const isValid = Object.keys(errors).length === 0
 
   const validate = () => {
@@ -105,13 +216,13 @@ const NewClientPage = () => {
       "crm_pos_decision",
       setPositive,
       "positive_decision",
-      "positive"
+      "positive_decision_type"
     )
     getTransformedData(
       "crm_neg_decision",
       setNegative,
       "negative_decision",
-      "negative"
+      "negative_decision_type"
     )
     getTransformedData("crm_dept_type", setType, "type", "debt_type")
 
@@ -232,6 +343,27 @@ const NewClientPage = () => {
     validate()
   }, [clientData])
 
+  if (clientData.positive_decision_type) {
+    validatorConfig = {
+      ...validatorConfig,
+      positive_decision_date: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+      measure_provided_duration: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+      settled_debt_amount: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+    }
+  }
+
   const inputsData = [
     {
       label: "Представительство ПРД",
@@ -342,7 +474,7 @@ const NewClientPage = () => {
       type: "date",
     },
     {
-      label: "Срок, на который предоставляется мера поддержки",
+      label: "Срок, на который предоставляется мера поддержки (в мес.)",
       key: "measure_provided_duration",
       type: "text",
     },
@@ -379,7 +511,8 @@ const NewClientPage = () => {
       type: "text",
     },
     ///////////////////////////////////////////////////////////////////////////////////
-    { label: "Следующие поля пока не работают!", key: "", type: "title" },
+    { label: "Следующие поля пока не работают!", key: "", type: "title" }, ///////// delete later
+
     { label: "Отлагательные меры", key: "", type: "title" },
     {
       label:
@@ -490,7 +623,7 @@ const NewClientPage = () => {
                       key={ind}
                       label={el.label}
                       name={el.key}
-                      value={testData[el.key]}
+                      value={clientData[el.key]}
                       onChange={handleChange}
                       error={errors[el.key]}
                       clientData={el.key === "inn" && clientData}
@@ -510,12 +643,17 @@ const NewClientPage = () => {
                   )
                 } else if (el.type === "date") {
                   return (
-                    <div className="m-2 mb-4" key={ind}>
-                      {" "}
+                    <div className="m-2 mb-4 has-validation" key={ind}>
                       <label className="form-label" htmlFor={el.key}>
                         {el.label}
                       </label>
-                      <div className="border p-2 w-25">
+                      <div
+                        className={
+                          errors[el.key]
+                            ? "text form-control mt-1 mr-2  p-2 w-25 is-invalid"
+                            : "text form-control mt-1 mr-2 border p-2 w-25"
+                        }
+                      >
                         <ReactDatePicker
                           selected={startDate}
                           onChange={(date) => handleChange(date)}
@@ -524,6 +662,11 @@ const NewClientPage = () => {
                           dateFormat="dd/MM/yyyy"
                         />
                       </div>
+                      {errors[el.key] && (
+                        <div className="invalid-feedback">
+                          Это поле обязательно для заполнению
+                        </div>
+                      )}
                     </div>
                   )
                 } else if (el.type === "title") {
