@@ -882,7 +882,10 @@ def StartScoringViewSet(request):
         for inn in request.data.get("model")["inns"]:
             inn_list.append(inn["inn"])
         for marker_formula in request.data.get("model")["marker_id"]:
-            marker_formula_list.append(marker_formula["py_query"])
+            # marker_formula_list.append(marker_formula["py_query"])
+            marker_formula_list.append((marker_formula["name_marker_attr"], 
+                                        marker_formula["py_query"], 
+                                        marker_formula["target_formula_value"]))
 
         rank = 0.0 
         dict_markers = {}
@@ -893,38 +896,73 @@ def StartScoringViewSet(request):
                 counted_attributes = CountedAttributesNew.objects.get(inn=inn)
             except (ImportedAttributes.DoesNotExist , CountedAttributesNew.DoesNotExist):
                 continue
-            for formula in marker_formula_list:
-                # print("\nformula IN FOR",formula)
-                # print("\nimported_attributes.dolg", imported_attributes.dolg)
-                # print("imported_attributes.s_1600_4", imported_attributes.s_1600_4)
 
+            for marker_name, formula, target_value in marker_formula_list:
                 if formula.startswith("Error"):
-                     list_markers.append({
-                         "formula": formula, 
-                         "value": 0,
-                         "error": formula,
+                    list_markers.append({
+                        "marker_name": marker_name,
+                        "formula": formula,
+                        "target_value": "-", 
+                        "value": 0,
+                        "error": formula,
                          })
-                     rank += 0
+                    rank += 0
                 else:
                     try:
                         counting_rank = eval(formula)
+                        counting_target_value = eval(target_value)
                         list_markers.append({
-                                "formula": formula, 
-                                "value": counting_rank,
-                                "error": "",
-                                }) 
+                            "marker_name": marker_name,
+                            "formula": formula,
+                            "target_value": counting_target_value,  
+                            "value": counting_rank,
+                            "error": "",
+                            }) 
                         rank += counting_rank
                     except Exception as e:
                         list_markers.append({
-                                "formula": formula, 
-                                "value": 0, 
-                                "error": f"{e}",
-                                })
+                            "marker_name": marker_name,
+                            "formula": formula,
+                            "target_value": "-",
+                            "value": 0, 
+                            "error": f"{e}",
+                            })
                         rank += 0
 
-                # print("\nRANK", rank)
-                # inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
-                # inn_res.save()
+
+            # for formula in marker_formula_list:
+            #     # print("\nformula IN FOR",formula)
+            #     # print("\nimported_attributes.dolg", imported_attributes.dolg)
+            #     # print("imported_attributes.s_1600_4", imported_attributes.s_1600_4)
+
+            #     if formula.startswith("Error"):
+            #          list_markers.append({
+            #              "formula": formula, 
+            #              "value": 0,
+            #              "error": formula,
+            #              })
+            #          rank += 0
+            #     else:
+            #         try:
+            #             counting_rank = eval(formula)
+            #             list_markers.append({
+            #                     "formula": formula, 
+            #                     "value": counting_rank,
+            #                     "error": "",
+            #                     }) 
+            #             rank += counting_rank
+            #         except Exception as e:
+            #             list_markers.append({
+            #                     "formula": formula, 
+            #                     "value": 0, 
+            #                     "error": f"{e}",
+            #                     })
+            #             rank += 0
+
+            #     # print("\nRANK", rank)
+            #     # inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
+            #     # inn_res.save()
+            
             total_json = {
                 "markers_and_values": list_markers,
                 "total_rank": rank

@@ -98,7 +98,7 @@ const ResultTable = ({ getLinkMarkers }) => {
             <tr>
               <th scope="col">Название модели</th>
               <th scope="col">Автор</th>
-              <th scope="col">Дата запуска</th>
+              <th scope="col">Дата создания</th>
               <th scope="col">ИНН и результат</th>
             </tr>
           </thead>
