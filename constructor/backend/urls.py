@@ -27,7 +27,8 @@ urlpatterns = [
 
     re_path(r"^marker_attributes/create_relation/$", CreateRelationScoreModelAndMarkersAttributesViewSet, name="create_relation_cntd_attr_score_mdl"),
     re_path(r"^inn_res/create_relation/$", CreateRelationInnAndScoringModelViewSet, name="create_relation_inn_score_mdl"),
-    
+    re_path(r"^delete_marker/(?P<pk_model>[0-9]+)/(?P<pk_marker>[0-9]+)$", DeleteMarkerViewSet, name='delete_marker'),
+
     re_path(r"^inn_res/$", InnAndResultsListViewSet, name="inn_and_results"),
     re_path(r"^inn_res/(?P<pk>[0-9]+)$", InnAndResultsDetailViewSet, name="inn_and_results_detail"),
 
@@ -60,5 +61,8 @@ urlpatterns = [
 
     re_path(r"^crm_client/$", ClientViewSet, name="crm_client"),
     re_path(r"^crm_create_client/$", CreateRelationClient, name="crm_create_client"),
+    re_path(r"^crm_detail_relation_client/(?P<pk>[-\w]+)$", DetailRelationClient, name="crm_detail_relation_client"),
+    re_path(r"^crm_update_relation_client/(?P<pk>[-\w]+)$", UpdateRelationClient, name="crm_update_relation_client"),
     #---------------------
+    re_path(r"^crm_import_db_to_file/$", import_db_to_file, name="import_db_to_file"),
 ]

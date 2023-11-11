@@ -179,17 +179,19 @@ def pre_replace(expression):
     while "РАЗНДАТ(" in expression:
         start = expression.find("РАЗНДАТ(")
         end = expression.find('")', start)
-        sub_expr = expression[start+8:end]
+        sub_expr = expression[start+8:end+1]
         args = sub_expr.split(";")
         if args[1] == "СЕГОДНЯ()":
             args[1] = "datetime.today()"
         unit = args[2]
+
         if unit == '"y"':
-            replacement = f'abs({args[0]}.days - {args[1]}.days)//365'
+            replacement = f'abs({args[0]} - {args[1]}).days//365'
         elif unit == '"d"':
-            replacement = f'abs({args[0]}.days - {args[1]}.days)'
+            replacement = f'abs({args[0]} - {args[1]}).days'
         else:
             replacement = f'abs({args[0]} - {args[1]})'
+            
         expression = expression[:start] + replacement + expression[end+2:]
     
     return expression
@@ -198,7 +200,7 @@ def pre_replace(expression):
 def add_prefix(expression):
     def replace(match):
         if match.group(0) not in {'if', 'else', 'and', 'or', 'not', 'in'}:
-            return 'imported_attributes.' + match.group(0)
+            return 'imported_attr.' + match.group(0)
         else:
             return match.group(0)
 

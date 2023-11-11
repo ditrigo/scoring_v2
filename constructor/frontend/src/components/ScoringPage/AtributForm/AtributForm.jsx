@@ -18,6 +18,7 @@ const AtributForm = ({ create, setVisible }) => {
     copied: false,
   })
   const [balancedError, setBalancedError] = useState("")
+  const [targerFormulaValue, setTargerFormulaValue] = useState("")
 
   // const handleClick = (e) => {
   //   e.preventDefault();
@@ -79,8 +80,8 @@ const AtributForm = ({ create, setVisible }) => {
         description: "Description",
         nested_level: 1,
         author_id: "Тестовый пользователь",
+        target_formula_value: targerFormulaValue
       }
-
       create(newMarker)
 
       setMarker({ name_marker_attr: "", attr_formulas: "" })
@@ -198,26 +199,39 @@ const AtributForm = ({ create, setVisible }) => {
             </div>
           </div>
         </div>
-        <div className="row-md-auto mb-3">
+        <div className="row m-0 mb-3 mt-3 justify-content-md-center">
           {/* <div className="col"> */}
           <CopyToClipboard
             text={copiedValue.value}
-            // onCopy={() => this.setState({ copied: true })}
+          // onCopy={() => this.setState({ copied: true })}
           >
             <MyButton onClick={(e) => e.preventDefault()}>
-              Нажмите, чтобы скопировать
+              Cкопировать атрибут
             </MyButton>
           </CopyToClipboard>
           {/* </div> */}
         </div>
         <textarea
+          className="form-control"
           placeholder="Формула"
-          className="w-100 textarea"
+          // className="w-100 textarea"
           value={marker.attr_formulas}
           onChange={(e) =>
             setMarker({ ...marker, attr_formulas: e.target.value })
           }
         ></textarea>
+        <div className="row m-0 mb-3 mt-3">
+          <MyInput
+            type="text"
+            placeholder="Целевое значение формулы"
+            value={targerFormulaValue}
+            onChange={(e) =>
+              // console.log(e.target.value)
+              setTargerFormulaValue(e.target.value)
+            }
+          />
+        </div>
+
         {/* <MyInput
           value={marker.attr_formulas}
           onChange={(e) =>

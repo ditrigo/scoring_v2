@@ -129,6 +129,7 @@ const ScoringPage = () => {
         description: newAtr.description,
         nested_level: newAtr.nested_level,
         author_id: newAtr.author_id,
+        target_formula_value: newAtr.target_formula_value,
       })
       console.log("data", data)
       setMarkers((prevState) => [...prevState, data])

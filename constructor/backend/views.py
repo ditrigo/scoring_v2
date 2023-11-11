@@ -26,6 +26,9 @@ from .pyparser import *
 # from import_export import mixins
 from django.views.generic.list import ListView
 
+from django.db import connection
+from django.http import FileResponse
+
 
 # Uploaded files into DataBase
 @api_view(['GET', 'POST'])
@@ -511,7 +514,6 @@ def CatalogsListViewSet(request):
 @api_view(['GET', 'POST'])
 def MarkersAttributesListViewSet(request):
     permission_classes = (IsAuthenticated,)
-
     if request.method == 'GET':
         # data = None
         # paginator = None
@@ -574,6 +576,20 @@ def MarkersAttributesDetailViewSet(request, pk):
     elif request.method == 'DELETE':
         marker_id.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+def DeleteMarkerViewSet(request, pk_model, pk_marker):
+    if request.method == 'GET':
+
+        scoring_model = ScoringModel.objects.get(id=pk_model)
+        counted_attr = MarkersAttributes.objects.get(id=pk_marker)
+        scoring_model.marker_id.remove(counted_attr)
+        scoring_model.save()
+    
+        return Response({'message': 'Маркер удален'}, status=status.HTTP_200_OK)
+        
+    return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST'])
@@ -866,7 +882,10 @@ def StartScoringViewSet(request):
         for inn in request.data.get("model")["inns"]:
             inn_list.append(inn["inn"])
         for marker_formula in request.data.get("model")["marker_id"]:
-            marker_formula_list.append(marker_formula["py_query"])
+            # marker_formula_list.append(marker_formula["py_query"])
+            marker_formula_list.append((marker_formula["name_marker_attr"], 
+                                        marker_formula["py_query"], 
+                                        marker_formula["target_formula_value"]))
 
         rank = 0.0 
         dict_markers = {}
@@ -877,38 +896,73 @@ def StartScoringViewSet(request):
                 counted_attributes = CountedAttributesNew.objects.get(inn=inn)
             except (ImportedAttributes.DoesNotExist , CountedAttributesNew.DoesNotExist):
                 continue
-            for formula in marker_formula_list:
-                # print("\nformula IN FOR",formula)
-                # print("\nimported_attributes.dolg", imported_attributes.dolg)
-                # print("imported_attributes.s_1600_4", imported_attributes.s_1600_4)
 
+            for marker_name, formula, target_value in marker_formula_list:
                 if formula.startswith("Error"):
-                     list_markers.append({
-                         "formula": formula, 
-                         "value": 0,
-                         "error": formula,
+                    list_markers.append({
+                        "marker_name": marker_name,
+                        "formula": formula,
+                        "target_value": "-", 
+                        "value": 0,
+                        "error": formula,
                          })
-                     rank += 0
+                    rank += 0
                 else:
                     try:
                         counting_rank = eval(formula)
+                        counting_target_value = eval(target_value)
                         list_markers.append({
-                                "formula": formula, 
-                                "value": counting_rank,
-                                "error": "",
-                                }) 
+                            "marker_name": marker_name,
+                            "formula": formula,
+                            "target_value": counting_target_value,  
+                            "value": counting_rank,
+                            "error": "",
+                            }) 
                         rank += counting_rank
                     except Exception as e:
                         list_markers.append({
-                                "formula": formula, 
-                                "value": 0, 
-                                "error": f"{e}",
-                                })
+                            "marker_name": marker_name,
+                            "formula": formula,
+                            "target_value": "-",
+                            "value": 0, 
+                            "error": f"{e}",
+                            })
                         rank += 0
 
-                # print("\nRANK", rank)
-                # inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
-                # inn_res.save()
+
+            # for formula in marker_formula_list:
+            #     # print("\nformula IN FOR",formula)
+            #     # print("\nimported_attributes.dolg", imported_attributes.dolg)
+            #     # print("imported_attributes.s_1600_4", imported_attributes.s_1600_4)
+
+            #     if formula.startswith("Error"):
+            #          list_markers.append({
+            #              "formula": formula, 
+            #              "value": 0,
+            #              "error": formula,
+            #              })
+            #          rank += 0
+            #     else:
+            #         try:
+            #             counting_rank = eval(formula)
+            #             list_markers.append({
+            #                     "formula": formula, 
+            #                     "value": counting_rank,
+            #                     "error": "",
+            #                     }) 
+            #             rank += counting_rank
+            #         except Exception as e:
+            #             list_markers.append({
+            #                     "formula": formula, 
+            #                     "value": 0, 
+            #                     "error": f"{e}",
+            #                     })
+            #             rank += 0
+
+            #     # print("\nRANK", rank)
+            #     # inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
+            #     # inn_res.save()
+            
             total_json = {
                 "markers_and_values": list_markers,
                 "total_rank": rank
@@ -956,7 +1010,9 @@ def StartTestScoringViewSet(request):
         for inn in request.data.get("model")["inns"]:
             inn_list.append(inn["inn"])
         for marker_formula in request.data.get("model")["marker_id"]:
-            marker_formula_list.append(marker_formula["py_query"])
+            marker_formula_list.append((marker_formula["name_marker_attr"], 
+                                        marker_formula["py_query"], 
+                                        marker_formula["target_formula_value"]))
         # print(inn_list)
 
         # dict_markers = {}
@@ -970,7 +1026,7 @@ def StartTestScoringViewSet(request):
                 # print("EXCEPT")
                 continue
             # print("INN", inn)
-            for formula in marker_formula_list:
+            for marker_name, formula, target_value in marker_formula_list:
                 # print("FORMULA", formula)
                 # try:
                 #     imported_attributes = ImportedAttributes.objects.get(inn=inn)
@@ -981,30 +1037,60 @@ def StartTestScoringViewSet(request):
                 # print("VALUE", value)
                 # list_markers.append({'formula': formula, "value": value })
                 # rank += value
-
                 if formula.startswith("Error"):
-                     list_markers.append({
-                         "formula": formula, 
-                         "value": 0,
-                         "error": formula,
+                    list_markers.append({
+                        "marker_name": marker_name,
+                        "formula": formula,
+                        "target_value": "-", 
+                        "value": 0,
+                        "error": formula,
                          })
-                     rank += 0
+                    rank += 0
                 else:
                     try:
                         counting_rank = eval(formula)
+                        counting_target_value = eval(target_value)
                         list_markers.append({
-                                "formula": formula, 
-                                "value": counting_rank,
-                                "error": "",
-                                }) 
+                            "marker_name": marker_name,
+                            "formula": formula,
+                            "target_value": counting_target_value,  
+                            "value": counting_rank,
+                            "error": "",
+                            }) 
                         rank += counting_rank
                     except Exception as e:
                         list_markers.append({
-                                "formula": formula, 
-                                "value": 0, 
-                                "error": f"{e}",
-                                })
+                            "marker_name": marker_name,
+                            "formula": formula,
+                            "target_value": "-",
+                            "value": 0, 
+                            "error": f"{e}",
+                            })
                         rank += 0
+
+                # if formula.startswith("Error"):
+                #      list_markers.append({
+                #          "formula": formula, 
+                #          "value": 0,
+                #          "error": formula,
+                #          })
+                #      rank += 0
+                # else:
+                #     try:
+                #         counting_rank = eval(formula)
+                #         list_markers.append({
+                #                 "formula": formula, 
+                #                 "value": counting_rank,
+                #                 "error": "",
+                #                 }) 
+                #         rank += counting_rank
+                #     except Exception as e:
+                #         list_markers.append({
+                #                 "formula": formula, 
+                #                 "value": 0, 
+                #                 "error": f"{e}",
+                #                 })
+                #         rank += 0
 
             total_json = {
                 "markers_and_values": list_markers,
@@ -1148,7 +1234,8 @@ def NegativeDecisionViewSet(request):
                 many=True
                 )
         return Response({'data': serializer.data})
-    
+
+
 @api_view(['GET'])
 def FieldsOfPositiveDecisionsViewSet(request, pk):
     if request.method == 'GET':
@@ -1311,4 +1398,367 @@ def CreateRelationClient(request):
         
         return Response({'message': 'Клиент создан'}, status=status.HTTP_200_OK)
     return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def DetailRelationClient(request, pk):
+    if request.method == 'GET':
+
+        client = Client.objects.get(id=pk)
+        client_data = ClientSerializer(client)
+    
+        if client.kpi != None:
+            fields_of_positive_decision = None
+            # Если тип не выбран, то и полей нет
+            if client.kpi.positive_decision_type != None:
+                fields_of_positive_decision = KpiPositiveDecisionFieldsSerializer(KpiPositiveDecisionFields.objects.filter(kpi=client.kpi.id), many=True)
+
+        data = {}
+        data.update(client_data.data)
+        data['fields_of_positive_decision'] = fields_of_positive_decision.data
+
+        return Response({'data': data}, status=status.HTTP_200_OK)
+        
+    return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def UpdateRelationClient(request, pk):
+    if request.method == 'POST':
+
+        with transaction.atomic():
+            try:
+
+                region = Region.objects.get(id=request.data.get('region_id'))
+                manager = Manager.objects.get(id=request.data.get('manager_id'))
+                applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status'))
+
+                client = ClientRepresentative.objects.get(id=request.data.get('representitive_client_id')['id'])
+                serializer_body = ClientRepresentativeSerializer(instance=client, \
+                                                                 data=request.data.get('representitive_client_id'))
+                if not serializer_body.is_valid():
+                    transaction.set_rollback(True)
+                    return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                serializer_body.save()
+                
+                # representitive_client_id = ClientRepresentative.objects.latest('id').id
+            
+                category = Category.objects.get(id=request.data.get('compliance_data_id')["category"])
+                debt_type = DebtType.objects.get(id=request.data.get('compliance_data_id')["debt_type"])
+                support_measure = SupportMeasure.objects.get(id=request.data.get('compliance_data_id')["support_measure"])
+                
+                ComplianceCriteria.objects.filter(id=request.data.get('compliance_data_id')['id']).update(
+                    debt_amount = request.data.get('compliance_data_id')["debt_amount"],
+                    debt_type = debt_type,
+                    category = category,
+                    support_measure = support_measure,
+                    note = request.data.get('compliance_data_id')["note"],
+                    support_duration = request.data.get('compliance_data_id')["support_duration"],
+                )
+                # compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
+                
+                info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
+                
+                InformationSource.objects.filter(id=request.data.get('information_source_id')['id']).update(
+                    info_source_type = info_source_type_id,
+                    info_source_date = request.data.get('information_source_id')["info_source_date"],
+                    info_source_number = request.data.get('information_source_id')["info_source_number"],
+                )
+                # information_source_id = InformationSource.objects.latest('id').id 
+                
+                kpi_id = None
+                if request.data.get('kpi_id') != None:
+                    serializer_kpi = KPISerializer(instance=KPI.objects.get(id=request.data.get('kpi_id')['id']), data=request.data.get('kpi_id'))
+                    if not serializer_kpi.is_valid():
+                        transaction.set_rollback(True)
+                        return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+                    serializer_kpi.save()
+                    
+
+                    kpi_id = KPI.objects.latest('id').id
+
+                    KpiPositiveDecisionFields.objects.filter(kpi=kpi_id).delete()
+
+                    if request.data.get('fields_of_positive_decision') != None and \
+                        request.data.get('kpi_id')['positive_decision_type'] != None:
+                        data_fields = request.data.get('fields_of_positive_decision')
+                        for fields in data_fields:
+                            fields['kpi'] = kpi_id
+                            serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
+                            if not serializer_fields_of_positive.is_valid():
+                                transaction.set_rollback(True)
+                                return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                        
+                            serializer_fields_of_positive.save()
+
+                Client.objects.filter(id=request.data.get('id')).update(
+                    first_name = request.data.get('first_name'),
+                    second_name = request.data.get('second_name'),
+                    patronymic = request.data.get('patronymic'),
+                    inn = request.data.get('inn'),
+                    region = region,
+                    manager = manager,
+                    applicant_status = applicant_status,
+                    # information_source_id = information_source_id,
+                    # representitive_client_id = representitive_client_id,
+                    # compliance_criteria_id = compliance_criteria_id,
+                    first_meeting_date = request.data.get('first_meeting_date'),
+                    event_date = request.data.get('event_date'),
+                    event_description = request.data.get('event_description'),
+                    # kpi_id = kpi_id,
+                )
+            except:
+                return Response({'message': 'Некорректный ввод данных!'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response({'message': 'Клиент обновлен'}, status=status.HTTP_200_OK)
+    return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)
 #---------------------
+
+
+@api_view(['GET'])
+def import_db_to_file(request):
+
+    #Созданим уникальны идентификатор для нашей таблицы и файла
+    guid = 'file_db_import_' + uuid.uuid4().hex
+
+    #Создадим дирректорию для хранения файлов
+    dir_name = 'statistic_files'
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
+
+    columns = get_columns_to_query()
+    column_merge = ['B', 'C', 'D', 'E', 'F', 'O', 'P', 'Q', 'R', 'S', 'T', 'AD']
+    column_merg_ind = [0, 1, 2, 3, 4, 13, 14, 15, 16, 17, 18, 28]
+
+    # Устанавливаем соединение с базой данных
+    with connection.cursor() as cursor:
+
+        text_query = get_query_to_import()
+        cursor.execute(text_query)
+        data = cursor.fetchall()
+
+        df = pd.DataFrame(data, columns=columns).fillna('')
+        df = pd.concat([pd.Series([i for i in range(1, len(data)+1)], name='п/п'), df], axis=1)
+
+        #Создадим excel
+        filename = f'{dir_name}/{guid}.xlsx'
+        with pd.ExcelWriter(filename, engine='xlsxwriter') as writer:
+            df.to_excel(writer, sheet_name='Выгрузка', index=False, startrow=3, header=False)
+            sheet = writer.sheets['Выгрузка']
+
+            cell_format_header = writer.book.add_format({'bold': True, 'align': 'center', 'border':1, 'text_wrap': True})
+
+            sheet.merge_range('A1:D1', 'Общие сведения', cell_format_header)
+            sheet.merge_range('E1:N1', 'Первичные учетные данные (+)', cell_format_header)
+            sheet.merge_range('O1:T1', 'Критерии соответствия клиентским требованиям (маркеры) (+)', cell_format_header)
+            sheet.merge_range('U1:W1', 'Согласительные мероприятия (+)', cell_format_header)
+            sheet.merge_range('X1:AM1', 'Ключевые показатели эффективности (KPI) (+)', cell_format_header)
+
+            sheet.merge_range('G2:I2', 'Источник информации', cell_format_header)
+            sheet.merge_range('J2:M2', 'Представители клиента', cell_format_header)
+            sheet.write('N2:N2', 'Контрольная точка', cell_format_header)
+            sheet.merge_range('U2:W2', 'Контрольная точка', cell_format_header)
+            sheet.merge_range('X2:AC2', 'Принятое решение', cell_format_header)
+            sheet.merge_range('AE2:AF2', 'Просроченная задолженность', cell_format_header)
+            sheet.write('AG2:AG2', 'Отлагательные меры', cell_format_header)
+            sheet.write('AH2:AH2', 'Изменения сроков уплаты', cell_format_header)
+            sheet.merge_range('AI2:AM2', 'Мировое соглашение (+)', cell_format_header)
+
+            sheet.merge_range('A2:A3', 'п/п', cell_format_header)
+            for i in range(0, len(columns)):
+                if i in column_merg_ind:
+                    sim = column_merge[column_merg_ind.index(i)]
+                    sheet.merge_range(f'{sim}2:{sim}3', columns[i], cell_format_header)
+                else:
+                    sheet.write(2, i+1, columns[i], cell_format_header)
+                cell_format = writer.book.add_format({'text_wrap': True})
+                sheet.set_column(2, i+1, 18, cell_format)
+
+        #Создадим ответ из файла
+        response = FileResponse(open(filename, 'rb'), status=status.HTTP_200_OK)
+
+        return response
+    
+    return Response({'message': 'Что-то пошло не так'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def get_columns_to_query():
+
+    return ["Менеджер площадки (из списка)", 
+        "Наименование клиента",
+        "ИНН",
+        "Регион (из списка)",
+        "Статус заявителя (из списка) (*)",
+        "письмо / список / поручение",
+        "дата",
+        "номер",
+        "ФИО",
+        "должность",
+        "телефон",
+        "почта",
+        "Дата регистрации обращения в МИУДОЛ",
+        "Сумма задолженности (будущего долга) (в т.ч. пени, штрафы), тыс. руб.",
+        "Тип долга (из списка)",
+        "Категория (из списка)",
+        "Мера поддержки (способ урегулирования), запрашиваемая клиентом (из списка) (*)",
+        "Примечание к гр. 23", 
+        "Срок на котрый необходимо предоставление меры, мес.",
+        "Дата первой встречи",
+        "Дата наступления события (*)",
+        "Описание события (кратко)",
+        "Вид положительного решения (из списка)",
+        "ДАТА положительного решения",
+        "На сколько предоставлена мера, в месяцах",
+        "От кого ходатайство ОИВ (для МС)",
+        "Вид отрицательного решения (из списка)",
+        "Сумма урегулированной задолженности, тыс. руб.",
+        "Сумма поступившая в бюджет, тыс. руб.",
+        "сумма, тыс. руб.",	
+        "сумма технической просроченной задолженности, сумма, тыс. руб.",
+        "Ближайший срок исполнения обязательства (до какого момента отложены меры)",
+        "Не вступило в силу рассрочка/ отсрочка, тыс. руб.",
+        "Номер дела",
+        "Дата утверждения МС судом",
+        "Сумма требований вошедших в МС, тыс. руб.",
+        "Дата окончания МС",
+        "Сумма исполненных обязательств, тыс. руб."	
+    ]
+
+
+def get_query_to_import():
+
+    return """
+SELECT 
+--Общие сведения
+    t_manager.second_name || ' ' || t_manager.first_name || ' ' || t_manager.patronymic as manager,
+    t_client.second_name || ' ' || t_client.first_name || ' ' || t_client.patronymic as client,
+    t_inn.inn as inn,
+-- Первичные учетные данные
+    t_region.region as region,
+    t_status.status as status,
+-- Источник информации
+    t_inf_type.type as info_type,
+    t_inf_sours.info_source_date as info_source_date,
+    t_inf_sours.info_source_number as info_source_number,
+-- Представители клиента
+    t_repr_client.representative_second_name || ' ' || t_repr_client.representative_first_name || ' ' || t_repr_client.representative_patronymic as fio_repr_client,
+    t_repr_client.representative_position as repr_position,
+    t_repr_client.representative_phone as repr_phone,
+    t_repr_client.representative_email as repr_email,
+-- Контрольная точка
+    t_repr_client.control_point as repr_control_point,
+-- Критерии соответствия клиентским требованиям (маркеры) (+)					
+    t_criteria.debt_amount as debt_amount,
+    t_debt_type.type as debt_type,
+    t_category.type as category,
+    t_supp_measure.category_type as category_type,
+    t_criteria.note as note,
+    t_criteria.support_duration as support_duration,
+-- Согласительные мероприятия (+)
+    t_client.first_meeting_date as first_meeting_date,
+    t_client.event_date as event_date,
+    t_client.event_description as event_description,
+-- Ключевые показатели эффективности (KPI) (+)															
+-- Принятое решение
+    t_pos_decision.positive_decision as positive_decision,
+    t_kpi.positive_decision_date as positive_decision_date,
+    t_kpi.measure_provided_duration as measure_provided_duration,
+    t_kpi.oiv_request_sender as oiv_request_sender,
+    t_neg_decision.negative_decision as negative_decision,
+    t_kpi.settled_debt_amount as settled_debt_amount,
+    
+    t_kpi.received_amount_budget as received_amount_budget,
+-- Просроченная задолженность	
+    t_kpi.overdue_debt_amount as overdue_debt_amount,
+    t_kpi.technical_overdue_debt_amount as technical_overdue_debt_amount,
+-- Отлагательные меры
+    t_kpi_positive_decision_fields_1.value as nearest_deadline,
+-- Изменения сроков уплаты
+    t_kpi_positive_decision_fields_2.value as installment_plan,
+-- Мировое соглашение (+)			
+    t_kpi_positive_decision_fields_3.value as case_number,
+    t_kpi_positive_decision_fields_4.value as date_of_approvall,
+    t_kpi_positive_decision_fields_5.value as sum_of_the_claims,
+    t_kpi_positive_decision_fields_6.value as end_date,
+    t_kpi_positive_decision_fields_7.value as amount_of_fulfilled    
+
+  FROM client as t_client
+  LEFT JOIN manager as t_manager
+  ON t_client.manager_id = t_manager.id
+  LEFT JOIN inn_res as t_inn
+  ON t_client.inn = t_inn.id
+  LEFT JOIN region as t_region
+  ON t_client.region_id = t_region.id
+  LEFT JOIN appl_status as t_status
+  ON t_client.applicant_status_id = t_status.id
+  LEFT JOIN inform_source as t_inf_sours
+  ON t_client.information_source_id = t_inf_sours.id
+  LEFT JOIN inform_source_type as t_inf_type    
+  ON t_inf_sours.info_source_type_id = t_inf_type.id
+  LEFT JOIN client_representative as t_repr_client
+  ON t_client.representitive_client_id = t_repr_client.id
+  LEFT JOIN compliance_criteria as t_criteria
+  ON t_client.compliance_criteria_id = t_criteria.id
+  LEFT JOIN debt_type as t_debt_type
+  ON t_criteria.debt_type_id = t_debt_type.id
+  LEFT JOIN category as t_category
+  ON t_criteria.category_id = t_category.id
+  LEFT JOIN supp_measure as t_supp_measure
+  ON t_criteria.support_measure_id = t_supp_measure.id
+  LEFT JOIN kpi as t_kpi
+  ON t_client.kpi_id = t_kpi.id
+  LEFT JOIN pos_decision as t_pos_decision
+  ON t_kpi.positive_decision_type_id = t_pos_decision.id
+  LEFT JOIN neg_decision as t_neg_decision
+  ON t_kpi.negative_decision_type_id = t_neg_decision.id
+  -- Отлагательные меры
+  LEFT JOIN positive_decision_fields as t_positive_decision_fields_1
+  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_1.positive_decision_id
+  AND t_positive_decision_fields_1.origin = 'Ближайший срок исполнения обязательства'
+  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_1
+  ON t_kpi.id = t_kpi_positive_decision_fields_1.kpi_id
+  AND t_kpi_positive_decision_fields_1.fields_of_pos_decision_id = t_positive_decision_fields_1.id
+ -- Изменения сроков уплаты
+ LEFT JOIN positive_decision_fields as t_positive_decision_fields_2
+  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_2.positive_decision_id
+  AND t_positive_decision_fields_2.origin = 'Не вступило в силу рассрочка'
+  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_2
+  ON t_kpi.id = t_kpi_positive_decision_fields_2.kpi_id
+  AND t_kpi_positive_decision_fields_2.fields_of_pos_decision_id = t_positive_decision_fields_2.id
+ -- Мировое соглашение (+)				
+ LEFT JOIN positive_decision_fields as t_positive_decision_fields_3
+  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_3.positive_decision_id
+  AND t_positive_decision_fields_3.origin = 'Номер дела'
+  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_3
+  ON t_kpi.id = t_kpi_positive_decision_fields_3.kpi_id
+  AND t_kpi_positive_decision_fields_3.fields_of_pos_decision_id = t_positive_decision_fields_3.id
+  
+ LEFT JOIN positive_decision_fields as t_positive_decision_fields_4
+  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_4.positive_decision_id
+  AND t_positive_decision_fields_4.origin = 'Дата утверждения МС судом'
+  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_4
+  ON t_kpi.id = t_kpi_positive_decision_fields_4.kpi_id
+  AND t_kpi_positive_decision_fields_4.fields_of_pos_decision_id = t_positive_decision_fields_4.id
+  
+ LEFT JOIN positive_decision_fields as t_positive_decision_fields_5
+  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_5.positive_decision_id
+  AND t_positive_decision_fields_5.origin = 'Сумма требований вошедших в МС'
+  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_5
+  ON t_kpi.id = t_kpi_positive_decision_fields_5.kpi_id
+  AND t_kpi_positive_decision_fields_5.fields_of_pos_decision_id = t_positive_decision_fields_5.id
+  
+ LEFT JOIN positive_decision_fields as t_positive_decision_fields_6
+  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_6.positive_decision_id
+  AND t_positive_decision_fields_6.origin = 'Дата окончания МС'
+  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_6
+  ON t_kpi.id = t_kpi_positive_decision_fields_6.kpi_id
+  AND t_kpi_positive_decision_fields_6.fields_of_pos_decision_id = t_positive_decision_fields_6.id
+  
+ LEFT JOIN positive_decision_fields as t_positive_decision_fields_7
+  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_7.positive_decision_id
+  AND t_positive_decision_fields_7.origin = 'Сумма исполненных обязательств'
+  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_7
+  ON t_kpi.id = t_kpi_positive_decision_fields_7.kpi_id
+  AND t_kpi_positive_decision_fields_7.fields_of_pos_decision_id = t_positive_decision_fields_7.id
+"""

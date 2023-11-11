@@ -179,41 +179,74 @@ const TestScoringForm = ({ model }) => {
           </MyButton>
         </div> */}
       </div>
-      <div className="row">
+      <div
+        className="row table-wrapper-scroll-y"
+        style={{ "display": "block" }}>
         <h3 className="mt-4">Тестовый результат:</h3>
         {updatedModel && (
-          <table className="text-center table  table-bordered table-responsive">
-            <thead>
-              <tr>
-                <th scope="col">ИНН</th>
-                <th scope="col">Итоговый результат</th>
-                <th scope="col">Формулы</th>
-                <th scope="col">Значения</th>
-              </tr>
-            </thead>
-            <tbody>
-              {json_response?.map((info, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{info.inn}</td>
-                    <td>{info.total_rank}</td>
-                    <td>
-                      {info.markers_and_values.map((el, index) => {
-                        console.log("el", el)
-                        return <tr key={index}>{el.formula}</tr>
-                      })}
-                    </td>
-                    <td>
-                      {info.markers_and_values.map((el, index) => {
-                        // console.log("el", el);
-                        return <tr key={index}>{el.value}</tr>
-                      })}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+          <div
+            className="table-responsive"
+            style={{ "maxHeight": "300px" }}
+          >
+            <table
+              className="table text-center  table-responsive"
+            // style={{ "overflowY": "auto", "maxHeight":"300px" }}
+            >
+              <thead>
+                <tr>
+                  <th scope="col">ИНН</th>
+                  <th scope="col">Итоговый результат</th>
+                  <th scope="col">Формулы</th>
+                  <th scope="col">Балл маркера</th>
+                  <th scope="col">Значение маркера</th>
+                  <th scope="col">Ошибки</th>
+                </tr>
+              </thead>
+              <tbody>
+                {json_response?.map((info, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{info.inn}</td>
+                      <td>{info.total_rank}</td>
+                      <td >
+                        {info.markers_and_values.map((el, index) => {
+                          // console.log("el", el)
+                          return <tr style={{ "borderBottom": "1pt solid black" }} key={index}>{index + 1} : {el.formula}</tr>
+                        })}
+                      </td>
+                      <td>
+                        {info.markers_and_values.map((el, index) => {
+                          // console.log("el", el);
+                          return <tr style={{ "borderBottom": "1pt solid black" }} key={index}>
+                            <tr>
+                              {index + 1} : {el.value}
+                            </tr>
+                          </tr>
+                        })}
+                      </td>
+                      <td>
+                        {info.markers_and_values.map((el, index) => {
+                          // console.log("el", el);
+                          return <tr style={{ "borderBottom": "1pt solid black" }} key={index}>
+                            {index + 1} : {el.target_value}
+                          </tr>
+                        })}
+                      </td>
+                      <td>
+                        {info.markers_and_values.map((el, index) => {
+                          // console.log("el", el);
+                          return <tr style={{ "borderBottom": "1pt solid black" }} key={index}>
+                            {index + 1} : {el.error}
+                          </tr>
+                        })}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+
         )}
         {/* {updatedModel &&
           updatedModel.map((el) => {
