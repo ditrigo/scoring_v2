@@ -179,15 +179,17 @@ const TestScoringForm = ({ model }) => {
           </MyButton>
         </div> */}
       </div>
-      <div className="row table-wrapper-scroll-y" style={{ "display": "block" }}>
+      <div
+        className="row table-wrapper-scroll-y"
+        style={{ "display": "block" }}>
         <h3 className="mt-4">Тестовый результат:</h3>
         {updatedModel && (
           <div
-            className=" table-wrapper-scroll-y"
-          // style={{ "display": "block" }}
+            className="table-responsive"
+            style={{ "maxHeight": "300px" }}
           >
             <table
-              className="table text-center table-bordered table-responsive"
+              className="table text-center  table-responsive"
             // style={{ "overflowY": "auto", "maxHeight":"300px" }}
             >
               <thead>
