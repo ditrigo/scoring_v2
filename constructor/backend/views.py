@@ -910,7 +910,11 @@ def StartScoringViewSet(request):
                 else:
                     try:
                         counting_rank = eval(formula)
-                        counting_target_value = eval(target_value)
+                        if target_value:
+                            counting_target_value = eval(target_value)
+                        else:
+                            counting_target_value = "Нет значения для маркера"
+                        # counting_target_value = eval(target_value)
                         list_markers.append({
                             "marker_name": marker_name,
                             "formula": formula,
@@ -1005,7 +1009,7 @@ def StartTestScoringViewSet(request):
         #                     marker_formula_list.append(v)
 
 
-        print(request.data)
+        # print(request.data)
         inn_list, marker_formula_list = [], []
         for inn in request.data.get("model")["inns"]:
             inn_list.append(inn["inn"])
@@ -1049,7 +1053,11 @@ def StartTestScoringViewSet(request):
                 else:
                     try:
                         counting_rank = eval(formula)
-                        counting_target_value = eval(target_value)
+                        if target_value:
+                            counting_target_value = eval(target_value)
+                        else:
+                            counting_target_value = "Нет значения для маркера"
+                        print(counting_target_value)
                         list_markers.append({
                             "marker_name": marker_name,
                             "formula": formula,
@@ -1059,6 +1067,7 @@ def StartTestScoringViewSet(request):
                             }) 
                         rank += counting_rank
                     except Exception as e:
+                        print("Except", target_value, formula)
                         list_markers.append({
                             "marker_name": marker_name,
                             "formula": formula,
