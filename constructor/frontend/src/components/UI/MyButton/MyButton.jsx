@@ -1,15 +1,18 @@
-import React from 'react';
-import '../../../styles/App.css';
-import 'bootstrap/dist/css/bootstrap.css';
+import React from "react"
+import "../../../styles/App.css"
+import "bootstrap/dist/css/bootstrap.css"
 
 const MyButton = ({ children, ...props }) => {
-    return (
-        <button
-            {...props}
-            className={props.className ? `btn ${props.className}` : "btn btn-outline-primary"}>
-            {children}
-        </button>
-    );
+  return (
+    <button
+      {...props}
+      className={
+        props.className ? `btn ${props.className}` : "btn btn-outline-primary"
+      }
+    >
+      {children}
+    </button>
+  )
 }
 
-export default MyButton;
+export default MyButton

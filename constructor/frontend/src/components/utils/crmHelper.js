@@ -9,6 +9,12 @@ export const transformData = (data, keyInNativeObj, keyName) => {
     value: el.id,
     name: keyName,
   }))
+  result.unshift({
+    id: "",
+    label: "Пусто",
+    value: "",
+    name: keyName,
+  })
   return result
 }
 
@@ -37,6 +43,12 @@ export const transformManagersData = (data) => {
     value: `${el.id}`,
     name: "manager_id",
   }))
+  result.unshift({
+    id: "",
+    label: `Пусто`,
+    value: ``,
+    name: "manager_id",
+  })
   return result
 }
 
@@ -47,6 +59,12 @@ export const transformRegionsData = (data) => {
     value: `${el.id}`,
     name: "region_id",
   }))
+  result.unshift({
+    id: "",
+    label: `Пусто`,
+    value: ``,
+    name: "region_id",
+  })
   return result
 }
 
@@ -436,3 +454,120 @@ export const inputsData = [
   { label: "Потребность в оборотных средствах", key: "", type: "text" },
   { label: "Ранг платежеспособности", key: "", type: "text" },
 ]
+
+const jsonInUpdate = {
+  region_id: 1,
+  manager_id: 1,
+  applicant_status: 1,
+  information_source_id: {
+    id: "",
+    info_source_type_id: 1,
+    info_source_date: "2023-11-07T00:00:00Z",
+    info_source_number: "123",
+  },
+  representitive_client_id: {
+    id: "",
+    representative_first_name: "ййй",
+    representative_second_name: "цццц",
+    representative_patronymic: "ууу",
+    representative_position: "ккке",
+    representative_phone: "+79991112345",
+    representative_email: "test@mail.ru",
+    control_point: "21/10/2023",
+  },
+  compliance_data_id: {
+    id: "",
+    debt_amount: 3,
+    debt_type: 2,
+    category: 3,
+    support_measure: 1,
+    note: "just note",
+    support_duration: 1,
+  },
+  kpi: {
+    id: "",
+    uuid: "",
+    created_date: "",
+    positive_decision_date: "2023-11-11",
+    measure_provided_duration: 23,
+    oiv_request_sender: "er",
+    settled_debt_amount: 44,
+    received_amount_budget: 555,
+    overdue_debt_amount: 777,
+    technical_overdue_debt_amount: 888,
+    positive_decision_type: 1,
+    negative_decision_type: 1,
+  },
+  first_name: "Иван",
+  second_name: "Денисов",
+  patronymic: "Денисович",
+  inn: 1000000101,
+  first_meeting_date: "2023-11-11",
+  event_date: "2023-11-11T19:38:54Z",
+  event_description: "sssss",
+  fields_of_positive_decision: [],
+}
+
+const jsonCreate = {
+  region_id: "4",
+  manager_id: "6",
+  applicant_status: 2,
+  information_source_id: {
+    id: "",
+    info_source_type_id: 5,
+    info_source_date: "2023-11-12",
+    info_source_number: "4353245",
+  },
+  representitive_client_id: {
+    id: "",
+    representative_first_name: "sdfg",
+    representative_second_name: "dsfgsd",
+    representative_patronymic: "sdfgdg",
+    representative_position: "sdfgd",
+    representative_phone: "23453245325",
+    representative_email: "dsfgsdfg@mail.com",
+    control_point: "2023-11-16",
+  },
+  compliance_data_id: {
+    id: "",
+    debt_amount: "45145",
+    debt_type: 4,
+    category: 4,
+    support_measure: 5,
+    note: "sdfgdfg",
+    support_duration: "45",
+  },
+  kpi: {
+    id: "",
+    uuid: "",
+    created_date: "",
+    positive_decision_date: "2023-11-12",
+    measure_provided_duration: "345",
+    oiv_request_sender: "dsfg",
+    settled_debt_amount: "345",
+    received_amount_budget: "345",
+    overdue_debt_amount: "345",
+    technical_overdue_debt_amount: "345",
+    positive_decision_type: 5,
+    negative_decision_type: 3,
+  },
+  first_name: "fgdgf",
+  second_name: "dfgdsg",
+  patronymic: "dfgdsg",
+  inn: "2345234545",
+  first_meeting_date: "2023-11-17",
+  event_date: "2023-11-25",
+  event_description: "sdfgsd",
+  fields_of_positive_decision: [
+    {
+      id: 5,
+      fields_of_pos_decision: 5,
+      value: "111",
+    },
+    {
+      id: 6,
+      fields_of_pos_decision: 6,
+      value: "222",
+    },
+  ],
+}

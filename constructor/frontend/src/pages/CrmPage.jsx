@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import api from "../api"
+// import api from "../api"
 import TableHeader from "../components/CrmPage/Form/TableHeader"
 import NumericRow from "../components/CrmPage/Form/NumericRow"
 import ContentRows from "../components/CrmPage/Form/ContentRows"
