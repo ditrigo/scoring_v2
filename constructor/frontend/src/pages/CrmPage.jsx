@@ -6,10 +6,14 @@ import ContentRows from "../components/CrmPage/Form/ContentRows"
 import { Link } from "react-router-dom"
 import MyInput from "../components/UI/MyInput/MyInput"
 import MyButton from "../components/UI/MyButton/MyButton"
+import configFile from "../config.json"
+import axios from "axios"
 
 const CrmPage = () => {
   const [users, setUsers] = useState()
   const [searchValue, setSearchValue] = useState("")
+  const FileDownload = require("js-file-download")
+
   let filtredUsers = []
 
   try {
@@ -24,15 +28,31 @@ const CrmPage = () => {
     // Добавил проверку через тернарный оператор, чтоб не падал в ошибку от пустых users
     filtredUsers = users
       ? users.filter((el) => {
-          if (Number.isInteger(+searchValue)) {
-            return el.INN.includes(searchValue)
-          } else {
-            return el.manager.toLowerCase().includes(searchValue.toLowerCase())
-          }
-        })
+        if (Number.isInteger(+searchValue)) {
+          return el.INN.includes(searchValue)
+        } else {
+          return el.manager.toLowerCase().includes(searchValue.toLowerCase())
+        }
+      })
       : null
   } catch (e) {
     console.log(e)
+  }
+
+  async function downLoadCrmDatas() {
+    axios({
+      url: `${configFile.apiEndPoint}/crm_import_db_to_file/`,
+      method: "GET",
+      responseType: "blob",
+    })
+      .then((res) => {
+        FileDownload(res.data, "CRM Report.xlsx")
+        // console.log("Результаты в таблице", res.data.data)
+        // setResults(res.data.data)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   }
 
   return (
@@ -49,11 +69,17 @@ const CrmPage = () => {
             />
           </form>
         </div>
-
         <div className="col-md-auto mt-1 mb-1">
           <Link to="/newclient" className="">
             <MyButton>Новый клиент</MyButton>
           </Link>
+        </div>
+        <div className="col-md-auto mt-1 mb-1">
+          <MyButton
+            onClick = {() => downLoadCrmDatas()}
+          >
+            Скачать данные
+          </MyButton>
         </div>
       </div>
       {users ? (
