@@ -218,7 +218,9 @@ const TestScoringForm = ({ model }) => {
                         {info.markers_and_values.map((el, index) => {
                           // console.log("el", el);
                           return <tr style={{ "borderBottom": "1pt solid black" }} key={index}>
-                            {index + 1} : {el.target_value}
+                            {index + 1} : {typeof (el.target_value) === "number"
+                              ? Math.round(el.target_value * 100) / 100
+                              : el.target_value}
                           </tr>
                         })}
                       </td>
