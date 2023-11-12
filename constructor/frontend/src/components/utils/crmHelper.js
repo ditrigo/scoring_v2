@@ -2,6 +2,7 @@ import axios from "axios"
 import configFile from "../../config.json"
 
 export const transformData = (data, keyInNativeObj, keyName) => {
+  // console.log(data)
   const result = data.map((el) => ({
     id: el.id,
     label: el[keyInNativeObj],

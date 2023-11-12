@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import MyModal from "../../ScoringPage/MyModal/MyModal"
 import MyButton from "../../UI/MyButton/MyButton"
-import axios from "axios"
 import MyInput from "../../UI/MyInput/MyInput.jsx"
 import TestScoringForm from "../../ScoringEditPage/TestScoringForm"
-import modelService from "../../../services/model.service"
-import httpService from "../../../services/http.service.js"
-// import moment from "moment"
-// import localization from "moment/locale/ru"
 
 const MarkersTable = ({
   modelId,
@@ -15,25 +10,9 @@ const MarkersTable = ({
   linkedMarkers,
   deleteMarkerFromModel,
 }) => {
-  const [mes, setMes] = useState("")
-  // const [linkedMarkers, setLinkedMarkers] = useState([])
   const [modalTestScoring, setModalTestScoring] = useState(false)
   const [modalMarkerView, setModalMarkerView] = useState(false)
   const [markerDetail, setMarkerDetail] = useState([{ name: "", formula: "" }])
-
-  // async function getLinkedMarkers() {
-  //   try {
-  //     const { data } = await modelService.getLinkedMarkers(modelId)
-  //     // console.log("from service ", data.marker_id)
-  //     setLinkedMarkers(data.marker_id)
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   getLinkedMarkers()
-  // }, [])
 
   const showMarkerDetail = (marker) => {
     setModalMarkerView(true)
@@ -42,23 +21,6 @@ const MarkersTable = ({
       formula: marker.attr_formulas,
     })
   }
-
-  // http://127.0.0.1:8000/api/delete_marker/17/57
-
-  // async function deleteMarkerFromModel(markerId) {
-  //   try {
-  //     const { data } = await httpService.get(
-  //       `delete_marker/${modelId}/${markerId}`
-  //     )
-  //     console.log(data)
-  //     linkedMarkers.filter((el) => el.id !== markerId)
-  //     console.log()
-
-  //     setMes(data)
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }
 
   return (
     <div className="container mb-4">

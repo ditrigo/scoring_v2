@@ -6,31 +6,45 @@ import ContentRows from "../components/CrmPage/Form/ContentRows"
 import { Link } from "react-router-dom"
 import MyInput from "../components/UI/MyInput/MyInput"
 import MyButton from "../components/UI/MyButton/MyButton"
+import httpService from "../services/http.service"
 
 const CrmPage = () => {
-  const [users, setUsers] = useState()
+  const [clients, setClients] = useState()
   const [searchValue, setSearchValue] = useState("")
-  let filtredUsers = []
+  let filtredClients = []
+
+  const getClients = async () => {
+    try {
+      const { data } = await httpService.get(`crm_client/`)
+      // console.log(data.data)
+      setClients(data.data)
+    } catch (error) {
+      console.log("🚀 ~ file: CrmPage.jsx:19 ~ getClients ~ error:", error)
+    }
+  }
+
+  useEffect(() => {
+    getClients()
+  }, [])
 
   try {
     useEffect(() => {
-      api.users.fetchAll().then((data) => {
-        setUsers(data)
-      })
-      // setUsers(usersApi)
-      console.log(users)
+      // console.log(clients)
     }, [])
 
-    // Добавил проверку через тернарный оператор, чтоб не падал в ошибку от пустых users
-    filtredUsers = users
-      ? users.filter((el) => {
+    // Добавил проверку через тернарный оператор, чтоб не падал в ошибку от пустых clients
+    filtredClients = clients
+      ? clients.filter((el) => {
+          // console.log(el)
           if (Number.isInteger(+searchValue)) {
-            return el.INN.includes(searchValue)
+            return String(el.inn).includes(searchValue)
           } else {
-            return el.manager.toLowerCase().includes(searchValue.toLowerCase())
+            return el.manager.second_name
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())
           }
         })
-      : null
+      : clients
   } catch (e) {
     console.log(e)
   }
@@ -56,7 +70,7 @@ const CrmPage = () => {
           </Link>
         </div>
       </div>
-      {users ? (
+      {clients ? (
         <>
           <div className="row mt-3">
             <div className="col-md-12">
@@ -69,7 +83,7 @@ const CrmPage = () => {
                       <TableHeader />
                       <tbody className="text-center">
                         <NumericRow />
-                        <ContentRows users={filtredUsers} />
+                        <ContentRows clients={filtredClients} />
                       </tbody>
                     </table>
                   </div>
