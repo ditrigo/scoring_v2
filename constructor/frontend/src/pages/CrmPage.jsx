@@ -65,9 +65,9 @@ const CrmPage = () => {
                 <div className="card-body">
                   {" "}
                   <div className="table crmTable">
-                    <table className="table tableContent">
+                    <table className="table text-center tableContent">
                       <TableHeader />
-                      <tbody>
+                      <tbody className="text-center">
                         <NumericRow />
                         <ContentRows users={filtredUsers} />
                       </tbody>

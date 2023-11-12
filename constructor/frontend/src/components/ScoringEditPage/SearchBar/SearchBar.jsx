@@ -16,6 +16,7 @@ const SearchBar = ({
   statusModel,
   model,
   linkedMarkers,
+  deleteMarkerFromModel,
 }) => {
   const [expanded, setExpanded] = useState(false)
   const [selections, setSelections] = useState([])
@@ -65,6 +66,7 @@ const SearchBar = ({
             modelId={idModel}
             model={model}
             linkedMarkers={linkedMarkers}
+            deleteMarkerFromModel={deleteMarkerFromModel}
           />
         </div>
       }

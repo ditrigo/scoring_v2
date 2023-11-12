@@ -9,8 +9,13 @@ import httpService from "../../../services/http.service.js"
 // import moment from "moment"
 // import localization from "moment/locale/ru"
 
-const MarkersTable = ({ modelId, model, linkedMarkers }) => {
-  const [markers, setMarkers] = useState([])
+const MarkersTable = ({
+  modelId,
+  model,
+  linkedMarkers,
+  deleteMarkerFromModel,
+}) => {
+  const [mes, setMes] = useState("")
   // const [linkedMarkers, setLinkedMarkers] = useState([])
   const [modalTestScoring, setModalTestScoring] = useState(false)
   const [modalMarkerView, setModalMarkerView] = useState(false)
@@ -39,18 +44,21 @@ const MarkersTable = ({ modelId, model, linkedMarkers }) => {
   }
 
   // http://127.0.0.1:8000/api/delete_marker/17/57
-  async function deleteMarkerFromModel(markerId) {
-    try {
-      const { data } = await httpService.get(
-        `delete_marker/${modelId}/${markerId}`
-      )
-      linkedMarkers.filter((item) => item.id !== markerId)
 
-      console.log("linkedMarkers", linkedMarkers)
-    } catch (e) {
-      console.log(e)
-    }
-  }
+  // async function deleteMarkerFromModel(markerId) {
+  //   try {
+  //     const { data } = await httpService.get(
+  //       `delete_marker/${modelId}/${markerId}`
+  //     )
+  //     console.log(data)
+  //     linkedMarkers.filter((el) => el.id !== markerId)
+  //     console.log()
+
+  //     setMes(data)
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
 
   return (
     <div className="container mb-4">
@@ -93,8 +101,9 @@ const MarkersTable = ({ modelId, model, linkedMarkers }) => {
                         </td>
                         <td>
                           <button
-                            onClick={() =>
-                              deleteMarkerFromModel(marker.id)
+                            onClick={
+                              () => deleteMarkerFromModel(marker.id)
+                              // console.log("Удалить по id", marker.id)
                             }
                             className="btn btn-outline-danger"
                           >

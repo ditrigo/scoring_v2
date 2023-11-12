@@ -1,6 +1,6 @@
 import React from "react"
 
-const TextField = ({ label, name, value, onChange, error }) => {
+const TextField = ({ label, name, value, onChange, error, clientData }) => {
   const handleChange = ({ target }) => {
     onChange({ name: target.name, value: target.value })
   }
@@ -23,6 +23,11 @@ const TextField = ({ label, name, value, onChange, error }) => {
           onChange={handleChange}
         />
         {error && <div className="invalid-feedback ">{error}</div>}
+        {clientData.inn && !error && (
+          <div className="text-warning">
+            Внимание! ИНН может содержать 10 или 12 знаков!
+          </div>
+        )}
       </div>
     </div>
   )

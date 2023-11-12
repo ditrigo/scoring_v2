@@ -7,7 +7,7 @@ export function validator(data, config) {
         if (typeof data === "boolean") {
           statusValidate = !data
         } else {
-          statusValidate = data.trim() === ""
+          statusValidate = typeof data === "string" && data.trim() === ""
         }
         break
       }
@@ -35,7 +35,11 @@ export function validator(data, config) {
         break
       }
       case "count": {
-        statusValidate = data.length !== config.value
+        statusValidate = data.length < config.value
+        break
+      }
+      case "maxCount": {
+        statusValidate = data.length > config.value
         break
       }
       default:

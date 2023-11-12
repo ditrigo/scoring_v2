@@ -7,6 +7,7 @@ import SearchBar from "../components/ScoringEditPage/SearchBar/SearchBar"
 import { useLocation } from "react-router-dom"
 import markerSrvice from "../services/marker.service"
 import modelService from "../services/model.service"
+import httpService from "../services/http.service"
 
 const ScoringEdit = () => {
   const [countedAttributes, setCountedAttributes] = useState([])
@@ -77,7 +78,7 @@ const ScoringEdit = () => {
           scoring_model_id: state.models.id,
         }
       )
-      console.log(newLinkModelAndAttributes)
+      // console.log(newLinkModelAndAttributes)
       setModels([])
       setCurrentModel({})
       getModels()
@@ -87,6 +88,18 @@ const ScoringEdit = () => {
     }
 
     changeModelStatusById(statusButton)
+  }
+
+  async function deleteMarkerFromModel(markerId) {
+    try {
+      const { data } = await httpService.get(
+        `delete_marker/${state.models.id}/${markerId}`
+      )
+      // console.log(data)
+      getLinkedMarkers()
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   useEffect(() => {
@@ -104,6 +117,7 @@ const ScoringEdit = () => {
       statusModel={state.models.status}
       model={currentModel}
       linkedMarkers={linkedMarkers}
+      deleteMarkerFromModel={deleteMarkerFromModel}
     />
     // </div>
   )
