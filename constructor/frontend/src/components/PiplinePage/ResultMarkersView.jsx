@@ -41,7 +41,7 @@ const ResultMarkersView = () => {
         <div className="row mb-3">
           <Link to="/results">
             <MyButton
-              className="btn btn-outline-secondary mt-2"
+              className="btn btn-outline-secondary "
               onClick={() => { }}
             >
               К таблице результатов

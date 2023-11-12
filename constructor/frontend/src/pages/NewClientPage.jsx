@@ -12,13 +12,14 @@ import {
   transformRegionsData,
 } from "../components/utils/crmHelper"
 import configFile from "../config.json"
-import ReactDatePicker from "react-datepicker"
+// import ReactDatePicker from "react-datepicker"
+import httpService from "../services/http.service"
 
 const NewClientPage = () => {
   const params = useParams()
-  const [users, setUsers] = useState()
+  const [client, setClient] = useState()
   const [errors, setErrors] = useState({})
-  const [startDate, setStartDate] = useState()
+  // const [startDate, setStartDate] = useState()
 
   const [regions, setRegions] = useState({})
   const [support, setSupport] = useState({})
@@ -137,22 +138,6 @@ const NewClientPage = () => {
         value: 6,
       },
     },
-    // optional
-    // positive_decision_date: {
-    //   isRequired: {
-    //     message: "Это поле обязательно для заполнения",
-    //   },
-    // },
-    // measure_provided_duration: {
-    //   isRequired: {
-    //     message: "Это поле обязательно для заполнения",
-    //   },
-    // },
-    // settled_debt_amount: {
-    //   isRequired: {
-    //     message: "Это поле обязательно для заполнения",
-    //   },
-    // },
     ///////////////////////////////////////////////////////////// для следущюих полей нет ключей! Создал пока свои!
     stage: {
       isRequired: {
@@ -245,10 +230,99 @@ const NewClientPage = () => {
       })
   }, [])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    alert("Отправка данных на сервер")
-    console.log(clientData)
+    // console.log(client && client.information_source.id)
+    const json = {
+      region_id: clientData.region_id,
+      manager_id: clientData.manager_id,
+      applicant_status: clientData.applicant_status,
+      information_source_id: {
+        id: client[0] ? client[0].information_source.id : "",
+        info_source_type_id: clientData.info_source_type_id,
+        info_source_date: clientData.info_source_date,
+        info_source_number: clientData.info_source_number,
+      },
+      representitive_client_id: {
+        id: client[0] ? client[0].representitive_client.id : "",
+        representative_first_name: clientData.representative_first_name,
+        representative_second_name: clientData.representative_second_name,
+        representative_patronymic: clientData.representative_patronymic,
+        representative_position: clientData.representative_position,
+        representative_phone: clientData.representative_phone,
+        representative_email: clientData.representative_email,
+        control_point: clientData.control_point,
+      },
+      compliance_data_id: {
+        id: client[0] ? client[0].compliance_criteria.id : "",
+        debt_amount: clientData.debt_amount,
+        debt_type: clientData.debt_type,
+        category: clientData.category,
+        support_measure: clientData.support_measure,
+        note: clientData.note,
+        support_duration: clientData.support_duration,
+      },
+      kpi: {
+        id: "",
+        uuid: "",
+        created_date: "",
+        positive_decision_date: clientData.positive_decision_date,
+        measure_provided_duration: clientData.measure_provided_duration,
+        oiv_request_sender: clientData.oiv_request_sender,
+        settled_debt_amount: clientData.settled_debt_amount,
+        received_amount_budget: clientData.received_amount_budget,
+        overdue_debt_amount: clientData.overdue_debt_amount,
+        technical_overdue_debt_amount: clientData.technical_overdue_debt_amount,
+        positive_decision_type: clientData.positive_decision_type,
+        negative_decision_type: clientData.negative_decision_type,
+      },
+      first_name: clientData.first_name,
+      second_name: clientData.second_name,
+      patronymic: clientData.patronymic,
+      inn: clientData.inn,
+      first_meeting_date: clientData.first_meeting_date,
+      event_date: clientData.event_date,
+      event_description: clientData.event_description,
+      fields_of_positive_decision: [
+        // {
+        //   id: 5,
+        //   fields_of_pos_decision: 5,
+        //   value: "111",
+        // },
+        // {
+        //   id: 6,
+        //   fields_of_pos_decision: 6,
+        //   value: "222",
+        // },
+      ],
+    }
+
+    console.log(json)
+    if (params.id && client) {
+      try {
+        const { data } = await httpService.post(
+          `crm_update_relation_client/${params.id}`,
+          json
+        )
+        console.log(data)
+      } catch (error) {
+        console.log(
+          "🚀 ~ file: NewClientPage.jsx:238 ~ handleSubmit ~ error:",
+          error
+        )
+      }
+    } else {
+      try {
+        const { data } = await httpService.post(`crm_create_client/`, json)
+        // console.log(data)
+      } catch (error) {
+        console.log(
+          "🚀 ~ file: NewClientPage.jsx:238 ~ handleSubmit ~ error:",
+          error
+        )
+      }
+    }
+
     // setClientData({})
   }
 
@@ -259,6 +333,13 @@ const NewClientPage = () => {
 
   const handleChange = (target) => {
     console.log(target)
+    if (target?.target?.type === "date") {
+      setClientData((prevState) => ({
+        ...prevState,
+        [target.target.dataset.name]: target.target.value,
+      }))
+    }
+
     setClientData((prevState) => ({
       ...prevState,
       [target.name]: target.value,
@@ -266,17 +347,6 @@ const NewClientPage = () => {
   }
 
   // TEST
-  const [testData, setTestData] = useState({})
-  const [testApi, setTestApi] = useState()
-
-  // const handleChangeTest = (target) => {
-  //   // console.log(target)
-
-  //   setTestData((prevState) => ({
-  //     ...prevState,
-  //     [target.name]: target.value,
-  //   }))
-  // }
 
   const solvencyRisk = [
     { label: "Высокий риск", value: "Высокий риск", name: "solvencyRisk" },
@@ -324,20 +394,83 @@ const NewClientPage = () => {
     },
   ]
 
+  // const [testData, setTestData] = useState({})
+  // const [users, setUsers] = useState()
+  // const [testApi, setTestApi] = useState()
+
+  const getClients = async () => {
+    try {
+      const { data } = await httpService.get(`crm_client/`)
+      const client = data.data.filter((el) => {
+        // console.log("el: ", el.id, "params: ", params.id)
+        return el.id === +params.id
+      })
+      // console.log(client)
+      setClient(client)
+    } catch (error) {
+      console.log("🚀 ~ file: CrmPage.jsx:19 ~ getClients ~ error:", error)
+    }
+  }
+
   useEffect(() => {
-    api.users.fetchAll().then((data) => {
-      setUsers(data)
-    })
-    api.testFiedls.fetchAll().then((data) => {
-      setTestApi(data)
-    })
+    if (params.id) getClients()
   }, [])
 
   useEffect(() => {
-    if (params.id && users) {
-      testApi && setTestData(testApi[0])
+    if (params.id && client) {
+      // console.log(client[0])
+      setClientData({
+        ...clientData,
+        first_name: client[0].first_name,
+        second_name: client[0].second_name,
+        patronymic: client[0].patronymic,
+        inn: client[0].inn,
+        region_id: client[0].region.id,
+        manager_id: client[0].manager.id,
+        applicant_status: client[0].applicant_status.id,
+        info_source_type_id: client[0].information_source.info_source_type,
+        info_source_date: client[0].information_source.info_source_date,
+        info_source_number: client[0].information_source.info_source_number,
+        representative_first_name:
+          client[0].representitive_client.representative_first_name,
+        representative_second_name:
+          client[0].representitive_client.representative_second_name,
+        representative_patronymic:
+          client[0].representitive_client.representative_patronymic,
+        representative_position:
+          client[0].representitive_client.representative_position,
+        representative_phone:
+          client[0].representitive_client.representative_phone,
+        representative_email:
+          client[0].representitive_client.representative_email,
+        control_point: client[0].representitive_client.control_point,
+        debt_amount: client[0].compliance_criteria.debt_amount,
+        debt_type: client[0].compliance_criteria.debt_type.id,
+        category: client[0].compliance_criteria.category.id,
+        support_measure: client[0].compliance_criteria.support_measure.id,
+        note: client[0].compliance_criteria.note,
+        support_duration: client[0].compliance_criteria.support_duration,
+        first_meeting_date: client[0].first_meeting_date,
+        event_date: client[0].event_date,
+        event_description: client[0].event_description,
+        positive_decision_type: 1,
+        negative_decision_type: 1,
+        positive_decision_date: "2023-11-11",
+        measure_provided_duration: 23,
+        oiv_request_sender: "er",
+        settled_debt_amount: 44,
+        received_amount_budget: 555,
+        overdue_debt_amount: 777,
+        technical_overdue_debt_amount: 888,
+      })
     }
-  }, [testApi])
+  }, [client])
+
+  // useEffect(() => {
+  //   if (params.id && users) {
+  //     testApi && setTestData(testApi[0])
+  //   }
+  // }, [testApi])
 
   useEffect(() => {
     validate()
@@ -630,13 +763,26 @@ const NewClientPage = () => {
                     />
                   )
                 } else if (el.type === "select") {
+                  // params.id &&
+                  //   client &&
+                  //   console.log(
+                  //     el.options?.filter(
+                  //       (opt) => opt.id === clientData[el.key]
+                  //     )[0]?.label
+                  //   )
                   return (
                     <SelectSearchField
                       key={ind}
                       options={el.options}
                       label={el.label}
                       name={el.key}
-                      placeholder={el.label}
+                      placeholder={
+                        params.id && client
+                          ? el.options.filter(
+                              (opt) => opt.id === clientData[el.key]
+                            )[0]?.label
+                          : el.label
+                      }
                       onChange={handleChange}
                       error={errors[el.key]}
                     />
@@ -654,12 +800,17 @@ const NewClientPage = () => {
                             : "text form-control mt-1 mr-2 border p-2 w-25"
                         }
                       >
-                        <ReactDatePicker
+                        {/* <ReactDatePicker
                           selected={startDate}
                           onChange={(date) => handleChange(date)}
                           isClearable
                           placeholderText="Выберите дату"
                           dateFormat="dd/MM/yyyy"
+                        /> */}
+                        <input
+                          type="date"
+                          onChange={(date) => handleChange(date)}
+                          data-name={el.key}
                         />
                       </div>
                       {errors[el.key] && (
@@ -678,14 +829,6 @@ const NewClientPage = () => {
                   )
                 }
               })}
-              {/* <SelectSearchField
-                options={riskList}
-                onChange={handleChangeTest}
-                name="risk"
-                error={errors.risk}
-                label="New label select"
-                placeholder={testData.risk}
-              /> */}
 
               <div className="row row-centered  colored">
                 <button
@@ -702,7 +845,7 @@ const NewClientPage = () => {
                   onClick={handleCancle}
                 >
                   <Link to="/crm" className="nav-link m-2">
-                    Отмена
+                    Назад
                   </Link>
                 </button>
               </div>

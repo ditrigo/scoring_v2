@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import api from "../api"
+// import api from "../api"
 import TableHeader from "../components/CrmPage/Form/TableHeader"
 import NumericRow from "../components/CrmPage/Form/NumericRow"
 import ContentRows from "../components/CrmPage/Form/ContentRows"
@@ -8,33 +8,46 @@ import MyInput from "../components/UI/MyInput/MyInput"
 import MyButton from "../components/UI/MyButton/MyButton"
 import configFile from "../config.json"
 import axios from "axios"
+import httpService from "../services/http.service"
 
 const CrmPage = () => {
-  const [users, setUsers] = useState()
+  const [clients, setClients] = useState()
   const [searchValue, setSearchValue] = useState("")
   const FileDownload = require("js-file-download")
+  let filtredClients = []
 
-  let filtredUsers = []
+  const getClients = async () => {
+    try {
+      const { data } = await httpService.get(`crm_client/`)
+      // console.log(data.data)
+      setClients(data.data)
+    } catch (error) {
+      console.log("🚀 ~ file: CrmPage.jsx:19 ~ getClients ~ error:", error)
+    }
+  }
+
+  useEffect(() => {
+    getClients()
+  }, [])
 
   try {
     useEffect(() => {
-      api.users.fetchAll().then((data) => {
-        setUsers(data)
-      })
-      // setUsers(usersApi)
-      console.log(users)
+      // console.log(clients)
     }, [])
 
-    // Добавил проверку через тернарный оператор, чтоб не падал в ошибку от пустых users
-    filtredUsers = users
-      ? users.filter((el) => {
-        if (Number.isInteger(+searchValue)) {
-          return el.INN.includes(searchValue)
-        } else {
-          return el.manager.toLowerCase().includes(searchValue.toLowerCase())
-        }
-      })
-      : null
+    // Добавил проверку через тернарный оператор, чтоб не падал в ошибку от пустых clients
+    filtredClients = clients
+      ? clients.filter((el) => {
+          // console.log(el)
+          if (Number.isInteger(+searchValue)) {
+            return String(el.inn).includes(searchValue)
+          } else {
+            return el.manager.second_name
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())
+          }
+        })
+      : clients
   } catch (e) {
     console.log(e)
   }
@@ -82,7 +95,7 @@ const CrmPage = () => {
           </MyButton>
         </div>
       </div>
-      {users ? (
+      {clients ? (
         <>
           <div className="row mt-3">
             <div className="col-md-12">
@@ -95,7 +108,7 @@ const CrmPage = () => {
                       <TableHeader />
                       <tbody className="text-center">
                         <NumericRow />
-                        <ContentRows users={filtredUsers} />
+                        <ContentRows clients={filtredClients} />
                       </tbody>
                     </table>
                   </div>
