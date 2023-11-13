@@ -24,7 +24,7 @@ const PipelinePage = () => {
   //   { name: "Результаты скоринга", open: false },
   //   { name: "Журнал скоринга", open: false },
   // ])
-  const [startDate, setStartDate] = useState(new Date())
+  const [startDate, setStartDate] = useState()
   const [models, setModels] = useState([])
   const [inputINN, setInputINN] = useState("")
   const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
@@ -201,7 +201,7 @@ const PipelinePage = () => {
                           selected={startDate}
                           onChange={(date) => setStartDate(date)}
                           isClearable
-                          placeholderText="I have been cleared!"
+                          placeholderText="дд.мм.гггг"
                           dateFormat="dd/MM/yyyy"
                         />
                       </td>

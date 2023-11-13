@@ -6,11 +6,14 @@ import ContentRows from "../components/CrmPage/Form/ContentRows"
 import { Link } from "react-router-dom"
 import MyInput from "../components/UI/MyInput/MyInput"
 import MyButton from "../components/UI/MyButton/MyButton"
+import configFile from "../config.json"
+import axios from "axios"
 import httpService from "../services/http.service"
 
 const CrmPage = () => {
   const [clients, setClients] = useState()
   const [searchValue, setSearchValue] = useState("")
+  const FileDownload = require("js-file-download")
   let filtredClients = []
 
   const getClients = async () => {
@@ -18,6 +21,7 @@ const CrmPage = () => {
       const { data } = await httpService.get(`crm_client/`)
       // console.log(data.data)
       setClients(data.data)
+      // console.log(clients)
     } catch (error) {
       console.log("🚀 ~ file: CrmPage.jsx:19 ~ getClients ~ error:", error)
     }
@@ -49,6 +53,22 @@ const CrmPage = () => {
     console.log(e)
   }
 
+  async function downLoadCrmDatas() {
+    axios({
+      url: `${configFile.apiEndPoint}/crm_import_db_to_file/`,
+      method: "GET",
+      responseType: "blob",
+    })
+      .then((res) => {
+        FileDownload(res.data, "CRM Report.xlsx")
+        // console.log("Результаты в таблице", res.data.data)
+        // setResults(res.data.data)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }
+
   return (
     <div className="container mr-5 mt-3 mb-3">
       <div className="row">
@@ -63,11 +83,13 @@ const CrmPage = () => {
             />
           </form>
         </div>
-
         <div className="col-md-auto mt-1 mb-1">
           <Link to="/newclient" className="">
             <MyButton>Новый клиент</MyButton>
           </Link>
+        </div>
+        <div className="col-md-auto mt-1 mb-1">
+          <MyButton onClick={() => downLoadCrmDatas()}>Скачать данные</MyButton>
         </div>
       </div>
       {clients ? (

@@ -38,7 +38,9 @@ urlpatterns = [
     # re_path(r"^get_formula_value/$", GetformulaValue, name="get_formula_value"), # тестовая апишка
 
     re_path(r"^download/$", DownloadTryViewSet, name="download"),
-
+    
+    # Test
+    re_path(r"^for_journal/$", ForJournalViewSet, name="for_journal"),
 
     ### CRM URLS ###########################################################################################
     #----------------

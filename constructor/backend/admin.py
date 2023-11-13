@@ -66,38 +66,38 @@ class InnResResource(resources.ModelResource):
         skip_unchanged = True
         import_id_fields  = ('inn')
 
-    def after_export(self, queryset, data, *args, **kwargs):
-        # print(queryset)
-        # print(data)
-        new_data = Dataset()
-        inn_res_data = Dataset()
-        inn_res_data.dict = data.dict
-        print(pd.json_normalize(json.loads(data.get_col(6)[0]), "markers_and_values"))
+    # def after_export(self, queryset, data, *args, **kwargs):
+    #     # print(queryset)
+    #     # print(data)
+    #     new_data = Dataset()
+    #     inn_res_data = Dataset()
+    #     inn_res_data.dict = data.dict
+    #     print(pd.json_normalize(json.loads(data.get_col(6)[0]), "markers_and_values"))
 
-        rows_new_df = []
-        for row in range(len(pd.json_normalize(json.loads(inn_res_data.get_col(6)[0]), "markers_and_values" ).values)+1):
-            print("row", row)
-            # num_markers = len(pd.json_normalize(json.loads(data.get_col(6)[0]), "markers_and_values" ).values)
-            values_marker = pd.json_normalize(json.loads(inn_res_data.get_col(6)[row]), "markers_and_values").values
-            print("\nvalues_marker", values_marker)
-            for num_marker in range(len(values_marker)):
-                x = list(inn_res_data[row])
-                x = np.append(x, values_marker[num_marker])
-                rows_new_df.append(x)
-        print("\nrows_new_df", rows_new_df)
-        arr = []
-        for row in rows_new_df:
-            for idx in row:
-                print("idx", idx)
-                arr.append(idx)
+    #     rows_new_df = []
+    #     for row in range(len(pd.json_normalize(json.loads(inn_res_data.get_col(6)[0]), "markers_and_values" ).values)+1):
+    #         print("row", row)
+    #         # num_markers = len(pd.json_normalize(json.loads(data.get_col(6)[0]), "markers_and_values" ).values)
+    #         values_marker = pd.json_normalize(json.loads(inn_res_data.get_col(6)[row]), "markers_and_values").values
+    #         print("\nvalues_marker", values_marker)
+    #         for num_marker in range(len(values_marker)):
+    #             x = list(inn_res_data[row])
+    #             x = np.append(x, values_marker[num_marker])
+    #             rows_new_df.append(x)
+    #     print("\nrows_new_df", rows_new_df)
+    #     arr = []
+    #     for row in rows_new_df:
+    #         for idx in row:
+    #             print("idx", idx)
+    #             arr.append(idx)
             
-            new_data.append(arr)
-            arr=[]
-        print(new_data)
-        new_data.headers = data.headers + [ "formula", "value"]
-        data.dict = new_data.dict
-        print(new_data)
-        return super().after_export(queryset, data, *args, **kwargs)
+    #         new_data.append(arr)
+    #         arr=[]
+    #     print(new_data)
+    #     new_data.headers = data.headers + [ "formula", "value"]
+    #     data.dict = new_data.dict
+    #     print(new_data)
+    #     return super().after_export(queryset, data, *args, **kwargs)
 
 class InnResAdmin(ImportExportModelAdmin):
     resorce_classes = [InnResResource]

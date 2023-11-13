@@ -6,24 +6,67 @@ import localization from "moment/locale/ru"
 import { Link } from "react-router-dom"
 import modelService from "../../services/model.service"
 import configFile from "../../config.json"
+import MyInput from "../UI/MyInput/MyInput"
 
 const ResultTable = ({ getLinkMarkers }) => {
-  const [results, setResults] = useState([])
+  // const [results, setResults] = useState([])
   const [models, setModels] = useState()
-
+  const [searchValue, setSearchValue] = useState("")
   const FileDownload = require("js-file-download")
+  let searchedModels = []
 
-  async function getResults() {
-    axios
-      .get(`${configFile.apiEndPoint}/inn_res/`)
-      .then((res) => {
-        // console.log("Результаты в таблице", res.data.data)
-        setResults(res.data.data)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+  // async function getResults() {
+  //   axios
+  //     .get(`${configFile.apiEndPoint}/inn_res/`)
+  //     .then((res) => {
+  //       // console.log("Результаты в таблице", res.data.data)
+  //       setResults(res.data.data)
+  //     })
+  //     .catch((e) => {
+  //       console.log(e)
+  //     })
+  // }
+
+  const getModels = async () => {
+    try {
+      const { data } = await modelService.get()
+      console.log("data: ", data)
+      setModels(data)
+      // console.log("from service models", models)
+    } catch (e) {
+      console.log(e)
+    }
   }
+
+  useEffect(() => {
+    // getResults()
+    getModels()
+  }, [])
+
+  searchedModels = models
+    ? models.filter((el) => {
+        // console.log(el)
+        return el.inns.some((inn) => {
+          // console.log(inn)
+          return Moment(inn.created_date)
+            .locale("rus", localization)
+            .format("LLL")
+            .includes(searchValue)
+        })
+      })
+    : models
+  // searchedModels = models
+  //   ? models.filter((el) => {
+  //       // console.log(el)
+  //       return el.inns.some((inn) => {
+  //         // console.log(inn)
+  //         return Moment(inn.created_date)
+  //           .locale("rus", localization)
+  //           .format("LLL")
+  //           .includes(searchValue)
+  //       })
+  //     })
+  //   : models
 
   async function downLoadResults() {
     axios({
@@ -39,32 +82,6 @@ const ResultTable = ({ getLinkMarkers }) => {
       .catch((e) => {
         console.log(e)
       })
-  }
-  useEffect(() => {
-    getResults()
-    getModels()
-  }, [])
-
-  // async function getModels() {
-  //   axios
-  //     .get("http://127.0.0.1:8000/api/scoring_model/")
-  //     .then((res) => {
-  //       // console.log("Получение моделей resTab", res.data.data)
-  //       setModels(res.data.data)
-  //     })
-  //     .catch((e) => {
-  //       console.log(e)
-  //     })
-  // }
-
-  const getModels = async () => {
-    try {
-      const { data } = await modelService.get()
-      // console.log("from service ", data)
-      setModels(data)
-    } catch (e) {
-      console.log(e)
-    }
   }
 
   return (
@@ -93,6 +110,14 @@ const ResultTable = ({ getLinkMarkers }) => {
             <MyButton onClick={downLoadResults}>Выгрузить данные</MyButton>
           </div>
         </div>
+        <div className="mt-4">
+          <MyInput
+            type="text"
+            placeholder="Введите дату создания"
+            // className="form-group search__input mr-5"
+            onChange={(event) => setSearchValue(event.target.value)}
+          />
+        </div>
         <table className="text-center table  table-bordered table-responsive">
           <thead>
             <tr>
@@ -104,7 +129,7 @@ const ResultTable = ({ getLinkMarkers }) => {
           </thead>
           <tbody>
             {models &&
-              models.map((el, index) => {
+              searchedModels.map((el, index) => {
                 return (
                   el.inns.length !== 0 && (
                     <tr key={index}>
@@ -115,9 +140,20 @@ const ResultTable = ({ getLinkMarkers }) => {
                       </td>
                       <td>{"Тестовый пользователь" && el.author_id}</td>
                       <td>
+                        {/* дата модели -
                         {Moment(el.created_date)
                           .locale("rus", localization)
-                          .format("LLL")}
+                          .format("LLL")}{" "}
+                        - дата модели */}
+                        {el.inns.map((el, index) => {
+                          return (
+                            <p className="text-center" key={index}>
+                              {Moment(el.created_date)
+                                .locale("rus", localization)
+                                .format("LLL")}
+                            </p>
+                          )
+                        })}
                       </td>
                       <td>
                         {el.inns.map((el, index) => {
