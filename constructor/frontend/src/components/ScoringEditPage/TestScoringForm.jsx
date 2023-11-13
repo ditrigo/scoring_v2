@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import MyInput from "../UI/MyInput/MyInput"
-import ReactDatePicker from "react-datepicker"
+import ReactDatePicker, { registerLocale } from "react-datepicker"
+import ru from 'date-fns/locale/ru';
 import MyButton from "../UI/MyButton/MyButton"
 import axios from "axios"
 import modelService from "../../services/model.service"
@@ -9,6 +10,7 @@ import configFile from "../../config.json"
 const TestScoringForm = ({ model }) => {
   const [inputINN, setInputINN] = useState("")
   const [startDate, setStartDate] = useState(new Date())
+  registerLocale("ru", ru);
   // const [isSaved, setIsSaved] = useState(false)
   // const [disabledBtn, setDisabledBtn] = useState("")
   const [models, setModels] = useState([])
@@ -129,12 +131,13 @@ const TestScoringForm = ({ model }) => {
                 <td>Отчетная дата</td>
                 <td>
                   <ReactDatePicker
+                    locale="ru"
                     selected={startDate}
                     onChange={(date) => setStartDate(date)}
                     isClearable
                     placeholderText="I have been cleared!"
                     dateFormat="dd/MM/yyyy"
-                    locale="rus"
+                    // locale="rus"
                   />
                 </td>
               </tr>

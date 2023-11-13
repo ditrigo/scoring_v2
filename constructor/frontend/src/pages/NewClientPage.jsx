@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import api from "../api"
 import TextField from "../components/CrmPage/Form/textField"
 import Divider from "../components/CrmPage/Form/Divider"
 import { Link, useParams } from "react-router-dom"
@@ -111,11 +110,11 @@ const NewClientPage = () => {
         message: "Это поле обязательно для заполнения",
       },
     },
-    PRD: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
+    // PRD: {
+    //   isRequired: {
+    //     message: "Это поле обязательно для заполнения",
+    //   },
+    // },
 
     category: {
       isRequired: {
@@ -564,7 +563,7 @@ const NewClientPage = () => {
     },
     {
       label:
-        "Примечание к описанию события в рамках огласительных меропрятий (гр.22)",
+        "Примечание к описанию события в рамках согласительных меропрятий (гр.22)",
       key: "note",
       type: "text",
     },
@@ -575,7 +574,7 @@ const NewClientPage = () => {
     },
     { label: "Согласительные меры", key: "", type: "title" },
     {
-      label: "Дата первой встречи в рамках согласитлеьных мероприятий",
+      label: "Дата первой встречи в рамках согласительных мероприятий",
       key: "first_meeting_date",
       type: "date",
     },
@@ -623,7 +622,7 @@ const NewClientPage = () => {
       options: negative,
     },
     {
-      label: "Сумма урегулированной задолженности",
+      label: "Сумма урегулированной задолженности (тыс руб)",
       key: "settled_debt_amount",
       type: "text",
     },

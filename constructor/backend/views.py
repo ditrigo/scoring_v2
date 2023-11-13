@@ -1126,7 +1126,7 @@ def ForJournalViewSet(request):
 
     columns = ["scoring_model_id", "model_name", "model_author", "inn_id", "created_date", "inn", "result_score"]
     with connection.cursor() as cursor:
-        
+    
         text_query = """
             select 
                 smi.scoringmodel_id
@@ -1187,6 +1187,8 @@ def ForJournalViewSet(request):
 
 @api_view(['GET'])
 def DownloadJournalData(request):
+    # print(request)
+    print(request.GET.get('firstdate'))
 
     guid = 'file_db_import_' + uuid.uuid4().hex
     
@@ -1199,9 +1201,12 @@ def DownloadJournalData(request):
         os.makedirs(dir_name)
 
     filename = f'{dir_name}/journal_{guid}.xlsx'
-    columns = ["id скоринговой модели", "Наименование модели", "Создатель модели", "id ИНН", "Создание скоринга", "ИНН", "Результат"]
-    first_date = "2023-11-11 15:15"
-    second_date = "2023-11-12 15:15"
+    columns = ["id скоринговой модели", 
+               "Наименование модели", 
+               "Создатель модели", "id ИНН", 
+               "Создание скоринга", "ИНН", "Результат"]
+    first_date = request.GET.get('firstdate') # "2023-11-11 15:15"
+    second_date = request.GET.get('seconddate')
     with connection.cursor() as cursor:
         if first_date and second_date:
             text_query = f"""
@@ -1217,7 +1222,7 @@ def DownloadJournalData(request):
                 join scoring_model_inns smi 
                 on sm.id = smi.scoringmodel_id 
                 join inn_res ir on ir.id = smi.innres_id
-                where date(ir.created_date) BETWEEN "{first_date}" and "{second_date}" 
+                where date(ir.created_date) BETWEEN {first_date} and {second_date} 
                 order by smi.scoringmodel_id
                 ;
                 """
@@ -1239,7 +1244,24 @@ def DownloadJournalData(request):
                 join scoring_model_inns smi 
                 on sm.id = smi.scoringmodel_id 
                 join inn_res ir on ir.id = smi.innres_id
-                where date(ir.created_date) = "{date_one}" 
+                where date(ir.created_date) = {date_one}
+                order by smi.scoringmodel_id
+                ;
+                """
+        else:
+            text_query = f"""
+                select 
+                    smi.scoringmodel_id
+                    , sm.model_name 
+                    , sm.author_id
+                    , smi.innres_id 
+                    , ir.created_date 
+                    , ir.inn
+                    , ir.result_score
+                from scoring_model sm 
+                join scoring_model_inns smi 
+                on sm.id = smi.scoringmodel_id 
+                join inn_res ir on ir.id = smi.innres_id
                 order by smi.scoringmodel_id
                 ;
                 """

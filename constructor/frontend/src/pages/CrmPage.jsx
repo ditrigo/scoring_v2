@@ -21,6 +21,7 @@ const CrmPage = () => {
       const { data } = await httpService.get(`crm_client/`)
       // console.log(data.data)
       setClients(data.data)
+      // console.log(clients)
     } catch (error) {
       console.log("🚀 ~ file: CrmPage.jsx:19 ~ getClients ~ error:", error)
     }
@@ -88,11 +89,7 @@ const CrmPage = () => {
           </Link>
         </div>
         <div className="col-md-auto mt-1 mb-1">
-          <MyButton
-            onClick = {() => downLoadCrmDatas()}
-          >
-            Скачать данные
-          </MyButton>
+          <MyButton onClick={() => downLoadCrmDatas()}>Скачать данные</MyButton>
         </div>
       </div>
       {clients ? (
