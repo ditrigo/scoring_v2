@@ -41,6 +41,7 @@ urlpatterns = [
     
     # Test
     re_path(r"^for_journal/$", ForJournalViewSet, name="for_journal"),
+    re_path(r"^data_for_journal/$", DownloadJournalData, name="data_for_journal"),
 
     ### CRM URLS ###########################################################################################
     #----------------

@@ -1,5 +1,6 @@
 # import datetime
 from datetime import date
+from tempfile import TemporaryDirectory
 from django.urls import reverse
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -1183,7 +1184,76 @@ def ForJournalViewSet(request):
                      "response":json.loads(df.to_json(orient="records")) }, 
                      status=status.HTTP_200_OK)
 
-             
+
+@api_view(['GET'])
+def DownloadJournalData(request):
+
+    guid = 'file_db_import_' + uuid.uuid4().hex
+    
+    # with TemporaryDirectory() as tmp_dir:
+    #     filename = f'{tmp_dir}/ScoreResults_{guid}.xlsx'
+
+    #Создадим дирректорию для хранения файлов
+    dir_name = 'statistic_files'
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
+
+    filename = f'{dir_name}/journal_{guid}.xlsx'
+    columns = ["id скоринговой модели", "Наименование модели", "Создатель модели", "id ИНН", "Создание скоринга", "ИНН", "Результат"]
+    first_date = "2023-11-11 15:15"
+    second_date = "2023-11-12 15:15"
+    with connection.cursor() as cursor:
+        if first_date and second_date:
+            text_query = f"""
+                select 
+                    smi.scoringmodel_id
+                    , sm.model_name 
+                    , sm.author_id
+                    , smi.innres_id 
+                    , ir.created_date 
+                    , ir.inn
+                    , ir.result_score
+                from scoring_model sm 
+                join scoring_model_inns smi 
+                on sm.id = smi.scoringmodel_id 
+                join inn_res ir on ir.id = smi.innres_id
+                where date(ir.created_date) BETWEEN "{first_date}" and "{second_date}" 
+                order by smi.scoringmodel_id
+                ;
+                """
+        elif first_date or second_date:
+            if first_date:
+                date_one = first_date
+            else:
+                date_one = second_date
+            text_query = f"""
+                select 
+                    smi.scoringmodel_id
+                    , sm.model_name 
+                    , sm.author_id
+                    , smi.innres_id 
+                    , ir.created_date 
+                    , ir.inn
+                    , ir.result_score
+                from scoring_model sm 
+                join scoring_model_inns smi 
+                on sm.id = smi.scoringmodel_id 
+                join inn_res ir on ir.id = smi.innres_id
+                where date(ir.created_date) = "{date_one}" 
+                order by smi.scoringmodel_id
+                ;
+                """
+        
+        cursor.execute(text_query)
+        data = cursor.fetchall()
+        df = pd.DataFrame(data, columns=columns).fillna('')
+        with pd.ExcelWriter(filename, engine='xlsxwriter') as writer:
+            df.to_excel(writer, sheet_name='Выгрузка', index=False,)
+
+        response = FileResponse(open(filename, 'rb'), status=status.HTTP_200_OK)
+        return response
+    
+    return Response({'message': 'Что-то пошло не так'}, status=status.HTTP_400_BAD_REQUEST)
 
 ### CRM VIEWS ###########################################################################################
 

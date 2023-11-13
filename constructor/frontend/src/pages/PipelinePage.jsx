@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react"
 import MyButton from "../components/UI/MyButton/MyButton"
 import MyInput from "../components/UI/MyInput/MyInput"
 import "bootstrap/dist/css/bootstrap.css"
-import DatePicker from "react-datepicker"
+import DatePicker, { registerLocale } from "react-datepicker"
+import ru from 'date-fns/locale/ru';
+
 import axios from "axios"
 import "react-datepicker/dist/react-datepicker.css"
 import SelectField from "../components/CrmPage/Form/SelectField"
@@ -15,7 +17,7 @@ import configFile from "../config.json"
 
 const PipelinePage = () => {
   const [open, setOpen] = useState(true)
-
+  
   //   Для отображения в дальнейшем различных элементов
   // const [block, setBlock] = useState([
   //   { name: "Статические данные", open: false },
@@ -25,6 +27,8 @@ const PipelinePage = () => {
   //   { name: "Журнал скоринга", open: false },
   // ])
   const [startDate, setStartDate] = useState(new Date())
+  registerLocale("ru", ru);
+  
   const [models, setModels] = useState([])
   const [inputINN, setInputINN] = useState("")
   const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
@@ -198,10 +202,11 @@ const PipelinePage = () => {
                       <td>Отчетная дата</td>
                       <td>
                         <DatePicker
+                          locale="ru"
                           selected={startDate}
                           onChange={(date) => setStartDate(date)}
                           isClearable
-                          placeholderText="I have been cleared!"
+                          placeholderText="дд.мм.гггг"
                           dateFormat="dd/MM/yyyy"
                         />
                       </td>
