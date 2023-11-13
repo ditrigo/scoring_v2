@@ -621,6 +621,19 @@ class NegativeDecision(models.Model):    # KPI -> PositiveDecision
     def __str__(self):
         return self.negative_decision
 
+
+class CatalogPRD(models.Model): # Справочник ПРД
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    created_date = models.DateTimeField(auto_now_add=True)
+    catalog_prd = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        db_table ='prd_catalog'
+ 
+    def __str__(self):
+        return self.catalog_prd
 #---------------------
 
 #---------------------
@@ -758,6 +771,7 @@ class Client(models.Model):
     representitive_client = models.ForeignKey(ClientRepresentative, on_delete=models.CASCADE) # Представитель клиента
     # support_measure = models.ForeignKey(SupportMeasure, on_delete=models.CASCADE) # Мера поддержки
     compliance_criteria = models.ForeignKey(ComplianceCriteria, on_delete=models.CASCADE) # Мера поддержки
+    prd_catalog = models.ForeignKey(CatalogPRD, on_delete=models.CASCADE) # ПРД каталог
     first_meeting_date = models.DateField(blank=True, null=True) # Дата первой встречи
     event_date = models.DateTimeField(blank=True, null=True) # Дата наступления события
     event_description = models.TextField(blank=True, null=True) # Описание события

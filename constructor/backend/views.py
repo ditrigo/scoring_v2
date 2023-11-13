@@ -1488,6 +1488,7 @@ def CreateRelationClient(request):
                 region = Region.objects.get(id=request.data.get('region_id'))
                 manager = Manager.objects.get(id=request.data.get('manager_id'))
                 applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status'))
+                prd_catalog = CatalogPRD.objects.get(id=request.data.get('prd_catalog_id'))
 
                 serializer_body = ClientRepresentativeSerializer(data=request.data.get('representitive_client_id'))
                 if not serializer_body.is_valid():
@@ -1555,6 +1556,7 @@ def CreateRelationClient(request):
                     representitive_client_id = representitive_client_id,
                     compliance_criteria_id = compliance_criteria_id,
                     first_meeting_date = request.data.get('first_meeting_date'),
+                    prd_catalog = prd_catalog,
                     event_date = request.data.get('event_date'),
                     event_description = request.data.get('event_description'),
                     kpi_id = kpi_id,
