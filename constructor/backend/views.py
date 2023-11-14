@@ -23,6 +23,7 @@ from django.db import transaction, connection
 import os
 from django.http import HttpResponse
 from .pyparser import *
+import xlsxwriter
 
 
 # from import_export import mixins
@@ -1187,13 +1188,24 @@ def ForJournalViewSet(request):
 
 @api_view(['GET'])
 def DownloadJournalData(request):
-    # print(request)
-    print(request.GET.get('firstdate'))
+
+    date_time = request.GET.get('date') # "2023-11-11 15:15"
+    user_id = request.GET.get('user')
+    model_id = request.GET.get('model')
+
+    where_data = ""
+    if not date_time is None:
+        where_data = f"AND date(ir.created_date) = {date_time}"
+
+    where_user_id = ""
+    if not user_id is None:
+        where_user_id = f"AND sm.author_id = {user_id}"
+
+    where_model_id = ""
+    if not model_id is None:
+        where_model_id = f"AND smi.scoringmodel_id = {model_id}"
 
     guid = 'file_db_import_' + uuid.uuid4().hex
-    
-    # with TemporaryDirectory() as tmp_dir:
-    #     filename = f'{tmp_dir}/ScoreResults_{guid}.xlsx'
 
     #Создадим дирректорию для хранения файлов
     dir_name = 'statistic_files'
@@ -1201,81 +1213,114 @@ def DownloadJournalData(request):
         os.makedirs(dir_name)
 
     filename = f'{dir_name}/journal_{guid}.xlsx'
-    columns = ["id скоринговой модели", 
-               "Наименование модели", 
-               "Создатель модели", "id ИНН", 
-               "Создание скоринга", "ИНН", "Результат"]
-    first_date = request.GET.get('firstdate') # "2023-11-11 15:15"
-    second_date = request.GET.get('seconddate')
+    columns = ["id модели", 
+               "Пользователь",
+               "Наименование организации", 
+               "Дата сведений", 
+               "Модель",
+               "ИНН", 
+               "Ключ",
+               "Значение"]
+  
     with connection.cursor() as cursor:
-        if first_date and second_date:
-            text_query = f"""
-                select 
-                    smi.scoringmodel_id
-                    , sm.model_name 
-                    , sm.author_id
-                    , smi.innres_id 
-                    , ir.created_date 
-                    , ir.inn
-                    , ir.result_score
-                from scoring_model sm 
-                join scoring_model_inns smi 
-                on sm.id = smi.scoringmodel_id 
-                join inn_res ir on ir.id = smi.innres_id
-                where date(ir.created_date) BETWEEN {first_date} and {second_date} 
-                order by smi.scoringmodel_id
-                ;
-                """
-        elif first_date or second_date:
-            if first_date:
-                date_one = first_date
-            else:
-                date_one = second_date
-            text_query = f"""
-                select 
-                    smi.scoringmodel_id
-                    , sm.model_name 
-                    , sm.author_id
-                    , smi.innres_id 
-                    , ir.created_date 
-                    , ir.inn
-                    , ir.result_score
-                from scoring_model sm 
-                join scoring_model_inns smi 
-                on sm.id = smi.scoringmodel_id 
-                join inn_res ir on ir.id = smi.innres_id
-                where date(ir.created_date) = {date_one}
-                order by smi.scoringmodel_id
-                ;
-                """
-        else:
-            text_query = f"""
-                select 
-                    smi.scoringmodel_id
-                    , sm.model_name 
-                    , sm.author_id
-                    , smi.innres_id 
-                    , ir.created_date 
-                    , ir.inn
-                    , ir.result_score
-                from scoring_model sm 
-                join scoring_model_inns smi 
-                on sm.id = smi.scoringmodel_id 
-                join inn_res ir on ir.id = smi.innres_id
-                order by smi.scoringmodel_id
-                ;
-                """
+        text_query = f"""
+            SELECT 
+                smi.scoringmodel_id as model_id,
+                sm.author_id,
+                ia.np_name,
+                ia.report_date,
+                sm.model_name,
+                ir.inn,
+                tr.key, 
+                tr.value 
+                
+                FROM inn_res ir, json_tree(result_score) as tr
+                JOIN scoring_model_inns smi 
+                ON smi.innres_id = ir.id 
+                JOIN scoring_model sm 
+                ON sm.id = smi.scoringmodel_id 
+                JOIN imported_attributes ia 
+                ON ia.inn = ir.inn
+                WHERE tr.key is not null 
+                AND typeof(tr.key) != 'integer'
+                {where_data}
+                {where_model_id}
+                {where_user_id}
+                ORDER BY smi.scoringmodel_id;
+            """
         
         cursor.execute(text_query)
         data = cursor.fetchall()
         df = pd.DataFrame(data, columns=columns).fillna('')
-        with pd.ExcelWriter(filename, engine='xlsxwriter') as writer:
-            df.to_excel(writer, sheet_name='Выгрузка', index=False,)
+
+        list_models = df['id модели'].unique()
+        list_date = df['Дата сведений'].unique()
+        list_users = df['Пользователь'].unique()
+
+        with xlsxwriter.Workbook(filename) as writer:
+            cell_format_header = writer.add_format({'bold': True, 'align': 'center', 'border':1, 'text_wrap': True})
+            for row_model in list_models:
+                for row_user in list_users:
+                    for row_date in list_date:
+
+                        name_model = df.loc[df['id модели']==row_model, 'Модель'].iloc[0]
+
+                        name_sheet = f'{name_model}_{row_date}'.replace(':','_').replace(':','_')[:30]
+                        worksheet = writer.add_worksheet(name_sheet)
+
+                        worksheet.merge_range('A1:A2', 'Наименование организации', cell_format_header)
+                        worksheet.merge_range('B1:B2', 'Дата сведений', cell_format_header)
+                        worksheet.merge_range('C1:C2', 'ИНН', cell_format_header)
+                        worksheet.merge_range('D1:D2', 'Итоговый результат', cell_format_header)
+                        
+                        df_markers = df.loc[df['id модели']==row_model]
+                        df_markers = df_markers.loc[df_markers['Дата сведений']==row_date]
+                        df_markers = df_markers.loc[df_markers['Пользователь']==row_user]
+
+                        first_row = True
+                       
+                        for num, inn in enumerate(df_markers['ИНН'].unique()):
+                            
+                            df_key_value = df_markers.loc[df['ИНН']==inn]
+                            row_org = df_key_value.loc[df_key_value['Ключ']=='total_rank'].iloc[0]
+                            
+                            worksheet.write(num + 2, 0, row_org['Наименование организации'])
+                            worksheet.write(num + 2, 1, str(row_org['Дата сведений']))
+                            worksheet.write(num + 2, 2, f' {row_org["ИНН"]}')
+                            worksheet.write(num + 2, 3, row_org['Значение'])
+                            
+                            worksheet.set_column(num + 2, 0, 18)
+                            worksheet.set_column(num + 2, 1, 18)
+                            worksheet.set_column(num + 2, 2, 18)
+                            worksheet.set_column(num + 2, 3, 18)
+
+                            for index in ['marker_name', 'target_value', 'value']:
+                                count_target_row = num + 2
+                                count_target_col = 4
+                                
+                                df_value = df_key_value.loc[df_key_value['Ключ']==index]
+
+                                for ind in df_value.index:
+                                    row_value = df_value.loc[ind]
+                                    
+                                    # Заголовок
+                                    if index == 'marker_name':
+                                        if first_row:
+                                            worksheet.merge_range(0, count_target_col, 0, count_target_col + 1, str(row_value['Значение']), cell_format_header) 
+                                            worksheet.write(1, count_target_col, 'Значение', cell_format_header) 
+                                            worksheet.write(1, count_target_col + 1, 'Результат', cell_format_header) 
+                                    else:
+                                        if index == 'target_value':
+                                            worksheet.write(count_target_row, count_target_col, str(row_value['Значение']))
+                                        else:
+                                            worksheet.write(count_target_row, count_target_col + 1, str(row_value['Значение']))
+                                        worksheet.set_column(count_target_row, count_target_col + 1, 18)
+
+                                    count_target_col += 2
+                            first_row = False
 
         response = FileResponse(open(filename, 'rb'), status=status.HTTP_200_OK)
         return response
-    
-    return Response({'message': 'Что-то пошло не так'}, status=status.HTTP_400_BAD_REQUEST)
 
 ### CRM VIEWS ###########################################################################################
 

@@ -107,6 +107,10 @@ const NewClientPage = () => {
         message: "ИНН должен содержать от 10 символов.",
         value: 10,
       },
+      maxCount: {
+        message: "Не больше 10 знаков",
+        value: 10,
+      },
     },
     applicant_status: {
       isRequired: {
@@ -217,12 +221,12 @@ const NewClientPage = () => {
       "type",
       "debt_type")
     getTransformedData(
-      "crm_prd_catalog", 
+      "crm_prd_catalog",
       setPrdCatalog,
       "catalog_prd",
       "prd_catalog_id"
     )
-    
+
 
     axios
       .get(`${configFile.apiEndPoint}/crm_managers/`)
@@ -565,7 +569,11 @@ const NewClientPage = () => {
       key: "",
       type: "title",
     },
-    { label: "Сумма задолженности", key: "debt_amount", type: "text" },
+    {
+      label: "Сумма задолженности",
+      key: "debt_amount",
+      type: "text"
+    },
     { label: "Тип долга", key: "debt_type", type: "select", options: type },
     {
       label: "Категория предприятия",
@@ -854,14 +862,23 @@ const NewClientPage = () => {
                   onClick={handleSubmit}
                   disabled={!isValid}
                 >
-                  Сохранить
+{/* 
+                  <Link
+                    to="/crm"
+                    className="nav-link m-2"
+                    onClick={() => window.location.reload()}
+                  > */}
+                    Сохранить
+                  {/* </Link> */}
                 </button>
 
                 <button
                   className="btn btn-danger w-25 mx-auto m-2 col-sm-3"
                   onClick={handleCancle}
                 >
-                  <Link to="/crm" className="nav-link m-2">
+                  <Link to="/crm"
+                    className="nav-link m-2"
+                  >
                     Назад
                   </Link>
                 </button>

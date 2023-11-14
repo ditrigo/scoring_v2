@@ -762,16 +762,17 @@ class Client(models.Model):
     first_name = models.CharField(max_length=255, blank=True, null=True)
     second_name = models.CharField(max_length=255, blank=True, null=True)
     patronymic = models.CharField(max_length=255, blank=True, null=True)
-    inn = models.IntegerField() # ИНН
+    inn = models.IntegerField(blank=True, null=True) # ИНН
     # registration_date = models.DateTimeField() это, наверное,  ClientRepresentative.control_point 
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
-    manager = models.ForeignKey(Manager, on_delete=models.CASCADE)
-    applicant_status = models.ForeignKey(ApplicantStatus, on_delete=models.CASCADE) # Статус заявителя
-    information_source = models.ForeignKey(InformationSource, on_delete=models.CASCADE) # Источник информации
-    representitive_client = models.ForeignKey(ClientRepresentative, on_delete=models.CASCADE) # Представитель клиента
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, blank=True, null=True)
+    manager = models.ForeignKey(Manager, on_delete=models.CASCADE, blank=True, null=True)
+    applicant_status = models.ForeignKey(ApplicantStatus, on_delete=models.CASCADE, blank=True, null=True) # Статус заявителя
+    information_source = models.ForeignKey(InformationSource, on_delete=models.CASCADE, blank=True, null=True) # Источник информации
+    representitive_client = models.ForeignKey(ClientRepresentative, on_delete=models.CASCADE, blank=True, null=True) # Представитель клиента
     # support_measure = models.ForeignKey(SupportMeasure, on_delete=models.CASCADE) # Мера поддержки
-    compliance_criteria = models.ForeignKey(ComplianceCriteria, on_delete=models.CASCADE) # Мера поддержки
-    prd_catalog = models.ForeignKey(CatalogPRD, on_delete=models.CASCADE) # ПРД каталог
+    compliance_criteria = models.ForeignKey(ComplianceCriteria, on_delete=models.CASCADE, blank=True, null=True) # Мера поддержки
+    stage_review = models.ForeignKey(ReviewStage, on_delete=models.CASCADE, blank=True, null=True) # Мера поддержки
+    prd_catalog = models.ForeignKey(CatalogPRD, on_delete=models.CASCADE, blank=True, null=True) # ПРД каталог
     first_meeting_date = models.DateField(blank=True, null=True) # Дата первой встречи
     event_date = models.DateTimeField(blank=True, null=True) # Дата наступления события
     event_description = models.TextField(blank=True, null=True) # Описание события
