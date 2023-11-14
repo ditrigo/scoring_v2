@@ -184,6 +184,8 @@ class ClientSerializer(serializers.ModelSerializer):
     compliance_criteria = ComplianceCriteriaSerializer(many=False, read_only=True)
     kpi = KPISerializer(many=False, read_only=True)
     prd_catalog = CatalogPRDSerializer(many=False, read_only=True)
+    stage_review = ReviewStageSerializer(many=False, read_only=True)
+
     class Meta:
         model = Client
         fields = "__all__"
