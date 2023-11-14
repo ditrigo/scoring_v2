@@ -38,7 +38,7 @@ const ContentRows = ({ clients }) => {
           <td className={makeClassName("Средний риск")}>нет в json</td>
           <td className={makeClassName("Высокий риск")}>нет в json</td>
           <td>нет в json</td>
-          <td>{el.representitive_client.control_point}</td>
+          <td>{el.event_date}</td>
         </tr>
       )
     })

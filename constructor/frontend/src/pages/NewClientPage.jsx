@@ -11,14 +11,12 @@ import {
   transformRegionsData,
 } from "../components/utils/crmHelper"
 import configFile from "../config.json"
-// import ReactDatePicker from "react-datepicker"
 import httpService from "../services/http.service"
 
 const NewClientPage = () => {
   const params = useParams()
   const [client, setClient] = useState([])
   const [errors, setErrors] = useState({})
-  // const [startDate, setStartDate] = useState()
 
   const [regions, setRegions] = useState({})
   const [support, setSupport] = useState({})
@@ -31,8 +29,10 @@ const NewClientPage = () => {
   const [type, setType] = useState({})
   const [managers, setManagers] = useState({})
   const [prdCatalog, setPrdCatalog] = useState({})
+  const [fieldsOfPosDec, setfieldsOfPosDec] = useState([])
+  const [dataOfFieldsDec, setDataOfFieldsDec] = useState([])
   const [clientData, setClientData] = useState({
-    test: "",
+    // test: "",
 
     first_name: "",
     second_name: "",
@@ -70,16 +70,12 @@ const NewClientPage = () => {
     overdue_debt_amount: "",
     technical_overdue_debt_amount: "",
     // DENIS
+    stage_review: "",
     prd_catalog_id: "",
   })
 
   let validatorConfig = {
-    support_measure: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-    region_id: {
+    prd_catalog_id: {
       isRequired: {
         message: "Это поле обязательно для заполнения",
       },
@@ -89,16 +85,16 @@ const NewClientPage = () => {
         message: "Это поле обязательно для заполнения",
       },
     },
-    second_name: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-    patronymic: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
+    // second_name: {
+    //   isRequired: {
+    //     message: "Это поле обязательно для заполнения",
+    //   },
+    // },
+    // patronymic: {
+    //   isRequired: {
+    //     message: "Это поле обязательно для заполнения",
+    //   },
+    // }, /// - заменить на одно поле
     inn: {
       isRequired: {
         message: "Это поле обязательно для заполнения",
@@ -108,18 +104,46 @@ const NewClientPage = () => {
         value: 10,
       },
     },
+    region_id: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
     applicant_status: {
       isRequired: {
         message: "Это поле обязательно для заполнения",
       },
     },
-    // PRD: {
-    //   isRequired: {
-    //     message: "Это поле обязательно для заполнения",
-    //   },
-    // },
-
+    control_point: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    debt_amount: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    debt_type: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
     category: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    support_measure: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
+    event_date: {
       isRequired: {
         message: "Это поле обязательно для заполнения",
       },
@@ -129,45 +153,35 @@ const NewClientPage = () => {
         message: "Это поле обязательно для заполнения",
       },
     },
-    debt_type: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-    debt_amount: {
-      maxCount: {
-        message: "Не больше 6 знаков",
-        value: 6,
-      },
-    },
+
     ///////////////////////////////////////////////////////////// для следущюих полей нет ключей! Создал пока свои!
-    stage: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-    dateAppealsToMIDUOL: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-    deptSum: {
-      isRequired: {
-        message: "Это поле обязательно для заполнения",
-      },
-    },
-    termMesureNecessary: {
-      max: {
-        message: "Не более 36",
-        value: 36,
-      },
-    },
-    termMesure: {
-      max: {
-        message: "Не более 36",
-        value: 36,
-      },
-    },
+    // stage: {
+    //   isRequired: {
+    //     message: "Это поле обязательно для заполнения",
+    //   },
+    // },
+    // dateAppealsToMIDUOL: {
+    //   isRequired: {
+    //     message: "Это поле обязательно для заполнения",
+    //   },
+    // },
+    // deptSum: {
+    //   isRequired: {
+    //     message: "Это поле обязательно для заполнения",
+    //   },
+    // },
+    // termMesureNecessary: {
+    //   max: {
+    //     message: "Не более 36",
+    //     value: 36,
+    //   },
+    // },
+    // termMesure: {
+    //   max: {
+    //     message: "Не более 36",
+    //     value: 36,
+    //   },
+    // },
   }
 
   const isValid = Object.keys(errors).length === 0
@@ -185,7 +199,7 @@ const NewClientPage = () => {
       "category_type",
       "support_measure"
     )
-    getTransformedData("crm_review_stage", setStage, "stage", "stage")
+    getTransformedData("crm_review_stage", setStage, "stage", "stage_review")
     getTransformedData("crm_category", setCategory, "type", "category")
     getTransformedData(
       "crm_applicant_status",
@@ -211,18 +225,13 @@ const NewClientPage = () => {
       "negative_decision",
       "negative_decision_type"
     )
+    getTransformedData("crm_dept_type", setType, "type", "debt_type")
     getTransformedData(
-      "crm_dept_type",
-      setType,
-      "type",
-      "debt_type")
-    getTransformedData(
-      "crm_prd_catalog", 
+      "crm_prd_catalog",
       setPrdCatalog,
       "catalog_prd",
       "prd_catalog_id"
     )
-    
 
     axios
       .get(`${configFile.apiEndPoint}/crm_managers/`)
@@ -298,7 +307,9 @@ const NewClientPage = () => {
       event_description: clientData.event_description,
       // DENIS
       prd_catalog_id: clientData.prd_catalog_id,
+      stage_review: clientData.stage_review,
       fields_of_positive_decision: [
+        ...Object.values(dataOfFieldsDec),
         // {
         //   id: 5,
         //   fields_of_pos_decision: 5,
@@ -319,22 +330,19 @@ const NewClientPage = () => {
           `crm_update_relation_client/${params.id}`,
           json
         )
+        alert("Клиент обновлен " + data.message)
         console.log(data)
       } catch (error) {
-        console.log(
-          "🚀 ~ file: NewClientPage.jsx:238 ~ handleSubmit ~ error:",
-          error
-        )
+        alert("Ошибка: " + error.response.data.message)
       }
     } else {
       try {
         const { data } = await httpService.post(`crm_create_client/`, json)
-        // console.log(data)
+        alert("Ответ сервера: " + data.message)
+        console.log(data)
       } catch (error) {
-        console.log(
-          "🚀 ~ file: NewClientPage.jsx:238 ~ handleSubmit ~ error:",
-          error
-        )
+        console.log("🚀 error:", error.response.data.message)
+        alert("Ошибка: " + error.response.data.message)
       }
     }
 
@@ -355,6 +363,17 @@ const NewClientPage = () => {
       }))
     }
 
+    if (Number.isInteger(+target.name)) {
+      setDataOfFieldsDec((prevState) => ({
+        ...prevState,
+        [target.name]: {
+          id: "",
+          fields_of_pos_decision: target.name,
+          value: target.value,
+        },
+      }))
+    }
+
     setClientData((prevState) => ({
       ...prevState,
       [target.name]: target.value,
@@ -368,54 +387,11 @@ const NewClientPage = () => {
     { label: "Средний риск", value: "Средний риск", name: "solvencyRisk" },
     { label: "Низкий риск", value: "Низкий риск", name: "solvencyRisk" },
   ]
-  // const activityRisk = [
-  //   { label: "Высокий риск", value: "Высокий риск", name: "activityRisk" },
-  //   { label: "Средний риск", value: "Средний риск", name: "activityRisk" },
-  //   { label: "Низкий риск", value: "Низкий риск", name: "activityRisk" },
-  // ]
-  // const withdrawalOfAssetsRisk = [
-  //   {
-  //     label: "Высокий риск",
-  //     value: "Высокий риск",
-  //     name: "withdrawalOfAssetsRisk",
-  //   },
-  //   {
-  //     label: "Средний риск",
-  //     value: "Средний риск",
-  //     name: "withdrawalOfAssetsRisk",
-  //   },
-  //   {
-  //     label: "Низкий риск",
-  //     value: "Низкий риск",
-  //     name: "withdrawalOfAssetsRisk",
-  //   },
-  // ]
-
-  // const PRD = [
-  //   {
-  //     label: "МИУДОЛ",
-  //     value: "МИУДОЛ",
-  //     name: "PRD",
-  //   },
-  //   {
-  //     label: "РП Республика Коми",
-  //     value: "РП Республика Коми",
-  //     name: "PRD",
-  //   },
-  //   {
-  //     label: "РП Республика Карелия",
-  //     value: "РП Республика Карелия",
-  //     name: "PRD",
-  //   },
-  // ]
-
-  // const [testData, setTestData] = useState({})
-  // const [users, setUsers] = useState()
-  // const [testApi, setTestApi] = useState()
 
   const getClients = async () => {
     try {
       const { data } = await httpService.get(`crm_client/`)
+      console.log(data)
       const client = data.data.filter((el) => {
         // console.log("el: ", el.id, "params: ", params.id)
         return el.id === +params.id
@@ -432,10 +408,9 @@ const NewClientPage = () => {
   }, [])
 
   useEffect(() => {
-    if (params.id && client) {
-      // console.log(client[0])
+    if (params.id && client[0]) {
+      // console.log(client)
       setClientData({
-        ...clientData,
         first_name: client[0].first_name,
         second_name: client[0].second_name,
         patronymic: client[0].patronymic,
@@ -478,16 +453,11 @@ const NewClientPage = () => {
         overdue_debt_amount: 777,
         technical_overdue_debt_amount: 888,
         // DENIS
-        prd_catalog_id: client[0].prd_catalog_id.id
+        prd_catalog_id: client[0].prd_catalog.id,
+        stage_review: client[0].stage_review?.id,
       })
     }
   }, [client])
-
-  // useEffect(() => {
-  //   if (params.id && users) {
-  //     testApi && setTestData(testApi[0])
-  //   }
-  // }, [testApi])
 
   useEffect(() => {
     validate()
@@ -514,30 +484,75 @@ const NewClientPage = () => {
     }
   }
 
+  const getfieldsOfPositivDecision = async (id) => {
+    try {
+      const { data } = await httpService.get(
+        `crm_fields_of_positiv_decision/${id}`
+      )
+      // console.log(data.data)
+      const res = data.data.map((el) => {
+        setClientData((prevState) => ({
+          ...prevState,
+          [el.id]: "",
+        }))
+        return {
+          label: el.description,
+          key: el.id,
+          type: el.type_of_fields === "datetime" ? "date" : "text",
+        }
+      })
+      setfieldsOfPosDec(res)
+
+      // console.log(res)
+    } catch (error) {
+      console.log("🚀 ~ ", error)
+    }
+  }
+  useEffect(() => {
+    getfieldsOfPositivDecision(clientData.positive_decision_type)
+  }, [clientData.positive_decision_type])
+
   const inputsData = [
+    { label: "1. Общие сведения", key: "", type: "title" },
     {
       label: "Представительство ПРД",
       key: "prd_catalog_id",
       type: "select",
       options: prdCatalog,
     },
-    { label: "Наименование клиента", key: "", type: "title" },
-    { label: "Имя", key: "first_name", type: "text" },
-    { label: "Фамилия", key: "second_name", type: "text" },
-    { label: "Отчество", key: "patronymic", type: "text" },
+    {
+      label: "Менеджер площадки",
+      key: "manager_id",
+      type: "select",
+      options: managers,
+    },
+    {
+      label: "Имя (пока можно здесь указать наименование клиента)",
+      key: "first_name",
+      type: "text",
+    },
+    // { label: "Фамилия", key: "second_name", type: "text" },
+    // { label: "Отчество", key: "patronymic", type: "text" }, /// - заменить на одно поле
+
     { label: "ИНН", key: "inn", type: "text" },
-    { label: "Первичные учетные данные", key: "", type: "title" },
+    {
+      label: "Стадия рассмотрения",
+      key: "stage_review",
+      type: "select",
+      options: stage,
+    },
+
+    { label: "2. Первичные учетные данные", key: "", type: "title" },
     { label: "Регион", key: "region_id", type: "select", options: regions },
-    { label: "Менеджер", key: "manager_id", type: "select", options: managers },
     {
       label: "Статус заявителя",
       key: "applicant_status",
       type: "select",
       options: status,
     },
-    { label: "Источник информации", key: "", type: "title" },
+    { label: "Источник информации", key: "", type: "title2" },
     {
-      label: "Тип источника информации",
+      label: "Тип источника информации (Письмо / список / поручение)",
       key: "info_source_type_id",
       type: "select",
       options: sources,
@@ -552,16 +567,20 @@ const NewClientPage = () => {
       key: "info_source_number",
       type: "text",
     },
-    { label: "Представитель клиента", key: "", type: "title" },
-    { label: "Имя", key: "representative_first_name", type: "text" },
+    { label: "Представители клиента", key: "", type: "title2" },
     { label: "Фамилия", key: "representative_second_name", type: "text" },
+    { label: "Имя", key: "representative_first_name", type: "text" },
     { label: "Отчество", key: "representative_patronymic", type: "text" },
     { label: "Должность", key: "representative_position", type: "text" },
-    { label: "Номер", key: "representative_phone", type: "text" },
+    { label: "Телефон", key: "representative_phone", type: "text" },
     { label: "Электронная почта", key: "representative_email", type: "text" },
-    { label: "Дата обращения в МИУДОЛ", key: "control_point", type: "date" },
     {
-      label: "Критерии соответствия клиентским требованиям",
+      label: "Дата регистрации обращения в МИУДОЛ",
+      key: "control_point",
+      type: "date",
+    },
+    {
+      label: "3. Критерии соответствия клиентским требованиям",
       key: "",
       type: "title",
     },
@@ -580,56 +599,72 @@ const NewClientPage = () => {
       options: support,
     },
     {
-      label:
-        "Примечание к описанию события в рамках согласительных меропрятий (гр.22)",
+      label: "Примечание к мере поддержки",
       key: "note",
       type: "text",
     },
     {
-      label: "Срок, на который необходимо предоставить меру поддержки",
+      label: "Срок, на который необходимо предоставить меру поддержки (мес)",
       key: "support_duration",
       type: "text",
     },
-    { label: "Согласительные меры", key: "", type: "title" },
+
+    { label: "4. Согласительные мероприятия", key: "", type: "title" },
     {
-      label: "Дата первой встречи в рамках согласительных мероприятий",
+      label: "Дата первой встречи",
       key: "first_meeting_date",
       type: "date",
     },
     {
-      label: "Дата наступления события в рамках согласительных мероприятий",
+      label: "Контрольная точка (Дата наступления события)",
       key: "event_date",
       type: "date",
     },
     {
-      label: "Описание события в рамках согласительных мероприятий",
+      label: "Описание события ",
       key: "event_description",
       type: "text",
     },
     {
-      label: "Ключевые показатели эффективности (KPI)",
+      label: "5. Ключевые показатели эффективности (KPI)",
       key: "",
       type: "title",
     },
-    { label: "Принятое решение", key: "", type: "title" },
+    { label: "Принятое решение", key: "", type: "title2" },
     {
       label: "Вид положительного решения",
       key: "positive_decision_type",
       type: "select",
       options: positive,
     },
+
+    fieldsOfPosDec.length && fieldsOfPosDec[0],
+    fieldsOfPosDec.length && fieldsOfPosDec[1] ? fieldsOfPosDec[1] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[2] ? fieldsOfPosDec[2] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[3] ? fieldsOfPosDec[3] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[4] ? fieldsOfPosDec[4] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[5] ? fieldsOfPosDec[5] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[6] ? fieldsOfPosDec[6] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[7] ? fieldsOfPosDec[7] : "",
+
     {
-      label: "Дата принятия положительного решения",
+      label: "Дата положительного решения",
       key: "positive_decision_date",
       type: "date",
     },
     {
-      label: "Срок, на который предоставляется мера поддержки (в мес.)",
+      label: "На сколько предоставлена мера (в мес.)",
       key: "measure_provided_duration",
       type: "text",
     },
     {
-      label: "Орган исполнительной власти, от которого поступило ходатайство",
+      label: "Сумма урегулированной задолженности (тыс руб)",
+      key: "settled_debt_amount",
+      type: "text",
+    },
+    // здесь у них поле
+    {
+      label: "От кого ходатайство ОИВ (для МС)",
       key: "oiv_request_sender",
       type: "text",
     },
@@ -640,16 +675,16 @@ const NewClientPage = () => {
       options: negative,
     },
     {
-      label: "Сумма урегулированной задолженности (тыс руб)",
-      key: "settled_debt_amount",
-      type: "text",
+      label: "5. Ключевые показатели эффективности (KPI)",
+      key: "",
+      type: "title",
     },
     {
-      label: "Сумма, поступившая в бюджет",
+      label: "Сумма, поступившая в бюджет (тыс руб)",
       key: "received_amount_budget",
       type: "text",
     },
-    { label: "Просроченная задолженность", key: "", type: "title" },
+    { label: "Просроченная задолженность", key: "", type: "title2" },
     {
       label: "Сумма просроченной задолженности",
       key: "overdue_debt_amount",
@@ -661,62 +696,60 @@ const NewClientPage = () => {
       type: "text",
     },
     ///////////////////////////////////////////////////////////////////////////////////
-    { label: "Следующие поля пока не работают!", key: "", type: "title" }, ///////// delete later
+    { label: "Следующие поля пока не работают!!!", key: "", type: "title" }, ///////// delete later
 
-    { label: "Отлагательные меры", key: "", type: "title" },
+    { label: "Отлагательные меры", key: "", type: "title2" },
     {
-      label:
-        "Ближайший срок исполнения обязательств при принятии отлагательных мер",
+      label: "Ближайший срок исполнения обязательств",
       key: "",
       type: "date",
     },
-    { label: "Изменение сроков уплаты", key: "", type: "title" },
+    { label: "Рассрочка/отсрочка", key: "", type: "title2" },
     {
-      label:
-        "Сумма, не вступившая в силу при рассрочке/отсрочке при принятии меры «Изменение сроков уплаты»",
+      label: "Не вступило в силу рассрочка/отсрочка ",
       key: "",
       type: "text",
     },
-    { label: "Мировое соглашение", key: "", type: "title" },
+    { label: "Мировое соглашение", key: "", type: "title2" },
     {
-      label: 'Номер дела при принятии меры "Мировое соглашение"',
+      label: "Номер дела",
       key: "",
       type: "text",
     },
     {
-      label: "Дата утверждения мирового соглашения судом",
+      label: "Дата утверждения МС судом",
       key: "",
       type: "date",
     },
+    { label: "Дата окончания МС", key: "", type: "date" },
     {
-      label: "Сумма треований, вошедших в мировое соглашение",
+      label: "Сумма треований, вошедших в МС (тыс руб)",
       key: "",
       type: "text",
     },
-    { label: "Дата окончания мирового соглашения", key: "", type: "date" },
     {
-      label: "Сумма исполненных обязательств в рамках мирового соглашения",
+      label: "Сумма исполненных обязательств (тыс руб)",
       key: "",
       type: "text",
     },
-    { label: "Вид предостовляемого обеспечения", key: "", type: "title" },
-    { label: "Предоставляемый залог имущества", key: "", type: "text" },
-    { label: "Предоставляемое поручительство", key: "", type: "text" },
-    { label: "Предоставляемая банковская гарантия", key: "", type: "text" },
-    { label: "Стадия рассмотрения", key: "", type: "select", options: stage },
+    { label: "6. Вид предостовляемого обеспечения", key: "", type: "title" },
+    { label: "Залог имущества (тыс руб)", key: "", type: "text" },
+    { label: "Поручительство (тыс руб)", key: "", type: "text" },
+    { label: "Банковская гарантия (тыс руб)", key: "", type: "text" },
     {
-      label: "Проводимая работа в случае не исполнения предоставления меры",
+      label: "7. Проводимая работа в случае не исполнения предоставления меры",
       key: "",
       type: "title",
     },
-    { label: "Дата направления уведомления должнику", key: "", type: "date" },
-    { label: "Дата направления уведомления поручителю", key: "", type: "date" },
+    { label: "Дата направления уведомления ДОЛЖНИКУ", key: "", type: "date" },
+    { label: "Дата направления уведомления ПОРУЧИТЕЛЮ", key: "", type: "date" },
     {
-      label: "Дата направления уведомления залогодателю",
+      label: "Дата направления уведомления ЗАЛОГОДАТЕЛЮ",
       key: "",
       type: "date",
     },
-    { label: "Постконтроль", key: "", type: "title" },
+    { label: "8. Постконтроль", key: "", type: "title" },
+    // { label: "Подгрузить информацию через ИНН", key: "", type: "title2" },
     {
       label: "Выручка за прошедший отчетный период текущего года",
       key: "",
@@ -744,15 +777,27 @@ const NewClientPage = () => {
     { label: "Сумма ФОТ за предыдущее полугодие", key: "", type: "text" },
     { label: "Прибыль за предыдущее полугодие", key: "", type: "text" },
     {
-      label: "Платежеспособность",
+      label: "Результаты скоринга платежеспособность (не передается на бек)",
       key: "",
       type: "select",
       options: solvencyRisk,
-    }, //risk
-    { label: "Текущая стоимость бизнеса", key: "", type: "text" },
-    { label: "Ликвидационная стоимость бизнеса", key: "", type: "text" },
-    { label: "Возвратность средств", key: "", type: "text" },
-    { label: "Потребность в оборотных средствах", key: "", type: "text" },
+    },
+    {
+      label: "Из выписки СКУАД  - Текущая стоимость бизнеса",
+      key: "",
+      type: "text",
+    },
+    {
+      label: "Из выписки СКУАД  - Ликвидационная стоимость бизнеса",
+      key: "",
+      type: "text",
+    },
+    { label: "Из выписки СКУАД - Возвратность средств", key: "", type: "text" },
+    {
+      label: "Из выписки СКУАД - Потребность в оборотных средствах",
+      key: "",
+      type: "text",
+    },
     { label: "Ранг платежеспособности", key: "", type: "text" },
   ]
 
@@ -767,10 +812,12 @@ const NewClientPage = () => {
                 <Divider />
               </div>
               {inputsData.map((el, ind) => {
+                // console.log(el)
                 if (el.type === "text") {
                   return (
                     <TextField
                       key={ind}
+                      // type="number"
                       label={el.label}
                       name={el.key}
                       value={clientData[el.key]}
@@ -780,13 +827,6 @@ const NewClientPage = () => {
                     />
                   )
                 } else if (el.type === "select") {
-                  // params.id &&
-                  //   client &&
-                  //   console.log(
-                  //     el.options?.filter(
-                  //       (opt) => opt.id === clientData[el.key]
-                  //     )[0]?.label
-                  //   )
                   return (
                     <SelectSearchField
                       key={ind}
@@ -794,10 +834,10 @@ const NewClientPage = () => {
                       label={el.label}
                       name={el.key}
                       placeholder={
-                        params.id && client
-                          ? el.options.filter(
-                            (opt) => opt.id === clientData[el.key]
-                          )[0]?.label
+                        params.id && client[0]
+                          ? el?.options.filter(
+                              (opt) => opt.id === clientData[el.key]
+                            )[0]?.label
                           : el.label
                       }
                       onChange={handleChange}
@@ -817,13 +857,6 @@ const NewClientPage = () => {
                             : "text form-control mt-1 mr-2 border p-2 w-25"
                         }
                       >
-                        {/* <ReactDatePicker
-                          selected={startDate}
-                          onChange={(date) => handleChange(date)}
-                          isClearable
-                          placeholderText="Выберите дату"
-                          dateFormat="dd/MM/yyyy"
-                        /> */}
                         <input
                           type="date"
                           onChange={(date) => handleChange(date)}
@@ -842,6 +875,12 @@ const NewClientPage = () => {
                     <div key={ind}>
                       <h3 className="text-center mt-2">{el.label}</h3>
                       <Divider />
+                    </div>
+                  )
+                } else if (el.type === "title2") {
+                  return (
+                    <div key={ind}>
+                      <h3 className="text-primary mt-2">{el.label}</h3>
                     </div>
                   )
                 }
