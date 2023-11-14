@@ -141,7 +141,7 @@ const ResultTable = ({ getLinkMarkers }) => {
         <div className="mt-4">
           <MyInput
             type="text"
-            placeholder="Введите дату для выгрузки"
+            placeholder="Введите дату выдачи результатов для выгрузки"
             // className="form-group search__input mr-5"
             onChange={(event) => 
               // console.log("VALUE", event.target.value) 
