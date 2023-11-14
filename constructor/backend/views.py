@@ -1617,8 +1617,8 @@ def CreateRelationClient(request):
                     event_description = request.data.get('event_description'),
                     kpi_id = kpi_id,
                 )
-            except:
-                return Response({'message': 'Некорректный ввод данных!'}, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                return Response({'message': 'Некорректный ввод данных!', 'error': f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
         
         return Response({'message': 'Клиент создан'}, status=status.HTTP_200_OK)
     return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)

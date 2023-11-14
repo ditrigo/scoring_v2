@@ -1,6 +1,14 @@
 import React from "react"
 
-const TextField = ({ label, name, value, onChange, error, clientData }) => {
+const TextField = ({
+  label,
+  name,
+  value,
+  onChange,
+  error,
+  clientData,
+  type,
+}) => {
   const handleChange = ({ target }) => {
     onChange({ name: target.name, value: target.value })
   }
@@ -16,7 +24,7 @@ const TextField = ({ label, name, value, onChange, error, clientData }) => {
       <div className="mb-3 has-validation">
         <input
           className={getInputClasses()}
-          type="text"
+          type={type || "text"}
           id={name}
           name={name}
           value={value}
