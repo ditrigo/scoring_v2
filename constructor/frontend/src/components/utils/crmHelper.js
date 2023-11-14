@@ -40,7 +40,8 @@ export const transformManagersData = (data) => {
   const result = data.map((el) => ({
     id: el.id,
     label: `${el.second_name} ${el.first_name}. ${el.patronymic}. ${el.job_title}`,
-    value: `${el.id}`,
+    // Denis
+    value: el.id,
     name: "manager_id",
   }))
   result.unshift({
@@ -54,9 +55,11 @@ export const transformManagersData = (data) => {
 
 export const transformRegionsData = (data) => {
   const result = data.map((el) => ({
+    
     id: el.id,
     label: `${el.region_number} ${el.region}`,
-    value: `${el.id}`,
+    // Denis
+    value: el.id,
     name: "region_id",
   }))
   result.unshift({

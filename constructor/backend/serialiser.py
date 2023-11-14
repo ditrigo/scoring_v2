@@ -123,6 +123,11 @@ class NegativeDecisionSerializer(serializers.ModelSerializer):
         model = NegativeDecision
         fields = "__all__"
 
+
+class CatalogPRDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CatalogPRD
+        fields = "__all__"
 #---------------------
 
 #---------------------
@@ -178,6 +183,7 @@ class ClientSerializer(serializers.ModelSerializer):
     representitive_client = ClientRepresentativeSerializer(many=False, read_only=True)
     compliance_criteria = ComplianceCriteriaSerializer(many=False, read_only=True)
     kpi = KPISerializer(many=False, read_only=True)
+    prd_catalog = CatalogPRDSerializer(many=False, read_only=True)
     class Meta:
         model = Client
         fields = "__all__"

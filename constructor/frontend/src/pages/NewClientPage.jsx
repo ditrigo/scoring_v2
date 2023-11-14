@@ -16,7 +16,7 @@ import httpService from "../services/http.service"
 
 const NewClientPage = () => {
   const params = useParams()
-  const [client, setClient] = useState()
+  const [client, setClient] = useState([])
   const [errors, setErrors] = useState({})
   // const [startDate, setStartDate] = useState()
 
@@ -30,6 +30,7 @@ const NewClientPage = () => {
   const [negative, setNegative] = useState({})
   const [type, setType] = useState({})
   const [managers, setManagers] = useState({})
+  const [prdCatalog, setPrdCatalog] = useState({})
   const [clientData, setClientData] = useState({
     test: "",
 
@@ -68,6 +69,8 @@ const NewClientPage = () => {
     received_amount_budget: "",
     overdue_debt_amount: "",
     technical_overdue_debt_amount: "",
+    // DENIS
+    prd_catalog_id: "",
   })
 
   let validatorConfig = {
@@ -208,7 +211,18 @@ const NewClientPage = () => {
       "negative_decision",
       "negative_decision_type"
     )
-    getTransformedData("crm_dept_type", setType, "type", "debt_type")
+    getTransformedData(
+      "crm_dept_type",
+      setType,
+      "type",
+      "debt_type")
+    getTransformedData(
+      "crm_prd_catalog", 
+      setPrdCatalog,
+      "catalog_prd",
+      "prd_catalog_id"
+    )
+    
 
     axios
       .get(`${configFile.apiEndPoint}/crm_managers/`)
@@ -282,6 +296,8 @@ const NewClientPage = () => {
       first_meeting_date: clientData.first_meeting_date,
       event_date: clientData.event_date,
       event_description: clientData.event_description,
+      // DENIS
+      prd_catalog_id: clientData.prd_catalog_id,
       fields_of_positive_decision: [
         // {
         //   id: 5,
@@ -375,23 +391,23 @@ const NewClientPage = () => {
   //   },
   // ]
 
-  const PRD = [
-    {
-      label: "МИУДОЛ",
-      value: "МИУДОЛ",
-      name: "PRD",
-    },
-    {
-      label: "РП Республика Коми",
-      value: "РП Республика Коми",
-      name: "PRD",
-    },
-    {
-      label: "РП Республика Карелия",
-      value: "РП Республика Карелия",
-      name: "PRD",
-    },
-  ]
+  // const PRD = [
+  //   {
+  //     label: "МИУДОЛ",
+  //     value: "МИУДОЛ",
+  //     name: "PRD",
+  //   },
+  //   {
+  //     label: "РП Республика Коми",
+  //     value: "РП Республика Коми",
+  //     name: "PRD",
+  //   },
+  //   {
+  //     label: "РП Республика Карелия",
+  //     value: "РП Республика Карелия",
+  //     name: "PRD",
+  //   },
+  // ]
 
   // const [testData, setTestData] = useState({})
   // const [users, setUsers] = useState()
@@ -461,6 +477,8 @@ const NewClientPage = () => {
         received_amount_budget: 555,
         overdue_debt_amount: 777,
         technical_overdue_debt_amount: 888,
+        // DENIS
+        prd_catalog_id: client[0].prd_catalog_id.id
       })
     }
   }, [client])
@@ -499,9 +517,9 @@ const NewClientPage = () => {
   const inputsData = [
     {
       label: "Представительство ПРД",
-      key: "PRD",
+      key: "prd_catalog_id",
       type: "select",
-      options: PRD,
+      options: prdCatalog,
     },
     { label: "Наименование клиента", key: "", type: "title" },
     { label: "Имя", key: "first_name", type: "text" },
@@ -778,8 +796,8 @@ const NewClientPage = () => {
                       placeholder={
                         params.id && client
                           ? el.options.filter(
-                              (opt) => opt.id === clientData[el.key]
-                            )[0]?.label
+                            (opt) => opt.id === clientData[el.key]
+                          )[0]?.label
                           : el.label
                       }
                       onChange={handleChange}

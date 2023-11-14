@@ -1413,6 +1413,17 @@ def FieldsOfPositiveDecisionsViewSet(request, pk):
                 )
         return Response({'data': serializer.data})
 
+
+@api_view(['GET'])
+def PrdCatalogFieldsViewSet(request):
+    if request.method == 'GET':
+        prd_fields = CatalogPRD.objects.all().order_by('id')
+        serializer = CatalogPRDSerializer(
+                prd_fields,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
 #---------------------
 
 #---------------------

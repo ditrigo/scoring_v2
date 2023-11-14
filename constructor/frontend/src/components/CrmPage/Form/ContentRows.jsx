@@ -15,7 +15,7 @@ const ContentRows = ({ clients }) => {
       return (
         <tr key={el.id} role="button">
           <th scope="row">{el.id}</th>
-          <td>необходимо добавить данный справочник в бд</td>
+          <td>{el.prd_catalog.catalog_prd}</td>
           <td>
             <Link to={"/newclient/" + el.id}>
               {el.manager.second_name} {el.manager.first_name}.

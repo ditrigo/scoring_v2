@@ -12,7 +12,7 @@ const NewClientPage = () => {
   const [users, setUsers] = useState()
   const [errors, setErrors] = useState({})
 
-  const [clienData, setClientData] = useState({})
+  const [clienData, setClientData] = useState([])
   const [regions, setRegions] = useState({})
   const [support, setSupport] = useState({})
   const [stage, setStage] = useState({})
