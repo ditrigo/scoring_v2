@@ -1566,15 +1566,18 @@ def CreateRelationClient(request):
                     support_duration = request.data.get('compliance_data_id')["support_duration"],
                 )
                 compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
-
-                info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
                 
-                InformationSource.objects.create(
-                    info_source_type = info_source_type_id,
-                    info_source_date = request.data.get('information_source_id')["info_source_date"],
-                    info_source_number = request.data.get('information_source_id')["info_source_number"],
-                )
-                information_source_id = InformationSource.objects.latest('id').id 
+                if request.data.get('information_source_id')["info_source_type_id"] != "":
+                    info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
+                    
+                    InformationSource.objects.create(
+                        info_source_type = info_source_type_id,
+                        info_source_date = request.data.get('information_source_id')["info_source_date"],
+                        info_source_number = request.data.get('information_source_id')["info_source_number"],
+                    )
+                    information_source_id = InformationSource.objects.latest('id').id 
+                else:
+                    information_source_id = None
                 
                 kpi_id = None
                 if request.data.get('kpi_id') != None:
@@ -1752,8 +1755,8 @@ def import_db_to_file(request):
         os.makedirs(dir_name)
 
     columns = get_columns_to_query()
-    column_merge = ['B', 'C', 'D', 'E', 'F', 'O', 'P', 'Q', 'R', 'S', 'T', 'AD']
-    column_merg_ind = [0, 1, 2, 3, 4, 13, 14, 15, 16, 17, 18, 28]
+    column_merge = ['B', 'C', 'D', 'E', 'F', 'G', 'P', 'Q', 'R', 'S', 'T', 'U', 'AF']
+    column_merg_ind = [0, 1, 2, 3, 4, 5, 14, 15, 16, 17, 18, 19, 30]
 
     # Устанавливаем соединение с базой данных
     with connection.cursor() as cursor:
@@ -1773,24 +1776,24 @@ def import_db_to_file(request):
 
             cell_format_header = writer.book.add_format({'bold': True, 'align': 'center', 'border':1, 'text_wrap': True})
 
-            sheet.merge_range('A1:D1', 'Общие сведения', cell_format_header)
-            sheet.merge_range('E1:N1', 'Первичные учетные данные (+)', cell_format_header)
-            sheet.merge_range('O1:T1', 'Критерии соответствия клиентским требованиям (маркеры) (+)', cell_format_header)
-            sheet.merge_range('U1:W1', 'Согласительные мероприятия (+)', cell_format_header)
-            sheet.merge_range('X1:AM1', 'Ключевые показатели эффективности (KPI) (+)', cell_format_header)
+            sheet.merge_range('A1:E1', 'Общие сведения', cell_format_header)
+            sheet.merge_range('F1:O1', 'Первичные учетные данные (+)', cell_format_header)
+            sheet.merge_range('P1:U1', 'Критерии соответствия клиентским требованиям (маркеры) (+)', cell_format_header)
+            sheet.merge_range('V1:X1', 'Согласительные мероприятия (+)', cell_format_header)
+            sheet.merge_range('Y1:AO1', 'Ключевые показатели эффективности (KPI) (+)', cell_format_header)
 
-            sheet.merge_range('G2:I2', 'Источник информации', cell_format_header)
-            sheet.merge_range('J2:M2', 'Представители клиента', cell_format_header)
-            sheet.write('N2:N2', 'Контрольная точка', cell_format_header)
-            sheet.merge_range('U2:W2', 'Контрольная точка', cell_format_header)
-            sheet.merge_range('X2:AC2', 'Принятое решение', cell_format_header)
-            sheet.merge_range('AE2:AF2', 'Просроченная задолженность', cell_format_header)
-            sheet.write('AG2:AG2', 'Отлагательные меры', cell_format_header)
-            sheet.write('AH2:AH2', 'Изменения сроков уплаты', cell_format_header)
-            sheet.merge_range('AI2:AM2', 'Мировое соглашение (+)', cell_format_header)
+            sheet.merge_range('H2:J2', 'Источник информации', cell_format_header)
+            sheet.merge_range('K2:N2', 'Представители клиента', cell_format_header)
+            sheet.write('O2:O2', 'Контрольная точка', cell_format_header)
+            sheet.merge_range('V2:X2', 'Контрольная точка', cell_format_header)
+            sheet.merge_range('Y2:AE2', 'Принятое решение', cell_format_header)
+            sheet.merge_range('AG2:AH2', 'Просроченная задолженность', cell_format_header)
+            sheet.write('AI2:AI2', 'Отлагательные меры', cell_format_header)
+            sheet.write('AJ2:AJ2', 'Изменения сроков уплаты', cell_format_header)
+            sheet.merge_range('AK2:AO2', 'Мировое соглашение (+)', cell_format_header)
 
             sheet.merge_range('A2:A3', 'п/п', cell_format_header)
-            for i in range(0, len(columns)):
+            for i in range(0, len(columns[:-1])):
                 if i in column_merg_ind:
                     sim = column_merge[column_merg_ind.index(i)]
                     sheet.merge_range(f'{sim}2:{sim}3', columns[i], cell_format_header)
@@ -1799,17 +1802,44 @@ def import_db_to_file(request):
                 cell_format = writer.book.add_format({'text_wrap': True})
                 sheet.set_column(2, i+1, 18, cell_format)
 
+
+            sheet.merge_range('AP1:AR2', 'Вид предоставляемого обеспечения', cell_format_header)
+            sheet.write('AP3:AP3', 'Залог имущества (в тыс. руб.)', cell_format_header)
+            sheet.write('AQ3:AQ3', 'Поручительство (в тыс. руб.)', cell_format_header)
+            sheet.write('AR3:AR3', 'Банковская гарантия (в тыс. руб.)', cell_format_header)
+            sheet.merge_range('AS1:AS3', 'Стадия рассмотрения', cell_format_header)
+            sheet.set_column('AS1:AS3', 25)
+            sheet.merge_range('AT1:AV2', 'Проводимая работа в случае не исполнения предоставленной меры', cell_format_header)
+            sheet.merge_range('AW1:BK1', 'Постконтроль по состоянию на  ________', cell_format_header)
+            sheet.write('AT3:AT3', 'дата направления ДОЛЖНИКУ уведомления (претензии)', cell_format_header)
+            sheet.write('AU3:AU3', 'дата направления ПОРУЧИТЕЛЮ уведомления (претензии)', cell_format_header)
+            sheet.write('AV3:AV3', 'дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)', cell_format_header)
+            sheet.merge_range('AW2:AW3', 'выручка (КНД 1151006, год 2023, код периода-31, 40, стр.2_1_010 )', cell_format_header)
+            sheet.merge_range('AX2:AX3', 'выручка (КНД 0710099, год 2022, стр.2110_4)', cell_format_header)
+            sheet.merge_range('AY2:AY3', 'ССЧ ( КНД 1151111 , код периода -31 год 2023, стр.П023)', cell_format_header)
+            sheet.merge_range('AZ2:AZ3', 'активы 2022 г. (КНД 0710099, год 2022, стр.1600_4 )', cell_format_header)
+            sheet.merge_range('BA2:BA3', 'уплачено налогов 2023 г.( ИР РСБ)', cell_format_header)
+            sheet.merge_range('BB2:BB3', 'стадия в процедуре банкротства ', cell_format_header)
+            sheet.merge_range('BC2:BC3', 'сумма долга ЕНС ( ИР РСБ)', cell_format_header)
+            sheet.merge_range('BD2:BD3', 'ФОТ (КНД 1151111, год 2023, код периода-31, стр. П716)', cell_format_header)
+            sheet.merge_range('BE2:BE3', 'прибыль (КНД 1151006, год 2023,код периода-31, 40  стр.2_060)', cell_format_header)
+            sheet.merge_range('BF2:BF3', 'Результаты скоринга платежеспособности ', cell_format_header)
+            sheet.merge_range('BG2:BG3', 'из выписки СКУАД - текущая стоимость бизнеса', cell_format_header)
+            sheet.merge_range('BH2:BH3', 'из выписки СКУАД -, ликвидационная стоимость бизнеса', cell_format_header)
+            sheet.merge_range('BI2:BI3', 'из выписки СКУАД -  возвратность средств', cell_format_header)
+            sheet.merge_range('BJ2:BJ3', 'из выписки СКУАД - потребность в оборотных средствах', cell_format_header)
+            sheet.merge_range('BK2:BK3', 'ранг платёжеспособности', cell_format_header)
+
         #Создадим ответ из файла
         response = FileResponse(open(filename, 'rb'), status=status.HTTP_200_OK)
 
         return response
-    
-    return Response({'message': 'Что-то пошло не так'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def get_columns_to_query():
 
-    return ["Менеджер площадки (из списка)", 
+    return ["Представительсво ПРД",
+        "Менеджер площадки (из списка)", 
         "Наименование клиента",
         "ИНН",
         "Регион (из списка)",
@@ -1834,6 +1864,7 @@ def get_columns_to_query():
         "Вид положительного решения (из списка)",
         "ДАТА положительного решения",
         "На сколько предоставлена мера, в месяцах",
+        "Основания и методика рассмотрения гл. 9 НК РФ",
         "От кого ходатайство ОИВ (для МС)",
         "Вид отрицательного решения (из списка)",
         "Сумма урегулированной задолженности, тыс. руб.",
@@ -1846,7 +1877,8 @@ def get_columns_to_query():
         "Дата утверждения МС судом",
         "Сумма требований вошедших в МС, тыс. руб.",
         "Дата окончания МС",
-        "Сумма исполненных обязательств, тыс. руб."	
+        "Сумма исполненных обязательств, тыс. руб.",
+        "Стадия рассмотрения"	
     ]
 
 
@@ -1855,6 +1887,7 @@ def get_query_to_import():
     return """
 SELECT 
 --Общие сведения
+    t_prd_catalog.catalog_prd as prd,
     t_manager.second_name || ' ' || t_manager.first_name || ' ' || t_manager.patronymic as manager,
     t_client.second_name || ' ' || t_client.first_name || ' ' || t_client.patronymic as client,
     t_inn.inn as inn,
@@ -1888,6 +1921,7 @@ SELECT
     t_pos_decision.positive_decision as positive_decision,
     t_kpi.positive_decision_date as positive_decision_date,
     t_kpi.measure_provided_duration as measure_provided_duration,
+    '' as merodic,
     t_kpi.oiv_request_sender as oiv_request_sender,
     t_neg_decision.negative_decision as negative_decision,
     t_kpi.settled_debt_amount as settled_debt_amount,
@@ -1905,7 +1939,10 @@ SELECT
     t_kpi_positive_decision_fields_4.value as date_of_approvall,
     t_kpi_positive_decision_fields_5.value as sum_of_the_claims,
     t_kpi_positive_decision_fields_6.value as end_date,
-    t_kpi_positive_decision_fields_7.value as amount_of_fulfilled    
+    t_kpi_positive_decision_fields_7.value as amount_of_fulfilled,  
+
+    '' as stage
+    --t_review_stage.stage as stage
 
   FROM client as t_client
   LEFT JOIN manager as t_manager
@@ -1985,4 +2022,11 @@ SELECT
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_7
   ON t_kpi.id = t_kpi_positive_decision_fields_7.kpi_id
   AND t_kpi_positive_decision_fields_7.fields_of_pos_decision_id = t_positive_decision_fields_7.id
+
+  --ПРД каталог
+ LEFT JOIN prd_catalog as t_prd_catalog
+ ON t_client.prd_catalog_id = t_prd_catalog.id
+
+  --LEFT JOIN review_stage as t_review_stage
+  --ON t_client.review_stage_id = t_review_stage.id
 """

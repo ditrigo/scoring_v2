@@ -140,7 +140,7 @@ class ClientRepresentativeSerializer(serializers.ModelSerializer):
 
 
 class InformationSourceSerializer(serializers.ModelSerializer):
-    info_source_type_id = InformationSourceTypeSerializer(many=False, read_only=True)
+    info_source_type_id = InformationSourceTypeSerializer(many=False, read_only=True, required=False)
     class Meta:
         model = InformationSource
         fields = "__all__"
@@ -179,7 +179,7 @@ class ClientSerializer(serializers.ModelSerializer):
     region = RegionSerializer(many=False, read_only=True)
     manager = ManagerSerializer(many=False, read_only=True)
     applicant_status = ApplicantStatusSerializer(many=False, read_only=True)
-    information_source = InformationSourceSerializer(many=False, read_only=True)
+    information_source = InformationSourceSerializer(many=False, read_only=True, required=False)
     representitive_client = ClientRepresentativeSerializer(many=False, read_only=True)
     compliance_criteria = ComplianceCriteriaSerializer(many=False, read_only=True)
     kpi = KPISerializer(many=False, read_only=True)
