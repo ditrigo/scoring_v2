@@ -1541,43 +1541,68 @@ def CreateRelationClient(request):
         with transaction.atomic():
             try:
 
-                region = Region.objects.get(id=request.data.get('region_id'))
-                manager = Manager.objects.get(id=request.data.get('manager_id'))
-                applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status'))
-                prd_catalog = CatalogPRD.objects.get(id=request.data.get('prd_catalog_id'))
+                region = Region.objects.get(id=request.data.get('region_id')) # Required
 
-                serializer_body = ClientRepresentativeSerializer(data=request.data.get('representitive_client_id'))
+                if request.data.get('manager_id') != "":
+                    manager = Manager.objects.get(id=request.data.get('manager_id'))
+                else:
+                    manager = None
+                if request.data.get('stage_review') != "":
+                    stage_review = ReviewStage.objects.get(id=request.data.get('stage_review'))
+                else:
+                    stage_review = None
+
+                applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status')) # Required
+                prd_catalog = CatalogPRD.objects.get(id=request.data.get('prd_catalog_id')) # Required
+
+                serializer_body = ClientRepresentativeSerializer(data=request.data.get('representitive_client_id')) # All string fields
                 if not serializer_body.is_valid():
                     transaction.set_rollback(True)
                     return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
                 serializer_body.save()
                 representitive_client_id = ClientRepresentative.objects.latest('id').id
             
-                category = Category.objects.get(id=request.data.get('compliance_data_id')["category"])
-                debt_type = DebtType.objects.get(id=request.data.get('compliance_data_id')["debt_type"])
-                support_measure = SupportMeasure.objects.get(id=request.data.get('compliance_data_id')["support_measure"])
+                category = Category.objects.get(id=request.data.get('compliance_data_id')["category"]) # Required
+                debt_type = DebtType.objects.get(id=request.data.get('compliance_data_id')["debt_type"]) # Required
+                support_measure = SupportMeasure.objects.get(id=request.data.get('compliance_data_id')["support_measure"]) # Required
+
+                if request.data.get('compliance_data_id')["support_duration"] != "":
+                    support_duration = request.data.get('compliance_data_id')["support_duration"]
+                else:
+                    support_duration = None
                 
                 ComplianceCriteria.objects.create(
-                    debt_amount = request.data.get('compliance_data_id')["debt_amount"],
+                    debt_amount = request.data.get('compliance_data_id')["debt_amount"], # Required
                     debt_type = debt_type,
                     category = category,
                     support_measure = support_measure,
                     note = request.data.get('compliance_data_id')["note"],
-                    support_duration = request.data.get('compliance_data_id')["support_duration"],
+                    support_duration = support_duration,
                 )
                 compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
                 
                 if request.data.get('information_source_id')["info_source_type_id"] != "":
                     info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
-                    
-                    InformationSource.objects.create(
-                        info_source_type = info_source_type_id,
-                        info_source_date = request.data.get('information_source_id')["info_source_date"],
-                        info_source_number = request.data.get('information_source_id')["info_source_number"],
-                    )
-                    information_source_id = InformationSource.objects.latest('id').id 
                 else:
                     information_source_id = None
+
+                if request.data.get('information_source_id')["info_source_date"] != "":
+                    info_source_date = request.data.get('information_source_id')["info_source_date"]
+                else:
+                    info_source_date = None
+
+                if request.data.get('information_source_id')["info_source_number"] != "":
+                    info_source_number = request.data.get('information_source_id')["info_source_number"]
+                else:
+                    info_source_number = None
+                    
+                InformationSource.objects.create(
+                    info_source_type = info_source_type_id,
+                    info_source_date = info_source_date,
+                    info_source_number = info_source_number,
+                )
+                information_source_id = InformationSource.objects.latest('id').id 
+
                 
                 kpi_id = None
                 if request.data.get('kpi_id') != None:
@@ -1603,22 +1628,28 @@ def CreateRelationClient(request):
                         
                             serializer_fields_of_positive.save()
 
+                if request.data.get('first_meeting_date') != "":
+                    first_meeting_date = request.data.get('first_meeting_date')
+                else:
+                    first_meeting_date = None
+
                 Client.objects.create(
-                    first_name = request.data.get('first_name'),
-                    second_name = request.data.get('second_name'),
-                    patronymic = request.data.get('patronymic'),
-                    inn = request.data.get('inn'),
+                    first_name = request.data.get('first_name'), # string, "" -ok
+                    second_name = request.data.get('second_name'), # string, "" -ok
+                    patronymic = request.data.get('patronymic'), # string, "" -ok
+                    inn = request.data.get('inn'), # Required
                     region = region,
                     manager = manager,
                     applicant_status = applicant_status,
                     information_source_id = information_source_id,
                     representitive_client_id = representitive_client_id,
                     compliance_criteria_id = compliance_criteria_id,
-                    first_meeting_date = request.data.get('first_meeting_date'),
+                    first_meeting_date = first_meeting_date,
                     prd_catalog = prd_catalog,
-                    event_date = request.data.get('event_date'),
-                    event_description = request.data.get('event_description'),
+                    event_date = request.data.get('event_date'), # Required
+                    event_description = request.data.get('event_description'), # Required
                     kpi_id = kpi_id,
+                    stage_review = stage_review,
                 )
             except Exception as e:
                 return Response({'message': 'Некорректный ввод данных!', 'error': f"{e}"}, status=status.HTTP_400_BAD_REQUEST)

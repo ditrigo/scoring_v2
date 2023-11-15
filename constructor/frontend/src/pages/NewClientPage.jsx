@@ -45,7 +45,7 @@ const NewClientPage = () => {
     info_source_date: null,
     info_source_number: null,
     representative_first_name: null,
-    representative_second_name: null,
+    representative_second_name: "",
     representative_patronymic: null,
     representative_position: null,
     representative_phone: null,
