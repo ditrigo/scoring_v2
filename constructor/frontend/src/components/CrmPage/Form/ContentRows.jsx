@@ -1,5 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
+import Moment from "moment"
+import localization from "moment/locale/ru"
 
 const ContentRows = ({ clients }) => {
   const makeClassName = (value) => {
@@ -38,7 +40,9 @@ const ContentRows = ({ clients }) => {
           <td className={makeClassName("Средний риск")}>нет в json</td>
           <td className={makeClassName("Высокий риск")}>нет в json</td>
           <td>нет в json</td>
-          <td>{el.event_date}</td>
+          <td>
+            {Moment(el.event_date).locale("rus", localization).format("LLL")}
+          </td>
         </tr>
       )
     })

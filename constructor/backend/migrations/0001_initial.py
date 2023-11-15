@@ -41,6 +41,18 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
+            name='CatalogPRD',
+            fields=[
+                ('id', models.AutoField(primary_key=True, serialize=False)),
+                ('uuid', models.UUIDField(default=uuid.uuid4, editable=False)),
+                ('created_date', models.DateTimeField(auto_now_add=True)),
+                ('catalog_prd', models.CharField(blank=True, max_length=255, null=True)),
+            ],
+            options={
+                'db_table': 'prd_catalog',
+            },
+        ),
+        migrations.CreateModel(
             name='Category',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
