@@ -30,47 +30,47 @@ const NewClientPage = () => {
   const [managers, setManagers] = useState({})
   const [prdCatalog, setPrdCatalog] = useState({})
   const [fieldsOfPosDec, setfieldsOfPosDec] = useState([])
-  const [dataOfFieldsDec, setDataOfFieldsDec] = useState([])
+  const [dataOfFieldsDec, setDataOfFieldsDec] = useState({})
   const [clientData, setClientData] = useState({
     // test: "",
 
     first_name: "",
-    second_name: "",
-    patronymic: "",
+    second_name: null,
+    patronymic: null,
     inn: "",
     region_id: "",
-    manager_id: "",
+    manager_id: null,
     applicant_status: "",
-    info_source_type_id: "",
-    info_source_date: "",
-    info_source_number: "",
-    representative_first_name: "",
-    representative_second_name: "",
-    representative_patronymic: "",
-    representative_position: "",
-    representative_phone: "",
-    representative_email: "",
+    info_source_type_id: null,
+    info_source_date: null,
+    info_source_number: null,
+    representative_first_name: null,
+    representative_second_name: null,
+    representative_patronymic: null,
+    representative_position: null,
+    representative_phone: null,
+    representative_email: null,
     control_point: "",
     debt_amount: "",
     debt_type: "",
     category: "",
     support_measure: "",
-    note: "",
-    support_duration: "",
-    first_meeting_date: "",
+    note: null,
+    support_duration: null,
+    first_meeting_date: null,
     event_date: "",
     event_description: "",
-    positive_decision_type: "",
-    negative_decision_type: "",
-    positive_decision_date: "",
-    measure_provided_duration: "",
-    oiv_request_sender: "",
-    settled_debt_amount: "",
-    received_amount_budget: "",
-    overdue_debt_amount: "",
-    technical_overdue_debt_amount: "",
+    positive_decision_type: null,
+    negative_decision_type: null,
+    positive_decision_date: null,
+    measure_provided_duration: null,
+    oiv_request_sender: null,
+    settled_debt_amount: null,
+    received_amount_budget: null,
+    overdue_debt_amount: null,
+    technical_overdue_debt_amount: null,
     // DENIS
-    stage_review: "",
+    stage_review: null,
     prd_catalog_id: "",
   })
 
@@ -285,9 +285,8 @@ const NewClientPage = () => {
         support_duration: clientData.support_duration,
       },
       kpi: {
-        id: "",
-        uuid: "",
-        created_date: "",
+        id: 1,
+
         positive_decision_date: clientData.positive_decision_date,
         measure_provided_duration: clientData.measure_provided_duration,
         oiv_request_sender: clientData.oiv_request_sender,
@@ -308,6 +307,7 @@ const NewClientPage = () => {
       // DENIS
       prd_catalog_id: clientData.prd_catalog_id,
       stage_review: clientData.stage_review,
+      // fields_of_positive_decision: Object.values(dataOfFieldsDec),
       fields_of_positive_decision: [
         ...Object.values(dataOfFieldsDec),
         // {
@@ -341,8 +341,8 @@ const NewClientPage = () => {
         alert("Ответ сервера: " + data.message)
         console.log(data)
       } catch (error) {
-        console.log("🚀 error:", error.response.data.message)
-        alert("Ошибка: " + error.response.data.message)
+        console.log("🚀 error:", error.response.data)
+        alert("Ошибка: " + JSON.stringify(error.response.data))
       }
     }
 
@@ -356,21 +356,19 @@ const NewClientPage = () => {
 
   const handleChange = (target) => {
     console.log(target)
-    if (target?.target?.type === "date") {
-      setClientData((prevState) => ({
-        ...prevState,
-        [target.target.dataset.name]: target.target.value,
-      }))
-    }
-
     if (Number.isInteger(+target.name)) {
       setDataOfFieldsDec((prevState) => ({
         ...prevState,
         [target.name]: {
-          id: "",
           fields_of_pos_decision: target.name,
           value: target.value,
         },
+      }))
+    }
+    if (target?.target?.type === "date") {
+      setClientData((prevState) => ({
+        ...prevState,
+        [target.target.dataset.name]: target.target.value,
       }))
     }
 
@@ -464,6 +462,7 @@ const NewClientPage = () => {
   }, [clientData])
 
   if (clientData.positive_decision_type) {
+    console.log("validator add ", clientData.positive_decision_type)
     validatorConfig = {
       ...validatorConfig,
       positive_decision_date: {
@@ -485,6 +484,7 @@ const NewClientPage = () => {
   }
 
   const getfieldsOfPositivDecision = async (id) => {
+    setDataOfFieldsDec({})
     try {
       const { data } = await httpService.get(
         `crm_fields_of_positiv_decision/${id}`
@@ -534,7 +534,7 @@ const NewClientPage = () => {
     // { label: "Фамилия", key: "second_name", type: "text" },
     // { label: "Отчество", key: "patronymic", type: "text" }, /// - заменить на одно поле
 
-    { label: "ИНН", key: "inn", type: "text" },
+    { label: "ИНН", key: "inn", type: "text", inputType: "number" },
     {
       label: "Стадия рассмотрения",
       key: "stage_review",
@@ -566,14 +566,25 @@ const NewClientPage = () => {
       label: "Номер источника информации",
       key: "info_source_number",
       type: "text",
+      inputType: "number",
     },
     { label: "Представители клиента", key: "", type: "title2" },
     { label: "Фамилия", key: "representative_second_name", type: "text" },
     { label: "Имя", key: "representative_first_name", type: "text" },
     { label: "Отчество", key: "representative_patronymic", type: "text" },
     { label: "Должность", key: "representative_position", type: "text" },
-    { label: "Телефон", key: "representative_phone", type: "text" },
-    { label: "Электронная почта", key: "representative_email", type: "text" },
+    {
+      label: "Телефон",
+      key: "representative_phone",
+      type: "text",
+      inputType: "number",
+    },
+    {
+      label: "Электронная почта",
+      key: "representative_email",
+      type: "text",
+      inputType: "email",
+    },
     {
       label: "Дата регистрации обращения в МИУДОЛ",
       key: "control_point",
@@ -584,7 +595,12 @@ const NewClientPage = () => {
       key: "",
       type: "title",
     },
-    { label: "Сумма задолженности", key: "debt_amount", type: "text" },
+    {
+      label: "Сумма задолженности",
+      key: "debt_amount",
+      type: "text",
+      inputType: "number",
+    },
     { label: "Тип долга", key: "debt_type", type: "select", options: type },
     {
       label: "Категория предприятия",
@@ -607,6 +623,7 @@ const NewClientPage = () => {
       label: "Срок, на который необходимо предоставить меру поддержки (мес)",
       key: "support_duration",
       type: "text",
+      inputType: "number",
     },
 
     { label: "4. Согласительные мероприятия", key: "", type: "title" },
@@ -656,11 +673,13 @@ const NewClientPage = () => {
       label: "На сколько предоставлена мера (в мес.)",
       key: "measure_provided_duration",
       type: "text",
+      inputType: "number",
     },
     {
       label: "Сумма урегулированной задолженности (тыс руб)",
       key: "settled_debt_amount",
       type: "text",
+      inputType: "number",
     },
     // здесь у них поле
     {
@@ -683,17 +702,20 @@ const NewClientPage = () => {
       label: "Сумма, поступившая в бюджет (тыс руб)",
       key: "received_amount_budget",
       type: "text",
+      inputType: "number",
     },
     { label: "Просроченная задолженность", key: "", type: "title2" },
     {
       label: "Сумма просроченной задолженности",
       key: "overdue_debt_amount",
       type: "text",
+      inputType: "number",
     },
     {
       label: "Сумма технической просроченной задолженности",
       key: "technical_overdue_debt_amount",
       type: "text",
+      inputType: "number",
     },
     ///////////////////////////////////////////////////////////////////////////////////
     { label: "Следующие поля пока не работают!!!", key: "", type: "title" }, ///////// delete later
@@ -817,7 +839,7 @@ const NewClientPage = () => {
                   return (
                     <TextField
                       key={ind}
-                      // type="number"
+                      type={el.inputType || "text"}
                       label={el.label}
                       name={el.key}
                       value={clientData[el.key]}
@@ -893,6 +915,7 @@ const NewClientPage = () => {
                   onClick={handleSubmit}
                   disabled={!isValid}
                 >
+                  {/* <Link to="/crm" className="nav-link m-2">Сохранить</Link> */}
                   Сохранить
                 </button>
 
