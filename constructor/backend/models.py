@@ -648,7 +648,7 @@ class ClientRepresentative(models.Model): # Представитель клие�
     representative_second_name = models.CharField(max_length=255, blank=True, null=True)
     representative_patronymic = models.CharField(max_length=255, blank=True, null=True)
     representative_position = models.CharField(max_length=255, blank=True, null=True) # Должность представителя
-    representative_phone = models.CharField(max_length=20) # Телефон представителя
+    representative_phone = models.CharField(max_length=20, blank=True, null=True) # Телефон представителя
     representative_email = models.CharField(max_length=255, blank=True, null=True) # Почта представителя
     control_point = models.CharField(max_length=255, blank=True, null=True) # Контрольная точка
 
@@ -664,8 +664,8 @@ class InformationSource(models.Model):
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
     created_date = models.DateTimeField(auto_now_add=True)
-    info_source_type = models.ForeignKey(InformationSourceType, on_delete=models.CASCADE)
-    info_source_date = models.DateTimeField()
+    info_source_type = models.ForeignKey(InformationSourceType, on_delete=models.CASCADE, blank=True, null=True)
+    info_source_date = models.DateField(blank=True, null=True)
     info_source_number = models.CharField(max_length=255, blank=True, null=True)
     
     class Meta:
@@ -680,12 +680,12 @@ class ComplianceCriteria(models.Model):
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
     created_date = models.DateTimeField(auto_now_add=True)
-    debt_amount = models.IntegerField() # Сумма задолженности
-    debt_type = models.ForeignKey(DebtType, on_delete=models.CASCADE) # Тип долга
-    category = models.ForeignKey(Category, on_delete=models.CASCADE) # Категория
-    support_measure = models.ForeignKey(SupportMeasure, on_delete=models.CASCADE) # Мера поддержки
-    note = models.TextField() # Примечание к гр. 23
-    support_duration = models.IntegerField() # Срок предоставления меры
+    debt_amount = models.IntegerField(blank=True, null=True) # Сумма задолженности
+    debt_type = models.ForeignKey(DebtType, on_delete=models.CASCADE, blank=True, null=True) # Тип долга
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True) # Категория
+    support_measure = models.ForeignKey(SupportMeasure, on_delete=models.CASCADE, blank=True, null=True) # Мера поддержки
+    note = models.TextField(blank=True, null=True) # Примечание к гр. 23
+    support_duration = models.IntegerField(blank=True, null=True) # Срок предоставления меры
 
     class Meta:
         db_table ='compliance_criteria'
@@ -727,7 +727,7 @@ class FieldsOfPositiveDecisions(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     origin = models.CharField(max_length=255, blank=True, null=True) # Название в БД
     description = models.CharField(max_length=255, blank=True, null=True) # Название в реальности
-    positive_decision = models.ForeignKey(PositiveDecision, on_delete=models.CASCADE) # К какому решению пренадлежат поля
+    positive_decision = models.ForeignKey(PositiveDecision, on_delete=models.CASCADE, blank=True, null=True) # К какому решению пренадлежат поля
     type_of_fields = models.CharField(max_length=255, blank=True, null=True) # значения 0 - string 1 - datetime, 2 - int, 3 - float, 4 - boolean
 
     class Meta:
@@ -742,8 +742,8 @@ class KpiPositiveDecisionFields(models.Model):
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
     created_date = models.DateTimeField(auto_now_add=True)
-    kpi = models.ForeignKey(KPI, on_delete=models.CASCADE)
-    fields_of_pos_decision = models.ForeignKey(FieldsOfPositiveDecisions, on_delete=models.CASCADE)
+    kpi = models.ForeignKey(KPI, on_delete=models.CASCADE, blank=True, null=True)
+    fields_of_pos_decision = models.ForeignKey(FieldsOfPositiveDecisions, on_delete=models.CASCADE, blank=True, null=True)
     value = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
@@ -762,18 +762,19 @@ class Client(models.Model):
     first_name = models.CharField(max_length=255, blank=True, null=True)
     second_name = models.CharField(max_length=255, blank=True, null=True)
     patronymic = models.CharField(max_length=255, blank=True, null=True)
-    inn = models.IntegerField() # ИНН
+    inn = models.IntegerField(blank=True, null=True) # ИНН
     # registration_date = models.DateTimeField() это, наверное,  ClientRepresentative.control_point 
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
-    manager = models.ForeignKey(Manager, on_delete=models.CASCADE)
-    applicant_status = models.ForeignKey(ApplicantStatus, on_delete=models.CASCADE) # Статус заявителя
-    information_source = models.ForeignKey(InformationSource, on_delete=models.CASCADE) # Источник информации
-    representitive_client = models.ForeignKey(ClientRepresentative, on_delete=models.CASCADE) # Представитель клиента
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, blank=True, null=True)
+    manager = models.ForeignKey(Manager, on_delete=models.CASCADE, blank=True, null=True)
+    applicant_status = models.ForeignKey(ApplicantStatus, on_delete=models.CASCADE, blank=True, null=True) # Статус заявителя
+    information_source = models.ForeignKey(InformationSource, on_delete=models.CASCADE, blank=True, null=True) # Источник информации
+    representitive_client = models.ForeignKey(ClientRepresentative, on_delete=models.CASCADE, blank=True, null=True) # Представитель клиента
     # support_measure = models.ForeignKey(SupportMeasure, on_delete=models.CASCADE) # Мера поддержки
-    compliance_criteria = models.ForeignKey(ComplianceCriteria, on_delete=models.CASCADE) # Мера поддержки
-    prd_catalog = models.ForeignKey(CatalogPRD, on_delete=models.CASCADE) # ПРД каталог
+    compliance_criteria = models.ForeignKey(ComplianceCriteria, on_delete=models.CASCADE, blank=True, null=True) # Мера поддержки
+    stage_review = models.ForeignKey(ReviewStage, on_delete=models.CASCADE, blank=True, null=True) # Мера поддержки
+    prd_catalog = models.ForeignKey(CatalogPRD, on_delete=models.CASCADE, blank=True, null=True) # ПРД каталог
     first_meeting_date = models.DateField(blank=True, null=True) # Дата первой встречи
-    event_date = models.DateTimeField(blank=True, null=True) # Дата наступления события
+    event_date = models.DateField(blank=True, null=True) # Дата наступления события
     event_description = models.TextField(blank=True, null=True) # Описание события
     kpi = models.ForeignKey(KPI, on_delete=models.CASCADE, blank=True, null=True) # 
     

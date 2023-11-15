@@ -34,14 +34,15 @@ const ContentRows = ({ clients }) => {
           </td>
           <td>{el.applicant_status.status}</td>
           <td>{el.compliance_criteria.support_measure.category_type}</td>
-          <td>нет в json</td>
-          <td>нет в json</td>
+          <td>{el.kpi?.positive_decision_type}</td>
+          <td>{el.kpi?.negative_decision_type}</td>
           <td className={makeClassName("Низкий риск")}>нет в json</td>
           <td className={makeClassName("Средний риск")}>нет в json</td>
           <td className={makeClassName("Высокий риск")}>нет в json</td>
-          <td>нет в json</td>
+          <td> {el.stage_review?.stage}</td>
           <td>
             {Moment(el.event_date).locale("rus", localization).format("LLL")}
+            {/* {el.event_date} */}
           </td>
         </tr>
       )

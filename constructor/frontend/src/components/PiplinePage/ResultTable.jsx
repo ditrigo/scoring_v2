@@ -90,7 +90,7 @@ const ResultTable = ({ getLinkMarkers }) => {
   async function downLoadResultsNEW() {
     axios({
       url: searchValue 
-      ? `${configFile.apiEndPoint}/data_for_journal/?firstdate="${searchValue}"`
+      ? `${configFile.apiEndPoint}/data_for_journal/?date="${searchValue}"`
       : `${configFile.apiEndPoint}/data_for_journal/`
       ,
       method: "GET",

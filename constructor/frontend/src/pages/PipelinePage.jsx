@@ -3,7 +3,7 @@ import MyButton from "../components/UI/MyButton/MyButton"
 import MyInput from "../components/UI/MyInput/MyInput"
 import "bootstrap/dist/css/bootstrap.css"
 import DatePicker, { registerLocale } from "react-datepicker"
-import ru from 'date-fns/locale/ru';
+import ru from "date-fns/locale/ru"
 
 import axios from "axios"
 import "react-datepicker/dist/react-datepicker.css"
@@ -14,10 +14,11 @@ import modelService from "../services/model.service"
 // import ResultTable from "../components/PiplinePage/ResultTable"
 // import { Link } from "react-router-dom"
 import configFile from "../config.json"
+import httpService from "../services/http.service"
 
 const PipelinePage = () => {
   const [open, setOpen] = useState(true)
-  
+
   //   Для отображения в дальнейшем различных элементов
   // const [block, setBlock] = useState([
   //   { name: "Статические данные", open: false },
@@ -27,8 +28,8 @@ const PipelinePage = () => {
   //   { name: "Журнал скоринга", open: false },
   // ])
   const [startDate, setStartDate] = useState(new Date())
-  registerLocale("ru", ru);
-  
+  registerLocale("ru", ru)
+
   const [models, setModels] = useState([])
   const [inputINN, setInputINN] = useState("")
   const [scoringModel, setScoringModel] = useState({ scoring_model: "" })
@@ -66,40 +67,72 @@ const PipelinePage = () => {
       model,
     }
 
-    await axios
-      .post(`${configFile.apiEndPoint}/start_scoring/`, json)
-      .then((resp) => {
-        getModels()
-        setInputINN("")
-        setScoringModel({ scoring_model: "" })
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    try {
+      const { data } = httpService.post("start_scoring/", json)
+      getModels()
+      setInputINN("")
+      setScoringModel({ scoring_model: "" })
+    } catch (error) {
+      console.log("ERR relation", error.message)
+      alert("Ошибка скоринга: " + error.message)
+    }
+
+    // await axios
+    //   .post(`${configFile.apiEndPoint}/start_scoring/`, json)
+    //   .then((resp) => {
+    //     getModels()
+    //     setInputINN("")
+    //     setScoringModel({ scoring_model: "" })
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //     alert("Произошла ошибка: ", err)
+    //   })
   }
 
   async function handleSaveData() {
-    await axios
-      .post(`${configFile.apiEndPoint}/inn_res/create_relation/`, {
-        inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
-        active: true,
-        scoringmodel_id: models.find(
-          (el) => el.model_name === scoringModel.scoring_model
-        ).id,
-        author_id: "Тестовый пользователь",
-      })
-      .then(function (response) {
-        console.log("Сделать связку ", response.data)
-        setDisabledBtn("btn btn-outline-primary disabled")
-        setIsSaved(true)
-        setModels([])
-        setScoringOptions([])
-        // console.log("models in handleSaveData", models)
-        getModels()
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+    const json = {
+      inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
+      active: true,
+      scoringmodel_id: models.find(
+        (el) => el.model_name === scoringModel.scoring_model
+      ).id,
+      author_id: "Тестовый пользователь",
+    }
+    try {
+      const { data } = await httpService.post("inn_res/create_relation/", json)
+      console.log("Relation resp: ", data)
+      setDisabledBtn("btn btn-outline-primary disabled")
+      setIsSaved(true)
+      setModels([])
+      setScoringOptions([])
+      getModels()
+    } catch (error) {
+      console.log("ERR relation", error.message)
+      alert("Ошибка создания связки: " + error.message)
+    }
+
+    // await axios
+    //   .post(`${configFile.apiEndPoint}/inn_res/create_relation/`, {
+    //     inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
+    //     active: true,
+    //     scoringmodel_id: models.find(
+    //       (el) => el.model_name === scoringModel.scoring_model
+    //     ).id,
+    //     author_id: "Тестовый пользователь",
+    //   })
+    //   .then(function (response) {
+    //     console.log("Сделать связку ", response.data)
+    //     setDisabledBtn("btn btn-outline-primary disabled")
+    //     setIsSaved(true)
+    //     setModels([])
+    //     setScoringOptions([])
+    //     getModels()
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error)
+    //     alert("Произошла ошибка в сохранении связки: ", error)
+    //   })
   }
 
   const toggle = () => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import TextField from "../components/CrmPage/Form/textField"
 import Divider from "../components/CrmPage/Form/Divider"
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
 import { validator } from "../components/utils/validator"
 import SelectSearchField from "../components/CrmPage/Form/SelectSearchField"
@@ -15,6 +15,7 @@ import httpService from "../services/http.service"
 
 const NewClientPage = () => {
   const params = useParams()
+  const navigate = useNavigate()
   const [client, setClient] = useState([])
   const [errors, setErrors] = useState({})
 
@@ -35,42 +36,42 @@ const NewClientPage = () => {
     // test: "",
 
     first_name: "",
-    second_name: null,
-    patronymic: null,
+    // second_name: "",
+    // patronymic: "",
     inn: "",
     region_id: "",
-    manager_id: null,
+    manager_id: "",
     applicant_status: "",
-    info_source_type_id: null,
-    info_source_date: null,
-    info_source_number: null,
-    representative_first_name: null,
-    representative_second_name: null,
-    representative_patronymic: null,
-    representative_position: null,
-    representative_phone: null,
-    representative_email: null,
+    info_source_type_id: "",
+    info_source_date: "",
+    info_source_number: "",
+    representative_first_name: "",
+    representative_second_name: "",
+    representative_patronymic: "",
+    representative_position: "",
+    representative_phone: "",
+    representative_email: "",
     control_point: "",
     debt_amount: "",
     debt_type: "",
     category: "",
     support_measure: "",
-    note: null,
-    support_duration: null,
-    first_meeting_date: null,
+    note: "",
+    support_duration: "",
+    first_meeting_date: "",
     event_date: "",
     event_description: "",
-    positive_decision_type: null,
-    negative_decision_type: null,
-    positive_decision_date: null,
-    measure_provided_duration: null,
-    oiv_request_sender: null,
-    settled_debt_amount: null,
-    received_amount_budget: null,
-    overdue_debt_amount: null,
-    technical_overdue_debt_amount: null,
+    positive_decision_type: "",
+    negative_decision_type: "",
+    positive_decision_date: "",
+    measure_provided_duration: "",
+    oiv_request_sender: "",
+    settled_debt_amount: "",
+    received_amount_budget: "",
+    overdue_debt_amount: "",
+    technical_overdue_debt_amount: "",
     // DENIS
-    stage_review: null,
+    stage_review: "",
     prd_catalog_id: "",
   })
 
@@ -153,35 +154,42 @@ const NewClientPage = () => {
         message: "Это поле обязательно для заполнения",
       },
     },
-
-    ///////////////////////////////////////////////////////////// для следущюих полей нет ключей! Создал пока свои!
-    // stage: {
-    //   isRequired: {
-    //     message: "Это поле обязательно для заполнения",
-    //   },
-    // },
-    // dateAppealsToMIDUOL: {
-    //   isRequired: {
-    //     message: "Это поле обязательно для заполнения",
-    //   },
-    // },
-    // deptSum: {
-    //   isRequired: {
-    //     message: "Это поле обязательно для заполнения",
-    //   },
-    // },
-    // termMesureNecessary: {
-    //   max: {
-    //     message: "Не более 36",
-    //     value: 36,
-    //   },
-    // },
-    // termMesure: {
-    //   max: {
-    //     message: "Не более 36",
-    //     value: 36,
-    //   },
-    // },
+    settled_debt_amount: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    received_amount_budget: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    overdue_debt_amount: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    technical_overdue_debt_amount: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    support_duration: {
+      max: {
+        message: "Не более 36",
+        value: 36,
+      },
+    },
+    measure_provided_duration: {
+      max: {
+        message: "Не более 36",
+        value: 36,
+      },
+    },
   }
 
   const isValid = Object.keys(errors).length === 0
@@ -260,13 +268,13 @@ const NewClientPage = () => {
       manager_id: clientData.manager_id,
       applicant_status: clientData.applicant_status,
       information_source_id: {
-        id: client[0] ? client[0].information_source.id : "",
+        // id: client[0] ? client[0].information_source.id : "",
         info_source_type_id: clientData.info_source_type_id,
         info_source_date: clientData.info_source_date,
         info_source_number: clientData.info_source_number,
       },
       representitive_client_id: {
-        id: client[0] ? client[0].representitive_client.id : "",
+        // id: client[0] ? client[0].representitive_client.id : "",
         representative_first_name: clientData.representative_first_name,
         representative_second_name: clientData.representative_second_name,
         representative_patronymic: clientData.representative_patronymic,
@@ -276,7 +284,7 @@ const NewClientPage = () => {
         control_point: clientData.control_point,
       },
       compliance_data_id: {
-        id: client[0] ? client[0].compliance_criteria.id : "",
+        // id: client[0] ? client[0].compliance_criteria.id : "",
         debt_amount: clientData.debt_amount,
         debt_type: clientData.debt_type,
         category: clientData.category,
@@ -284,9 +292,10 @@ const NewClientPage = () => {
         note: clientData.note,
         support_duration: clientData.support_duration,
       },
-      kpi: {
-        id: 1,
-
+      kpi_id: {
+        // id: "",
+        // uuid: "",
+        // created_date: "",
         positive_decision_date: clientData.positive_decision_date,
         measure_provided_duration: clientData.measure_provided_duration,
         oiv_request_sender: clientData.oiv_request_sender,
@@ -298,8 +307,8 @@ const NewClientPage = () => {
         negative_decision_type: clientData.negative_decision_type,
       },
       first_name: clientData.first_name,
-      second_name: clientData.second_name,
-      patronymic: clientData.patronymic,
+      // second_name: clientData.second_name,
+      // patronymic: clientData.patronymic,
       inn: clientData.inn,
       first_meeting_date: clientData.first_meeting_date,
       event_date: clientData.event_date,
@@ -307,7 +316,6 @@ const NewClientPage = () => {
       // DENIS
       prd_catalog_id: clientData.prd_catalog_id,
       stage_review: clientData.stage_review,
-      // fields_of_positive_decision: Object.values(dataOfFieldsDec),
       fields_of_positive_decision: [
         ...Object.values(dataOfFieldsDec),
         // {
@@ -325,6 +333,7 @@ const NewClientPage = () => {
 
     console.log(json)
     if (params.id && client) {
+      // Обновление
       try {
         const { data } = await httpService.post(
           `crm_update_relation_client/${params.id}`,
@@ -332,14 +341,17 @@ const NewClientPage = () => {
         )
         alert("Клиент обновлен " + data.message)
         console.log(data)
+        navigate("/crm")
       } catch (error) {
         alert("Ошибка: " + error.response.data.message)
       }
     } else {
       try {
+        // Создание
         const { data } = await httpService.post(`crm_create_client/`, json)
         alert("Ответ сервера: " + data.message)
         console.log(data)
+        // navigate("/crm")
       } catch (error) {
         console.log("🚀 error:", error.response.data)
         alert("Ошибка: " + JSON.stringify(error.response.data))
@@ -352,16 +364,27 @@ const NewClientPage = () => {
   const handleCancle = (e) => {
     e.preventDefault()
     setClientData({})
+    navigate("/crm")
   }
 
   const handleChange = (target) => {
-    console.log(target)
     if (Number.isInteger(+target.name)) {
       setDataOfFieldsDec((prevState) => ({
         ...prevState,
         [target.name]: {
+          // id: "",
           fields_of_pos_decision: target.name,
           value: target.value,
+        },
+      }))
+    }
+    if (target.target?.dataset.positive) {
+      setDataOfFieldsDec((prevState) => ({
+        ...prevState,
+        [target.target.dataset.name]: {
+          // id: "",
+          fields_of_pos_decision: target.target.dataset.name,
+          value: target.target.value,
         },
       }))
     }
@@ -397,7 +420,7 @@ const NewClientPage = () => {
       // console.log(client)
       setClient(client)
     } catch (error) {
-      console.log("🚀 ~ file: CrmPage.jsx:19 ~ getClients ~ error:", error)
+      console.log("🚀 ", error)
     }
   }
 
@@ -410,8 +433,8 @@ const NewClientPage = () => {
       // console.log(client)
       setClientData({
         first_name: client[0].first_name,
-        second_name: client[0].second_name,
-        patronymic: client[0].patronymic,
+        // second_name: client[0].second_name,
+        // patronymic: client[0].patronymic,
         inn: client[0].inn,
         region_id: client[0].region.id,
         manager_id: client[0].manager.id,
@@ -441,15 +464,16 @@ const NewClientPage = () => {
         first_meeting_date: client[0].first_meeting_date,
         event_date: client[0].event_date,
         event_description: client[0].event_description,
-        positive_decision_type: 1,
-        negative_decision_type: 1,
-        positive_decision_date: "2023-11-11",
-        measure_provided_duration: 23,
-        oiv_request_sender: "er",
-        settled_debt_amount: 44,
-        received_amount_budget: 555,
-        overdue_debt_amount: 777,
-        technical_overdue_debt_amount: 888,
+        positive_decision_type: client[0].kpi.positive_decision_type,
+        negative_decision_type: client[0].kpi.negative_decision_type,
+        positive_decision_date: client[0].kpi.positive_decision_date,
+        measure_provided_duration: client[0].kpi.measure_provided_duration,
+        oiv_request_sender: client[0].kpi.oiv_request_sender,
+        settled_debt_amount: client[0].kpi.settled_debt_amount,
+        received_amount_budget: client[0].kpi.received_amount_budget,
+        overdue_debt_amount: client[0].kpi.overdue_debt_amount,
+        technical_overdue_debt_amount:
+          client[0].kpi.technical_overdue_debt_amount,
         // DENIS
         prd_catalog_id: client[0].prd_catalog.id,
         stage_review: client[0].stage_review?.id,
@@ -462,7 +486,7 @@ const NewClientPage = () => {
   }, [clientData])
 
   if (clientData.positive_decision_type) {
-    console.log("validator add ", clientData.positive_decision_type)
+    // console.log("validator add ", clientData.positive_decision_type)
     validatorConfig = {
       ...validatorConfig,
       positive_decision_date: {
@@ -499,13 +523,14 @@ const NewClientPage = () => {
           label: el.description,
           key: el.id,
           type: el.type_of_fields === "datetime" ? "date" : "text",
+          isPositive: true,
         }
       })
       setfieldsOfPosDec(res)
 
       // console.log(res)
     } catch (error) {
-      console.log("🚀 ~ ", error)
+      // console.log("🚀 ~ ", error)
     }
   }
   useEffect(() => {
@@ -883,6 +908,7 @@ const NewClientPage = () => {
                           type="date"
                           onChange={(date) => handleChange(date)}
                           data-name={el.key}
+                          data-positive={el?.isPositive}
                         />
                       </div>
                       {errors[el.key] && (
@@ -915,17 +941,24 @@ const NewClientPage = () => {
                   onClick={handleSubmit}
                   disabled={!isValid}
                 >
-                  {/* <Link to="/crm" className="nav-link m-2">Сохранить</Link> */}
+                  {/* 
+                  <Link
+                    to="/crm"
+                    className="nav-link m-2"
+                    onClick={() => window.location.reload()}
+                  > */}
                   Сохранить
+                  {/* </Link> */}
                 </button>
 
                 <button
                   className="btn btn-danger w-25 mx-auto m-2 col-sm-3"
                   onClick={handleCancle}
                 >
-                  <Link to="/crm" className="nav-link m-2">
+                  {/* <Link to="/crm" className="nav-link m-2">
                     Назад
-                  </Link>
+                  </Link> */}
+                  Back
                 </button>
               </div>
             </form>
