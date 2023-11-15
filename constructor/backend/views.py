@@ -1540,7 +1540,6 @@ def CreateRelationClient(request):
 
         with transaction.atomic():
             try:
-
                 region = Region.objects.get(id=request.data.get('region_id')) # Required
 
                 if request.data.get('manager_id') != "":
