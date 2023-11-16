@@ -1056,8 +1056,10 @@ def StartTestScoringViewSet(request):
                 else:
                     try:
                         counting_rank = eval(formula)
+                        print(counting_rank, formula)
                         if target_value:
                             counting_target_value = eval(target_value)
+                            print("counting_target_value", counting_target_value)
                         else:
                             counting_target_value = "Нет значения для маркера"
                         print(counting_target_value)

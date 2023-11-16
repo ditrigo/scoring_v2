@@ -45,11 +45,12 @@ const ResultTable = ({ getLinkMarkers }) => {
 
   searchedModels = models
     ? models.filter((el) => {
-      // console.log("el",el)
+      console.log("el",el)
       return el.inns.some((inn) => {
-        // console.log("inn",inn)
-        console.log("searchedModels inside map", searchedModels)
-        return Moment(inn.created_date, )
+        console.log("inn",inn)
+      //   console.log("searchedModels inside map", searchedModels)
+      //   console.log('inn.created_date', inn.created_date)
+        return Moment(inn.created_date )
           .locale("rus", localization)
           .format("LLL")
           .includes(searchValue)
