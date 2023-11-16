@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import TextField from "../components/CrmPage/Form/textField"
 import Divider from "../components/CrmPage/Form/Divider"
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
 import { validator } from "../components/utils/validator"
 import SelectSearchField from "../components/CrmPage/Form/SelectSearchField"
@@ -15,7 +15,8 @@ import httpService from "../services/http.service"
 
 const NewClientPage = () => {
   const params = useParams()
-  const [client, setClient] = useState([])
+  const navigate = useNavigate()
+  const [client, setClient] = useState()
   const [errors, setErrors] = useState({})
 
   const [regions, setRegions] = useState({})
@@ -32,45 +33,44 @@ const NewClientPage = () => {
   const [fieldsOfPosDec, setfieldsOfPosDec] = useState([])
   const [dataOfFieldsDec, setDataOfFieldsDec] = useState({})
   const [clientData, setClientData] = useState({
-    // test: "",
-
     first_name: "",
-    second_name: null,
-    patronymic: null,
+    // second_name: "",
+    // patronymic: "",
     inn: "",
     region_id: "",
-    manager_id: null,
+    manager_id: "",
     applicant_status: "",
-    info_source_type_id: null,
-    info_source_date: null,
-    info_source_number: null,
-    representative_first_name: null,
+    info_source_type_id: "",
+    info_source_date: "",
+    info_source_number: "",
+    representative_first_name: "",
     representative_second_name: "",
-    representative_patronymic: null,
-    representative_position: null,
-    representative_phone: null,
-    representative_email: null,
+    representative_patronymic: "",
+    representative_position: "",
+    representative_phone: "",
+    representative_email: "",
     control_point: "",
     debt_amount: "",
     debt_type: "",
     category: "",
     support_measure: "",
-    note: null,
-    support_duration: null,
-    first_meeting_date: null,
+    note: "",
+    support_duration: "",
+    first_meeting_date: "",
     event_date: "",
     event_description: "",
-    positive_decision_type: null,
-    negative_decision_type: null,
-    positive_decision_date: null,
-    measure_provided_duration: null,
-    oiv_request_sender: null,
-    settled_debt_amount: null,
-    received_amount_budget: null,
-    overdue_debt_amount: null,
-    technical_overdue_debt_amount: null,
+    positive_decision_type: "",
+    negative_decision_type: "",
+    positive_decision_date: "",
+    measure_provided_duration: "",
+    oiv_request_sender: "",
+    settled_debt_amount: "",
+    received_amount_budget: "",
+    overdue_debt_amount: "",
+    technical_overdue_debt_amount: "",
+    fields_of_positive_decision: [],
     // DENIS
-    stage_review: null,
+    stage_review: "",
     prd_catalog_id: "",
   })
 
@@ -85,16 +85,6 @@ const NewClientPage = () => {
         message: "Это поле обязательно для заполнения",
       },
     },
-    // second_name: {
-    //   isRequired: {
-    //     message: "Это поле обязательно для заполнения",
-    //   },
-    // },
-    // patronymic: {
-    //   isRequired: {
-    //     message: "Это поле обязательно для заполнения",
-    //   },
-    // }, /// - заменить на одно поле
     inn: {
       isRequired: {
         message: "Это поле обязательно для заполнения",
@@ -102,6 +92,11 @@ const NewClientPage = () => {
       count: {
         message: "ИНН должен содержать от 10 символов.",
         value: 10,
+      },
+    },
+    stage_review: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
       },
     },
     region_id: {
@@ -152,36 +147,54 @@ const NewClientPage = () => {
       isRequired: {
         message: "Это поле обязательно для заполнения",
       },
+      maxCount: {
+        message: "Не больше 200 знаков",
+        value: 200,
+      },
     },
-
-    ///////////////////////////////////////////////////////////// для следущюих полей нет ключей! Создал пока свои!
-    // stage: {
-    //   isRequired: {
-    //     message: "Это поле обязательно для заполнения",
-    //   },
-    // },
-    // dateAppealsToMIDUOL: {
-    //   isRequired: {
-    //     message: "Это поле обязательно для заполнения",
-    //   },
-    // },
-    // deptSum: {
-    //   isRequired: {
-    //     message: "Это поле обязательно для заполнения",
-    //   },
-    // },
-    // termMesureNecessary: {
+    // settled_debt_amount: {},
+    received_amount_budget: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    overdue_debt_amount: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    technical_overdue_debt_amount: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    support_duration: {
+      max: {
+        message: "Не более 36",
+        value: 36,
+      },
+    },
+    // measure_provided_duration: {
     //   max: {
     //     message: "Не более 36",
     //     value: 36,
     //   },
     // },
-    // termMesure: {
-    //   max: {
-    //     message: "Не более 36",
-    //     value: 36,
-    //   },
-    // },
+    9: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    14: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
   }
 
   const isValid = Object.keys(errors).length === 0
@@ -255,114 +268,166 @@ const NewClientPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     // console.log(client && client.information_source.id)
-    const json = {
-      region_id: clientData.region_id,
-      manager_id: clientData.manager_id,
-      applicant_status: clientData.applicant_status,
-      information_source_id: {
-        // id: client[0] ? client[0].information_source.id : "",
-        info_source_type_id: clientData.info_source_type_id,
-        info_source_date: clientData.info_source_date,
-        info_source_number: clientData.info_source_number,
-      },
-      representitive_client_id: {
-        // id: client[0] ? client[0].representitive_client.id : "",
-        representative_first_name: clientData.representative_first_name,
-        representative_second_name: clientData.representative_second_name,
-        representative_patronymic: clientData.representative_patronymic,
-        representative_position: clientData.representative_position,
-        representative_phone: clientData.representative_phone,
-        representative_email: clientData.representative_email,
-        control_point: clientData.control_point,
-      },
-      compliance_data_id: {
-        // id: client[0] ? client[0].compliance_criteria.id : "",
-        debt_amount: clientData.debt_amount,
-        debt_type: clientData.debt_type,
-        category: clientData.category,
-        support_measure: clientData.support_measure,
-        note: clientData.note,
-        support_duration: clientData.support_duration,
-      },
-      kpi: {
-        // id: "",
-        // uuid: "",
-        // created_date: "",
-        positive_decision_date: clientData.positive_decision_date,
-        measure_provided_duration: clientData.measure_provided_duration,
-        oiv_request_sender: clientData.oiv_request_sender,
-        settled_debt_amount: clientData.settled_debt_amount,
-        received_amount_budget: clientData.received_amount_budget,
-        overdue_debt_amount: clientData.overdue_debt_amount,
-        technical_overdue_debt_amount: clientData.technical_overdue_debt_amount,
-        positive_decision_type: clientData.positive_decision_type,
-        negative_decision_type: clientData.negative_decision_type,
-      },
-      first_name: clientData.first_name,
-      second_name: clientData.second_name,
-      patronymic: clientData.patronymic,
-      inn: clientData.inn,
-      first_meeting_date: clientData.first_meeting_date,
-      event_date: clientData.event_date,
-      event_description: clientData.event_description,
-      // DENIS
-      prd_catalog_id: clientData.prd_catalog_id,
-      stage_review: clientData.stage_review,
-      // fields_of_positive_decision: Object.values(dataOfFieldsDec),
-      fields_of_positive_decision: [
-        ...Object.values(dataOfFieldsDec),
-        // {
-        //   id: 5,
-        //   fields_of_pos_decision: 5,
-        //   value: "111",
-        // },
-        // {
-        //   id: 6,
-        //   fields_of_pos_decision: 6,
-        //   value: "222",
-        // },
-      ],
-    }
 
-    console.log(json)
     if (params.id && client) {
+      // Обновление
+      const jsonForUpdate = {
+        id: client.id,
+        first_name: clientData.first_name,
+        inn: clientData.inn,
+        region_id: clientData.region_id,
+        manager_id: clientData.manager_id,
+        applicant_status: clientData.applicant_status,
+
+        information_source_id: {
+          id: client.information_source.id,
+          info_source_type_id: clientData.info_source_type_id,
+          info_source_date: clientData.info_source_date,
+          info_source_number: clientData.info_source_number,
+        },
+        representitive_client_id: {
+          id: client.representitive_client.id,
+          representative_first_name: clientData.representative_first_name,
+          // representative_second_name: clientData.representative_second_name,
+          // representative_patronymic: clientData.representative_patronymic,
+          representative_position: clientData.representative_position,
+          representative_phone: clientData.representative_phone,
+          representative_email: clientData.representative_email,
+          control_point: clientData.control_point,
+        },
+        compliance_data_id: {
+          id: client.compliance_criteria.id,
+          debt_amount: clientData.debt_amount,
+          debt_type: clientData.debt_type,
+          category: clientData.category,
+          support_measure: clientData.support_measure,
+          note: clientData.note,
+          support_duration: clientData.support_duration,
+        },
+        first_meeting_date: clientData.first_meeting_date,
+        event_date: clientData.event_date,
+        event_description: clientData.event_description,
+        kpi_id: {
+          id: client.kpi.id,
+          positive_decision_date: clientData.positive_decision_date,
+          measure_provided_duration: clientData.measure_provided_duration,
+          oiv_request_sender: clientData.oiv_request_sender,
+          settled_debt_amount: clientData.settled_debt_amount,
+          received_amount_budget: clientData.received_amount_budget,
+          overdue_debt_amount: clientData.overdue_debt_amount,
+          technical_overdue_debt_amount:
+            clientData.technical_overdue_debt_amount,
+          positive_decision_type: clientData.positive_decision_type,
+          negative_decision_type: clientData.negative_decision_type,
+        },
+
+        prd_catalog_id: clientData.prd_catalog_id,
+        stage_review: clientData.stage_review,
+
+        fields_of_positive_decision: [...Object.values(dataOfFieldsDec)],
+      }
+      console.log("🚀jsonForUpdate: ", jsonForUpdate)
       try {
         const { data } = await httpService.post(
           `crm_update_relation_client/${params.id}`,
-          json
+          jsonForUpdate
         )
-        alert("Клиент обновлен " + data.message)
+        alert(data.message)
         console.log(data)
+        navigate("/crm")
       } catch (error) {
         alert("Ошибка: " + error.response.data.message)
       }
     } else {
       try {
+        // Создание
+        const json = {
+          region_id: clientData.region_id,
+          manager_id: clientData.manager_id,
+          applicant_status: clientData.applicant_status,
+          information_source_id: {
+            info_source_type_id: clientData.info_source_type_id,
+            info_source_date: clientData.info_source_date,
+            info_source_number: clientData.info_source_number,
+          },
+          representitive_client_id: {
+            representative_first_name: clientData.representative_first_name,
+            // representative_second_name: clientData.representative_second_name,
+            // representative_patronymic: clientData.representative_patronymic,
+            representative_position: clientData.representative_position,
+            representative_phone: clientData.representative_phone,
+            representative_email: clientData.representative_email,
+            control_point: clientData.control_point,
+          },
+          compliance_data_id: {
+            debt_amount: clientData.debt_amount,
+            debt_type: clientData.debt_type,
+            category: clientData.category,
+            support_measure: clientData.support_measure,
+            note: clientData.note,
+            support_duration: clientData.support_duration,
+          },
+          kpi_id: {
+            positive_decision_date: clientData.positive_decision_date,
+            measure_provided_duration: clientData.measure_provided_duration,
+            oiv_request_sender: clientData.oiv_request_sender,
+            settled_debt_amount: clientData.settled_debt_amount,
+            received_amount_budget: clientData.received_amount_budget,
+            overdue_debt_amount: clientData.overdue_debt_amount,
+            technical_overdue_debt_amount:
+              clientData.technical_overdue_debt_amount,
+            positive_decision_type: clientData.positive_decision_type,
+            negative_decision_type: clientData.negative_decision_type,
+          },
+          first_name: clientData.first_name,
+          // second_name: clientData.second_name,
+          // patronymic: clientData.patronymic,
+          inn: clientData.inn,
+          first_meeting_date: clientData.first_meeting_date,
+          event_date: clientData.event_date,
+          event_description: clientData.event_description,
+          // DENIS
+          prd_catalog_id: clientData.prd_catalog_id,
+          stage_review: clientData.stage_review,
+          fields_of_positive_decision: [...Object.values(dataOfFieldsDec)],
+        }
+        console.log("Создание json: ", json)
+
         const { data } = await httpService.post(`crm_create_client/`, json)
         alert("Ответ сервера: " + data.message)
         console.log(data)
+        navigate("/crm")
       } catch (error) {
         console.log("🚀 error:", error.response.data)
         alert("Ошибка: " + JSON.stringify(error.response.data))
       }
     }
-
-    // setClientData({})
   }
 
   const handleCancle = (e) => {
     e.preventDefault()
-    setClientData({})
+    navigate("/crm")
   }
 
   const handleChange = (target) => {
-    console.log(target)
     if (Number.isInteger(+target.name)) {
+      console.log(target.name)
       setDataOfFieldsDec((prevState) => ({
         ...prevState,
         [target.name]: {
+          // id: "",
           fields_of_pos_decision: target.name,
           value: target.value,
+        },
+      }))
+    }
+    if (target.target?.dataset.positive) {
+      setDataOfFieldsDec((prevState) => ({
+        ...prevState,
+        [target.target.dataset.name]: {
+          // id: "",
+          fields_of_pos_decision: target.target.dataset.name,
+          value: target.target.value,
         },
       }))
     }
@@ -387,83 +452,111 @@ const NewClientPage = () => {
     { label: "Низкий риск", value: "Низкий риск", name: "solvencyRisk" },
   ]
 
-  const getClients = async () => {
+  const getClient = async () => {
     try {
-      const { data } = await httpService.get(`crm_client/`)
-      console.log(data)
-      const client = data.data.filter((el) => {
-        // console.log("el: ", el.id, "params: ", params.id)
-        return el.id === +params.id
-      })
-      // console.log(client)
-      setClient(client)
+      const { data } = await httpService.get(
+        `crm_detail_relation_client/${params.id}`
+      )
+      console.log(data.data)
+      setClient(data.data)
     } catch (error) {
-      console.log("🚀 ~ file: CrmPage.jsx:19 ~ getClients ~ error:", error)
+      console.log("🚀 ", error)
     }
   }
 
   useEffect(() => {
-    if (params.id) getClients()
+    if (params.id) getClient()
   }, [])
 
   useEffect(() => {
-    if (params.id && client[0]) {
-      // console.log(client)
+    if (params.id && client) {
+      console.log(client)
       setClientData({
-        first_name: client[0].first_name,
-        second_name: client[0].second_name,
-        patronymic: client[0].patronymic,
-        inn: client[0].inn,
-        region_id: client[0].region.id,
-        manager_id: client[0].manager.id,
-        applicant_status: client[0].applicant_status.id,
-        info_source_type_id: client[0].information_source.info_source_type,
-        info_source_date: client[0].information_source.info_source_date,
-        info_source_number: client[0].information_source.info_source_number,
+        first_name: client.first_name,
+        // second_name: client.second_name,
+        // patronymic: client.patronymic,
+        inn: client.inn,
+        region_id: client.region.id,
+        manager_id: client.manager.id,
+        applicant_status: client.applicant_status.id,
+        info_source_type_id: client.information_source.info_source_type,
+        info_source_date: client.information_source.info_source_date,
+        info_source_number: client.information_source.info_source_number,
         representative_first_name:
-          client[0].representitive_client.representative_first_name,
+          client.representitive_client.representative_first_name,
         representative_second_name:
-          client[0].representitive_client.representative_second_name,
+          client.representitive_client.representative_second_name,
         representative_patronymic:
-          client[0].representitive_client.representative_patronymic,
+          client.representitive_client.representative_patronymic,
         representative_position:
-          client[0].representitive_client.representative_position,
-        representative_phone:
-          client[0].representitive_client.representative_phone,
-        representative_email:
-          client[0].representitive_client.representative_email,
-        control_point: client[0].representitive_client.control_point,
-        debt_amount: client[0].compliance_criteria.debt_amount,
-        debt_type: client[0].compliance_criteria.debt_type.id,
-        category: client[0].compliance_criteria.category.id,
-        support_measure: client[0].compliance_criteria.support_measure.id,
-        note: client[0].compliance_criteria.note,
-        support_duration: client[0].compliance_criteria.support_duration,
-        first_meeting_date: client[0].first_meeting_date,
-        event_date: client[0].event_date,
-        event_description: client[0].event_description,
-        positive_decision_type: 1,
-        negative_decision_type: 1,
-        positive_decision_date: "2023-11-11",
-        measure_provided_duration: 23,
-        oiv_request_sender: "er",
-        settled_debt_amount: 44,
-        received_amount_budget: 555,
-        overdue_debt_amount: 777,
-        technical_overdue_debt_amount: 888,
+          client.representitive_client.representative_position,
+        representative_phone: client.representitive_client.representative_phone,
+        representative_email: client.representitive_client.representative_email,
+        control_point: client.representitive_client.control_point,
+        debt_amount: client.compliance_criteria.debt_amount,
+        debt_type: client.compliance_criteria.debt_type.id,
+        category: client.compliance_criteria.category.id,
+        support_measure: client.compliance_criteria.support_measure.id,
+        note: client.compliance_criteria.note,
+        support_duration: client.compliance_criteria.support_duration,
+        first_meeting_date: client.first_meeting_date,
+        event_date: client.event_date,
+        event_description: client.event_description,
+        positive_decision_type: client.kpi.positive_decision_type,
+        negative_decision_type: client.kpi.negative_decision_type,
+        positive_decision_date: client.kpi.positive_decision_date,
+        measure_provided_duration: client.kpi.measure_provided_duration,
+        oiv_request_sender: client.kpi.oiv_request_sender,
+        settled_debt_amount: client.kpi.settled_debt_amount,
+        received_amount_budget: client.kpi.received_amount_budget,
+        overdue_debt_amount: client.kpi.overdue_debt_amount,
+        technical_overdue_debt_amount: client.kpi.technical_overdue_debt_amount,
         // DENIS
-        prd_catalog_id: client[0].prd_catalog.id,
-        stage_review: client[0].stage_review?.id,
+        prd_catalog_id: client.prd_catalog.id,
+        stage_review: client.stage_review?.id,
+        fields_of_positive_decision: client.fields_of_positive_decision,
+      })
+      client.fields_of_positive_decision.map((el) => {
+        console.log("подгрузка полей")
+        setClientData((prevState) => ({
+          ...prevState,
+          [el.fields_of_pos_decision]: el.value,
+        }))
       })
     }
   }, [client])
 
   useEffect(() => {
     validate()
+
+    if (params.id && client) {
+      client.fields_of_positive_decision.map((el) => {
+        setDataOfFieldsDec((prevState) => ({
+          ...prevState,
+          [el.fields_of_pos_decision]: {
+            // id: "",
+            fields_of_pos_decision: el.fields_of_pos_decision,
+            value: el.value,
+          },
+        }))
+      })
+    }
   }, [clientData])
 
+  useEffect(() => {
+    if (params.id && client) {
+      client.fields_of_positive_decision.map((el) => {
+        console.log("подгрузка полей")
+        return setClientData((prevState) => ({
+          ...prevState,
+          [el.fields_of_pos_decision]: el.value,
+        }))
+      })
+    }
+  }, [])
+
   if (clientData.positive_decision_type) {
-    console.log("validator add ", clientData.positive_decision_type)
+    // console.log("validator add ", clientData.positive_decision_type)
     validatorConfig = {
       ...validatorConfig,
       positive_decision_date: {
@@ -475,10 +568,18 @@ const NewClientPage = () => {
         isRequired: {
           message: "Это поле обязательно для заполнения",
         },
+        max: {
+          message: "Не более 36",
+          value: 36,
+        },
       },
       settled_debt_amount: {
         isRequired: {
           message: "Это поле обязательно для заполнения",
+        },
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
         },
       },
     }
@@ -486,27 +587,35 @@ const NewClientPage = () => {
 
   const getfieldsOfPositivDecision = async (id) => {
     setDataOfFieldsDec({})
+    setfieldsOfPosDec([])
     try {
       const { data } = await httpService.get(
         `crm_fields_of_positiv_decision/${id}`
       )
       // console.log(data.data)
       const res = data.data.map((el) => {
+        if (!client) {
+          setClientData((prevState) => ({
+            ...prevState,
+            [el.id]: "",
+          }))
+        }
         setClientData((prevState) => ({
           ...prevState,
-          [el.id]: "",
-        }))
+          control_field: "",
+        })) // Нужно изменить стейт для того, чтоб подгрузить значения в fieldsOfPosDec. Здесь все сложно...
         return {
           label: el.description,
           key: el.id,
           type: el.type_of_fields === "datetime" ? "date" : "text",
+          isPositive: true,
         }
       })
       setfieldsOfPosDec(res)
 
       // console.log(res)
     } catch (error) {
-      console.log("🚀 ~ ", error)
+      // console.log("🚀 ~ ", error)
     }
   }
   useEffect(() => {
@@ -528,7 +637,7 @@ const NewClientPage = () => {
       options: managers,
     },
     {
-      label: "Имя (пока можно здесь указать наименование клиента)",
+      label: "Наименование клиента",
       key: "first_name",
       type: "text",
     },
@@ -567,12 +676,11 @@ const NewClientPage = () => {
       label: "Номер источника информации",
       key: "info_source_number",
       type: "text",
-      inputType: "number",
     },
     { label: "Представители клиента", key: "", type: "title2" },
-    { label: "Фамилия", key: "representative_second_name", type: "text" },
-    { label: "Имя", key: "representative_first_name", type: "text" },
-    { label: "Отчество", key: "representative_patronymic", type: "text" },
+    { label: "ФИО", key: "representative_first_name", type: "text" },
+    // { label: "Фамилия", key: "representative_second_name", type: "text" },
+    // { label: "Отчество", key: "representative_patronymic", type: "text" },
     { label: "Должность", key: "representative_position", type: "text" },
     {
       label: "Телефон",
@@ -653,6 +761,7 @@ const NewClientPage = () => {
       label: "Вид положительного решения",
       key: "positive_decision_type",
       type: "select",
+      disabled: clientData.negative_decision_type,
       options: positive,
     },
 
@@ -692,6 +801,7 @@ const NewClientPage = () => {
       label: "Вид отрицаетльного решения",
       key: "negative_decision_type",
       type: "select",
+      disabled: clientData.positive_decision_type,
       options: negative,
     },
     {
@@ -857,7 +967,7 @@ const NewClientPage = () => {
                       label={el.label}
                       name={el.key}
                       placeholder={
-                        params.id && client[0]
+                        params.id && client
                           ? el?.options.filter(
                               (opt) => opt.id === clientData[el.key]
                             )[0]?.label
@@ -865,6 +975,7 @@ const NewClientPage = () => {
                       }
                       onChange={handleChange}
                       error={errors[el.key]}
+                      disabled={el.disabled}
                     />
                   )
                 } else if (el.type === "date") {
@@ -884,6 +995,7 @@ const NewClientPage = () => {
                           type="date"
                           onChange={(date) => handleChange(date)}
                           data-name={el.key}
+                          data-positive={el?.isPositive}
                         />
                       </div>
                       {errors[el.key] && (
@@ -916,7 +1028,6 @@ const NewClientPage = () => {
                   onClick={handleSubmit}
                   disabled={!isValid}
                 >
-                  {/* <Link to="/crm" className="nav-link m-2">Сохранить</Link> */}
                   Сохранить
                 </button>
 
@@ -924,11 +1035,7 @@ const NewClientPage = () => {
                   className="btn btn-danger w-25 mx-auto m-2 col-sm-3"
                   onClick={handleCancle}
                 >
-                  <Link to="/crm"
-                    className="nav-link m-2"
-                  >
-                    Назад
-                  </Link>
+                  Back
                 </button>
               </div>
             </form>

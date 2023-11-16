@@ -713,8 +713,8 @@ def CreateRelationInnAndScoringModelViewSet(request):
                     continue
                 
                 ### Процесс отлаживания функцилнала - при наличии связки не создавать новой
-                if scoring_model.inns.filter(inn=inn_id).exists():
-                    continue
+                # if scoring_model.inns.filter(inn=inn_id).exists():
+                #     continue
 
                 # try:
                 #     inn_res = InnRes.objects.get(inn=inn_id)
@@ -880,10 +880,12 @@ def InnAndResultsDetailViewSet(request, pk):
 @api_view(['POST'])
 def StartScoringViewSet(request):
     if request.method == 'POST':
+        # TODO ПРОИСХОДИТ ОБНОВЛЕНИЕ ОДИНАКОВЫХ ИНН ДЛЯ РАЗНЫХ МОДЕЛЕЙ - ИСПРАВИТЬ 
 
         inn_list, marker_formula_list = [], []
         for inn in request.data.get("model")["inns"]:
-            inn_list.append(inn["inn"])
+            inn_list.append((inn["inn"], 
+                             inn["id"]))
         for marker_formula in request.data.get("model")["marker_id"]:
             # marker_formula_list.append(marker_formula["py_query"])
             marker_formula_list.append((marker_formula["name_marker_attr"], 
@@ -893,7 +895,7 @@ def StartScoringViewSet(request):
         rank = 0.0 
         dict_markers = {}
         list_markers = []
-        for inn in inn_list:
+        for inn, idx in inn_list:
             try:
                 imported_attributes = ImportedAttributes.objects.get(inn=inn)
                 counted_attributes = CountedAttributesNew.objects.get(inn=inn)
@@ -978,7 +980,7 @@ def StartScoringViewSet(request):
 
             # print("\n")
             # print("dict_markers", dict_markers)
-            InnRes.objects.filter(inn=inn).update(result_score=dict_markers)
+            InnRes.objects.filter(id=idx).update(result_score=dict_markers)
         #     # InnRes.objects.create(markers_json=dict_markers)
             dict_markers.clear()
             list_markers = []
@@ -1691,6 +1693,8 @@ def UpdateRelationClient(request, pk):
                 region = Region.objects.get(id=request.data.get('region_id'))
                 manager = Manager.objects.get(id=request.data.get('manager_id'))
                 applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status'))
+                stage_review = ReviewStage.objects.get(id=request.data.get('stage_review'))
+                prd_catalog = CatalogPRD.objects.get(id=request.data.get('prd_catalog_id'))
 
                 client = ClientRepresentative.objects.get(id=request.data.get('representitive_client_id')['id'])
                 serializer_body = ClientRepresentativeSerializer(instance=client, \
@@ -1766,6 +1770,9 @@ def UpdateRelationClient(request, pk):
                     event_date = request.data.get('event_date'),
                     event_description = request.data.get('event_description'),
                     # kpi_id = kpi_id,
+                    stage_review = stage_review,
+                    prd_catalog = prd_catalog,
+
                 )
             except:
                 return Response({'message': 'Некорректный ввод данных!'}, status=status.HTTP_400_BAD_REQUEST)

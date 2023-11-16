@@ -8,6 +8,7 @@ const SelectSearchField = ({
   onChange,
   error,
   placeholder,
+  disabled,
 }) => {
   const getInputClasses = () => {
     return "select form-control mt-1 mr-2" + (error ? " is-invalid" : "")
@@ -25,6 +26,7 @@ const SelectSearchField = ({
           name={name}
           placeholder={placeholder}
           className={getInputClasses()}
+          isDisabled={disabled}
         />
         {error && <div className="invalid-feedback">{error}</div>}
       </div>

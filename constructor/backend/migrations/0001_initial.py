@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('patronymic', models.CharField(blank=True, max_length=255, null=True)),
                 ('inn', models.IntegerField(blank=True, null=True)),
                 ('first_meeting_date', models.DateField(blank=True, null=True)),
-                ('event_date', models.DateTimeField(blank=True, null=True)),
+                ('event_date', models.DateField(blank=True, null=True)),
                 ('event_description', models.TextField(blank=True, null=True)),
             ],
             options={
@@ -366,7 +366,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('uuid', models.UUIDField(default=uuid.uuid4, editable=False)),
                 ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('info_source_date', models.DateTimeField(blank=True, null=True)),
+                ('info_source_date', models.DateField(blank=True, null=True)),
                 ('info_source_number', models.CharField(blank=True, max_length=255, null=True)),
             ],
             options={

@@ -45,19 +45,18 @@ const ResultTable = ({ getLinkMarkers }) => {
 
   searchedModels = models
     ? models.filter((el) => {
-      console.log("el",el)
-      return el.inns.some((inn) => {
-        console.log("inn",inn)
-      //   console.log("searchedModels inside map", searchedModels)
-      //   console.log('inn.created_date', inn.created_date)
-        return Moment(inn.created_date )
-          .locale("rus", localization)
-          .format("LLL")
-          .includes(searchValue)
+        // console.log("el",el)
+        return el.inns.some((inn) => {
+          // console.log("inn",inn)
+          // console.log("searchedModels inside map", searchedModels)
+          return Moment(inn.created_date)
+            .locale("rus", localization)
+            .format("LLL")
+            .includes(searchValue)
+        })
       })
-    })
     : models
-    console.log("searchedModels", searchedModels)
+  // console.log("searchedModels", searchedModels)
 
   // searchedModels = models
   //   ? models.filter((el) => {
@@ -90,10 +89,9 @@ const ResultTable = ({ getLinkMarkers }) => {
 
   async function downLoadResultsNEW() {
     axios({
-      url: searchValue 
-      ? `${configFile.apiEndPoint}/data_for_journal/?date="${searchValue}"`
-      : `${configFile.apiEndPoint}/data_for_journal/`
-      ,
+      url: searchValue
+        ? `${configFile.apiEndPoint}/data_for_journal/?date="${searchValue}"`
+        : `${configFile.apiEndPoint}/data_for_journal/`,
       method: "GET",
       responseType: "blob",
     })
@@ -107,7 +105,6 @@ const ResultTable = ({ getLinkMarkers }) => {
       })
   }
 
-
   return (
     <>
       <div
@@ -120,11 +117,11 @@ const ResultTable = ({ getLinkMarkers }) => {
           <div className="col-md-auto">
             <Link
               to="/pipeline"
-            // className="mb-2"
+              // className="mb-2"
             >
               <MyButton
                 className="btn btn-outline-secondary"
-              // onClick={() => { }}
+                // onClick={() => { }}
               >
                 Модуль выдачи результатов
               </MyButton>
@@ -133,7 +130,7 @@ const ResultTable = ({ getLinkMarkers }) => {
           <div className="col-md-auto m-0">
             <MyButton
               // onClick={downLoadResults}
-              onClick = {downLoadResultsNEW}
+              onClick={downLoadResultsNEW}
             >
               Выгрузить данные
             </MyButton>
@@ -144,10 +141,10 @@ const ResultTable = ({ getLinkMarkers }) => {
             type="text"
             placeholder="Введите дату выдачи результатов для выгрузки"
             // className="form-group search__input mr-5"
-            onChange={(event) => 
-              // console.log("VALUE", event.target.value) 
-            setSearchValue(event.target.value)
-          }
+            onChange={(event) =>
+              // console.log("VALUE", event.target.value)
+              setSearchValue(event.target.value)
+            }
           />
         </div>
         <table className="text-center table  table-bordered table-responsive">
@@ -179,31 +176,57 @@ const ResultTable = ({ getLinkMarkers }) => {
                         - дата модели */}
                         {el.inns.map((el, index) => {
                           return (
-                            <p className="text-center" key={index}>
-                              {Moment(el.created_date)
-                                .locale("rus", localization)
-                                .format("LLL")}
-                            </p>
+                            Moment(el.created_date)
+                              .locale("rus", localization)
+                              .format("LLL")
+                              .includes(searchValue) && (
+                              <p className="text-center" key={index}>
+                                {Moment(el.created_date)
+                                  .locale("rus", localization)
+                                  .format("LLL")}
+                              </p>
+                            )
                           )
                         })}
                       </td>
                       <td>
                         {el.inns.map((el, index) => {
                           return (
-                            <p className="text-center" key={index}>
-                              ИНН{" "}
-                              {el.result_score ? (
-                                <Link to={"/results/" + el.inn}>{el.inn}</Link>
-                              ) : (
-                                el.inn
-                              )}{" "}
-                              с общим результатом{" "}
-                              <span className="text-success">
-                                {el.result_score
-                                  ? el?.result_score?.total_rank
-                                  : "-"}
-                              </span>
-                            </p>
+                            Moment(el.created_date)
+                              .locale("rus", localization)
+                              .format("LLL")
+                              .includes(searchValue) && (
+                              <p className="text-center" key={index}>
+                                ИНН{" "}
+                                {el.result_score ? (
+                                  <Link to={"/results/" + el.inn}>
+                                    {el.inn}
+                                  </Link>
+                                ) : (
+                                  el.inn
+                                )}{" "}
+                                с общим результатом{" "}
+                                <span className="text-success">
+                                  {el.result_score
+                                    ? el?.result_score?.total_rank
+                                    : "-"}
+                                </span>
+                              </p>
+                            )
+                            // <p className="text-center" key={index}>
+                            //   ИНН{" "}
+                            //   {el.result_score ? (
+                            //     <Link to={"/results/" + el.inn}>{el.inn}</Link>
+                            //   ) : (
+                            //     el.inn
+                            //   )}{" "}
+                            //   с общим результатом{" "}
+                            //   <span className="text-success">
+                            //     {el.result_score
+                            //       ? el?.result_score?.total_rank
+                            //       : "-"}
+                            //   </span>
+                            // </p>
                           )
                         })}
                       </td>
