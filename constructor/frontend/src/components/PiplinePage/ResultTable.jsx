@@ -48,7 +48,7 @@ const ResultTable = ({ getLinkMarkers }) => {
         // console.log("el",el)
         return el.inns.some((inn) => {
           // console.log("inn",inn)
-          console.log("searchedModels inside map", searchedModels)
+          // console.log("searchedModels inside map", searchedModels)
           return Moment(inn.created_date)
             .locale("rus", localization)
             .format("LLL")
@@ -56,7 +56,7 @@ const ResultTable = ({ getLinkMarkers }) => {
         })
       })
     : models
-  console.log("searchedModels", searchedModels)
+  // console.log("searchedModels", searchedModels)
 
   // searchedModels = models
   //   ? models.filter((el) => {
@@ -176,15 +176,16 @@ const ResultTable = ({ getLinkMarkers }) => {
                         - дата модели */}
                         {el.inns.map((el, index) => {
                           return (
-                            <p className="text-center" key={index}>
-                              {Moment(el.created_date)
-                                .locale("rus", localization)
-                                .format("LLL")
-                                .includes(searchValue) &&
-                                Moment(el.created_date)
+                            Moment(el.created_date)
+                              .locale("rus", localization)
+                              .format("LLL")
+                              .includes(searchValue) && (
+                              <p className="text-center" key={index}>
+                                {Moment(el.created_date)
                                   .locale("rus", localization)
                                   .format("LLL")}
-                            </p>
+                              </p>
+                            )
                           )
                         })}
                       </td>

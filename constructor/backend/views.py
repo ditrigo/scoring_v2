@@ -1658,6 +1658,8 @@ def UpdateRelationClient(request, pk):
                 region = Region.objects.get(id=request.data.get('region_id'))
                 manager = Manager.objects.get(id=request.data.get('manager_id'))
                 applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status'))
+                stage_review = ReviewStage.objects.get(id=request.data.get('stage_review'))
+                prd_catalog = CatalogPRD.objects.get(id=request.data.get('prd_catalog_id'))
 
                 client = ClientRepresentative.objects.get(id=request.data.get('representitive_client_id')['id'])
                 serializer_body = ClientRepresentativeSerializer(instance=client, \
@@ -1733,6 +1735,9 @@ def UpdateRelationClient(request, pk):
                     event_date = request.data.get('event_date'),
                     event_description = request.data.get('event_description'),
                     # kpi_id = kpi_id,
+                    stage_review = stage_review,
+                    prd_catalog = prd_catalog,
+
                 )
             except:
                 return Response({'message': 'Некорректный ввод данных!'}, status=status.HTTP_400_BAD_REQUEST)

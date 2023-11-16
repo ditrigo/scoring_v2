@@ -41,7 +41,7 @@ const ContentRows = ({ clients }) => {
           <td className={makeClassName("Высокий риск")}>нет в json</td>
           <td> {el.stage_review?.stage}</td>
           <td>
-            {Moment(el.event_date).locale("rus", localization).format("LLL")}
+            {Moment(el.event_date).locale("rus", localization).format("LL")}
             {/* {el.event_date} */}
           </td>
         </tr>
