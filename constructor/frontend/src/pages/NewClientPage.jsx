@@ -1035,7 +1035,7 @@ const NewClientPage = () => {
                   className="btn btn-danger w-25 mx-auto m-2 col-sm-3"
                   onClick={handleCancle}
                 >
-                  Back
+                  Назад
                 </button>
               </div>
             </form>
