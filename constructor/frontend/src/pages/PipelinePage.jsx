@@ -91,48 +91,48 @@ const PipelinePage = () => {
   }
 
   async function handleSaveData() {
-    const json = {
-      inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
-      active: true,
-      scoringmodel_id: models.find(
-        (el) => el.model_name === scoringModel.scoring_model
-      ).id,
-      author_id: "Тестовый пользователь",
-    }
-    try {
-      const { data } = await httpService.post("inn_res/create_relation/", json)
-      console.log("Relation resp: ", data)
-      setDisabledBtn("btn btn-outline-primary disabled")
-      setIsSaved(true)
-      setModels([])
-      setScoringOptions([])
-      getModels()
-    } catch (error) {
-      console.log("ERR relation", error.message)
-      alert("Ошибка создания связки: " + error.message)
-    }
+    // const json = {
+    //   inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
+    //   active: true,
+    //   scoringmodel_id: models.find(
+    //     (el) => el.model_name === scoringModel.scoring_model
+    //   ).id,
+    //   author_id: "Тестовый пользователь",
+    // }
+    // try {
+    //   const { data } = await httpService.post("inn_res/create_relation/", json)
+    //   console.log("Relation resp: ", data)
+    //   setDisabledBtn("btn btn-outline-primary disabled")
+    //   setIsSaved(true)
+    //   setModels([])
+    //   setScoringOptions([])
+    //   getModels()
+    // } catch (error) {
+    //   console.log("ERR relation", error.message)
+    //   alert("Ошибка создания связки: " + error.message)
+    // }
 
-    // await axios
-    //   .post(`${configFile.apiEndPoint}/inn_res/create_relation/`, {
-    //     inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
-    //     active: true,
-    //     scoringmodel_id: models.find(
-    //       (el) => el.model_name === scoringModel.scoring_model
-    //     ).id,
-    //     author_id: "Тестовый пользователь",
-    //   })
-    //   .then(function (response) {
-    //     console.log("Сделать связку ", response.data)
-    //     setDisabledBtn("btn btn-outline-primary disabled")
-    //     setIsSaved(true)
-    //     setModels([])
-    //     setScoringOptions([])
-    //     getModels()
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error)
-    //     alert("Произошла ошибка в сохранении связки: ", error)
-    //   })
+    await axios
+      .post(`${configFile.apiEndPoint}/inn_res/create_relation/`, {
+        inn_ids: inputINN.split(", ").join(" ").split("/").join(" ").split(" "),
+        active: true,
+        scoringmodel_id: models.find(
+          (el) => el.model_name === scoringModel.scoring_model
+        ).id,
+        author_id: "Тестовый пользователь",
+      })
+      .then(function (response) {
+        console.log("Сделать связку ", response.data)
+        setDisabledBtn("btn btn-outline-primary disabled")
+        setIsSaved(true)
+        setModels([])
+        setScoringOptions([])
+        getModels()
+      })
+      .catch(function (error) {
+        console.log(error)
+        alert("Произошла ошибка в сохранении связки: ", error)
+      })
   }
 
   const toggle = () => {
