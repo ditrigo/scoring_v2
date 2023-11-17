@@ -1584,10 +1584,12 @@ def CreateRelationClient(request):
                 )
                 compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
                 
+                print("request.data.get('information_source_id')[info_source_type_id]", request.data.get('information_source_id')["info_source_type_id"])
+                print(type(request.data.get('information_source_id')["info_source_type_id"]))
                 if request.data.get('information_source_id')["info_source_type_id"] != "":
                     info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
                 else:
-                    information_source_id = None
+                    info_source_type_id = None
 
                 if request.data.get('information_source_id')["info_source_date"] != "":
                     info_source_date = request.data.get('information_source_id')["info_source_date"]
@@ -1599,37 +1601,124 @@ def CreateRelationClient(request):
                 else:
                     info_source_number = None
                     
-                InformationSource.objects.create(
-                    info_source_type = info_source_type_id,
-                    info_source_date = info_source_date,
-                    info_source_number = info_source_number,
-                )
-                information_source_id = InformationSource.objects.latest('id').id 
+                # InformationSource.objects.create(
+                #     info_source_type = info_source_type_id,
+                #     info_source_date = info_source_date,
+                #     info_source_number = info_source_number,
+                # )
+                #TODO услвоие на не созданиии записи
+                if ( info_source_number) or ( info_source_type_id) or ( info_source_date):
+                    InformationSource.objects.create(
+                        info_source_type = info_source_type_id,
+                        info_source_date = info_source_date,
+                        info_source_number = info_source_number,
+                    )
+                    information_source_id = InformationSource.objects.latest('id').id 
+                else:
+                    information_source_id = None
 
-                
+                # TODO Предусмотреть возможность создание kpi при не всех заполненных полях ################
                 kpi_id = None
                 if request.data.get('kpi_id') != None:
-                    serializer_kpi = KPISerializer(data=request.data.get('kpi_id'))
-                    if not serializer_kpi.is_valid():
-                        transaction.set_rollback(True)
-                        return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                    if request.data.get('kpi_id')["positive_decision_type"] != "":
+                        positive_decision_type = request.data.get('kpi_id')["positive_decision_type"]
+                    else: 
+                        positive_decision_type = None
                     
-                    serializer_kpi.save()
+                    if request.data.get('kpi_id')["positive_decision_date"] != "":
+                        positive_decision_date = request.data.get('kpi_id')["positive_decision_date"]
+                    else: 
+                        positive_decision_date = None
+
+                    if request.data.get('kpi_id')["measure_provided_duration"] != "":
+                        measure_provided_duration = request.data.get('kpi_id')["measure_provided_duration"]
+                    else: 
+                        measure_provided_duration = None 
+                    
+                    if request.data.get('kpi_id')["negative_decision_type"] != "":
+                        # negative_decision_type = request.data.get('kpi_id')["negative_decision_type"]
+                        negative_decision_type = NegativeDecision.objects.get(id=request.data.get('kpi_id')["negative_decision_type"])
+                        print(negative_decision_type)
+                        print(type(negative_decision_type))
+                    else: 
+                        negative_decision_type = None 
+
+                    if request.data.get('kpi_id')["settled_debt_amount"] != "":
+                        settled_debt_amount = request.data.get('kpi_id')["settled_debt_amount"]
+                    else: 
+                        settled_debt_amount = None 
+
+                    if request.data.get('kpi_id')["received_amount_budget"] != "":
+                        received_amount_budget = request.data.get('kpi_id')["received_amount_budget"]
+                    else: 
+                        received_amount_budget = None 
+
+                    if request.data.get('kpi_id')["overdue_debt_amount"] != "":
+                        overdue_debt_amount = request.data.get('kpi_id')["overdue_debt_amount"]
+                    else: 
+                        overdue_debt_amount = None 
+
+                    if request.data.get('kpi_id')["technical_overdue_debt_amount"] != "":
+                        technical_overdue_debt_amount = request.data.get('kpi_id')["technical_overdue_debt_amount"]
+                    else: 
+                        technical_overdue_debt_amount = None 
+
+                    if ( positive_decision_type) or ( positive_decision_date) or \
+                    ( measure_provided_duration) or ( negative_decision_type) or \
+                    ( settled_debt_amount) or ( received_amount_budget) or \
+                    ( overdue_debt_amount) or ( technical_overdue_debt_amount):
+                        KPI.objects.create(
+                            positive_decision_type = positive_decision_type,
+                            positive_decision_date = positive_decision_date,
+                            measure_provided_duration = measure_provided_duration,
+                            oiv_request_sender = request.data.get('kpi_id')["oiv_request_sender"],
+                            negative_decision_type = negative_decision_type,
+                            settled_debt_amount = settled_debt_amount,
+                            received_amount_budget = received_amount_budget,
+                            overdue_debt_amount = overdue_debt_amount,
+                            technical_overdue_debt_amount = technical_overdue_debt_amount
+                        )
+                        kpi_id = KPI.objects.latest('id').id
+
+                        if request.data.get('fields_of_positive_decision') != None and \
+                            request.data.get('kpi_id')['positive_decision_type'] != None:
+                            data_fields = request.data.get('fields_of_positive_decision')
+                            for fields in data_fields:
+                                fields['kpi'] = kpi_id
+                                serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
+                                if not serializer_fields_of_positive.is_valid():
+                                    transaction.set_rollback(True)
+                                    return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                            
+                                serializer_fields_of_positive.save()
+
+                    else:
+                        kpi_id = None
+
+                # if request.data.get('kpi_id') != None:
+                #     serializer_kpi = KPISerializer(data=request.data.get('kpi_id'))
+                #     if not serializer_kpi.is_valid():
+                #         transaction.set_rollback(True)
+                #         return Response(serializer_body.errors, 
+                #                         status=status.HTTP_400_BAD_REQUEST)
+                    
+                #     serializer_kpi.save()
                     
 
-                    kpi_id = KPI.objects.latest('id').id
+                #     kpi_id = KPI.objects.latest('id').id
+                    ########################################################################################
 
-                    if request.data.get('fields_of_positive_decision') != None and \
-                        request.data.get('kpi_id')['positive_decision_type'] != None:
-                        data_fields = request.data.get('fields_of_positive_decision')
-                        for fields in data_fields:
-                            fields['kpi'] = kpi_id
-                            serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
-                            if not serializer_fields_of_positive.is_valid():
-                                transaction.set_rollback(True)
-                                return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                    # if request.data.get('fields_of_positive_decision') != None and \
+                    #     request.data.get('kpi_id')['positive_decision_type'] != None:
+                    #     data_fields = request.data.get('fields_of_positive_decision')
+                    #     for fields in data_fields:
+                    #         fields['kpi'] = kpi_id
+                    #         serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
+                    #         if not serializer_fields_of_positive.is_valid():
+                    #             transaction.set_rollback(True)
+                    #             return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
                         
-                            serializer_fields_of_positive.save()
+                    #         serializer_fields_of_positive.save()
 
                 if request.data.get('first_meeting_date') != "":
                     first_meeting_date = request.data.get('first_meeting_date')

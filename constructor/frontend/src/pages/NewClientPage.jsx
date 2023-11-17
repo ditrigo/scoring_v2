@@ -34,8 +34,8 @@ const NewClientPage = () => {
   const [dataOfFieldsDec, setDataOfFieldsDec] = useState({})
   const [clientData, setClientData] = useState({
     first_name: "",
-    // second_name: "",
-    // patronymic: "",
+    second_name: "",
+    patronymic: "",
     inn: "",
     region_id: "",
     manager_id: "",
@@ -274,6 +274,8 @@ const NewClientPage = () => {
       const jsonForUpdate = {
         id: client.id,
         first_name: clientData.first_name,
+        second_name: "", 
+        patronymic: "",
         inn: clientData.inn,
         region_id: clientData.region_id,
         manager_id: clientData.manager_id,
@@ -288,8 +290,8 @@ const NewClientPage = () => {
         representitive_client_id: {
           id: client.representitive_client.id,
           representative_first_name: clientData.representative_first_name,
-          // representative_second_name: clientData.representative_second_name,
-          // representative_patronymic: clientData.representative_patronymic,
+          representative_second_name: "", // clientData.representative_second_name,
+          representative_patronymic: "", // clientData.representative_patronymic,
           representative_position: clientData.representative_position,
           representative_phone: clientData.representative_phone,
           representative_email: clientData.representative_email,
@@ -380,8 +382,8 @@ const NewClientPage = () => {
             negative_decision_type: clientData.negative_decision_type,
           },
           first_name: clientData.first_name,
-          // second_name: clientData.second_name,
-          // patronymic: clientData.patronymic,
+          second_name: "",
+          patronymic: "",
           inn: clientData.inn,
           first_meeting_date: clientData.first_meeting_date,
           event_date: clientData.event_date,
@@ -473,8 +475,8 @@ const NewClientPage = () => {
       console.log(client)
       setClientData({
         first_name: client.first_name,
-        // second_name: client.second_name,
-        // patronymic: client.patronymic,
+        second_name: "",
+        patronymic: "",
         inn: client.inn,
         region_id: client.region.id,
         manager_id: client.manager.id,
