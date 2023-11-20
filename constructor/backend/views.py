@@ -1557,7 +1557,7 @@ def CreateRelationClient(request):
         with transaction.atomic():
             try:
                 region = Region.objects.get(id=request.data.get('region_id')) # Required
-                
+
                 if request.data.get('reasons') != "":
                     reasons = ReasonsForConsideration.objects.get(id=request.data.get('reasons'))  # string, "" -ok
                 else:
@@ -1624,15 +1624,15 @@ def CreateRelationClient(request):
                 #     info_source_number = info_source_number,
                 # )
                 #TODO услвоие на не созданиии записи
-                if ( info_source_number) or ( info_source_type_id) or ( info_source_date):
-                    InformationSource.objects.create(
-                        info_source_type = info_source_type_id,
-                        info_source_date = info_source_date,
-                        info_source_number = info_source_number,
-                    )
-                    information_source_id = InformationSource.objects.latest('id').id 
-                else:
-                    information_source_id = None
+                # if ( info_source_number) or ( info_source_type_id) or ( info_source_date):
+                InformationSource.objects.create(
+                    info_source_type = info_source_type_id,
+                    info_source_date = info_source_date,
+                    info_source_number = info_source_number,
+                )
+                information_source_id = InformationSource.objects.latest('id').id 
+                # else:
+                #     information_source_id = None
 
                 # TODO Предусмотреть возможность создание kpi при не всех заполненных полях ################
                 kpi_id = None
@@ -1643,7 +1643,10 @@ def CreateRelationClient(request):
                         positive_decision_type = None
                     
                     if request.data.get('kpi_id')["positive_decision_date"] != "":
-                        positive_decision_date = request.data.get('kpi_id')["positive_decision_date"]
+                        # positive_decision_date = request.data.get('kpi_id')["positive_decision_date"]
+                        date_format = '%Y-%m-%d'
+                        positive_decision_date = datetime.strptime(PositiveDecision.objects.get(id=request.data.get('kpi_id')["positive_decision_date"]), 
+                                                                   date_format)
                     else: 
                         positive_decision_date = None
 
@@ -1680,37 +1683,37 @@ def CreateRelationClient(request):
                     else: 
                         technical_overdue_debt_amount = None 
 
-                    if ( positive_decision_type) or ( positive_decision_date) or \
-                    ( measure_provided_duration) or ( negative_decision_type) or \
-                    ( settled_debt_amount) or ( received_amount_budget) or \
-                    ( overdue_debt_amount) or ( technical_overdue_debt_amount):
-                        KPI.objects.create(
-                            positive_decision_type = positive_decision_type,
-                            positive_decision_date = positive_decision_date,
-                            measure_provided_duration = measure_provided_duration,
-                            oiv_request_sender = request.data.get('kpi_id')["oiv_request_sender"],
-                            negative_decision_type = negative_decision_type,
-                            settled_debt_amount = settled_debt_amount,
-                            received_amount_budget = received_amount_budget,
-                            overdue_debt_amount = overdue_debt_amount,
-                            technical_overdue_debt_amount = technical_overdue_debt_amount
-                        )
-                        kpi_id = KPI.objects.latest('id').id
+                    # if ( positive_decision_type) or ( positive_decision_date) or \
+                    # ( measure_provided_duration) or ( negative_decision_type) or \
+                    # ( settled_debt_amount) or ( received_amount_budget) or \
+                    # ( overdue_debt_amount) or ( technical_overdue_debt_amount):
+                    KPI.objects.create(
+                        positive_decision_type = positive_decision_type,
+                        positive_decision_date = positive_decision_date,
+                        measure_provided_duration = measure_provided_duration,
+                        oiv_request_sender = request.data.get('kpi_id')["oiv_request_sender"], # string, "" -ok
+                        negative_decision_type = negative_decision_type,
+                        settled_debt_amount = settled_debt_amount,
+                        received_amount_budget = received_amount_budget,
+                        overdue_debt_amount = overdue_debt_amount,
+                        technical_overdue_debt_amount = technical_overdue_debt_amount
+                    )
+                    kpi_id = KPI.objects.latest('id').id
 
-                        if request.data.get('fields_of_positive_decision') != None and \
-                            request.data.get('kpi_id')['positive_decision_type'] != None:
-                            data_fields = request.data.get('fields_of_positive_decision')
-                            for fields in data_fields:
-                                fields['kpi'] = kpi_id
-                                serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
-                                if not serializer_fields_of_positive.is_valid():
-                                    transaction.set_rollback(True)
-                                    return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
-                            
-                                serializer_fields_of_positive.save()
+                    if request.data.get('fields_of_positive_decision') != None and \
+                        request.data.get('kpi_id')['positive_decision_type'] != None:
+                        data_fields = request.data.get('fields_of_positive_decision')
+                        for fields in data_fields:
+                            fields['kpi'] = kpi_id
+                            serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
+                            if not serializer_fields_of_positive.is_valid():
+                                transaction.set_rollback(True)
+                                return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                        
+                            serializer_fields_of_positive.save()
 
-                    else:
-                        kpi_id = None
+                    # else:
+                    #     kpi_id = None
 
                 # if request.data.get('kpi_id') != None:
                 #     serializer_kpi = KPISerializer(data=request.data.get('kpi_id'))
@@ -1847,12 +1850,26 @@ def UpdateRelationClient(request, pk):
                 )
                 # compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
                 
-                info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
+                # info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
+                if request.data.get('information_source_id')["info_source_type_id"] != "":
+                    info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
+                else:
+                    info_source_type_id = None
+
+                if request.data.get('information_source_id')["info_source_date"] != "":
+                    info_source_date = request.data.get('information_source_id')["info_source_date"]
+                else:
+                    info_source_date = None
+
+                if request.data.get('information_source_id')["info_source_number"] != "":
+                    info_source_number = request.data.get('information_source_id')["info_source_number"]
+                else:
+                    info_source_number = None
                 
                 InformationSource.objects.filter(id=request.data.get('information_source_id')['id']).update(
                     info_source_type = info_source_type_id,
-                    info_source_date = request.data.get('information_source_id')["info_source_date"],
-                    info_source_number = request.data.get('information_source_id')["info_source_number"],
+                    info_source_date = info_source_date,
+                    info_source_number = info_source_number,
                 )
                 # information_source_id = InformationSource.objects.latest('id').id 
                 
