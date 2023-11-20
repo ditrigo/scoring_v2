@@ -1630,7 +1630,7 @@ def CreateRelationClient(request):
                     info_source_date = info_source_date,
                     info_source_number = info_source_number,
                 )
-                information_source_id = InformationSource.objects.latest('id').id 
+                information_source_id = InformationSource.objects.latest('id').id
                 # else:
                 #     information_source_id = None
 
