@@ -58,9 +58,7 @@ const ContentRows = ({ clients }) => {
           <td>{el.prd_catalog.catalog_prd}</td>
           <td>
             <Link to={"/newclient/" + el.id}>
-              {el.manager?.second_name } 
-              {el.manager?.first_name }
-              {el.manager?.patronymic} {el.manager?.job_title}
+              {el.manager?.second_name}  {el.manager?.first_name} {el.manager?.patronymic} {el.manager?.job_title}
             </Link>
           </td>
           <td>
