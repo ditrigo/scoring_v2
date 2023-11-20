@@ -2088,7 +2088,7 @@ SELECT
     t_status.status as status,
 -- Источник информации
     t_inf_type.type as info_type,
-    t_inf_sours.info_source_date as info_source_date,
+    strftime('%d.%m.%Y',t_inf_sours.info_source_date) as info_source_date,
     t_inf_sours.info_source_number as info_source_number,
 -- Представители клиента
     t_repr_client.representative_second_name || ' ' || t_repr_client.representative_first_name || ' ' || t_repr_client.representative_patronymic as fio_repr_client,
