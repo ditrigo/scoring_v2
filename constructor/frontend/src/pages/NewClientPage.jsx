@@ -34,8 +34,8 @@ const NewClientPage = () => {
   const [dataOfFieldsDec, setDataOfFieldsDec] = useState({})
   const [clientData, setClientData] = useState({
     first_name: "",
-    // second_name: "",
-    // patronymic: "",
+    second_name: "",
+    patronymic: "",
     inn: "",
     region_id: "",
     manager_id: "",
@@ -92,6 +92,14 @@ const NewClientPage = () => {
       count: {
         message: "ИНН должен содержать от 10 символов.",
         value: 10,
+      },
+      maxCount: {
+        message: "Не больше 12 знаков",
+        value: 12,
+      },
+      not11: {
+        message: "Не может содержать 11 знаков",
+        value: 11,
       },
     },
     stage_review: {
@@ -264,7 +272,7 @@ const NewClientPage = () => {
         console.log(e)
       })
   }, [])
-
+  console.log("params.id && client", params.id && client)
   const handleSubmit = async (e) => {
     e.preventDefault()
     // console.log(client && client.information_source.id)
@@ -274,6 +282,8 @@ const NewClientPage = () => {
       const jsonForUpdate = {
         id: client.id,
         first_name: clientData.first_name,
+        second_name: "",
+        patronymic: "",
         inn: clientData.inn,
         region_id: clientData.region_id,
         manager_id: clientData.manager_id,
@@ -288,8 +298,8 @@ const NewClientPage = () => {
         representitive_client_id: {
           id: client.representitive_client.id,
           representative_first_name: clientData.representative_first_name,
-          // representative_second_name: clientData.representative_second_name,
-          // representative_patronymic: clientData.representative_patronymic,
+          representative_second_name: "", // clientData.representative_second_name,
+          representative_patronymic: "", // clientData.representative_patronymic,
           representative_position: clientData.representative_position,
           representative_phone: clientData.representative_phone,
           representative_email: clientData.representative_email,
@@ -380,8 +390,8 @@ const NewClientPage = () => {
             negative_decision_type: clientData.negative_decision_type,
           },
           first_name: clientData.first_name,
-          // second_name: clientData.second_name,
-          // patronymic: clientData.patronymic,
+          second_name: "",
+          patronymic: "",
           inn: clientData.inn,
           first_meeting_date: clientData.first_meeting_date,
           event_date: clientData.event_date,
@@ -473,8 +483,8 @@ const NewClientPage = () => {
       console.log(client)
       setClientData({
         first_name: client.first_name,
-        // second_name: client.second_name,
-        // patronymic: client.patronymic,
+        second_name: "",
+        patronymic: "",
         inn: client.inn,
         region_id: client.region.id,
         manager_id: client.manager.id,
@@ -502,15 +512,16 @@ const NewClientPage = () => {
         first_meeting_date: client.first_meeting_date,
         event_date: client.event_date,
         event_description: client.event_description,
-        positive_decision_type: client.kpi.positive_decision_type,
-        negative_decision_type: client.kpi.negative_decision_type,
-        positive_decision_date: client.kpi.positive_decision_date,
-        measure_provided_duration: client.kpi.measure_provided_duration,
-        oiv_request_sender: client.kpi.oiv_request_sender,
-        settled_debt_amount: client.kpi.settled_debt_amount,
-        received_amount_budget: client.kpi.received_amount_budget,
-        overdue_debt_amount: client.kpi.overdue_debt_amount,
-        technical_overdue_debt_amount: client.kpi.technical_overdue_debt_amount,
+        positive_decision_type: client.kpi?.positive_decision_type,
+        negative_decision_type: client.kpi?.negative_decision_type,
+        positive_decision_date: client.kpi?.positive_decision_date,
+        measure_provided_duration: client.kpi?.measure_provided_duration,
+        oiv_request_sender: client.kpi?.oiv_request_sender,
+        settled_debt_amount: client.kpi?.settled_debt_amount,
+        received_amount_budget: client.kpi?.received_amount_budget,
+        overdue_debt_amount: client.kpi?.overdue_debt_amount,
+        technical_overdue_debt_amount:
+          client.kpi?.technical_overdue_debt_amount,
         // DENIS
         prd_catalog_id: client.prd_catalog.id,
         stage_review: client.stage_review?.id,
@@ -765,15 +776,6 @@ const NewClientPage = () => {
       options: positive,
     },
 
-    fieldsOfPosDec.length && fieldsOfPosDec[0],
-    fieldsOfPosDec.length && fieldsOfPosDec[1] ? fieldsOfPosDec[1] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[2] ? fieldsOfPosDec[2] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[3] ? fieldsOfPosDec[3] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[4] ? fieldsOfPosDec[4] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[5] ? fieldsOfPosDec[5] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[6] ? fieldsOfPosDec[6] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[7] ? fieldsOfPosDec[7] : "",
-
     {
       label: "Дата положительного решения",
       key: "positive_decision_date",
@@ -791,6 +793,16 @@ const NewClientPage = () => {
       type: "text",
       inputType: "number",
     },
+
+    fieldsOfPosDec.length && fieldsOfPosDec[0],
+    fieldsOfPosDec.length && fieldsOfPosDec[1] ? fieldsOfPosDec[1] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[2] ? fieldsOfPosDec[2] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[3] ? fieldsOfPosDec[3] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[4] ? fieldsOfPosDec[4] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[5] ? fieldsOfPosDec[5] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[6] ? fieldsOfPosDec[6] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[7] ? fieldsOfPosDec[7] : "",
+
     // здесь у них поле
     {
       label: "От кого ходатайство ОИВ (для МС)",
@@ -1035,7 +1047,7 @@ const NewClientPage = () => {
                   className="btn btn-danger w-25 mx-auto m-2 col-sm-3"
                   onClick={handleCancle}
                 >
-                  Back
+                  Назад
                 </button>
               </div>
             </form>

@@ -713,8 +713,8 @@ def CreateRelationInnAndScoringModelViewSet(request):
                     continue
                 
                 ### Процесс отлаживания функцилнала - при наличии связки не создавать новой
-                if scoring_model.inns.filter(inn=inn_id).exists():
-                    continue
+                # if scoring_model.inns.filter(inn=inn_id).exists():
+                #     continue
 
                 # try:
                 #     inn_res = InnRes.objects.get(inn=inn_id)
@@ -880,10 +880,12 @@ def InnAndResultsDetailViewSet(request, pk):
 @api_view(['POST'])
 def StartScoringViewSet(request):
     if request.method == 'POST':
+        # TODO ПРОИСХОДИТ ОБНОВЛЕНИЕ ОДИНАКОВЫХ ИНН ДЛЯ РАЗНЫХ МОДЕЛЕЙ - ИСПРАВИТЬ 
 
         inn_list, marker_formula_list = [], []
         for inn in request.data.get("model")["inns"]:
-            inn_list.append(inn["inn"])
+            inn_list.append((inn["inn"], 
+                             inn["id"]))
         for marker_formula in request.data.get("model")["marker_id"]:
             # marker_formula_list.append(marker_formula["py_query"])
             marker_formula_list.append((marker_formula["name_marker_attr"], 
@@ -893,7 +895,7 @@ def StartScoringViewSet(request):
         rank = 0.0 
         dict_markers = {}
         list_markers = []
-        for inn in inn_list:
+        for inn, idx in inn_list:
             try:
                 imported_attributes = ImportedAttributes.objects.get(inn=inn)
                 counted_attributes = CountedAttributesNew.objects.get(inn=inn)
@@ -978,7 +980,7 @@ def StartScoringViewSet(request):
 
             # print("\n")
             # print("dict_markers", dict_markers)
-            InnRes.objects.filter(inn=inn).update(result_score=dict_markers)
+            InnRes.objects.filter(id=idx).update(result_score=dict_markers)
         #     # InnRes.objects.create(markers_json=dict_markers)
             dict_markers.clear()
             list_markers = []
@@ -1056,8 +1058,10 @@ def StartTestScoringViewSet(request):
                 else:
                     try:
                         counting_rank = eval(formula)
+                        print(counting_rank, formula)
                         if target_value:
                             counting_target_value = eval(target_value)
+                            print("counting_target_value", counting_target_value)
                         else:
                             counting_target_value = "Нет значения для маркера"
                         print(counting_target_value)
@@ -1540,82 +1544,202 @@ def CreateRelationClient(request):
 
         with transaction.atomic():
             try:
+                region = Region.objects.get(id=request.data.get('region_id')) # Required
 
-                region = Region.objects.get(id=request.data.get('region_id'))
-                manager = Manager.objects.get(id=request.data.get('manager_id'))
-                stage_review = ReviewStage.objects.get(id=request.data.get('stage_review'))
-                applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status'))
-                prd_catalog = CatalogPRD.objects.get(id=request.data.get('prd_catalog_id'))
+                if request.data.get('manager_id') != "":
+                    manager = Manager.objects.get(id=request.data.get('manager_id'))
+                else:
+                    manager = None
+                if request.data.get('stage_review') != "":
+                    stage_review = ReviewStage.objects.get(id=request.data.get('stage_review'))
+                else:
+                    stage_review = None
 
-                serializer_body = ClientRepresentativeSerializer(data=request.data.get('representitive_client_id'))
+                applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status')) # Required
+                prd_catalog = CatalogPRD.objects.get(id=request.data.get('prd_catalog_id')) # Required
+
+                serializer_body = ClientRepresentativeSerializer(data=request.data.get('representitive_client_id')) # All string fields
                 if not serializer_body.is_valid():
                     transaction.set_rollback(True)
                     return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
                 serializer_body.save()
                 representitive_client_id = ClientRepresentative.objects.latest('id').id
             
-                category = Category.objects.get(id=request.data.get('compliance_data_id')["category"])
-                debt_type = DebtType.objects.get(id=request.data.get('compliance_data_id')["debt_type"])
-                support_measure = SupportMeasure.objects.get(id=request.data.get('compliance_data_id')["support_measure"])
+                category = Category.objects.get(id=request.data.get('compliance_data_id')["category"]) # Required
+                debt_type = DebtType.objects.get(id=request.data.get('compliance_data_id')["debt_type"]) # Required
+                support_measure = SupportMeasure.objects.get(id=request.data.get('compliance_data_id')["support_measure"]) # Required
+
+                if request.data.get('compliance_data_id')["support_duration"] != "":
+                    support_duration = request.data.get('compliance_data_id')["support_duration"]
+                else:
+                    support_duration = None
                 
                 ComplianceCriteria.objects.create(
-                    debt_amount = request.data.get('compliance_data_id')["debt_amount"],
+                    debt_amount = request.data.get('compliance_data_id')["debt_amount"], # Required
                     debt_type = debt_type,
                     category = category,
                     support_measure = support_measure,
                     note = request.data.get('compliance_data_id')["note"],
-                    support_duration = request.data.get('compliance_data_id')["support_duration"],
+                    support_duration = support_duration,
                 )
                 compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
+                
+                print("request.data.get('information_source_id')[info_source_type_id]", request.data.get('information_source_id')["info_source_type_id"])
+                print(type(request.data.get('information_source_id')["info_source_type_id"]))
+                if request.data.get('information_source_id')["info_source_type_id"] != "":
+                    info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
+                else:
+                    info_source_type_id = None
 
-                info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
-                
-                InformationSource.objects.create(
-                    info_source_type = info_source_type_id,
-                    info_source_date = request.data.get('information_source_id')["info_source_date"],
-                    info_source_number = request.data.get('information_source_id')["info_source_number"],
-                )
-                information_source_id = InformationSource.objects.latest('id').id 
-                
+                if request.data.get('information_source_id')["info_source_date"] != "":
+                    info_source_date = request.data.get('information_source_id')["info_source_date"]
+                else:
+                    info_source_date = None
+
+                if request.data.get('information_source_id')["info_source_number"] != "":
+                    info_source_number = request.data.get('information_source_id')["info_source_number"]
+                else:
+                    info_source_number = None
+                    
+                # InformationSource.objects.create(
+                #     info_source_type = info_source_type_id,
+                #     info_source_date = info_source_date,
+                #     info_source_number = info_source_number,
+                # )
+                #TODO услвоие на не созданиии записи
+                if ( info_source_number) or ( info_source_type_id) or ( info_source_date):
+                    InformationSource.objects.create(
+                        info_source_type = info_source_type_id,
+                        info_source_date = info_source_date,
+                        info_source_number = info_source_number,
+                    )
+                    information_source_id = InformationSource.objects.latest('id').id 
+                else:
+                    information_source_id = None
+
+                # TODO Предусмотреть возможность создание kpi при не всех заполненных полях ################
                 kpi_id = None
                 if request.data.get('kpi_id') != None:
-                    serializer_kpi = KPISerializer(data=request.data.get('kpi_id'))
-                    if not serializer_kpi.is_valid():
-                        transaction.set_rollback(True)
-                        return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                    if request.data.get('kpi_id')["positive_decision_type"] != "":
+                        positive_decision_type = request.data.get('kpi_id')["positive_decision_type"]
+                    else: 
+                        positive_decision_type = None
                     
-                    serializer_kpi.save()
+                    if request.data.get('kpi_id')["positive_decision_date"] != "":
+                        positive_decision_date = request.data.get('kpi_id')["positive_decision_date"]
+                    else: 
+                        positive_decision_date = None
+
+                    if request.data.get('kpi_id')["measure_provided_duration"] != "":
+                        measure_provided_duration = request.data.get('kpi_id')["measure_provided_duration"]
+                    else: 
+                        measure_provided_duration = None 
+                    
+                    if request.data.get('kpi_id')["negative_decision_type"] != "":
+                        # negative_decision_type = request.data.get('kpi_id')["negative_decision_type"]
+                        negative_decision_type = NegativeDecision.objects.get(id=request.data.get('kpi_id')["negative_decision_type"])
+                        print(negative_decision_type)
+                        print(type(negative_decision_type))
+                    else: 
+                        negative_decision_type = None 
+
+                    if request.data.get('kpi_id')["settled_debt_amount"] != "":
+                        settled_debt_amount = request.data.get('kpi_id')["settled_debt_amount"]
+                    else: 
+                        settled_debt_amount = None 
+
+                    if request.data.get('kpi_id')["received_amount_budget"] != "":
+                        received_amount_budget = request.data.get('kpi_id')["received_amount_budget"]
+                    else: 
+                        received_amount_budget = None 
+
+                    if request.data.get('kpi_id')["overdue_debt_amount"] != "":
+                        overdue_debt_amount = request.data.get('kpi_id')["overdue_debt_amount"]
+                    else: 
+                        overdue_debt_amount = None 
+
+                    if request.data.get('kpi_id')["technical_overdue_debt_amount"] != "":
+                        technical_overdue_debt_amount = request.data.get('kpi_id')["technical_overdue_debt_amount"]
+                    else: 
+                        technical_overdue_debt_amount = None 
+
+                    if ( positive_decision_type) or ( positive_decision_date) or \
+                    ( measure_provided_duration) or ( negative_decision_type) or \
+                    ( settled_debt_amount) or ( received_amount_budget) or \
+                    ( overdue_debt_amount) or ( technical_overdue_debt_amount):
+                        KPI.objects.create(
+                            positive_decision_type = positive_decision_type,
+                            positive_decision_date = positive_decision_date,
+                            measure_provided_duration = measure_provided_duration,
+                            oiv_request_sender = request.data.get('kpi_id')["oiv_request_sender"],
+                            negative_decision_type = negative_decision_type,
+                            settled_debt_amount = settled_debt_amount,
+                            received_amount_budget = received_amount_budget,
+                            overdue_debt_amount = overdue_debt_amount,
+                            technical_overdue_debt_amount = technical_overdue_debt_amount
+                        )
+                        kpi_id = KPI.objects.latest('id').id
+
+                        if request.data.get('fields_of_positive_decision') != None and \
+                            request.data.get('kpi_id')['positive_decision_type'] != None:
+                            data_fields = request.data.get('fields_of_positive_decision')
+                            for fields in data_fields:
+                                fields['kpi'] = kpi_id
+                                serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
+                                if not serializer_fields_of_positive.is_valid():
+                                    transaction.set_rollback(True)
+                                    return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                            
+                                serializer_fields_of_positive.save()
+
+                    else:
+                        kpi_id = None
+
+                # if request.data.get('kpi_id') != None:
+                #     serializer_kpi = KPISerializer(data=request.data.get('kpi_id'))
+                #     if not serializer_kpi.is_valid():
+                #         transaction.set_rollback(True)
+                #         return Response(serializer_body.errors, 
+                #                         status=status.HTTP_400_BAD_REQUEST)
+                    
+                #     serializer_kpi.save()
                     
 
-                    kpi_id = KPI.objects.latest('id').id
+                #     kpi_id = KPI.objects.latest('id').id
+                    ########################################################################################
 
-                    if request.data.get('fields_of_positive_decision') != None and \
-                        request.data.get('kpi_id')['positive_decision_type'] != None:
-                        data_fields = request.data.get('fields_of_positive_decision')
-                        for fields in data_fields:
-                            fields['kpi'] = kpi_id
-                            serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
-                            if not serializer_fields_of_positive.is_valid():
-                                transaction.set_rollback(True)
-                                return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                    # if request.data.get('fields_of_positive_decision') != None and \
+                    #     request.data.get('kpi_id')['positive_decision_type'] != None:
+                    #     data_fields = request.data.get('fields_of_positive_decision')
+                    #     for fields in data_fields:
+                    #         fields['kpi'] = kpi_id
+                    #         serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
+                    #         if not serializer_fields_of_positive.is_valid():
+                    #             transaction.set_rollback(True)
+                    #             return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
                         
-                            serializer_fields_of_positive.save()
+                    #         serializer_fields_of_positive.save()
+
+                if request.data.get('first_meeting_date') != "":
+                    first_meeting_date = request.data.get('first_meeting_date')
+                else:
+                    first_meeting_date = None
 
                 Client.objects.create(
-                    first_name = request.data.get('first_name'),
-                    second_name = request.data.get('second_name'),
-                    patronymic = request.data.get('patronymic'),
-                    inn = request.data.get('inn'),
+                    first_name = request.data.get('first_name'), # string, "" -ok
+                    second_name = request.data.get('second_name'), # string, "" -ok
+                    patronymic = request.data.get('patronymic'), # string, "" -ok
+                    inn = request.data.get('inn'), # Required
                     region = region,
                     manager = manager,
                     applicant_status = applicant_status,
                     information_source_id = information_source_id,
                     representitive_client_id = representitive_client_id,
                     compliance_criteria_id = compliance_criteria_id,
-                    first_meeting_date = request.data.get('first_meeting_date'),
+                    first_meeting_date = first_meeting_date,
                     prd_catalog = prd_catalog,
-                    event_date = request.data.get('event_date'),
-                    event_description = request.data.get('event_description'),
+                    event_date = request.data.get('event_date'), # Required
+                    event_description = request.data.get('event_description'), # Required
                     kpi_id = kpi_id,
                     stage_review = stage_review,
                 )
@@ -1632,16 +1756,21 @@ def DetailRelationClient(request, pk):
 
         client = Client.objects.get(id=pk)
         client_data = ClientSerializer(client)
-    
-        if client.kpi != None:
-            fields_of_positive_decision = None
+        print(client)
+
+        fields_of_positive_decision = None
+        if (client.kpi != None):
             # Если тип не выбран, то и полей нет
-            if client.kpi.positive_decision_type != None:
+            if client.kpi.positive_decision_type != None :
                 fields_of_positive_decision = KpiPositiveDecisionFieldsSerializer(KpiPositiveDecisionFields.objects.filter(kpi=client.kpi.id), many=True)
 
         data = {}
         data.update(client_data.data)
-        data['fields_of_positive_decision'] = fields_of_positive_decision.data
+        print(data)
+        if fields_of_positive_decision != None:
+            data['fields_of_positive_decision'] = fields_of_positive_decision.data
+        else:
+            data['fields_of_positive_decision'] = []
 
         return Response({'data': data}, status=status.HTTP_200_OK)
         
@@ -1759,8 +1888,8 @@ def import_db_to_file(request):
         os.makedirs(dir_name)
 
     columns = get_columns_to_query()
-    column_merge = ['B', 'C', 'D', 'E', 'F', 'O', 'P', 'Q', 'R', 'S', 'T', 'AD']
-    column_merg_ind = [0, 1, 2, 3, 4, 13, 14, 15, 16, 17, 18, 28]
+    column_merge = ['B', 'C', 'D', 'E', 'F', 'G', 'P', 'Q', 'R', 'S', 'T', 'U', 'AF']
+    column_merg_ind = [0, 1, 2, 3, 4, 5, 14, 15, 16, 17, 18, 19, 30]
 
     # Устанавливаем соединение с базой данных
     with connection.cursor() as cursor:
@@ -1780,24 +1909,24 @@ def import_db_to_file(request):
 
             cell_format_header = writer.book.add_format({'bold': True, 'align': 'center', 'border':1, 'text_wrap': True})
 
-            sheet.merge_range('A1:D1', 'Общие сведения', cell_format_header)
-            sheet.merge_range('E1:N1', 'Первичные учетные данные (+)', cell_format_header)
-            sheet.merge_range('O1:T1', 'Критерии соответствия клиентским требованиям (маркеры) (+)', cell_format_header)
-            sheet.merge_range('U1:W1', 'Согласительные мероприятия (+)', cell_format_header)
-            sheet.merge_range('X1:AM1', 'Ключевые показатели эффективности (KPI) (+)', cell_format_header)
+            sheet.merge_range('A1:E1', 'Общие сведения', cell_format_header)
+            sheet.merge_range('F1:O1', 'Первичные учетные данные (+)', cell_format_header)
+            sheet.merge_range('P1:U1', 'Критерии соответствия клиентским требованиям (маркеры) (+)', cell_format_header)
+            sheet.merge_range('V1:X1', 'Согласительные мероприятия (+)', cell_format_header)
+            sheet.merge_range('Y1:AO1', 'Ключевые показатели эффективности (KPI) (+)', cell_format_header)
 
-            sheet.merge_range('G2:I2', 'Источник информации', cell_format_header)
-            sheet.merge_range('J2:M2', 'Представители клиента', cell_format_header)
-            sheet.write('N2:N2', 'Контрольная точка', cell_format_header)
-            sheet.merge_range('U2:W2', 'Контрольная точка', cell_format_header)
-            sheet.merge_range('X2:AC2', 'Принятое решение', cell_format_header)
-            sheet.merge_range('AE2:AF2', 'Просроченная задолженность', cell_format_header)
-            sheet.write('AG2:AG2', 'Отлагательные меры', cell_format_header)
-            sheet.write('AH2:AH2', 'Изменения сроков уплаты', cell_format_header)
-            sheet.merge_range('AI2:AM2', 'Мировое соглашение (+)', cell_format_header)
+            sheet.merge_range('H2:J2', 'Источник информации', cell_format_header)
+            sheet.merge_range('K2:N2', 'Представители клиента', cell_format_header)
+            sheet.write('O2:O2', 'Контрольная точка', cell_format_header)
+            sheet.merge_range('V2:X2', 'Контрольная точка', cell_format_header)
+            sheet.merge_range('Y2:AE2', 'Принятое решение', cell_format_header)
+            sheet.merge_range('AG2:AH2', 'Просроченная задолженность', cell_format_header)
+            sheet.write('AI2:AI2', 'Отлагательные меры', cell_format_header)
+            sheet.write('AJ2:AJ2', 'Изменения сроков уплаты', cell_format_header)
+            sheet.merge_range('AK2:AO2', 'Мировое соглашение (+)', cell_format_header)
 
             sheet.merge_range('A2:A3', 'п/п', cell_format_header)
-            for i in range(0, len(columns)):
+            for i in range(0, len(columns[:-1])):
                 if i in column_merg_ind:
                     sim = column_merge[column_merg_ind.index(i)]
                     sheet.merge_range(f'{sim}2:{sim}3', columns[i], cell_format_header)
@@ -1806,17 +1935,44 @@ def import_db_to_file(request):
                 cell_format = writer.book.add_format({'text_wrap': True})
                 sheet.set_column(2, i+1, 18, cell_format)
 
+
+            sheet.merge_range('AP1:AR2', 'Вид предоставляемого обеспечения', cell_format_header)
+            sheet.write('AP3:AP3', 'Залог имущества (в тыс. руб.)', cell_format_header)
+            sheet.write('AQ3:AQ3', 'Поручительство (в тыс. руб.)', cell_format_header)
+            sheet.write('AR3:AR3', 'Банковская гарантия (в тыс. руб.)', cell_format_header)
+            sheet.merge_range('AS1:AS3', 'Стадия рассмотрения', cell_format_header)
+            sheet.set_column('AS1:AS3', 25)
+            sheet.merge_range('AT1:AV2', 'Проводимая работа в случае не исполнения предоставленной меры', cell_format_header)
+            sheet.merge_range('AW1:BK1', 'Постконтроль по состоянию на  ________', cell_format_header)
+            sheet.write('AT3:AT3', 'дата направления ДОЛЖНИКУ уведомления (претензии)', cell_format_header)
+            sheet.write('AU3:AU3', 'дата направления ПОРУЧИТЕЛЮ уведомления (претензии)', cell_format_header)
+            sheet.write('AV3:AV3', 'дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)', cell_format_header)
+            sheet.merge_range('AW2:AW3', 'выручка (КНД 1151006, год 2023, код периода-31, 40, стр.2_1_010 )', cell_format_header)
+            sheet.merge_range('AX2:AX3', 'выручка (КНД 0710099, год 2022, стр.2110_4)', cell_format_header)
+            sheet.merge_range('AY2:AY3', 'ССЧ ( КНД 1151111 , код периода -31 год 2023, стр.П023)', cell_format_header)
+            sheet.merge_range('AZ2:AZ3', 'активы 2022 г. (КНД 0710099, год 2022, стр.1600_4 )', cell_format_header)
+            sheet.merge_range('BA2:BA3', 'уплачено налогов 2023 г.( ИР РСБ)', cell_format_header)
+            sheet.merge_range('BB2:BB3', 'стадия в процедуре банкротства ', cell_format_header)
+            sheet.merge_range('BC2:BC3', 'сумма долга ЕНС ( ИР РСБ)', cell_format_header)
+            sheet.merge_range('BD2:BD3', 'ФОТ (КНД 1151111, год 2023, код периода-31, стр. П716)', cell_format_header)
+            sheet.merge_range('BE2:BE3', 'прибыль (КНД 1151006, год 2023,код периода-31, 40  стр.2_060)', cell_format_header)
+            sheet.merge_range('BF2:BF3', 'Результаты скоринга платежеспособности ', cell_format_header)
+            sheet.merge_range('BG2:BG3', 'из выписки СКУАД - текущая стоимость бизнеса', cell_format_header)
+            sheet.merge_range('BH2:BH3', 'из выписки СКУАД -, ликвидационная стоимость бизнеса', cell_format_header)
+            sheet.merge_range('BI2:BI3', 'из выписки СКУАД -  возвратность средств', cell_format_header)
+            sheet.merge_range('BJ2:BJ3', 'из выписки СКУАД - потребность в оборотных средствах', cell_format_header)
+            sheet.merge_range('BK2:BK3', 'ранг платёжеспособности', cell_format_header)
+
         #Создадим ответ из файла
         response = FileResponse(open(filename, 'rb'), status=status.HTTP_200_OK)
 
         return response
-    
-    return Response({'message': 'Что-то пошло не так'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def get_columns_to_query():
 
-    return ["Менеджер площадки (из списка)", 
+    return ["Представительсво ПРД",
+        "Менеджер площадки (из списка)", 
         "Наименование клиента",
         "ИНН",
         "Регион (из списка)",
@@ -1841,6 +1997,7 @@ def get_columns_to_query():
         "Вид положительного решения (из списка)",
         "ДАТА положительного решения",
         "На сколько предоставлена мера, в месяцах",
+        "Основания и методика рассмотрения гл. 9 НК РФ",
         "От кого ходатайство ОИВ (для МС)",
         "Вид отрицательного решения (из списка)",
         "Сумма урегулированной задолженности, тыс. руб.",
@@ -1853,7 +2010,8 @@ def get_columns_to_query():
         "Дата утверждения МС судом",
         "Сумма требований вошедших в МС, тыс. руб.",
         "Дата окончания МС",
-        "Сумма исполненных обязательств, тыс. руб."	
+        "Сумма исполненных обязательств, тыс. руб.",
+        "Стадия рассмотрения"	
     ]
 
 
@@ -1862,6 +2020,7 @@ def get_query_to_import():
     return """
 SELECT 
 --Общие сведения
+    t_prd_catalog.catalog_prd as prd,
     t_manager.second_name || ' ' || t_manager.first_name || ' ' || t_manager.patronymic as manager,
     t_client.second_name || ' ' || t_client.first_name || ' ' || t_client.patronymic as client,
     t_inn.inn as inn,
@@ -1895,6 +2054,7 @@ SELECT
     t_pos_decision.positive_decision as positive_decision,
     t_kpi.positive_decision_date as positive_decision_date,
     t_kpi.measure_provided_duration as measure_provided_duration,
+    '' as merodic,
     t_kpi.oiv_request_sender as oiv_request_sender,
     t_neg_decision.negative_decision as negative_decision,
     t_kpi.settled_debt_amount as settled_debt_amount,
@@ -1912,7 +2072,10 @@ SELECT
     t_kpi_positive_decision_fields_4.value as date_of_approvall,
     t_kpi_positive_decision_fields_5.value as sum_of_the_claims,
     t_kpi_positive_decision_fields_6.value as end_date,
-    t_kpi_positive_decision_fields_7.value as amount_of_fulfilled    
+    t_kpi_positive_decision_fields_7.value as amount_of_fulfilled,  
+
+    '' as stage
+    --t_review_stage.stage as stage
 
   FROM client as t_client
   LEFT JOIN manager as t_manager
@@ -1992,4 +2155,11 @@ SELECT
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_7
   ON t_kpi.id = t_kpi_positive_decision_fields_7.kpi_id
   AND t_kpi_positive_decision_fields_7.fields_of_pos_decision_id = t_positive_decision_fields_7.id
+
+  --ПРД каталог
+ LEFT JOIN prd_catalog as t_prd_catalog
+ ON t_client.prd_catalog_id = t_prd_catalog.id
+
+  --LEFT JOIN review_stage as t_review_stage
+  --ON t_client.review_stage_id = t_review_stage.id
 """

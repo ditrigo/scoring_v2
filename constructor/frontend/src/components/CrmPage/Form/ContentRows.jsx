@@ -7,6 +7,7 @@ import httpService from "../../../services/http.service"
 const ContentRows = ({ clients }) => {
   const [positiveDecisions, setPositiveDecisions] = useState()
   const [negativeDecisions, setNegativeDecisions] = useState()
+
   const makeClassName = (value) => {
     if (value === "Низкий риск") return "text-success"
     if (value === "Средний риск") return "text-warning"
@@ -35,7 +36,7 @@ const ContentRows = ({ clients }) => {
     return (
       positiveDecisions &&
       positiveDecisions.find(
-        (el) => el.id === client.kpi?.positive_decision_type
+        (el) => el.id === client?.kpi?.positive_decision_type
       )
     )
   }
@@ -44,7 +45,7 @@ const ContentRows = ({ clients }) => {
     return (
       negativeDecisions &&
       negativeDecisions.find(
-        (el) => el.id === client.kpi?.negative_decision_type
+        (el) => el.id === client?.kpi?.negative_decision_type
       )
     )
   }
@@ -58,14 +59,12 @@ const ContentRows = ({ clients }) => {
           <td>{el.prd_catalog.catalog_prd}</td>
           <td>
             <Link to={"/newclient/" + el.id}>
-              {el.manager.second_name} {el.manager.first_name}.
-              {el.manager.patronymic}. {el.manager.job_title}
+              {el.manager?.second_name}
+              {el.manager?.first_name}
+              {el.manager?.patronymic} {el.manager?.job_title}
             </Link>
           </td>
-          <td>
-            {el.second_name} {el.first_name} {el.patronymic}
-          </td>
-
+          <td>{el.first_name}</td>
           <td>{el.inn}</td>
           <td>
             {el.region.region_number} {el.region.region}

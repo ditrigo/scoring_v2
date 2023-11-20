@@ -13,7 +13,7 @@ const ResultMarkersView = () => {
     axios
       .get(`${configFile.apiEndPoint}/inn_res/`)
       .then((res) => {
-        // console.log("Результаты в просмотре ", res.data.data)
+        console.log("Результаты в просмотре ", res.data.data)
         setResults(res.data.data)
         // setResult((prevState) => [res.data.data.find((el) => el.inn === +inn)])
       })
@@ -59,6 +59,9 @@ const ResultMarkersView = () => {
             <tbody>
               {result[0] &&
                 result[0].result_score?.markers_and_values.map((el, index) => {
+                  console.log("result[0]", result[0])
+                  console.log("result[1]", result[1])
+                  console.log(el)
                   return (
                     <tr key={index}>
                       <td className="text-center">{el.marker_name}</td>
