@@ -82,6 +82,11 @@ const NewClientPage = () => {
         message: "Это поле обязательно для заполнения",
       },
     },
+    manager_id: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения",
+      },
+    },
     first_name: {
       isRequired: {
         message: "Это поле обязательно для заполнения",
