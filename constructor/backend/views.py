@@ -1625,27 +1625,29 @@ def CreateRelationClient(request):
                 #     info_source_number = info_source_number,
                 # )
                 #TODO услвоие на не созданиии записи
-                if ( info_source_number) or ( info_source_type_id) or ( info_source_date):
-                    InformationSource.objects.create(
-                        info_source_type = info_source_type_id,
-                        info_source_date = info_source_date,
-                        info_source_number = info_source_number,
-                    )
-                    information_source_id = InformationSource.objects.latest('id').id 
-                else:
-                    information_source_id = None
+                # if ( info_source_number) or ( info_source_type_id) or ( info_source_date):
+                InformationSource.objects.create(
+                    info_source_type = info_source_type_id,
+                    info_source_date = info_source_date,
+                    info_source_number = info_source_number,
+                )
+                information_source_id = InformationSource.objects.latest('id').id
+                # else:
+                #     information_source_id = None
 
                 # TODO Предусмотреть возможность создание kpi при не всех заполненных полях ################
                 kpi_id = None
                 if request.data.get('kpi_id') != None:
                     if request.data.get('kpi_id')["positive_decision_type"] != "":
-                        positive_decision_type = request.data.get('kpi_id')["positive_decision_type"]
+                        positive_decision_type = PositiveDecision.objects.get(id=request.data.get('kpi_id')["positive_decision_type"])
                     else: 
                         positive_decision_type = None
                     
                     if request.data.get('kpi_id')["positive_decision_date"] != "":
                         # positive_decision_date = request.data.get('kpi_id')["positive_decision_date"]
-                        positive_decision_date = PositiveDecision.objects.get(id = request.data.get('kpi_id')["positive_decision_date"])
+                        date_format = '%Y-%m-%d'
+                        positive_decision_date = request.data.get('kpi_id')["positive_decision_date"]
+                                                            
                     else: 
                         positive_decision_date = None
 
@@ -1682,37 +1684,37 @@ def CreateRelationClient(request):
                     else: 
                         technical_overdue_debt_amount = None 
 
-                    if ( positive_decision_type) or ( positive_decision_date) or \
-                    ( measure_provided_duration) or ( negative_decision_type) or \
-                    ( settled_debt_amount) or ( received_amount_budget) or \
-                    ( overdue_debt_amount) or ( technical_overdue_debt_amount):
-                        KPI.objects.create(
-                            positive_decision_type = positive_decision_type,
-                            positive_decision_date = positive_decision_date,
-                            measure_provided_duration = measure_provided_duration,
-                            oiv_request_sender = request.data.get('kpi_id')["oiv_request_sender"],
-                            negative_decision_type = negative_decision_type,
-                            settled_debt_amount = settled_debt_amount,
-                            received_amount_budget = received_amount_budget,
-                            overdue_debt_amount = overdue_debt_amount,
-                            technical_overdue_debt_amount = technical_overdue_debt_amount
-                        )
-                        kpi_id = KPI.objects.latest('id').id
+                    # if ( positive_decision_type) or ( positive_decision_date) or \
+                    # ( measure_provided_duration) or ( negative_decision_type) or \
+                    # ( settled_debt_amount) or ( received_amount_budget) or \
+                    # ( overdue_debt_amount) or ( technical_overdue_debt_amount):
+                    KPI.objects.create(
+                        positive_decision_type = positive_decision_type,
+                        positive_decision_date = positive_decision_date,
+                        measure_provided_duration = measure_provided_duration,
+                        oiv_request_sender = request.data.get('kpi_id')["oiv_request_sender"], # string, "" -ok
+                        negative_decision_type = negative_decision_type,
+                        settled_debt_amount = settled_debt_amount,
+                        received_amount_budget = received_amount_budget,
+                        overdue_debt_amount = overdue_debt_amount,
+                        technical_overdue_debt_amount = technical_overdue_debt_amount
+                    )
+                    kpi_id = KPI.objects.latest('id').id
 
-                        if request.data.get('fields_of_positive_decision') != None and \
-                            request.data.get('kpi_id')['positive_decision_type'] != None:
-                            data_fields = request.data.get('fields_of_positive_decision')
-                            for fields in data_fields:
-                                fields['kpi'] = kpi_id
-                                serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
-                                if not serializer_fields_of_positive.is_valid():
-                                    transaction.set_rollback(True)
-                                    return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
-                            
-                                serializer_fields_of_positive.save()
+                    if request.data.get('fields_of_positive_decision') != None and \
+                        request.data.get('kpi_id')['positive_decision_type'] != None:
+                        data_fields = request.data.get('fields_of_positive_decision')
+                        for fields in data_fields:
+                            fields['kpi'] = kpi_id
+                            serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
+                            if not serializer_fields_of_positive.is_valid():
+                                transaction.set_rollback(True)
+                                return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                        
+                            serializer_fields_of_positive.save()
 
-                    else:
-                        kpi_id = None
+                    # else:
+                    #     kpi_id = None
 
                 # if request.data.get('kpi_id') != None:
                 #     serializer_kpi = KPISerializer(data=request.data.get('kpi_id'))
@@ -1834,12 +1836,26 @@ def UpdateRelationClient(request, pk):
                 )
                 # compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
                 
-                info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
+                # info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
+                if request.data.get('information_source_id')["info_source_type_id"] != "":
+                    info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
+                else:
+                    info_source_type_id = None
+
+                if request.data.get('information_source_id')["info_source_date"] != "":
+                    info_source_date = request.data.get('information_source_id')["info_source_date"]
+                else:
+                    info_source_date = None
+
+                if request.data.get('information_source_id')["info_source_number"] != "":
+                    info_source_number = request.data.get('information_source_id')["info_source_number"]
+                else:
+                    info_source_number = None
                 
                 InformationSource.objects.filter(id=request.data.get('information_source_id')['id']).update(
                     info_source_type = info_source_type_id,
-                    info_source_date = request.data.get('information_source_id')["info_source_date"],
-                    info_source_number = request.data.get('information_source_id')["info_source_number"],
+                    info_source_date = info_source_date,
+                    info_source_number = info_source_number,
                 )
                 # information_source_id = InformationSource.objects.latest('id').id 
                 
@@ -1957,9 +1973,9 @@ def import_db_to_file(request):
 
 
             sheet.merge_range('AP1:AR2', 'Вид предоставляемого обеспечения', cell_format_header)
-            sheet.write('AP3:AP3', 'Залог имущества (в тыс. руб.)', cell_format_header)
-            sheet.write('AQ3:AQ3', 'Поручительство (в тыс. руб.)', cell_format_header)
-            sheet.write('AR3:AR3', 'Банковская гарантия (в тыс. руб.)', cell_format_header)
+            # sheet.write('AP3:AP3', 'Залог имущества (в тыс. руб.)', cell_format_header)
+            # sheet.write('AQ3:AQ3', 'Поручительство (в тыс. руб.)', cell_format_header)
+            # sheet.write('AR3:AR3', 'Банковская гарантия (в тыс. руб.)', cell_format_header)
             sheet.merge_range('AS1:AS3', 'Стадия рассмотрения', cell_format_header)
             sheet.set_column('AS1:AS3', 25)
             sheet.merge_range('AT1:AV2', 'Проводимая работа в случае не исполнения предоставленной меры', cell_format_header)
@@ -2022,7 +2038,7 @@ def get_columns_to_query():
         "Вид отрицательного решения (из списка)",
         "Сумма урегулированной задолженности, тыс. руб.",
         "Сумма поступившая в бюджет, тыс. руб.",
-        "сумма, тыс. руб.",	
+        "сумма, тыс. руб.",  
         "сумма технической просроченной задолженности, сумма, тыс. руб.",
         "Ближайший срок исполнения обязательства (до какого момента отложены меры)",
         "Не вступило в силу рассрочка/ отсрочка, тыс. руб.",
@@ -2031,7 +2047,10 @@ def get_columns_to_query():
         "Сумма требований вошедших в МС, тыс. руб.",
         "Дата окончания МС",
         "Сумма исполненных обязательств, тыс. руб.",
-        "Стадия рассмотрения"	
+        "Залог имущества (в тыс. руб.)",
+        "Поручительство (в тыс. руб.)",
+        "Банковская гарантия (в тыс. руб.)",
+        "Стадия рассмотрения"  
     ]
 
 
@@ -2050,7 +2069,7 @@ SELECT
     t_status.status as status,
 -- Источник информации
     t_inf_type.type as info_type,
-    t_inf_sours.info_source_date as info_source_date,
+    strftime('%d.%m.%Y',t_inf_sours.info_source_date) as info_source_date,
     t_inf_sours.info_source_number as info_source_number,
 -- Представители клиента
     t_repr_client.representative_second_name || ' ' || t_repr_client.representative_first_name || ' ' || t_repr_client.representative_patronymic as fio_repr_client,
@@ -2058,7 +2077,7 @@ SELECT
     t_repr_client.representative_phone as repr_phone,
     t_repr_client.representative_email as repr_email,
 -- Контрольная точка
-    t_repr_client.control_point as repr_control_point,
+    strftime('%d.%m.%Y',t_repr_client.control_point) as repr_control_point,
 -- Критерии соответствия клиентским требованиям (маркеры) (+)					
     t_criteria.debt_amount as debt_amount,
     t_debt_type.type as debt_type,
@@ -2067,13 +2086,13 @@ SELECT
     t_criteria.note as note,
     t_criteria.support_duration as support_duration,
 -- Согласительные мероприятия (+)
-    t_client.first_meeting_date as first_meeting_date,
-    t_client.event_date as event_date,
+    strftime('%d.%m.%Y',t_client.first_meeting_date) as first_meeting_date,
+    strftime('%d.%m.%Y',t_client.event_date) as event_date,
     t_client.event_description as event_description,
 -- Ключевые показатели эффективности (KPI) (+)															
 -- Принятое решение
     t_pos_decision.positive_decision as positive_decision,
-    t_kpi.positive_decision_date as positive_decision_date,
+    strftime('%d.%m.%Y',t_kpi.positive_decision_date) as positive_decision_date,
     t_kpi.measure_provided_duration as measure_provided_duration,
     '' as merodic,
     t_kpi.oiv_request_sender as oiv_request_sender,
@@ -2095,8 +2114,11 @@ SELECT
     t_kpi_positive_decision_fields_6.value as end_date,
     t_kpi_positive_decision_fields_7.value as amount_of_fulfilled,  
 
-    '' as stage
-    --t_review_stage.stage as stage
+    '' as pole1,
+    '' as pole2,
+    '' as pole3,
+    --'123' as stage
+    t_review_stage.stage as stage
 
   FROM client as t_client
   LEFT JOIN manager as t_manager
@@ -2181,6 +2203,6 @@ SELECT
  LEFT JOIN prd_catalog as t_prd_catalog
  ON t_client.prd_catalog_id = t_prd_catalog.id
 
- --LEFT JOIN review_stage as t_review_stage
- --ON t_client.review_stage_id = t_review_stage.id
+ LEFT JOIN review_stage as t_review_stage
+ ON t_client.stage_review_id = t_review_stage.id
 """
