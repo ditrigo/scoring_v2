@@ -1473,6 +1473,18 @@ def PrdCatalogFieldsViewSet(request):
                 many=True
                 )
         return Response({'data': serializer.data})
+
+
+@api_view(['GET'])
+def ReasonsForConsiderationViewSet(request):
+    if request.method == 'GET':
+        reasons_fields = ReasonsForConsideration.objects.all().order_by('id')
+        serializer = ReasonsForConsiderationSerializer(
+                reasons_fields,
+                context={'request': request}, 
+                many=True
+                )
+        return Response({'data': serializer.data})
 #---------------------
 
 #---------------------
@@ -2023,7 +2035,8 @@ SELECT
     t_prd_catalog.catalog_prd as prd,
     t_manager.second_name || ' ' || t_manager.first_name || ' ' || t_manager.patronymic as manager,
     t_client.second_name || ' ' || t_client.first_name || ' ' || t_client.patronymic as client,
-    t_inn.inn as inn,
+    t_client.inn as inn,
+    --t_inn.inn as inn,
 -- Первичные учетные данные
     t_region.region as region,
     t_status.status as status,
@@ -2160,6 +2173,6 @@ SELECT
  LEFT JOIN prd_catalog as t_prd_catalog
  ON t_client.prd_catalog_id = t_prd_catalog.id
 
-  --LEFT JOIN review_stage as t_review_stage
-  --ON t_client.review_stage_id = t_review_stage.id
+ --LEFT JOIN review_stage as t_review_stage
+ --ON t_client.review_stage_id = t_review_stage.id
 """

@@ -128,6 +128,12 @@ class CatalogPRDSerializer(serializers.ModelSerializer):
     class Meta:
         model = CatalogPRD
         fields = "__all__"
+
+
+class ReasonsForConsiderationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReasonsForConsideration
+        fields = "__all__"
 #---------------------
 
 #---------------------
@@ -185,6 +191,7 @@ class ClientSerializer(serializers.ModelSerializer):
     kpi = KPISerializer(many=False, read_only=True)
     prd_catalog = CatalogPRDSerializer(many=False, read_only=True)
     stage_review = ReviewStageSerializer(many=False, read_only=True)
+    reasons = ReasonsForConsiderationSerializer(many=False, read_only=True)
 
     class Meta:
         model = Client
