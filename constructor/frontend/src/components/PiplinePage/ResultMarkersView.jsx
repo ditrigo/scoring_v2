@@ -15,7 +15,7 @@ const ResultMarkersView = () => {
       .then((res) => {
         console.log("Результаты в просмотре ", res.data.data)
         setResults(res.data.data)
-        setResult((prevState) => [res.data.data.find((el) => el.inn === +inn)])
+        // setResult((prevState) => [res.data.data.find((el) => el.inn === +inn)])
       })
       .catch((e) => {
         console.log(e)
@@ -40,10 +40,7 @@ const ResultMarkersView = () => {
       >
         <div className="row mb-3">
           <Link to="/results">
-            <MyButton
-              className="btn btn-outline-secondary "
-              onClick={() => { }}
-            >
+            <MyButton className="btn btn-outline-secondary " onClick={() => {}}>
               К таблице результатов
             </MyButton>
           </Link>
@@ -70,9 +67,10 @@ const ResultMarkersView = () => {
                       <td className="text-center">{el.marker_name}</td>
                       <td className="text-center">{el.formula}</td>
                       <td>
-                        {typeof (el.target_value) === "number"
+                        {typeof el.target_value === "number"
                           ? Math.round(el.target_value * 100) / 100
-                          : el.target_value} </td>
+                          : el.target_value}{" "}
+                      </td>
                       <td>{el.value}</td>
                       <td>{el.error}</td>
                     </tr>

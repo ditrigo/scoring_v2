@@ -1557,11 +1557,12 @@ def CreateRelationClient(request):
         with transaction.atomic():
             try:
                 region = Region.objects.get(id=request.data.get('region_id')) # Required
+                # reasons = ReasonsForConsiderationSerializer.objects.get(id=request.data.get('reasons')) 
 
                 if request.data.get('reasons') != "":
                     reasons = ReasonsForConsideration.objects.get(id=request.data.get('reasons'))  # string, "" -ok
                 else:
-                    reasons = None 
+                    reasons = None
 
                 if request.data.get('manager_id') != "":
                     manager = Manager.objects.get(id=request.data.get('manager_id'))
@@ -1601,8 +1602,8 @@ def CreateRelationClient(request):
                 )
                 compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
                 
-                # print("request.data.get('information_source_id')[info_source_type_id]", request.data.get('information_source_id')["info_source_type_id"])
-                # print(type(request.data.get('information_source_id')["info_source_type_id"]))
+                print("request.data.get('information_source_id')[info_source_type_id]", request.data.get('information_source_id')["info_source_type_id"])
+                print(type(request.data.get('information_source_id')["info_source_type_id"]))
                 if request.data.get('information_source_id')["info_source_type_id"] != "":
                     info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
                 else:
@@ -1638,15 +1639,15 @@ def CreateRelationClient(request):
                 kpi_id = None
                 if request.data.get('kpi_id') != None:
                     if request.data.get('kpi_id')["positive_decision_type"] != "":
-                        positive_decision_type = request.data.get('kpi_id')["positive_decision_type"]
+                        positive_decision_type = PositiveDecision.objects.get(id=request.data.get('kpi_id')["positive_decision_type"])
                     else: 
                         positive_decision_type = None
                     
                     if request.data.get('kpi_id')["positive_decision_date"] != "":
                         # positive_decision_date = request.data.get('kpi_id')["positive_decision_date"]
                         date_format = '%Y-%m-%d'
-                        positive_decision_date = datetime.strptime(PositiveDecision.objects.get(id=request.data.get('kpi_id')["positive_decision_date"]), 
-                                                                   date_format)
+                        positive_decision_date = request.data.get('kpi_id')["positive_decision_date"]
+                                                            
                     else: 
                         positive_decision_date = None
 
@@ -1658,8 +1659,8 @@ def CreateRelationClient(request):
                     if request.data.get('kpi_id')["negative_decision_type"] != "":
                         # negative_decision_type = request.data.get('kpi_id')["negative_decision_type"]
                         negative_decision_type = NegativeDecision.objects.get(id=request.data.get('kpi_id')["negative_decision_type"])
-                        # print(negative_decision_type)
-                        # print(type(negative_decision_type))
+                        print(negative_decision_type)
+                        print(type(negative_decision_type))
                     else: 
                         negative_decision_type = None 
 
@@ -1805,23 +1806,13 @@ def UpdateRelationClient(request, pk):
         with transaction.atomic():
             try:
 
-                region = Region.objects.get(id=request.data.get('region_id')) # Required
-                if request.data.get('reasons') != "":
-                    reasons = ReasonsForConsideration.objects.get(id=request.data.get('reasons'))  # string, "" -ok
-                else:
-                    reasons = None
+                region = Region.objects.get(id=request.data.get('region_id'))
+                manager = Manager.objects.get(id=request.data.get('manager_id'))
+                applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status'))
+                stage_review = ReviewStage.objects.get(id=request.data.get('stage_review'))
+                prd_catalog = CatalogPRD.objects.get(id=request.data.get('prd_catalog_id'))
 
-                # manager = Manager.objects.get(id=request.data.get('manager_id'))
-                if request.data.get('manager_id') != "":
-                    manager = Manager.objects.get(id=request.data.get('manager_id'))
-                else:
-                    manager = None
-                
-                applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status')) # Required
-                stage_review = ReviewStage.objects.get(id=request.data.get('stage_review')) # string, "" -ok
-                prd_catalog = CatalogPRD.objects.get(id=request.data.get('prd_catalog_id')) # Required
-
-                client = ClientRepresentative.objects.get(id=request.data.get('representitive_client_id')['id']) # All string fields
+                client = ClientRepresentative.objects.get(id=request.data.get('representitive_client_id')['id'])
                 serializer_body = ClientRepresentativeSerializer(instance=client, \
                                                                  data=request.data.get('representitive_client_id'))
                 if not serializer_body.is_valid():
@@ -1831,22 +1822,17 @@ def UpdateRelationClient(request, pk):
                 
                 # representitive_client_id = ClientRepresentative.objects.latest('id').id
             
-                category = Category.objects.get(id=request.data.get('compliance_data_id')["category"]) # Required
-                debt_type = DebtType.objects.get(id=request.data.get('compliance_data_id')["debt_type"]) # Required
-                support_measure = SupportMeasure.objects.get(id=request.data.get('compliance_data_id')["support_measure"]) # Required
-
-                if request.data.get('compliance_data_id')["support_duration"] != "":
-                    support_duration = request.data.get('compliance_data_id')["support_duration"]
-                else:
-                    support_duration = None
+                category = Category.objects.get(id=request.data.get('compliance_data_id')["category"])
+                debt_type = DebtType.objects.get(id=request.data.get('compliance_data_id')["debt_type"])
+                support_measure = SupportMeasure.objects.get(id=request.data.get('compliance_data_id')["support_measure"])
                 
                 ComplianceCriteria.objects.filter(id=request.data.get('compliance_data_id')['id']).update(
-                    debt_amount = request.data.get('compliance_data_id')["debt_amount"], # Required
+                    debt_amount = request.data.get('compliance_data_id')["debt_amount"],
                     debt_type = debt_type,
                     category = category,
                     support_measure = support_measure,
                     note = request.data.get('compliance_data_id')["note"],
-                    support_duration = support_duration,
+                    support_duration = request.data.get('compliance_data_id')["support_duration"],
                 )
                 # compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
                 
@@ -1899,29 +1885,24 @@ def UpdateRelationClient(request, pk):
                         
                             serializer_fields_of_positive.save()
 
-                if request.data.get('first_meeting_date') != "":
-                    first_meeting_date = request.data.get('first_meeting_date')
-                else:
-                    first_meeting_date = None
-                
                 Client.objects.filter(id=request.data.get('id')).update(
-                    first_name = request.data.get('first_name'), # string, "" -ok
-                    second_name = request.data.get('second_name'), # string, "" -ok
-                    patronymic = request.data.get('patronymic'), # string, "" -ok
-                    inn = request.data.get('inn'), # Required
+                    first_name = request.data.get('first_name'),
+                    second_name = request.data.get('second_name'),
+                    patronymic = request.data.get('patronymic'),
+                    inn = request.data.get('inn'),
                     region = region,
                     manager = manager,
                     applicant_status = applicant_status,
                     # information_source_id = information_source_id,
                     # representitive_client_id = representitive_client_id,
                     # compliance_criteria_id = compliance_criteria_id,
-                    first_meeting_date = first_meeting_date,
-                    event_date = request.data.get('event_date'), # Required
-                    event_description = request.data.get('event_description'), # Required
+                    first_meeting_date = request.data.get('first_meeting_date'),
+                    event_date = request.data.get('event_date'),
+                    event_description = request.data.get('event_description'),
                     # kpi_id = kpi_id,
                     stage_review = stage_review,
                     prd_catalog = prd_catalog,
-                    reasons = reasons,
+
                 )
             except:
                 return Response({'message': 'Некорректный ввод данных!'}, status=status.HTTP_400_BAD_REQUEST)
@@ -2096,7 +2077,7 @@ SELECT
     t_repr_client.representative_phone as repr_phone,
     t_repr_client.representative_email as repr_email,
 -- Контрольная точка
-    t_repr_client.control_point as repr_control_point,
+    strftime('%d.%m.%Y',t_repr_client.control_point) as repr_control_point,
 -- Критерии соответствия клиентским требованиям (маркеры) (+)					
     t_criteria.debt_amount as debt_amount,
     t_debt_type.type as debt_type,
@@ -2105,13 +2086,13 @@ SELECT
     t_criteria.note as note,
     t_criteria.support_duration as support_duration,
 -- Согласительные мероприятия (+)
-    t_client.first_meeting_date as first_meeting_date,
-    t_client.event_date as event_date,
+    strftime('%d.%m.%Y',t_client.first_meeting_date) as first_meeting_date,
+    strftime('%d.%m.%Y',t_client.event_date) as event_date,
     t_client.event_description as event_description,
 -- Ключевые показатели эффективности (KPI) (+)															
 -- Принятое решение
     t_pos_decision.positive_decision as positive_decision,
-    t_kpi.positive_decision_date as positive_decision_date,
+    strftime('%d.%m.%Y',t_kpi.positive_decision_date) as positive_decision_date,
     t_kpi.measure_provided_duration as measure_provided_duration,
     '' as merodic,
     t_kpi.oiv_request_sender as oiv_request_sender,
@@ -2136,8 +2117,7 @@ SELECT
     '' as pole1,
     '' as pole2,
     '' as pole3,
-
-    --'' as stage
+    --'123' as stage
     t_review_stage.stage as stage
 
   FROM client as t_client
@@ -2222,8 +2202,7 @@ SELECT
   --ПРД каталог
  LEFT JOIN prd_catalog as t_prd_catalog
  ON t_client.prd_catalog_id = t_prd_catalog.id
- 
-  -- Стадия рассмотрения
+
  LEFT JOIN review_stage as t_review_stage
  ON t_client.stage_review_id = t_review_stage.id
 """

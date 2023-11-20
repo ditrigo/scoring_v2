@@ -30,12 +30,13 @@ const NewClientPage = () => {
   const [type, setType] = useState({})
   const [managers, setManagers] = useState({})
   const [prdCatalog, setPrdCatalog] = useState({})
+  const [reasonsConsideration, setReasonsConsideration] = useState({})
   const [fieldsOfPosDec, setfieldsOfPosDec] = useState([])
   const [dataOfFieldsDec, setDataOfFieldsDec] = useState({})
   const [clientData, setClientData] = useState({
     first_name: "",
-    second_name: "",
-    patronymic: "",
+    // second_name: "",
+    // patronymic: "",
     inn: "",
     region_id: "",
     manager_id: "",
@@ -44,8 +45,8 @@ const NewClientPage = () => {
     info_source_date: "",
     info_source_number: "",
     representative_first_name: "",
-    representative_second_name: "",
-    representative_patronymic: "",
+    // representative_second_name: "",
+    // representative_patronymic: "",
     representative_position: "",
     representative_phone: "",
     representative_email: "",
@@ -72,6 +73,7 @@ const NewClientPage = () => {
     // DENIS
     stage_review: "",
     prd_catalog_id: "",
+    reasons: "",
   })
 
   let validatorConfig = {
@@ -92,6 +94,14 @@ const NewClientPage = () => {
       count: {
         message: "ИНН должен содержать от 10 символов.",
         value: 10,
+      },
+      maxCount: {
+        message: "Не больше 12 знаков",
+        value: 12,
+      },
+      not11: {
+        message: "Не может содержать 11 знаков",
+        value: 11,
       },
     },
     stage_review: {
@@ -245,6 +255,12 @@ const NewClientPage = () => {
       "catalog_prd",
       "prd_catalog_id"
     )
+    getTransformedData(
+      "crm_reasons_consideration",
+      setReasonsConsideration,
+      "reasons",
+      "reasons"
+    )
 
     axios
       .get(`${configFile.apiEndPoint}/crm_managers/`)
@@ -264,7 +280,9 @@ const NewClientPage = () => {
         console.log(e)
       })
   }, [])
-  console.log("params.id && client", params.id && client) 
+
+  // console.log("params.id && client", params.id && client)
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     // console.log(client && client.information_source.id)
@@ -274,7 +292,7 @@ const NewClientPage = () => {
       const jsonForUpdate = {
         id: client.id,
         first_name: clientData.first_name,
-        second_name: "", 
+        second_name: "",
         patronymic: "",
         inn: clientData.inn,
         region_id: clientData.region_id,
@@ -282,13 +300,13 @@ const NewClientPage = () => {
         applicant_status: clientData.applicant_status,
 
         information_source_id: {
-          id: client.information_source.id,
+          id: client.information_source?.id || "",
           info_source_type_id: clientData.info_source_type_id,
           info_source_date: clientData.info_source_date,
           info_source_number: clientData.info_source_number,
         },
         representitive_client_id: {
-          id: client.representitive_client.id,
+          id: client.representitive_client.id || "",
           representative_first_name: clientData.representative_first_name,
           representative_second_name: "", // clientData.representative_second_name,
           representative_patronymic: "", // clientData.representative_patronymic,
@@ -298,7 +316,7 @@ const NewClientPage = () => {
           control_point: clientData.control_point,
         },
         compliance_data_id: {
-          id: client.compliance_criteria.id,
+          id: client.compliance_criteria.id || "",
           debt_amount: clientData.debt_amount,
           debt_type: clientData.debt_type,
           category: clientData.category,
@@ -310,7 +328,7 @@ const NewClientPage = () => {
         event_date: clientData.event_date,
         event_description: clientData.event_description,
         kpi_id: {
-          id: client.kpi.id,
+          id: client.kpi?.id || "1",
           positive_decision_date: clientData.positive_decision_date,
           measure_provided_duration: clientData.measure_provided_duration,
           oiv_request_sender: clientData.oiv_request_sender,
@@ -325,6 +343,7 @@ const NewClientPage = () => {
 
         prd_catalog_id: clientData.prd_catalog_id,
         stage_review: clientData.stage_review,
+        reasons: clientData.reasons,
 
         fields_of_positive_decision: [...Object.values(dataOfFieldsDec)],
       }
@@ -391,6 +410,8 @@ const NewClientPage = () => {
           // DENIS
           prd_catalog_id: clientData.prd_catalog_id,
           stage_review: clientData.stage_review,
+          reasons: clientData.reasons,
+
           fields_of_positive_decision: [...Object.values(dataOfFieldsDec)],
         }
         console.log("Создание json: ", json)
@@ -400,7 +421,7 @@ const NewClientPage = () => {
         console.log(data)
         navigate("/crm")
       } catch (error) {
-        console.log("🚀 error:", error.response.data)
+        console.log("🚀 error:", error.response?.data)
         alert("Ошибка: " + JSON.stringify(error.response.data))
       }
     }
@@ -479,45 +500,49 @@ const NewClientPage = () => {
         patronymic: "",
         inn: client.inn,
         region_id: client.region.id,
-        manager_id: client.manager.id,
+        manager_id: client.manager.id || "",
         applicant_status: client.applicant_status.id,
-        info_source_type_id: client.information_source.info_source_type,
-        info_source_date: client.information_source.info_source_date,
-        info_source_number: client.information_source.info_source_number,
+        info_source_type_id: client.information_source?.info_source_type || "",
+        info_source_date: client.information_source?.info_source_date || "",
+        info_source_number: client.information_source?.info_source_number || "",
         representative_first_name:
-          client.representitive_client.representative_first_name,
-        representative_second_name:
-          client.representitive_client.representative_second_name,
-        representative_patronymic:
-          client.representitive_client.representative_patronymic,
+          client.representitive_client.representative_first_name || "",
+        // representative_second_name:
+        //   client.representitive_client.representative_second_name,
+        // representative_patronymic:
+        //   client.representitive_client.representative_patronymic,
         representative_position:
-          client.representitive_client.representative_position,
-        representative_phone: client.representitive_client.representative_phone,
-        representative_email: client.representitive_client.representative_email,
+          client.representitive_client.representative_position || "",
+        representative_phone:
+          client.representitive_client.representative_phone || "",
+        representative_email:
+          client.representitive_client.representative_email || "",
         control_point: client.representitive_client.control_point,
         debt_amount: client.compliance_criteria.debt_amount,
         debt_type: client.compliance_criteria.debt_type.id,
         category: client.compliance_criteria.category.id,
         support_measure: client.compliance_criteria.support_measure.id,
         note: client.compliance_criteria.note,
-        support_duration: client.compliance_criteria.support_duration,
-        first_meeting_date: client.first_meeting_date,
+        support_duration: client.compliance_criteria.support_duration || "",
+        first_meeting_date: client.first_meeting_date || "",
         event_date: client.event_date,
         event_description: client.event_description,
-        positive_decision_type: client.kpi?.positive_decision_type,
-        negative_decision_type: client.kpi?.negative_decision_type,
-        positive_decision_date: client.kpi?.positive_decision_date,
-        measure_provided_duration: client.kpi?.measure_provided_duration,
-        oiv_request_sender: client.kpi?.oiv_request_sender,
-        settled_debt_amount: client.kpi?.settled_debt_amount,
-        received_amount_budget: client.kpi?.received_amount_budget,
-        overdue_debt_amount: client.kpi?.overdue_debt_amount,
-        technical_overdue_debt_amount: client.kpi?.technical_overdue_debt_amount,
+        positive_decision_type: client.kpi?.positive_decision_type || "",
+        negative_decision_type: client.kpi?.negative_decision_type || "",
+        positive_decision_date: client.kpi?.positive_decision_date || "",
+        measure_provided_duration: client.kpi?.measure_provided_duration || "",
+        oiv_request_sender: client.kpi?.oiv_request_sender || "",
+        settled_debt_amount: client.kpi?.settled_debt_amount || "",
+        received_amount_budget: client.kpi?.received_amount_budget || "",
+        overdue_debt_amount: client.kpi?.overdue_debt_amount || "",
+        technical_overdue_debt_amount:
+          client.kpi?.technical_overdue_debt_amount || "",
         // DENIS
         prd_catalog_id: client.prd_catalog.id,
-        stage_review: client.stage_review?.id,
+        stage_review: client.stage_review.id,
         fields_of_positive_decision: client.fields_of_positive_decision,
       })
+
       client.fields_of_positive_decision.map((el) => {
         console.log("подгрузка полей")
         setClientData((prevState) => ({
@@ -767,15 +792,6 @@ const NewClientPage = () => {
       options: positive,
     },
 
-    fieldsOfPosDec.length && fieldsOfPosDec[0],
-    fieldsOfPosDec.length && fieldsOfPosDec[1] ? fieldsOfPosDec[1] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[2] ? fieldsOfPosDec[2] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[3] ? fieldsOfPosDec[3] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[4] ? fieldsOfPosDec[4] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[5] ? fieldsOfPosDec[5] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[6] ? fieldsOfPosDec[6] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[7] ? fieldsOfPosDec[7] : "",
-
     {
       label: "Дата положительного решения",
       key: "positive_decision_date",
@@ -793,7 +809,22 @@ const NewClientPage = () => {
       type: "text",
       inputType: "number",
     },
-    // здесь у них поле
+
+    fieldsOfPosDec.length && fieldsOfPosDec[0],
+    fieldsOfPosDec.length && fieldsOfPosDec[1] ? fieldsOfPosDec[1] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[2] ? fieldsOfPosDec[2] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[3] ? fieldsOfPosDec[3] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[4] ? fieldsOfPosDec[4] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[5] ? fieldsOfPosDec[5] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[6] ? fieldsOfPosDec[6] : "",
+    fieldsOfPosDec.length && fieldsOfPosDec[7] ? fieldsOfPosDec[7] : "",
+
+    {
+      label: "Основания и методика рассмотрения гл. 9НК РФ",
+      key: "reasons",
+      type: "select",
+      options: reasonsConsideration,
+    },
     {
       label: "От кого ходатайство ОИВ (для МС)",
       key: "oiv_request_sender",
