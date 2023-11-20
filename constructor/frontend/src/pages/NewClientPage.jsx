@@ -297,8 +297,8 @@ const NewClientPage = () => {
       const jsonForUpdate = {
         id: client.id,
         first_name: clientData.first_name,
-        second_name: "",
-        patronymic: "",
+        // second_name: "",
+        // patronymic: "",
         inn: clientData.inn,
         region_id: clientData.region_id,
         manager_id: clientData.manager_id,
@@ -313,8 +313,8 @@ const NewClientPage = () => {
         representitive_client_id: {
           id: client.representitive_client.id || "",
           representative_first_name: clientData.representative_first_name,
-          representative_second_name: "", // clientData.representative_second_name,
-          representative_patronymic: "", // clientData.representative_patronymic,
+          // representative_second_name: "", // clientData.representative_second_name,
+          // representative_patronymic: "", // clientData.representative_patronymic,
           representative_position: clientData.representative_position,
           representative_phone: clientData.representative_phone,
           representative_email: clientData.representative_email,
@@ -333,7 +333,7 @@ const NewClientPage = () => {
         event_date: clientData.event_date,
         event_description: clientData.event_description,
         kpi_id: {
-          id: client.kpi?.id || "1",
+          id: client.kpi?.id || "",
           positive_decision_date: clientData.positive_decision_date,
           measure_provided_duration: clientData.measure_provided_duration,
           oiv_request_sender: clientData.oiv_request_sender,
@@ -348,7 +348,7 @@ const NewClientPage = () => {
 
         prd_catalog_id: clientData.prd_catalog_id,
         stage_review: clientData.stage_review,
-        reasons: clientData.reasons,
+        reasons: clientData.reasons || "",
 
         fields_of_positive_decision: [...Object.values(dataOfFieldsDec)],
       }
@@ -406,8 +406,8 @@ const NewClientPage = () => {
             negative_decision_type: clientData.negative_decision_type,
           },
           first_name: clientData.first_name,
-          second_name: "",
-          patronymic: "",
+          // second_name: "",
+          // patronymic: "",
           inn: clientData.inn,
           first_meeting_date: clientData.first_meeting_date,
           event_date: clientData.event_date,
