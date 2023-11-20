@@ -634,6 +634,20 @@ class CatalogPRD(models.Model): # Справочник ПРД
  
     def __str__(self):
         return self.catalog_prd
+
+
+class ReasonsForConsideration(models.Model):
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default = uuid.uuid4,
+                            editable = False,)
+    created_date = models.DateTimeField(auto_now_add=True)
+    reasons = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        db_table ='reasons_for_consideration'
+ 
+    def __str__(self):
+        return self.reasons
 #---------------------
 
 #---------------------
@@ -776,6 +790,7 @@ class Client(models.Model):
     first_meeting_date = models.DateField(blank=True, null=True) # Дата первой встречи
     event_date = models.DateField(blank=True, null=True) # Дата наступления события
     event_description = models.TextField(blank=True, null=True) # Описание события
+    reasons = models.ForeignKey(ReasonsForConsideration, on_delete=models.CASCADE, blank=True, null=True)
     kpi = models.ForeignKey(KPI, on_delete=models.CASCADE, blank=True, null=True) # 
     
     class Meta:
