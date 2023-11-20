@@ -1199,7 +1199,8 @@ def DownloadJournalData(request):
 
     where_data = ""
     if not date_time is None:
-        where_data = f"AND date(ir.created_date) = {date_time}"
+        # where_data = f"AND date(ir.created_date) = {date_time}"
+        where_data = f"AND strftime('%d.%m.%Y', ir.created_date) = {date_time}"
 
     where_user_id = ""
     if not user_id is None:
@@ -1568,6 +1569,7 @@ def CreateRelationClient(request):
                     manager = Manager.objects.get(id=request.data.get('manager_id'))
                 else:
                     manager = None
+
                 if request.data.get('stage_review') != "":
                     stage_review = ReviewStage.objects.get(id=request.data.get('stage_review'))
                 else:
@@ -1802,15 +1804,24 @@ def DetailRelationClient(request, pk):
 @api_view(['POST'])
 def UpdateRelationClient(request, pk):
     if request.method == 'POST':
-
         with transaction.atomic():
             try:
+                region = Region.objects.get(id=request.data.get('region_id')) # Required
+                manager = Manager.objects.get(id=request.data.get('manager_id')) # Required
+                applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status')) # Required
+                
+                # stage_review = ReviewStage.objects.get(id=request.data.get('stage_review')) # Required
+                if request.data.get('stage_review') != "":
+                    stage_review = ReviewStage.objects.get(id=request.data.get('stage_review'))
+                else:
+                    stage_review = None
+                
+                if request.data.get('reasons') != "":
+                    reasons = ReasonsForConsideration.objects.get(id=request.data.get('reasons'))  # string, "" -ok
+                else:
+                    reasons = None
 
-                region = Region.objects.get(id=request.data.get('region_id'))
-                manager = Manager.objects.get(id=request.data.get('manager_id'))
-                applicant_status = ApplicantStatus.objects.get(id=request.data.get('applicant_status'))
-                stage_review = ReviewStage.objects.get(id=request.data.get('stage_review'))
-                prd_catalog = CatalogPRD.objects.get(id=request.data.get('prd_catalog_id'))
+                prd_catalog = CatalogPRD.objects.get(id=request.data.get('prd_catalog_id')) # Required
 
                 client = ClientRepresentative.objects.get(id=request.data.get('representitive_client_id')['id'])
                 serializer_body = ClientRepresentativeSerializer(instance=client, \
@@ -1825,6 +1836,11 @@ def UpdateRelationClient(request, pk):
                 category = Category.objects.get(id=request.data.get('compliance_data_id')["category"])
                 debt_type = DebtType.objects.get(id=request.data.get('compliance_data_id')["debt_type"])
                 support_measure = SupportMeasure.objects.get(id=request.data.get('compliance_data_id')["support_measure"])
+
+                if request.data.get('compliance_data_id')["support_duration"] != "":
+                    support_duration = request.data.get('compliance_data_id')["support_duration"]
+                else:
+                    support_duration = None
                 
                 ComplianceCriteria.objects.filter(id=request.data.get('compliance_data_id')['id']).update(
                     debt_amount = request.data.get('compliance_data_id')["debt_amount"],
@@ -1832,7 +1848,7 @@ def UpdateRelationClient(request, pk):
                     category = category,
                     support_measure = support_measure,
                     note = request.data.get('compliance_data_id')["note"],
-                    support_duration = request.data.get('compliance_data_id')["support_duration"],
+                    support_duration = support_duration,
                 )
                 # compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
                 
@@ -1858,26 +1874,79 @@ def UpdateRelationClient(request, pk):
                     info_source_number = info_source_number,
                 )
                 # information_source_id = InformationSource.objects.latest('id').id 
-                
-                kpi_id = None
+
+                #######################################################################################################
+
+                kpi_id = KPI.objects.get(id=request.data.get('kpi_id')["id"])
+                print(kpi_id.id)
                 if request.data.get('kpi_id') != None:
-                    serializer_kpi = KPISerializer(instance=KPI.objects.get(id=request.data.get('kpi_id')['id']), data=request.data.get('kpi_id'))
-                    if not serializer_kpi.is_valid():
-                        transaction.set_rollback(True)
-                        return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
-            
-                    serializer_kpi.save()
+                    if request.data.get('kpi_id')["positive_decision_type"] != "":
+                        positive_decision_type = PositiveDecision.objects.get(id=request.data.get('kpi_id')["positive_decision_type"])
+                    else: 
+                        positive_decision_type = None
                     
+                    if request.data.get('kpi_id')["positive_decision_date"] != "":
+                        # positive_decision_date = request.data.get('kpi_id')["positive_decision_date"]
+                        positive_decision_date = request.data.get('kpi_id')["positive_decision_date"]
+                                                            
+                    else: 
+                        positive_decision_date = None
 
-                    kpi_id = KPI.objects.latest('id').id
+                    if request.data.get('kpi_id')["measure_provided_duration"] != "":
+                        measure_provided_duration = request.data.get('kpi_id')["measure_provided_duration"]
+                    else: 
+                        measure_provided_duration = None 
+                    
+                    if request.data.get('kpi_id')["negative_decision_type"] != "":
+                        # negative_decision_type = request.data.get('kpi_id')["negative_decision_type"]
+                        negative_decision_type = NegativeDecision.objects.get(id=request.data.get('kpi_id')["negative_decision_type"])
+                    else: 
+                        negative_decision_type = None 
 
-                    KpiPositiveDecisionFields.objects.filter(kpi=kpi_id).delete()
+                    if request.data.get('kpi_id')["settled_debt_amount"] != "":
+                        settled_debt_amount = request.data.get('kpi_id')["settled_debt_amount"]
+                    else: 
+                        settled_debt_amount = None 
+
+                    if request.data.get('kpi_id')["received_amount_budget"] != "":
+                        received_amount_budget = request.data.get('kpi_id')["received_amount_budget"]
+                    else: 
+                        received_amount_budget = None 
+
+                    if request.data.get('kpi_id')["overdue_debt_amount"] != "":
+                        overdue_debt_amount = request.data.get('kpi_id')["overdue_debt_amount"]
+                    else: 
+                        overdue_debt_amount = None 
+
+                    if request.data.get('kpi_id')["technical_overdue_debt_amount"] != "":
+                        technical_overdue_debt_amount = request.data.get('kpi_id')["technical_overdue_debt_amount"]
+                    else: 
+                        technical_overdue_debt_amount = None 
+
+                    # if ( positive_decision_type) or ( positive_decision_date) or \
+                    # ( measure_provided_duration) or ( negative_decision_type) or \
+                    # ( settled_debt_amount) or ( received_amount_budget) or \
+                    # ( overdue_debt_amount) or ( technical_overdue_debt_amount):
+                    KPI.objects.filter(id=kpi_id.id).update(
+                        positive_decision_type = positive_decision_type,
+                        positive_decision_date = positive_decision_date,
+                        measure_provided_duration = measure_provided_duration,
+                        oiv_request_sender = request.data.get('kpi_id')["oiv_request_sender"], # string, "" -ok
+                        negative_decision_type = negative_decision_type,
+                        settled_debt_amount = settled_debt_amount,
+                        received_amount_budget = received_amount_budget,
+                        overdue_debt_amount = overdue_debt_amount,
+                        technical_overdue_debt_amount = technical_overdue_debt_amount
+                    )
+                    # kpi_id = KPI.objects.latest('id').id
+
+                    KpiPositiveDecisionFields.objects.filter(kpi=kpi_id.id).delete()
 
                     if request.data.get('fields_of_positive_decision') != None and \
                         request.data.get('kpi_id')['positive_decision_type'] != None:
                         data_fields = request.data.get('fields_of_positive_decision')
                         for fields in data_fields:
-                            fields['kpi'] = kpi_id
+                            fields['kpi'] = kpi_id.id
                             serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
                             if not serializer_fields_of_positive.is_valid():
                                 transaction.set_rollback(True)
@@ -1885,10 +1954,44 @@ def UpdateRelationClient(request, pk):
                         
                             serializer_fields_of_positive.save()
 
-                Client.objects.filter(id=request.data.get('id')).update(
-                    first_name = request.data.get('first_name'),
-                    second_name = request.data.get('second_name'),
-                    patronymic = request.data.get('patronymic'),
+                ######################################################################################################
+
+                # kpi_id = None
+                # if request.data.get('kpi_id') != None:
+                #     serializer_kpi = KPISerializer(instance=KPI.objects.get(id=request.data.get('kpi_id')['id']), data=request.data.get('kpi_id'))
+                #     if not serializer_kpi.is_valid():
+                #         transaction.set_rollback(True)
+                #         return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+                #     serializer_kpi.save()
+                    
+
+                #     kpi_id = KPI.objects.latest('id').id
+
+                #     KpiPositiveDecisionFields.objects.filter(kpi=kpi_id).delete()
+
+                #     if request.data.get('fields_of_positive_decision') != None and \
+                #         request.data.get('kpi_id')['positive_decision_type'] != None:
+                #         data_fields = request.data.get('fields_of_positive_decision')
+                #         for fields in data_fields:
+                #             fields['kpi'] = kpi_id
+                #             serializer_fields_of_positive = KpiPositiveDecisionFieldsSerializer(data=fields)
+                #             if not serializer_fields_of_positive.is_valid():
+                #                 transaction.set_rollback(True)
+                #                 return Response(serializer_body.errors, status=status.HTTP_400_BAD_REQUEST)
+                        
+                #             serializer_fields_of_positive.save()
+
+                
+                if request.data.get('first_meeting_date') != "":
+                    first_meeting_date = request.data.get('first_meeting_date')
+                else:
+                    first_meeting_date = None
+                
+                Client.objects.filter(id=pk).update(
+                    first_name = request.data.get('first_name'), # string, "" -ok
+                    second_name = request.data.get('second_name'), # string, "" -ok
+                    patronymic = request.data.get('patronymic'), # string, "" -ok
                     inn = request.data.get('inn'),
                     region = region,
                     manager = manager,
@@ -1896,16 +1999,18 @@ def UpdateRelationClient(request, pk):
                     # information_source_id = information_source_id,
                     # representitive_client_id = representitive_client_id,
                     # compliance_criteria_id = compliance_criteria_id,
-                    first_meeting_date = request.data.get('first_meeting_date'),
+                    first_meeting_date = first_meeting_date,
                     event_date = request.data.get('event_date'),
                     event_description = request.data.get('event_description'),
                     # kpi_id = kpi_id,
                     stage_review = stage_review,
                     prd_catalog = prd_catalog,
-
+                    reasons = reasons,
                 )
-            except:
-                return Response({'message': 'Некорректный ввод данных!'}, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e: 
+                return Response({'message': 'Некорректный ввод данных!',
+                                 'error': f"{e}"}, 
+                                status=status.HTTP_400_BAD_REQUEST)
         
         return Response({'message': 'Клиент обновлен'}, status=status.HTTP_200_OK)
     return Response({'message': 'Метод не найден'}, status=status.HTTP_400_BAD_REQUEST)
