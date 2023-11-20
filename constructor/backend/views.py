@@ -1597,8 +1597,8 @@ def CreateRelationClient(request):
                 )
                 compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
                 
-                print("request.data.get('information_source_id')[info_source_type_id]", request.data.get('information_source_id')["info_source_type_id"])
-                print(type(request.data.get('information_source_id')["info_source_type_id"]))
+                # print("request.data.get('information_source_id')[info_source_type_id]", request.data.get('information_source_id')["info_source_type_id"])
+                # print(type(request.data.get('information_source_id')["info_source_type_id"]))
                 if request.data.get('information_source_id')["info_source_type_id"] != "":
                     info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
                 else:
@@ -1651,8 +1651,8 @@ def CreateRelationClient(request):
                     if request.data.get('kpi_id')["negative_decision_type"] != "":
                         # negative_decision_type = request.data.get('kpi_id')["negative_decision_type"]
                         negative_decision_type = NegativeDecision.objects.get(id=request.data.get('kpi_id')["negative_decision_type"])
-                        print(negative_decision_type)
-                        print(type(negative_decision_type))
+                        # print(negative_decision_type)
+                        # print(type(negative_decision_type))
                     else: 
                         negative_decision_type = None 
 
@@ -2089,8 +2089,8 @@ SELECT
     t_kpi_positive_decision_fields_6.value as end_date,
     t_kpi_positive_decision_fields_7.value as amount_of_fulfilled,  
 
-    '' as stage
-    --t_review_stage.stage as stage
+    --'' as stage
+    t_review_stage.stage as stage
 
   FROM client as t_client
   LEFT JOIN manager as t_manager
@@ -2174,7 +2174,8 @@ SELECT
   --ПРД каталог
  LEFT JOIN prd_catalog as t_prd_catalog
  ON t_client.prd_catalog_id = t_prd_catalog.id
-
- --LEFT JOIN review_stage as t_review_stage
- --ON t_client.review_stage_id = t_review_stage.id
+ 
+  -- Стадия рассмотрения
+ LEFT JOIN review_stage as t_review_stage
+ ON t_client.stage_review_id = t_review_stage.id
 """
