@@ -1,15 +1,53 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import Moment from "moment"
 import localization from "moment/locale/ru"
+import httpService from "../../../services/http.service"
 
 const ContentRows = ({ clients }) => {
+  const [positiveDecisions, setPositiveDecisions] = useState()
+  const [negativeDecisions, setNegativeDecisions] = useState()
   const makeClassName = (value) => {
     if (value === "Низкий риск") return "text-success"
     if (value === "Средний риск") return "text-warning"
     if (value === "Высокий риск") return "text-danger"
   }
   console.log(clients)
+
+  const getPositiveDecisions = async () => {
+    try {
+      const { data } = await httpService.get(`crm_pos_decision/`)
+      setPositiveDecisions(data.data)
+    } catch (error) {}
+  }
+  const getNegativeDecisions = async () => {
+    try {
+      const { data } = await httpService.get(`crm_neg_decision/`)
+      setNegativeDecisions(data.data)
+    } catch (error) {}
+  }
+  useEffect(() => {
+    getPositiveDecisions()
+    getNegativeDecisions()
+  }, [])
+
+  const getPositive = (client) => {
+    return (
+      positiveDecisions &&
+      positiveDecisions.find(
+        (el) => el.id === client.kpi?.positive_decision_type
+      )
+    )
+  }
+
+  const getNegative = (client) => {
+    return (
+      negativeDecisions &&
+      negativeDecisions.find(
+        (el) => el.id === client.kpi?.negative_decision_type
+      )
+    )
+  }
 
   return (
     clients &&
@@ -34,15 +72,14 @@ const ContentRows = ({ clients }) => {
           </td>
           <td>{el.applicant_status.status}</td>
           <td>{el.compliance_criteria.support_measure.category_type}</td>
-          <td>{el.kpi?.positive_decision_type}</td>
-          <td>{el.kpi?.negative_decision_type}</td>
+          <td>{getPositive(el)?.positive_decision}</td>
+          <td>{getNegative(el)?.negative_decision}</td>
           <td className={makeClassName("Низкий риск")}>нет в json</td>
           <td className={makeClassName("Средний риск")}>нет в json</td>
           <td className={makeClassName("Высокий риск")}>нет в json</td>
           <td> {el.stage_review?.stage}</td>
           <td>
-            {Moment(el.event_date).locale("rus", localization).format("LL")}
-            {/* {el.event_date} */}
+            {Moment(el.event_date).locale("rus", localization).format("L")}
           </td>
         </tr>
       )
