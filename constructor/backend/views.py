@@ -1199,7 +1199,8 @@ def DownloadJournalData(request):
 
     where_data = ""
     if not date_time is None:
-        where_data = f"AND date(ir.created_date) = {date_time}"
+        # where_data = f"AND date(ir.created_date) = {date_time}"
+        where_data = f"AND strftime('%d.%m.%Y', ir.created_date) = {date_time}"
 
     where_user_id = ""
     if not user_id is None:
