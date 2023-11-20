@@ -1951,9 +1951,9 @@ def import_db_to_file(request):
 
 
             sheet.merge_range('AP1:AR2', 'Вид предоставляемого обеспечения', cell_format_header)
-            sheet.write('AP3:AP3', 'Залог имущества (в тыс. руб.)', cell_format_header)
-            sheet.write('AQ3:AQ3', 'Поручительство (в тыс. руб.)', cell_format_header)
-            sheet.write('AR3:AR3', 'Банковская гарантия (в тыс. руб.)', cell_format_header)
+            # sheet.write('AP3:AP3', 'Залог имущества (в тыс. руб.)', cell_format_header)
+            # sheet.write('AQ3:AQ3', 'Поручительство (в тыс. руб.)', cell_format_header)
+            # sheet.write('AR3:AR3', 'Банковская гарантия (в тыс. руб.)', cell_format_header)
             sheet.merge_range('AS1:AS3', 'Стадия рассмотрения', cell_format_header)
             sheet.set_column('AS1:AS3', 25)
             sheet.merge_range('AT1:AV2', 'Проводимая работа в случае не исполнения предоставленной меры', cell_format_header)
@@ -2016,7 +2016,7 @@ def get_columns_to_query():
         "Вид отрицательного решения (из списка)",
         "Сумма урегулированной задолженности, тыс. руб.",
         "Сумма поступившая в бюджет, тыс. руб.",
-        "сумма, тыс. руб.",	
+        "сумма, тыс. руб.",  
         "сумма технической просроченной задолженности, сумма, тыс. руб.",
         "Ближайший срок исполнения обязательства (до какого момента отложены меры)",
         "Не вступило в силу рассрочка/ отсрочка, тыс. руб.",
@@ -2025,7 +2025,10 @@ def get_columns_to_query():
         "Сумма требований вошедших в МС, тыс. руб.",
         "Дата окончания МС",
         "Сумма исполненных обязательств, тыс. руб.",
-        "Стадия рассмотрения"	
+        "Залог имущества (в тыс. руб.)",
+        "Поручительство (в тыс. руб.)",
+        "Банковская гарантия (в тыс. руб.)",
+        "Стадия рассмотрения"  
     ]
 
 
@@ -2088,6 +2091,10 @@ SELECT
     t_kpi_positive_decision_fields_5.value as sum_of_the_claims,
     t_kpi_positive_decision_fields_6.value as end_date,
     t_kpi_positive_decision_fields_7.value as amount_of_fulfilled,  
+
+    '' as pole1,
+    '' as pole2,
+    '' as pole3,
 
     --'' as stage
     t_review_stage.stage as stage
