@@ -636,7 +636,7 @@ class CatalogPRD(models.Model): # Справочник ПРД
         return self.catalog_prd
 
 
-class ReasonsForConsideration(models.Model):
+class ReasonsForConsideration(models.Model): # Основания и методика рассмотрения гл. 9 НК РФ
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default = uuid.uuid4,
                             editable = False,)
@@ -790,7 +790,7 @@ class Client(models.Model):
     first_meeting_date = models.DateField(blank=True, null=True) # Дата первой встречи
     event_date = models.DateField(blank=True, null=True) # Дата наступления события
     event_description = models.TextField(blank=True, null=True) # Описание события
-    reasons = models.ForeignKey(ReasonsForConsideration, on_delete=models.CASCADE, blank=True, null=True)
+    reasons = models.ForeignKey(ReasonsForConsideration, on_delete=models.CASCADE, blank=True, null=True) # Основания и методика рассмотрения
     kpi = models.ForeignKey(KPI, on_delete=models.CASCADE, blank=True, null=True) # 
     
     class Meta:

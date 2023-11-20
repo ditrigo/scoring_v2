@@ -1557,6 +1557,7 @@ def CreateRelationClient(request):
         with transaction.atomic():
             try:
                 region = Region.objects.get(id=request.data.get('region_id')) # Required
+                reasons = ReasonsForConsiderationSerializer.objects.get(id=request.data.get('reasons')) 
 
                 if request.data.get('manager_id') != "":
                     manager = Manager.objects.get(id=request.data.get('manager_id'))
@@ -1754,6 +1755,7 @@ def CreateRelationClient(request):
                     event_description = request.data.get('event_description'), # Required
                     kpi_id = kpi_id,
                     stage_review = stage_review,
+                    reasons = reasons
                 )
             except Exception as e:
                 return Response({'message': 'Некорректный ввод данных!', 'error': f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
