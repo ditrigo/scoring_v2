@@ -1557,7 +1557,12 @@ def CreateRelationClient(request):
         with transaction.atomic():
             try:
                 region = Region.objects.get(id=request.data.get('region_id')) # Required
-                reasons = ReasonsForConsiderationSerializer.objects.get(id=request.data.get('reasons')) 
+                # reasons = ReasonsForConsiderationSerializer.objects.get(id=request.data.get('reasons')) 
+
+                if request.data.get('reasons') != "":
+                    reasons = ReasonsForConsideration.objects.get(id=request.data.get('reasons'))  # string, "" -ok
+                else:
+                    reasons = None
 
                 if request.data.get('manager_id') != "":
                     manager = Manager.objects.get(id=request.data.get('manager_id'))
@@ -1639,7 +1644,8 @@ def CreateRelationClient(request):
                         positive_decision_type = None
                     
                     if request.data.get('kpi_id')["positive_decision_date"] != "":
-                        positive_decision_date = request.data.get('kpi_id')["positive_decision_date"]
+                        # positive_decision_date = request.data.get('kpi_id')["positive_decision_date"]
+                        positive_decision_date = PositiveDecision.objects.get(id = request.data.get('kpi_id')["positive_decision_date"])
                     else: 
                         positive_decision_date = None
 
