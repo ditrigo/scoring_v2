@@ -1756,16 +1756,21 @@ def DetailRelationClient(request, pk):
 
         client = Client.objects.get(id=pk)
         client_data = ClientSerializer(client)
-    
-        if client.kpi != None:
-            fields_of_positive_decision = None
+        print(client)
+
+        fields_of_positive_decision = None
+        if (client.kpi != None):
             # Если тип не выбран, то и полей нет
-            if client.kpi.positive_decision_type != None:
+            if client.kpi.positive_decision_type != None :
                 fields_of_positive_decision = KpiPositiveDecisionFieldsSerializer(KpiPositiveDecisionFields.objects.filter(kpi=client.kpi.id), many=True)
 
         data = {}
         data.update(client_data.data)
-        data['fields_of_positive_decision'] = fields_of_positive_decision.data
+        print(data)
+        if fields_of_positive_decision != None:
+            data['fields_of_positive_decision'] = fields_of_positive_decision.data
+        else:
+            data['fields_of_positive_decision'] = []
 
         return Response({'data': data}, status=status.HTTP_200_OK)
         

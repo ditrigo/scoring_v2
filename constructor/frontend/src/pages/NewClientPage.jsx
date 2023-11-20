@@ -264,7 +264,7 @@ const NewClientPage = () => {
         console.log(e)
       })
   }, [])
-
+  console.log("params.id && client", params.id && client) 
   const handleSubmit = async (e) => {
     e.preventDefault()
     // console.log(client && client.information_source.id)
@@ -504,15 +504,15 @@ const NewClientPage = () => {
         first_meeting_date: client.first_meeting_date,
         event_date: client.event_date,
         event_description: client.event_description,
-        positive_decision_type: client.kpi.positive_decision_type,
-        negative_decision_type: client.kpi.negative_decision_type,
-        positive_decision_date: client.kpi.positive_decision_date,
-        measure_provided_duration: client.kpi.measure_provided_duration,
-        oiv_request_sender: client.kpi.oiv_request_sender,
-        settled_debt_amount: client.kpi.settled_debt_amount,
-        received_amount_budget: client.kpi.received_amount_budget,
-        overdue_debt_amount: client.kpi.overdue_debt_amount,
-        technical_overdue_debt_amount: client.kpi.technical_overdue_debt_amount,
+        positive_decision_type: client.kpi?.positive_decision_type,
+        negative_decision_type: client.kpi?.negative_decision_type,
+        positive_decision_date: client.kpi?.positive_decision_date,
+        measure_provided_duration: client.kpi?.measure_provided_duration,
+        oiv_request_sender: client.kpi?.oiv_request_sender,
+        settled_debt_amount: client.kpi?.settled_debt_amount,
+        received_amount_budget: client.kpi?.received_amount_budget,
+        overdue_debt_amount: client.kpi?.overdue_debt_amount,
+        technical_overdue_debt_amount: client.kpi?.technical_overdue_debt_amount,
         // DENIS
         prd_catalog_id: client.prd_catalog.id,
         stage_review: client.stage_review?.id,

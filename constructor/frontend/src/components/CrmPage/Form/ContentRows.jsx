@@ -35,7 +35,7 @@ const ContentRows = ({ clients }) => {
     return (
       positiveDecisions &&
       positiveDecisions.find(
-        (el) => el.id === client.kpi?.positive_decision_type
+        (el) => el.id === client?.kpi?.positive_decision_type
       )
     )
   }
@@ -44,7 +44,7 @@ const ContentRows = ({ clients }) => {
     return (
       negativeDecisions &&
       negativeDecisions.find(
-        (el) => el.id === client.kpi?.negative_decision_type
+        (el) => el.id === client?.kpi?.negative_decision_type
       )
     )
   }
