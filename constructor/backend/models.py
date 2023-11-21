@@ -670,6 +670,12 @@ class ClientRepresentative(models.Model): # Представитель клие�
 
     class Meta:
         db_table ='client_representative'
+
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     if data['accept_fond_date'] == "":
+    #         data['accept_fond_date'] = None
+    #     return data
  
     def __str__(self):
         return f"{self.representative_first_name} {self.representative_second_name}"

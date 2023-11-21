@@ -1604,8 +1604,8 @@ def CreateRelationClient(request):
                 )
                 compliance_criteria_id = ComplianceCriteria.objects.latest('id').id
                 
-                print("request.data.get('information_source_id')[info_source_type_id]", request.data.get('information_source_id')["info_source_type_id"])
-                print(type(request.data.get('information_source_id')["info_source_type_id"]))
+                # print("request.data.get('information_source_id')[info_source_type_id]", request.data.get('information_source_id')["info_source_type_id"])
+                # print(type(request.data.get('information_source_id')["info_source_type_id"]))
                 if request.data.get('information_source_id')["info_source_type_id"] != "":
                     info_source_type_id = InformationSourceType.objects.get(id=request.data.get('information_source_id')["info_source_type_id"])
                 else:
@@ -1661,8 +1661,8 @@ def CreateRelationClient(request):
                     if request.data.get('kpi_id')["negative_decision_type"] != "":
                         # negative_decision_type = request.data.get('kpi_id')["negative_decision_type"]
                         negative_decision_type = NegativeDecision.objects.get(id=request.data.get('kpi_id')["negative_decision_type"])
-                        print(negative_decision_type)
-                        print(type(negative_decision_type))
+                        # print(negative_decision_type)
+                        # print(type(negative_decision_type))
                     else: 
                         negative_decision_type = None 
 
@@ -1685,6 +1685,12 @@ def CreateRelationClient(request):
                         technical_overdue_debt_amount = request.data.get('kpi_id')["technical_overdue_debt_amount"]
                     else: 
                         technical_overdue_debt_amount = None 
+
+                    # TODO Раскомментировать после доработки
+                    # if request.data.get('kpi_id')["amount_settled_debt_other_creditors"] != "":
+                    #     technical_overdue_debt_amount = request.data.get('kpi_id')["amount_settled_debt_other_creditors"]
+                    # else: 
+                    #     technical_overdue_debt_amount = None
 
                     # if ( positive_decision_type) or ( positive_decision_date) or \
                     # ( measure_provided_duration) or ( negative_decision_type) or \
@@ -1747,6 +1753,80 @@ def CreateRelationClient(request):
                     first_meeting_date = request.data.get('first_meeting_date')
                 else:
                     first_meeting_date = None
+                
+                # TODO Раскомментировать после доработки
+                # if request.data.get('notice_debitor_date') != "":
+                #     notice_debitor_date = request.data.get('notice_debitor_date')
+                # else:
+                #     notice_debitor_date = None
+                # if request.data.get('notice_guarantor_date') != "":
+                #     notice_guarantor_date = request.data.get('notice_guarantor_date')
+                # else:
+                #     notice_guarantor_date = None
+                # if request.data.get('notice_pledgetor_date') != "":
+                #     notice_pledgetor_date = request.data.get('notice_pledgetor_date')
+                # else:
+                #     notice_pledgetor_date = None
+                # if request.data.get('revenue_knd_1151006_2023year') != "":
+                #     revenue_knd_1151006_2023year = request.data.get('revenue_knd_1151006_2023year')
+                # else:
+                #     revenue_knd_1151006_2023year = None
+                # if request.data.get('revenue_knd_0710099_2022year') != "":
+                #     revenue_knd_0710099_2022year = request.data.get('revenue_knd_0710099_2022year')
+                # else:
+                #     revenue_knd_0710099_2022year = None
+                # if request.data.get('ssch_knd_1151111') != "":
+                #     ssch_knd_1151111 = request.data.get('ssch_knd_1151111')
+                # else:
+                #     ssch_knd_1151111 = None
+                # if request.data.get('assets_2022year') != "":
+                #     assets_2022year = request.data.get('assets_2022year')
+                # else:
+                #     assets_2022year = None
+                # if request.data.get('taxes_paid_2023year') != "":
+                #     taxes_paid_2023year = request.data.get('taxes_paid_2023year')
+                # else:
+                #     taxes_paid_2023year = None
+                # if request.data.get('bankruptcy_proceedings_stage') != "":
+                #     bankruptcy_proceedings_stage = request.data.get('bankruptcy_proceedings_stage')
+                # else:
+                #     bankruptcy_proceedings_stage = None
+                # if request.data.get('debt_amount_unified_tax_service') != "":
+                #     debt_amount_unified_tax_service = request.data.get('debt_amount_unified_tax_service')
+                # else:
+                #     debt_amount_unified_tax_service = None
+                # if request.data.get('fot_knd_1151111') != "":
+                #     fot_knd_1151111 = request.data.get('fot_knd_1151111')
+                # else:
+                #     fot_knd_1151111 = None
+                # if request.data.get('profit_knd_1151006') != "":
+                #     profit_knd_1151006 = request.data.get('profit_knd_1151006')
+                # else:
+                #     profit_knd_1151006 = None
+                # if request.data.get('solvency_scoring_results') != "":
+                #     solvency_scoring_results = request.data.get('solvency_scoring_results')
+                # else:
+                #     solvency_scoring_results = None
+                # if request.data.get('skuad_current_business_value') != "":
+                #     skuad_current_business_value = request.data.get('skuad_current_business_value')
+                # else:
+                #     skuad_current_business_value = None
+                # if request.data.get('skuad_liquidation_business_value') != "":
+                #     skuad_liquidation_business_value = request.data.get('skuad_liquidation_business_value')
+                # else:
+                #     skuad_liquidation_business_value = None
+                # if request.data.get('skuad_refund_funds') != "":
+                #     skuad_refund_funds = request.data.get('skuad_refund_funds')
+                # else:
+                #     skuad_refund_funds = None
+                # if request.data.get('skuad_working_capital') != "":
+                #     skuad_working_capital = request.data.get('skuad_working_capital')
+                # else:
+                #     skuad_working_capital = None
+                # if request.data.get('solvency_rank') != "":
+                #     solvency_rank = request.data.get('solvency_rank')
+                # else:
+                #     solvency_rank = None
 
                 Client.objects.create(
                     first_name = request.data.get('first_name'), # string, "" -ok
@@ -1765,7 +1845,27 @@ def CreateRelationClient(request):
                     event_description = request.data.get('event_description'), # Required
                     kpi_id = kpi_id,
                     stage_review = stage_review,
-                    reasons = reasons
+                    reasons = reasons,
+
+                    # TODO Раскомментировать после доработки
+                    # notice_debitor_date = notice_debitor_date,
+                    # notice_guarantor_date = notice_guarantor_date,
+                    # notice_pledgetor_date = notice_pledgetor_date,
+                    # revenue_knd_1151006_2023year = revenue_knd_1151006_2023year,
+                    # revenue_knd_0710099_2022year = revenue_knd_0710099_2022year,
+                    # ssch_knd_1151111 = ssch_knd_1151111, 
+                    # assets_2022year = assets_2022year,
+                    # taxes_paid_2023year = taxes_paid_2023year,
+                    # bankruptcy_proceedings_stage = bankruptcy_proceedings_stage,
+                    # debt_amount_unified_tax_service = debt_amount_unified_tax_service,
+                    # fot_knd_1151111 = fot_knd_1151111,
+                    # profit_knd_1151006 = profit_knd_1151006,
+                    # solvency_scoring_results = solvency_scoring_results,
+                    # skuad_current_business_value = skuad_current_business_value,
+                    # skuad_liquidation_business_value = skuad_liquidation_business_value,
+                    # skuad_refund_funds = skuad_refund_funds,
+                    # skuad_working_capital = skuad_working_capital,
+                    # solvency_rank = solvency_rank,
                 )
             except Exception as e:
                 return Response({'message': 'Некорректный ввод данных!', 'error': f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
