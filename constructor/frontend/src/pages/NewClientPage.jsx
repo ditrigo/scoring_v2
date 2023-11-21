@@ -35,8 +35,6 @@ const NewClientPage = () => {
   const [dataOfFieldsDec, setDataOfFieldsDec] = useState({})
   const [clientData, setClientData] = useState({
     first_name: "",
-    // second_name: "",
-    // patronymic: "",
     inn: "",
     region_id: "",
     manager_id: "",
@@ -45,8 +43,6 @@ const NewClientPage = () => {
     info_source_date: "",
     info_source_number: "",
     representative_first_name: "",
-    // representative_second_name: "",
-    // representative_patronymic: "",
     representative_position: "",
     representative_phone: "",
     representative_email: "",
@@ -545,6 +541,7 @@ const NewClientPage = () => {
         // DENIS
         prd_catalog_id: client.prd_catalog.id,
         stage_review: client.stage_review.id,
+        reasons: client.reasons?.id,
         fields_of_positive_decision: client.fields_of_positive_decision,
       })
 
@@ -620,6 +617,14 @@ const NewClientPage = () => {
   const getfieldsOfPositivDecision = async (id) => {
     setDataOfFieldsDec({})
     setfieldsOfPosDec([])
+    setClientData((prevState) => ({
+      ...prevState,
+      positive_decision_date: "",
+      measure_provided_duration: "",
+      settled_debt_amount: "",
+      overdue_debt_amount: "",
+      technical_overdue_debt_amount: "",
+    }))
     try {
       const { data } = await httpService.get(
         `crm_fields_of_positiv_decision/${id}`
@@ -634,8 +639,8 @@ const NewClientPage = () => {
         }
         setClientData((prevState) => ({
           ...prevState,
-          control_field: "",
-        })) // Нужно изменить стейт для того, чтоб подгрузить значения в fieldsOfPosDec. Здесь все сложно...
+          flag: "",
+        })) // Нужно изменить стейт для того, чтоб подгрузить значения в fieldsOfPosDec при редактировании. Здесь все сложно...
         return {
           label: el.description,
           key: el.id,
@@ -673,9 +678,6 @@ const NewClientPage = () => {
       key: "first_name",
       type: "text",
     },
-    // { label: "Фамилия", key: "second_name", type: "text" },
-    // { label: "Отчество", key: "patronymic", type: "text" }, /// - заменить на одно поле
-
     { label: "ИНН", key: "inn", type: "text", inputType: "number" },
     {
       label: "Стадия рассмотрения",
@@ -711,8 +713,6 @@ const NewClientPage = () => {
     },
     { label: "Представители клиента", key: "", type: "title2" },
     { label: "ФИО", key: "representative_first_name", type: "text" },
-    // { label: "Фамилия", key: "representative_second_name", type: "text" },
-    // { label: "Отчество", key: "representative_patronymic", type: "text" },
     { label: "Должность", key: "representative_position", type: "text" },
     {
       label: "Телефон",
@@ -869,44 +869,50 @@ const NewClientPage = () => {
     ///////////////////////////////////////////////////////////////////////////////////
     { label: "Следующие поля пока не работают!!!", key: "", type: "title" }, ///////// delete later
 
-    { label: "Отлагательные меры", key: "", type: "title2" },
-    {
-      label: "Ближайший срок исполнения обязательств",
-      key: "",
-      type: "date",
-    },
-    { label: "Рассрочка/отсрочка", key: "", type: "title2" },
-    {
-      label: "Не вступило в силу рассрочка/отсрочка ",
-      key: "",
-      type: "text",
-    },
-    { label: "Мировое соглашение", key: "", type: "title2" },
-    {
-      label: "Номер дела",
-      key: "",
-      type: "text",
-    },
-    {
-      label: "Дата утверждения МС судом",
-      key: "",
-      type: "date",
-    },
-    { label: "Дата окончания МС", key: "", type: "date" },
-    {
-      label: "Сумма треований, вошедших в МС (тыс руб)",
-      key: "",
-      type: "text",
-    },
-    {
-      label: "Сумма исполненных обязательств (тыс руб)",
-      key: "",
-      type: "text",
-    },
+    // { label: "Отлагательные меры", key: "", type: "title2" },
+    // {
+    //   label: "Ближайший срок исполнения обязательств",
+    //   key: "",
+    //   type: "date",
+    // },
+    // { label: "Рассрочка/отсрочка", key: "", type: "title2" },
+    // {
+    //   label: "Не вступило в силу рассрочка/отсрочка ",
+    //   key: "",
+    //   type: "text",
+    // },
+    // { label: "Мировое соглашение", key: "", type: "title2" },
+    // {
+    //   label: "Номер дела",
+    //   key: "",
+    //   type: "text",
+    // },
+    // {
+    //   label: "Дата утверждения МС судом",
+    //   key: "",
+    //   type: "date",
+    // },
+    // { label: "Дата окончания МС", key: "", type: "date" },
+    // {
+    //   label: "Сумма треований, вошедших в МС (тыс руб)",
+    //   key: "",
+    //   type: "number",
+    // },
+    // {
+    //   label: "Сумма исполненных обязательств (тыс руб)",
+    //   key: "",
+    //   type: "number",
+    // },
     { label: "6. Вид предостовляемого обеспечения", key: "", type: "title" },
-    { label: "Залог имущества (тыс руб)", key: "", type: "text" },
-    { label: "Поручительство (тыс руб)", key: "", type: "text" },
-    { label: "Банковская гарантия (тыс руб)", key: "", type: "text" },
+    // { label: "Залог имущества (тыс руб)", key: "", type: "number" },
+    // { label: "Поручительство (тыс руб)", key: "", type: "number" },
+    // { label: "Банковская гарантия (тыс руб)", key: "", type: "number" },
+    {
+      label: "Контрактные обязательства (тыс руб)",
+      key: "",
+      type: "text",
+      inputType: "number",
+    }, // New
     {
       label: "7. Проводимая работа в случае не исполнения предоставления меры",
       key: "",
@@ -925,12 +931,14 @@ const NewClientPage = () => {
       label: "Выручка за прошедший отчетный период текущего года",
       key: "",
       type: "text",
+      inputType: "number",
     },
-    { label: "Выручка за предыдущий год", key: "", type: "text" },
+    { label: "Выручка за предыдущий год", key: "", inputType: "number" },
     {
       label: "Среднесписочная численность персонала за предыдущее полугодие",
       key: "",
       type: "text",
+      inputType: "number",
     },
     { label: "Активы за предыдущий год", key: "", type: "text" },
     {
@@ -938,15 +946,27 @@ const NewClientPage = () => {
         'Сумма уплаченных налогов за текущий год согласно ИР "Расчет с бюджетом"',
       key: "",
       type: "text",
+      inputType: "number",
     },
     { label: "Стадия в процедуре банкротства", key: "", type: "text" },
     {
       label: 'Сумма долга ЕНС согласно ИР "Расчет с бюджетом"',
       key: "",
       type: "text",
+      inputType: "number",
     },
-    { label: "Сумма ФОТ за предыдущее полугодие", key: "", type: "text" },
-    { label: "Прибыль за предыдущее полугодие", key: "", type: "text" },
+    {
+      label: "Сумма ФОТ за предыдущее полугодие",
+      key: "",
+      type: "text",
+      inputType: "number",
+    },
+    {
+      label: "Прибыль за предыдущее полугодие",
+      key: "",
+      type: "text",
+      inputType: "number",
+    },
     {
       label: "Результаты скоринга платежеспособность (не передается на бек)",
       key: "",
@@ -1032,6 +1052,7 @@ const NewClientPage = () => {
                         <input
                           type="date"
                           onChange={(date) => handleChange(date)}
+                          value={clientData[el.key]}
                           data-name={el.key}
                           data-positive={el?.isPositive}
                         />
