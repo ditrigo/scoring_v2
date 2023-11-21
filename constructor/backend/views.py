@@ -2166,7 +2166,7 @@ SELECT
 --Общие сведения
     t_prd_catalog.catalog_prd as prd,
     t_manager.second_name || ' ' || t_manager.first_name || ' ' || t_manager.patronymic as manager,
-    t_client.second_name || ' ' || t_client.first_name || ' ' || t_client.patronymic as client,
+    t_client.first_name  as client,
     t_client.inn as inn,
     --t_inn.inn as inn,
 -- Первичные учетные данные
