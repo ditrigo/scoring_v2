@@ -72,9 +72,9 @@ const ContentRows = ({ clients }) => {
           <td>{el.compliance_criteria.support_measure.category_type}</td>
           <td>{getPositive(el)?.positive_decision}</td>
           <td>{getNegative(el)?.negative_decision}</td>
-          <td className={makeClassName("Низкий риск")}>нет в json</td>
-          <td className={makeClassName("Средний риск")}>нет в json</td>
-          <td className={makeClassName("Высокий риск")}>нет в json</td>
+          <td className={makeClassName("Низкий риск")}>Риск</td>
+          <td className={makeClassName("Средний риск")}>Риск</td>
+          <td className={makeClassName("Высокий риск")}>Риск</td>
           <td> {el.stage_review?.stage}</td>
           <td>
             {Moment(el.event_date).locale("rus", localization).format("L")}
