@@ -665,6 +665,8 @@ class ClientRepresentative(models.Model): # Представитель клие�
     representative_phone = models.CharField(max_length=20, blank=True, null=True) # Телефон представителя
     representative_email = models.CharField(max_length=255, blank=True, null=True) # Почта представителя
     control_point = models.CharField(max_length=255, blank=True, null=True) # Контрольная точка
+    # 
+    accept_fond_date = models.DateField(blank=True, null=True) # Дата принятия клиента в работу Фондом
 
     class Meta:
         db_table ='client_representative'
@@ -700,6 +702,8 @@ class ComplianceCriteria(models.Model):
     support_measure = models.ForeignKey(SupportMeasure, on_delete=models.CASCADE, blank=True, null=True) # Мера поддержки
     note = models.TextField(blank=True, null=True) # Примечание к гр. 23
     support_duration = models.IntegerField(blank=True, null=True) # Срок предоставления меры
+    # 
+    amount_debt_other_creditors = models.IntegerField(blank=True, null=True) # Сумма задолженности перед иными кредиторами (в тыс. руб.)
 
     class Meta:
         db_table ='compliance_criteria'
@@ -723,6 +727,9 @@ class KPI(models.Model): # KPI вид решения
     received_amount_budget = models.IntegerField(blank=True, null=True)  # Сумма поступившая в бюджет
     overdue_debt_amount = models.IntegerField(blank=True, null=True)  # Просроченная задолженность сумма
     technical_overdue_debt_amount = models.IntegerField(blank=True, null=True)  # Сумма технической просроченной задолженности
+
+    #
+    amount_settled_debt_other_creditors = models.IntegerField(blank=True, null=True) # Сумма урегулированной задолженности перед иными кредиторами 
 
     # next_commitment_date = models.DateField()  # Ближайший срок исполнения обязательства - пойдет на СВЯЗКУ
     # installment_delayed_amount = models.IntegerField()  # Не вступило в силу рассрочка/отсрочка - пойдет на СВЯЗКУ
@@ -791,7 +798,29 @@ class Client(models.Model):
     event_date = models.DateField(blank=True, null=True) # Дата наступления события
     event_description = models.TextField(blank=True, null=True) # Описание события
     reasons = models.ForeignKey(ReasonsForConsideration, on_delete=models.CASCADE, blank=True, null=True) # Основания и методика рассмотрения
-    kpi = models.ForeignKey(KPI, on_delete=models.CASCADE, blank=True, null=True) # 
+    kpi = models.ForeignKey(KPI, on_delete=models.CASCADE, blank=True, null=True) # KPI
+    
+    # Проводимая работа в случае не исполнения предоставленной меры
+    notice_debitor_date = models.DateField(blank=True, null=True) # дата направления ДОЛЖНИКУ уведомления (претензии)	
+    notice_guarantor_date = models.DateField(blank=True, null=True) # дата направления ПОРУЧИТЕЛЮ уведомления (претензии)	
+    notice_pledgetor_date = models.DateField(blank=True, null=True) # дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)
+    
+    # ПостКонтроль  по состоянию на  23.08.2023 
+    revenue_knd_1151006_2023year = models.FloatField(blank=True, null=True) # выручка (КНД 1151006, год 2023, код периода-31, 40, стр.2_1_010 )	
+    revenue_knd_0710099_2022year = models.FloatField(blank=True, null=True) # выручка (КНД 0710099, год 2022, стр.2110_4)	
+    ssch_knd_1151111 = models.IntegerField(blank=True, null=True) # ССЧ ( КНД 1151111 , код периода -31 год 2023, стр.П023)	
+    assets_2022year = models.FloatField(blank=True, null=True) # активы 2022 г. (КНД 0710099, год 2022, стр.1600_4 )	
+    taxes_paid_2023year = models.FloatField(blank=True, null=True) # уплачено налогов 2023 г.( ИР РСБ)	
+    bankruptcy_proceedings_stage = models.CharField(max_length=255, blank=True, null=True) # стадия в процедуре банкротства 	
+    debt_amount_unified_tax_service = models.FloatField(blank=True, null=True) # сумма долга ЕНС ( ИР РСБ)	
+    fot_knd_1151111 = models.FloatField(blank=True, null=True) # ФОТ (КНД 1151111, год 2023, код периода-31, стр. П716)	
+    profit_knd_1151006 = models.FloatField(blank=True, null=True) # прибыль (КНД 1151006, год 2023,код периода-31, 40  стр.2_060)	
+    solvency_scoring_results = models.CharField(max_length=255, blank=True, null=True)# Результаты скоринга платежеспособности 	
+    skuad_current_business_value = models.FloatField(blank=True, null=True) # из выписки СКУАД - текущая стоимость бизнеса	
+    skuad_liquidation_business_value = models.FloatField(blank=True, null=True) # из выписки СКУАД -, ликвидационная стоимость бизнеса	
+    skuad_refund_funds = models.FloatField(blank=True, null=True) # из выписки СКУАД -  возвратность средств	
+    skuad_working_capital = models.FloatField(blank=True, null=True) # из выписки СКУАД - потребность в оборотных средствах	
+    solvency_rank = models.IntegerField(blank=True, null=True) # ранг платёжеспособности
     
     class Meta:
         db_table ='client'
