@@ -269,7 +269,7 @@ class MarkersAttributes(models.Model):
 
     # From CountedAttrFormula
     def save(self, *args, **kwargs):
-        self.sql_query = sql_parser(self.attr_formulas)
+        # self.sql_query = sql_parser(self.attr_formulas)
         # self.py_query = py_parser_main(self.attr_formulas) # Old version of parser
         self.py_query = pyparser(self.attr_formulas)
         super().save(*args, **kwargs)
