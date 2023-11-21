@@ -70,6 +70,25 @@ const NewClientPage = () => {
     stage_review: "",
     prd_catalog_id: "",
     reasons: "",
+    // New fields
+    notice_debitor_date: "",
+    notice_guarantor_date: "",
+    notice_pledgetor_date: "",
+    revenue_knd_1151006_2023year: "",
+    revenue_knd_0710099_2022year: "",
+    ssch_knd_1151111: "",
+    assets_2022year: "",
+    reastaxes_paid_2023yearns: "",
+    reasobankruptcy_proceedings_stagens: "",
+    debt_amount_unified_tax_service: "",
+    fot_knd_1151111: "",
+    profit_knd_1151006: "",
+    solvency_scoring_results: "",
+    reaskuad_current_business_valuesons: "",
+    skuad_liquidation_business_value: "",
+    skuad_refund_funds: "",
+    skuad_working_capital: "",
+    solvency_rank: "",
   })
 
   let validatorConfig = {
@@ -543,6 +562,25 @@ const NewClientPage = () => {
         stage_review: client.stage_review.id,
         reasons: client.reasons?.id,
         fields_of_positive_decision: client.fields_of_positive_decision,
+        // New fields
+        notice_debitor_date: "",
+        notice_guarantor_date: "",
+        notice_pledgetor_date: "",
+        revenue_knd_1151006_2023year: "",
+        revenue_knd_0710099_2022year: "",
+        ssch_knd_1151111: "",
+        assets_2022year: "",
+        reastaxes_paid_2023yearns: "",
+        reasobankruptcy_proceedings_stagens: "",
+        debt_amount_unified_tax_service: "",
+        fot_knd_1151111: "",
+        profit_knd_1151006: "",
+        solvency_scoring_results: "",
+        reaskuad_current_business_valuesons: "",
+        skuad_liquidation_business_value: "",
+        skuad_refund_funds: "",
+        skuad_working_capital: "",
+        solvency_rank: "",
       })
 
       client.fields_of_positive_decision.map((el) => {
@@ -650,7 +688,7 @@ const NewClientPage = () => {
       })
       setfieldsOfPosDec(res)
 
-      // console.log(res)
+      console.log("Пpилетающие поля ", res)
     } catch (error) {
       // console.log("🚀 ~ ", error)
     }
@@ -658,6 +696,9 @@ const NewClientPage = () => {
   useEffect(() => {
     getfieldsOfPositivDecision(clientData.positive_decision_type)
   }, [clientData.positive_decision_type])
+
+  // console.log(clientData.positive_decision_type === 1 && fieldsOfPosDec.length)
+  // console.log()
 
   const inputsData = [
     { label: "1. Общие сведения", key: "", type: "title" },
@@ -796,6 +837,14 @@ const NewClientPage = () => {
       disabled: clientData.negative_decision_type,
       options: positive,
     },
+    // fieldsOfPosDec.length && fieldsOfPosDec[0],
+    // fieldsOfPosDec.length && fieldsOfPosDec[1] ? fieldsOfPosDec[1] : "",
+    // fieldsOfPosDec.length && fieldsOfPosDec[2] ? fieldsOfPosDec[2] : "",
+    // fieldsOfPosDec.length && fieldsOfPosDec[3] ? fieldsOfPosDec[3] : "",
+    // fieldsOfPosDec.length && fieldsOfPosDec[4] ? fieldsOfPosDec[4] : "",
+    // fieldsOfPosDec.length && fieldsOfPosDec[5] ? fieldsOfPosDec[5] : "",
+    // fieldsOfPosDec.length && fieldsOfPosDec[6] ? fieldsOfPosDec[6] : "",
+    // fieldsOfPosDec.length && fieldsOfPosDec[7] ? fieldsOfPosDec[7] : "",
 
     {
       label: "Дата положительного решения",
@@ -814,16 +863,6 @@ const NewClientPage = () => {
       type: "text",
       inputType: "number",
     },
-
-    fieldsOfPosDec.length && fieldsOfPosDec[0],
-    fieldsOfPosDec.length && fieldsOfPosDec[1] ? fieldsOfPosDec[1] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[2] ? fieldsOfPosDec[2] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[3] ? fieldsOfPosDec[3] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[4] ? fieldsOfPosDec[4] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[5] ? fieldsOfPosDec[5] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[6] ? fieldsOfPosDec[6] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[7] ? fieldsOfPosDec[7] : "",
-
     {
       label: "Основания и методика рассмотрения гл. 9НК РФ",
       key: "reasons",
@@ -842,6 +881,7 @@ const NewClientPage = () => {
       disabled: clientData.positive_decision_type,
       options: negative,
     },
+
     {
       label: "5. Ключевые показатели эффективности (KPI)",
       key: "",
@@ -853,6 +893,40 @@ const NewClientPage = () => {
       type: "text",
       inputType: "number",
     },
+    // Для MC
+    clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[0],
+    clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[1],
+    clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[2],
+    clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[3],
+    clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[4],
+
+    // ДЛЯ Рассрочка
+    clientData.positive_decision_type === 2 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[0],
+
+    // ДЛЯ Отлагательные меры (Не хватает полей дальше или ...)
+    clientData.positive_decision_type === 3 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[0],
+
+    // ДЛЯ Отсрочка
+    clientData.positive_decision_type === 4 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[0],
+
+    // ДЛЯ Инвестиционный кредит нет
+
     { label: "Просроченная задолженность", key: "", type: "title2" },
     {
       label: "Сумма просроченной задолженности",
@@ -867,9 +941,8 @@ const NewClientPage = () => {
       inputType: "number",
     },
     ///////////////////////////////////////////////////////////////////////////////////
-    { label: "Следующие поля пока не работают!!!", key: "", type: "title" }, ///////// delete later
-
     // { label: "Отлагательные меры", key: "", type: "title2" },
+
     // {
     //   label: "Ближайший срок исполнения обязательств",
     //   key: "",
@@ -904,6 +977,52 @@ const NewClientPage = () => {
     //   type: "number",
     // },
     { label: "6. Вид предостовляемого обеспечения", key: "", type: "title" },
+    // ДЛЯ МС
+    clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[5],
+    clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[6],
+    clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[7],
+
+    // ДЛЯ Рассрочка
+    clientData.positive_decision_type === 2 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[1],
+    clientData.positive_decision_type === 2 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[2],
+    clientData.positive_decision_type === 2 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[3],
+
+    // Для Отлагательные меры нет
+
+    // ДЛЯ Отсрочка
+    clientData.positive_decision_type === 4 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[1],
+    clientData.positive_decision_type === 4 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[2],
+    clientData.positive_decision_type === 4 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[3],
+
+    // ДЛЯ Инвестиционный кредит
+    clientData.positive_decision_type === 5 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[0],
+    clientData.positive_decision_type === 5 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[1],
+    clientData.positive_decision_type === 5 &&
+      fieldsOfPosDec.length &&
+      fieldsOfPosDec[2],
+
     // { label: "Залог имущества (тыс руб)", key: "", type: "number" },
     // { label: "Поручительство (тыс руб)", key: "", type: "number" },
     // { label: "Банковская гарантия (тыс руб)", key: "", type: "number" },
@@ -918,78 +1037,98 @@ const NewClientPage = () => {
       key: "",
       type: "title",
     },
-    { label: "Дата направления уведомления ДОЛЖНИКУ", key: "", type: "date" },
-    { label: "Дата направления уведомления ПОРУЧИТЕЛЮ", key: "", type: "date" },
+    {
+      label: "Дата направления уведомления ДОЛЖНИКУ",
+      key: "notice_debitor_date",
+      type: "date",
+    },
+    {
+      label: "Дата направления уведомления ПОРУЧИТЕЛЮ",
+      key: "notice_guarantor_date",
+      type: "date",
+    },
     {
       label: "Дата направления уведомления ЗАЛОГОДАТЕЛЮ",
-      key: "",
+      key: "notice_pledgetor_date",
       type: "date",
     },
     { label: "8. Постконтроль", key: "", type: "title" },
     // { label: "Подгрузить информацию через ИНН", key: "", type: "title2" },
     {
       label: "Выручка за прошедший отчетный период текущего года",
-      key: "",
+      key: "revenue_knd_1151006_2023year",
       type: "text",
       inputType: "number",
     },
-    { label: "Выручка за предыдущий год", key: "", inputType: "number" },
+    {
+      label: "Выручка за предыдущий год",
+      key: "revenue_knd_0710099_2022year",
+      inputType: "number",
+    },
     {
       label: "Среднесписочная численность персонала за предыдущее полугодие",
-      key: "",
+      key: "ssch_knd_1151111",
       type: "text",
       inputType: "number",
     },
-    { label: "Активы за предыдущий год", key: "", type: "text" },
+    { label: "Активы за предыдущий год", key: "assets_2022year", type: "text" },
     {
       label:
         'Сумма уплаченных налогов за текущий год согласно ИР "Расчет с бюджетом"',
-      key: "",
+      key: "taxes_paid_2023year",
       type: "text",
       inputType: "number",
     },
-    { label: "Стадия в процедуре банкротства", key: "", type: "text" },
+    {
+      label: "Стадия в процедуре банкротства",
+      key: "bankruptcy_proceedings_stage",
+      type: "text",
+    },
     {
       label: 'Сумма долга ЕНС согласно ИР "Расчет с бюджетом"',
-      key: "",
+      key: "debt_amount_unified_tax_service",
       type: "text",
       inputType: "number",
     },
     {
       label: "Сумма ФОТ за предыдущее полугодие",
-      key: "",
+      key: "fot_knd_1151111",
       type: "text",
       inputType: "number",
     },
     {
       label: "Прибыль за предыдущее полугодие",
-      key: "",
+      key: "profit_knd_1151006",
       type: "text",
       inputType: "number",
     },
     {
       label: "Результаты скоринга платежеспособность (не передается на бек)",
-      key: "",
-      type: "select",
-      options: solvencyRisk,
+      key: "solvency_scoring_results",
+      type: "text",
+      // options: solvencyRisk,
     },
     {
       label: "Из выписки СКУАД  - Текущая стоимость бизнеса",
-      key: "",
+      key: "skuad_current_business_value",
       type: "text",
     },
     {
       label: "Из выписки СКУАД  - Ликвидационная стоимость бизнеса",
-      key: "",
+      key: "skuad_liquidation_business_value",
       type: "text",
     },
-    { label: "Из выписки СКУАД - Возвратность средств", key: "", type: "text" },
+    {
+      label: "Из выписки СКУАД - Возвратность средств",
+      key: "skuad_refund_funds",
+      type: "text",
+    },
     {
       label: "Из выписки СКУАД - Потребность в оборотных средствах",
-      key: "",
+      key: "skuad_working_capital",
       type: "text",
     },
-    { label: "Ранг платежеспособности", key: "", type: "text" },
+    { label: "Ранг платежеспособности", key: "solvency_rank", type: "text" },
   ]
 
   return (
