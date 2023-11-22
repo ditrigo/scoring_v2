@@ -724,8 +724,8 @@ class KPI(models.Model): # KPI вид решения
                             editable = False,)
     created_date = models.DateTimeField(auto_now_add=True)
     positive_decision_type = models.ForeignKey(PositiveDecision, on_delete=models.CASCADE, null=True, blank=True)  # Вид положительного решения
-    positive_decision_date = models.DateField(blank=True, null=True)  # Дата положительного решения
-    measure_provided_duration = models.IntegerField(blank=True, null=True)  # На сколько предоставлена мера
+    positive_decision_date = models.DateField(blank=True, null=True)  # Дата положительного решения !!!ДИНАМИКА БУДЕТ!!!
+    measure_provided_duration = models.IntegerField(blank=True, null=True)  # На сколько предоставлена мера !!!ДИНАМИКА БУДЕТ!!!
     # oiv_request_sender = models.CharField(max_length=255, blank=True, null=True)  # От кого ходатайство ОИВ (для МС) !!!ДИНАМИКА БУДЕТ!!!
     negative_decision_type = models.ForeignKey(NegativeDecision, on_delete=models.CASCADE, null=True, blank=True)  # Вид отрицательного решения
     settled_debt_amount = models.IntegerField(blank=True, null=True)  # Сумма урегулированной задолженности

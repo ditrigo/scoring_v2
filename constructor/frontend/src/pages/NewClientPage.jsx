@@ -1206,7 +1206,7 @@ const NewClientPage = () => {
 
     // Новый блок
     clientData.positive_decision_type && {
-      label: "Вид предостовляемого обеспечения",
+      label: "Вид предоставляемого обеспечения",
       key: "",
       type: "title2",
     },
