@@ -2140,8 +2140,8 @@ def import_db_to_file(request):
         os.makedirs(dir_name)
 
     columns = get_columns_to_query()
-    column_merge = ['B', 'C', 'D', 'E', 'F', 'G', 'P', 'Q', 'R', 'S', 'T', 'U', 'AF']
-    column_merg_ind = [0, 1, 2, 3, 4, 5, 14, 15, 16, 17, 18, 19, 30]
+    column_merge = ['B', 'C', 'D', 'E', 'F', 'G', 'P', 'Q', 'R', 'S', 'T', 'U', 'AF', 'AW', 'AX', 'AY', 'AZ', 'BA', 'BB', 'BC', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BK']
+    column_merg_ind = [0, 1, 2, 3, 4, 5, 14, 15, 16, 17, 18, 19, 30, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61]
 
     # Устанавливаем соединение с базой данных
     with connection.cursor() as cursor:
@@ -2179,7 +2179,7 @@ def import_db_to_file(request):
 
             sheet.merge_range('A2:A3', 'п/п', cell_format_header)
             
-            for i in range(0, len(columns[:-1])):
+            for i in range(0, len(columns)):
                 if i in column_merg_ind:
                     sim = column_merge[column_merg_ind.index(i)]
                     sheet.merge_range(f'{sim}2:{sim}3', columns[i], cell_format_header)
@@ -2197,29 +2197,30 @@ def import_db_to_file(request):
             sheet.set_column('AS1:AS3', 26)
             sheet.merge_range('AT1:AV2', 'Проводимая работа в случае не исполнения предоставленной меры', cell_format_header)
             sheet.merge_range('AW1:BK1', 'Постконтроль по состоянию на  ________', cell_format_header)
-            # sheet.write('AT3:AT3', 'дата направления ДОЛЖНИКУ уведомления (претензии)', cell_format_header)
-            # sheet.write('AU3:AU3', 'дата направления ПОРУЧИТЕЛЮ уведомления (претензии)', cell_format_header)
-            # sheet.write('AV3:AV3', 'дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)', cell_format_header)
-            # sheet.merge_range('AW2:AW3', 'выручка (КНД 1151006, год 2023, код периода-31, 40, стр.2_1_010 )', cell_format_header)
-            # sheet.merge_range('AX2:AX3', 'выручка (КНД 0710099, год 2022, стр.2110_4)', cell_format_header)
-            # sheet.merge_range('AY2:AY3', 'ССЧ ( КНД 1151111 , код периода -31 год 2023, стр.П023)', cell_format_header)
-            # sheet.merge_range('AZ2:AZ3', 'активы 2022 г. (КНД 0710099, год 2022, стр.1600_4 )', cell_format_header)
-            # sheet.merge_range('BA2:BA3', 'уплачено налогов 2023 г.( ИР РСБ)', cell_format_header)
-            # sheet.merge_range('BB2:BB3', 'стадия в процедуре банкротства ', cell_format_header)
-            # sheet.merge_range('BC2:BC3', 'сумма долга ЕНС ( ИР РСБ)', cell_format_header)
-            # sheet.merge_range('BD2:BD3', 'ФОТ (КНД 1151111, год 2023, код периода-31, стр. П716)', cell_format_header)
-            # sheet.merge_range('BE2:BE3', 'прибыль (КНД 1151006, год 2023,код периода-31, 40  стр.2_060)', cell_format_header)
-            # sheet.merge_range('BF2:BF3', 'Результаты скоринга платежеспособности ', cell_format_header)
-            # sheet.merge_range('BG2:BG3', 'из выписки СКУАД - текущая стоимость бизнеса', cell_format_header)
-            # sheet.merge_range('BH2:BH3', 'из выписки СКУАД -, ликвидационная стоимость бизнеса', cell_format_header)
-            # sheet.merge_range('BI2:BI3', 'из выписки СКУАД -  возвратность средств', cell_format_header)
-            # sheet.merge_range('BJ2:BJ3', 'из выписки СКУАД - потребность в оборотных средствах', cell_format_header)
-            # sheet.merge_range('BK2:BK3', 'ранг платёжеспособности', cell_format_header)
+            sheet.write('AT3:AT3', 'дата направления ДОЛЖНИКУ уведомления (претензии)', cell_format_header)
+            sheet.write('AU3:AU3', 'дата направления ПОРУЧИТЕЛЮ уведомления (претензии)', cell_format_header)
+            sheet.write('AV3:AV3', 'дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)', cell_format_header)
+            # sheet.merge_range('BA2:BA3', 'выручка (КНД 1151006, год 2023, код периода-31, 40, стр.2_1_010 )', cell_format_header)
+            # sheet.merge_range('BB2:BB3', 'выручка (КНД 0710099, год 2022, стр.2110_4)', cell_format_header)
+            # sheet.merge_range('BC2:BC3', 'ССЧ ( КНД 1151111 , код периода -31 год 2023, стр.П023)', cell_format_header)
+            # sheet.merge_range('BD2:BD3', 'активы 2022 г. (КНД 0710099, год 2022, стр.1600_4 )', cell_format_header)
+            # sheet.merge_range('BE2:BE3', 'уплачено налогов 2023 г.( ИР РСБ)', cell_format_header)
+            # sheet.merge_range('BF2:BF3', 'стадия в процедуре банкротства ', cell_format_header)
+            # sheet.merge_range('BG2:BG3', 'сумма долга ЕНС ( ИР РСБ)', cell_format_header)
+            # sheet.merge_range('BH2:BH3', 'ФОТ (КНД 1151111, год 2023, код периода-31, стр. П716)', cell_format_header)
+            # sheet.merge_range('BI2:BI3', 'прибыль (КНД 1151006, год 2023,код периода-31, 40  стр.2_060)', cell_format_header)
+            # sheet.merge_range('BJ2:BJ3', 'Результаты скоринга платежеспособности ', cell_format_header)
+            # sheet.merge_range('BK2:BK3', 'из выписки СКУАД - текущая стоимость бизнеса', cell_format_header)
+            # sheet.merge_range('BL2:BL3', 'из выписки СКУАД -, ликвидационная стоимость бизнеса', cell_format_header)
+            # sheet.merge_range('BM2:BM3', 'из выписки СКУАД -  возвратность средств', cell_format_header)
+            # sheet.merge_range('BN2:BN3', 'из выписки СКУАД - потребность в оборотных средствах', cell_format_header)
+            # sheet.merge_range('BO2:BO3', 'ранг платёжеспособности', cell_format_header)
 
         #Создадим ответ из файла
         response = FileResponse(open(filename, 'rb'), status=status.HTTP_200_OK)
 
         return response
+
 
 
 def get_columns_to_query():
@@ -2251,7 +2252,7 @@ def get_columns_to_query():
         "ДАТА положительного решения",
         "На сколько предоставлена мера, в месяцах",
         "Основания и методика рассмотрения гл. 9 НК РФ",
-        # "От кого ходатайство ОИВ (для МС)",
+        "От кого ходатайство ОИВ (для МС)",
         "Вид отрицательного решения (из списка)",
         "Сумма урегулированной задолженности, тыс. руб.",
         "Сумма поступившая в бюджет, тыс. руб.",
@@ -2268,7 +2269,7 @@ def get_columns_to_query():
         "Поручительство (в тыс. руб.)",
         "Банковская гарантия (в тыс. руб.)",
         "Стадия рассмотрения"  ,
-
+        
         "дата направления ДОЛЖНИКУ уведомления (претензии)",
         "дата направления ПОРУЧИТЕЛЮ уведомления (претензии)",
         "дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)",
@@ -2331,7 +2332,7 @@ SELECT
     strftime('%d.%m.%Y',t_kpi.positive_decision_date) as positive_decision_date,
     t_kpi.measure_provided_duration as measure_provided_duration,
     '' as merodic,
-    --t_kpi.oiv_request_sender as oiv_request_sender,
+    t_kpi_positive_decision_fields_8.value as oiv_request_sender,
     t_neg_decision.negative_decision as negative_decision,
     t_kpi.settled_debt_amount as settled_debt_amount,
     
@@ -2407,52 +2408,59 @@ SELECT
   -- Отлагательные меры
   LEFT JOIN positive_decision_fields as t_positive_decision_fields_1
   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_1.positive_decision_id
-  AND t_positive_decision_fields_1.origin = 'Ближайший срок исполнения обязательства'
+  AND t_positive_decision_fields_1.origin = 'nearest_date_obligation'
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_1
   ON t_kpi.id = t_kpi_positive_decision_fields_1.kpi_id
   AND t_kpi_positive_decision_fields_1.fields_of_pos_decision_id = t_positive_decision_fields_1.id
  -- Изменения сроков уплаты
  LEFT JOIN positive_decision_fields as t_positive_decision_fields_2
   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_2.positive_decision_id
-  AND t_positive_decision_fields_2.origin = 'Не вступило в силу рассрочка'
+  AND t_positive_decision_fields_2.origin = 'not_in_force'
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_2
   ON t_kpi.id = t_kpi_positive_decision_fields_2.kpi_id
   AND t_kpi_positive_decision_fields_2.fields_of_pos_decision_id = t_positive_decision_fields_2.id
  -- Мировое соглашение (+)				
  LEFT JOIN positive_decision_fields as t_positive_decision_fields_3
   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_3.positive_decision_id
-  AND t_positive_decision_fields_3.origin = 'Номер дела'
+  AND t_positive_decision_fields_3.origin = 'case_number'
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_3
   ON t_kpi.id = t_kpi_positive_decision_fields_3.kpi_id
   AND t_kpi_positive_decision_fields_3.fields_of_pos_decision_id = t_positive_decision_fields_3.id
   
  LEFT JOIN positive_decision_fields as t_positive_decision_fields_4
   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_4.positive_decision_id
-  AND t_positive_decision_fields_4.origin = 'Дата утверждения МС судом'
+  AND t_positive_decision_fields_4.origin = 'accept_date'
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_4
   ON t_kpi.id = t_kpi_positive_decision_fields_4.kpi_id
   AND t_kpi_positive_decision_fields_4.fields_of_pos_decision_id = t_positive_decision_fields_4.id
   
  LEFT JOIN positive_decision_fields as t_positive_decision_fields_5
   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_5.positive_decision_id
-  AND t_positive_decision_fields_5.origin = 'Сумма требований вошедших в МС'
+  AND t_positive_decision_fields_5.origin = 'claims_amount'
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_5
   ON t_kpi.id = t_kpi_positive_decision_fields_5.kpi_id
   AND t_kpi_positive_decision_fields_5.fields_of_pos_decision_id = t_positive_decision_fields_5.id
   
  LEFT JOIN positive_decision_fields as t_positive_decision_fields_6
   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_6.positive_decision_id
-  AND t_positive_decision_fields_6.origin = 'Дата окончания МС'
+  AND t_positive_decision_fields_6.origin = 'expiration_date'
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_6
   ON t_kpi.id = t_kpi_positive_decision_fields_6.kpi_id
   AND t_kpi_positive_decision_fields_6.fields_of_pos_decision_id = t_positive_decision_fields_6.id
   
  LEFT JOIN positive_decision_fields as t_positive_decision_fields_7
   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_7.positive_decision_id
-  AND t_positive_decision_fields_7.origin = 'Сумма исполненных обязательств'
+  AND t_positive_decision_fields_7.origin = 'fulfilled_obligations_amount'
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_7
   ON t_kpi.id = t_kpi_positive_decision_fields_7.kpi_id
   AND t_kpi_positive_decision_fields_7.fields_of_pos_decision_id = t_positive_decision_fields_7.id
+
+ LEFT JOIN positive_decision_fields as t_positive_decision_fields_8
+  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_8.positive_decision_id
+  AND t_positive_decision_fields_8.origin = 'oiv_petition'
+  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_8
+  ON t_kpi.id = t_kpi_positive_decision_fields_8.kpi_id
+  AND t_kpi_positive_decision_fields_8.fields_of_pos_decision_id = t_positive_decision_fields_8.id
 
   --ПРД каталог
  LEFT JOIN prd_catalog as t_prd_catalog
