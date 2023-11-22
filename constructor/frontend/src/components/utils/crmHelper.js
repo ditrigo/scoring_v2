@@ -69,3 +69,14 @@ export const transformRegionsData = (data) => {
   })
   return result
 }
+
+export const transformDynamicOptionsData = (options, key) => {
+  // console.log("in func ", options)
+  // console.log("in func ", key)
+  return options.map((el) => ({
+    id: el.id,
+    label: el.label,
+    name: key,
+    value: el.value,
+  }))
+}

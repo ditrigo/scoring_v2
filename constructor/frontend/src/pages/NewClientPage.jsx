@@ -7,6 +7,7 @@ import { validator } from "../components/utils/validator"
 import SelectSearchField from "../components/CrmPage/Form/SelectSearchField"
 import {
   getTransformedData,
+  transformDynamicOptionsData,
   transformManagersData,
   transformRegionsData,
 } from "../components/utils/crmHelper"
@@ -30,13 +31,11 @@ const NewClientPage = () => {
   const [type, setType] = useState({})
   const [managers, setManagers] = useState({})
   const [prdCatalog, setPrdCatalog] = useState({})
-  const [reasonsConsideration, setReasonsConsideration] = useState({})
+  const [reasonsConsideration, setReasonsConsideration] = useState([])
   const [fieldsOfPosDec, setfieldsOfPosDec] = useState([])
   const [dataOfFieldsDec, setDataOfFieldsDec] = useState({})
   const [clientData, setClientData] = useState({
     first_name: "",
-    // second_name: "",
-    // patronymic: "",
     inn: "",
     region_id: "",
     manager_id: "",
@@ -45,8 +44,6 @@ const NewClientPage = () => {
     info_source_date: "",
     info_source_number: "",
     representative_first_name: "",
-    // representative_second_name: "",
-    // representative_patronymic: "",
     representative_position: "",
     representative_phone: "",
     representative_email: "",
@@ -74,9 +71,27 @@ const NewClientPage = () => {
     stage_review: "",
     prd_catalog_id: "",
     reasons: "",
+    // New fields
+    notice_debitor_date: "",
+    notice_guarantor_date: "",
+    notice_pledgetor_date: "",
+    revenue_knd_1151006_2023year: "",
+    revenue_knd_0710099_2022year: "",
+    ssch_knd_1151111: "",
+    assets_2022year: "",
+    reastaxes_paid_2023yearns: "",
+    reasobankruptcy_proceedings_stagens: "",
+    debt_amount_unified_tax_service: "",
+    fot_knd_1151111: "",
+    profit_knd_1151006: "",
+    solvency_scoring_results: "",
+    reaskuad_current_business_valuesons: "",
+    skuad_liquidation_business_value: "",
+    skuad_refund_funds: "",
+    skuad_working_capital: "",
+    solvency_rank: "",
   })
-
-  let validatorConfig = {
+  const [validatorConfig, setValidatorCOnfig] = useState({
     prd_catalog_id: {
       isRequired: {
         message: "Это поле обязательно для заполнения",
@@ -167,7 +182,6 @@ const NewClientPage = () => {
         value: 200,
       },
     },
-    // settled_debt_amount: {},
     received_amount_budget: {
       maxCount: {
         message: "Не больше 6 знаков",
@@ -192,25 +206,7 @@ const NewClientPage = () => {
         value: 36,
       },
     },
-    // measure_provided_duration: {
-    //   max: {
-    //     message: "Не более 36",
-    //     value: 36,
-    //   },
-    // },
-    9: {
-      maxCount: {
-        message: "Не больше 6 знаков",
-        value: 6,
-      },
-    },
-    14: {
-      maxCount: {
-        message: "Не больше 6 знаков",
-        value: 6,
-      },
-    },
-  }
+  })
 
   const isValid = Object.keys(errors).length === 0
 
@@ -264,7 +260,7 @@ const NewClientPage = () => {
       "crm_reasons_consideration",
       setReasonsConsideration,
       "reasons",
-      "reasons"
+      ""
     )
 
     axios
@@ -336,7 +332,7 @@ const NewClientPage = () => {
           id: client.kpi?.id || "",
           positive_decision_date: clientData.positive_decision_date,
           measure_provided_duration: clientData.measure_provided_duration,
-          oiv_request_sender: clientData.oiv_request_sender,
+          // oiv_request_sender: clientData.oiv_request_sender,
           settled_debt_amount: clientData.settled_debt_amount,
           received_amount_budget: clientData.received_amount_budget,
           overdue_debt_amount: clientData.overdue_debt_amount,
@@ -396,7 +392,7 @@ const NewClientPage = () => {
           kpi_id: {
             positive_decision_date: clientData.positive_decision_date,
             measure_provided_duration: clientData.measure_provided_duration,
-            oiv_request_sender: clientData.oiv_request_sender,
+            // oiv_request_sender: clientData.oiv_request_sender,
             settled_debt_amount: clientData.settled_debt_amount,
             received_amount_budget: clientData.received_amount_budget,
             overdue_debt_amount: clientData.overdue_debt_amount,
@@ -438,8 +434,10 @@ const NewClientPage = () => {
   }
 
   const handleChange = (target) => {
+    // console.log(target)
+
     if (Number.isInteger(+target.name)) {
-      console.log(target.name)
+      // console.log(target)
       setDataOfFieldsDec((prevState) => ({
         ...prevState,
         [target.name]: {
@@ -450,6 +448,8 @@ const NewClientPage = () => {
       }))
     }
     if (target.target?.dataset.positive) {
+      // console.log(target)
+
       setDataOfFieldsDec((prevState) => ({
         ...prevState,
         [target.target.dataset.name]: {
@@ -472,20 +472,12 @@ const NewClientPage = () => {
     }))
   }
 
-  // TEST
-
-  const solvencyRisk = [
-    { label: "Высокий риск", value: "Высокий риск", name: "solvencyRisk" },
-    { label: "Средний риск", value: "Средний риск", name: "solvencyRisk" },
-    { label: "Низкий риск", value: "Низкий риск", name: "solvencyRisk" },
-  ]
-
   const getClient = async () => {
     try {
       const { data } = await httpService.get(
         `crm_detail_relation_client/${params.id}`
       )
-      console.log(data.data)
+      // console.log(data.data)
       setClient(data.data)
     } catch (error) {
       console.log("🚀 ", error)
@@ -498,7 +490,7 @@ const NewClientPage = () => {
 
   useEffect(() => {
     if (params.id && client) {
-      console.log(client)
+      // console.log(client)
       setClientData({
         first_name: client.first_name,
         second_name: "",
@@ -545,7 +537,27 @@ const NewClientPage = () => {
         // DENIS
         prd_catalog_id: client.prd_catalog.id,
         stage_review: client.stage_review.id,
+        reasons: client.reasons?.id,
         fields_of_positive_decision: client.fields_of_positive_decision,
+        // New fields
+        notice_debitor_date: "",
+        notice_guarantor_date: "",
+        notice_pledgetor_date: "",
+        revenue_knd_1151006_2023year: "",
+        revenue_knd_0710099_2022year: "",
+        ssch_knd_1151111: "",
+        assets_2022year: "",
+        reastaxes_paid_2023yearns: "",
+        reasobankruptcy_proceedings_stagens: "",
+        debt_amount_unified_tax_service: "",
+        fot_knd_1151111: "",
+        profit_knd_1151006: "",
+        solvency_scoring_results: "",
+        reaskuad_current_business_valuesons: "",
+        skuad_liquidation_business_value: "",
+        skuad_refund_funds: "",
+        skuad_working_capital: "",
+        solvency_rank: "",
       })
 
       client.fields_of_positive_decision.map((el) => {
@@ -559,6 +571,267 @@ const NewClientPage = () => {
   }, [client])
 
   useEffect(() => {
+    setValidatorCOnfig({
+      prd_catalog_id: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+      manager_id: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+      first_name: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+      inn: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+        count: {
+          message: "ИНН должен содержать от 10 символов.",
+          value: 10,
+        },
+        maxCount: {
+          message: "Не больше 12 знаков",
+          value: 12,
+        },
+        not11: {
+          message: "Не может содержать 11 знаков",
+          value: 11,
+        },
+      },
+      stage_review: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+      region_id: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+      applicant_status: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+      control_point: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+      debt_amount: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      debt_type: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+      category: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+      support_measure: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+      event_date: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+      },
+      event_description: {
+        isRequired: {
+          message: "Это поле обязательно для заполнения",
+        },
+        maxCount: {
+          message: "Не больше 200 знаков",
+          value: 200,
+        },
+      },
+      received_amount_budget: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      overdue_debt_amount: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      technical_overdue_debt_amount: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      support_duration: {
+        max: {
+          message: "Не более 36",
+          value: 36,
+        },
+      },
+      2: {
+        max: {
+          message: "Не более 36",
+          value: 36,
+        },
+      },
+      3: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      9: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      10: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      11: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      14: {
+        max: {
+          message: "Не более 36",
+          value: 36,
+        },
+      },
+      16: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      17: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      18: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      19: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      20: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      22: {
+        max: {
+          message: "Не более 36",
+          value: 36,
+        },
+      },
+      23: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      26: {
+        max: {
+          message: "Не более 36",
+          value: 36,
+        },
+      },
+      28: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      30: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      31: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      32: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      34: {
+        max: {
+          message: "Не более 36",
+          value: 36,
+        },
+      },
+      36: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      37: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      38: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      39: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+      40: {
+        maxCount: {
+          message: "Не больше 6 знаков",
+          value: 6,
+        },
+      },
+    })
+    setErrors({})
     validate()
 
     if (params.id && client) {
@@ -587,46 +860,19 @@ const NewClientPage = () => {
     }
   }, [])
 
-  if (clientData.positive_decision_type) {
-    // console.log("validator add ", clientData.positive_decision_type)
-    validatorConfig = {
-      ...validatorConfig,
-      positive_decision_date: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-      },
-      measure_provided_duration: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-        max: {
-          message: "Не более 36",
-          value: 36,
-        },
-      },
-      settled_debt_amount: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-    }
-  }
-
   const getfieldsOfPositivDecision = async (id) => {
-    setDataOfFieldsDec({})
-    setfieldsOfPosDec([])
+    // console.log("Вызов функции получения...")
+    setDataOfFieldsDec([])
+
     try {
       const { data } = await httpService.get(
         `crm_fields_of_positiv_decision/${id}`
       )
-      // console.log(data.data)
+      console.log(data.data)
+
       const res = data.data.map((el) => {
-        if (!client) {
+        if (client) {
+          console.log("здесь должна быть подгрузка в стейт пустых значений")
           setClientData((prevState) => ({
             ...prevState,
             [el.id]: "",
@@ -634,22 +880,47 @@ const NewClientPage = () => {
         }
         setClientData((prevState) => ({
           ...prevState,
-          control_field: "",
-        })) // Нужно изменить стейт для того, чтоб подгрузить значения в fieldsOfPosDec. Здесь все сложно...
-        return {
-          label: el.description,
-          key: el.id,
-          type: el.type_of_fields === "datetime" ? "date" : "text",
-          isPositive: true,
+          flag: "",
+        })) // Нужно изменить стейт для того, чтоб подгрузить значения в fieldsOfPosDec при редактировании. Здесь все сложно...
+
+        if (el.required) {
+          console.log("Required")
+          setValidatorCOnfig((prevState) => ({
+            ...prevState,
+            [el.id]: {
+              ...el.id,
+              isRequired: {
+                message: "Это поле обязательно для заполнения",
+              },
+            },
+          }))
         }
+        // console.log(validatorConfig)
+
+        return el.origin === "reasons_for_consideration"
+          ? {
+              label: el.description,
+              key: el.id,
+              type: "select",
+              options: transformDynamicOptionsData(reasonsConsideration, el.id),
+            }
+          : {
+              label: el.description,
+              key: el.id,
+              type: el.type_of_fields === "datetime" ? "date" : "text",
+              inputType: el.type_of_fields === "integer" ? "number" : "text",
+              isPositive: true,
+            }
       })
+
       setfieldsOfPosDec(res)
 
-      // console.log(res)
+      // console.log("Пpилетающие поля переделанные (внутри функ) ", res)
     } catch (error) {
-      // console.log("🚀 ~ ", error)
+      console.log("🚀 ~ ОШИБКА В ПОЛУЧЕНИИ ПОЛЕЙ", error)
     }
   }
+
   useEffect(() => {
     getfieldsOfPositivDecision(clientData.positive_decision_type)
   }, [clientData.positive_decision_type])
@@ -673,9 +944,6 @@ const NewClientPage = () => {
       key: "first_name",
       type: "text",
     },
-    // { label: "Фамилия", key: "second_name", type: "text" },
-    // { label: "Отчество", key: "patronymic", type: "text" }, /// - заменить на одно поле
-
     { label: "ИНН", key: "inn", type: "text", inputType: "number" },
     {
       label: "Стадия рассмотрения",
@@ -711,8 +979,6 @@ const NewClientPage = () => {
     },
     { label: "Представители клиента", key: "", type: "title2" },
     { label: "ФИО", key: "representative_first_name", type: "text" },
-    // { label: "Фамилия", key: "representative_second_name", type: "text" },
-    // { label: "Отчество", key: "representative_patronymic", type: "text" },
     { label: "Должность", key: "representative_position", type: "text" },
     {
       label: "Телефон",
@@ -788,6 +1054,7 @@ const NewClientPage = () => {
       key: "",
       type: "title",
     },
+    // Положительное решение
     { label: "Принятое решение", key: "", type: "title2" },
     {
       label: "Вид положительного решения",
@@ -797,44 +1064,210 @@ const NewClientPage = () => {
       options: positive,
     },
 
-    {
-      label: "Дата положительного решения",
-      key: "positive_decision_date",
-      type: "date",
-    },
-    {
-      label: "На сколько предоставлена мера (в мес.)",
-      key: "measure_provided_duration",
-      type: "text",
-      inputType: "number",
-    },
-    {
-      label: "Сумма урегулированной задолженности (тыс руб)",
-      key: "settled_debt_amount",
-      type: "text",
-      inputType: "number",
-    },
+    // // Для МС (поля смотреть из консоли)
+    clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[0],
+    clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[1],
+    (clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[11]) ||
+      "",
+    clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[2],
 
-    fieldsOfPosDec.length && fieldsOfPosDec[0],
-    fieldsOfPosDec.length && fieldsOfPosDec[1] ? fieldsOfPosDec[1] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[2] ? fieldsOfPosDec[2] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[3] ? fieldsOfPosDec[3] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[4] ? fieldsOfPosDec[4] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[5] ? fieldsOfPosDec[5] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[6] ? fieldsOfPosDec[6] : "",
-    fieldsOfPosDec.length && fieldsOfPosDec[7] ? fieldsOfPosDec[7] : "",
+    // ДЛЯ Рассрочка
+    clientData.positive_decision_type === 2 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[0],
+    clientData.positive_decision_type === 2 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[1],
+    clientData.positive_decision_type === 2 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[2],
+    clientData.positive_decision_type === 2 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[3],
 
-    {
-      label: "Основания и методика рассмотрения гл. 9НК РФ",
-      key: "reasons",
-      type: "select",
-      options: reasonsConsideration,
+    // ДЛЯ Отлагательные меры
+    clientData.positive_decision_type === 3 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[0],
+    clientData.positive_decision_type === 3 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[1],
+    clientData.positive_decision_type === 3 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[2],
+
+    // ДЛЯ Отсрочка
+    clientData.positive_decision_type === 4 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[0],
+    clientData.positive_decision_type === 4 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[1],
+    clientData.positive_decision_type === 4 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[2],
+    clientData.positive_decision_type === 4 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[3],
+
+    // ДЛЯ Инвестиционный кредит
+    clientData.positive_decision_type === 5 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[0],
+    clientData.positive_decision_type === 5 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[1],
+    clientData.positive_decision_type === 5 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[2],
+    clientData.positive_decision_type === 5 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[3],
+
+    //Новая серия полей
+
+    // Для MC
+    clientData.positive_decision_type === 1 && {
+      label: "Мировое соглашение",
+      key: "",
+      type: "title2",
     },
-    {
-      label: "От кого ходатайство ОИВ (для МС)",
-      key: "oiv_request_sender",
-      type: "text",
+    clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[3],
+    (clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[4]) ||
+      "",
+    (clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[6]) ||
+      "",
+    (clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[5]) ||
+      "",
+    (clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[7]) ||
+      "",
+
+    // ДЛЯ Рассрочка
+    clientData.positive_decision_type === 2 && {
+      label: "Рассрочка/отсрочка",
+      key: "",
+      type: "title2",
     },
+    (clientData.positive_decision_type === 2 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[4]) ||
+      "",
+
+    // ДЛЯ Отлагательные меры
+    clientData.positive_decision_type === 3 && {
+      label: "Отлагательные меры",
+      key: "",
+      type: "title2",
+    },
+    (clientData.positive_decision_type === 3 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[3]) ||
+      "",
+
+    // ДЛЯ Отсрочка
+    clientData.positive_decision_type === 4 && {
+      label: "Рассрочка/отсрочка",
+      key: "",
+      type: "title2",
+    },
+    (clientData.positive_decision_type === 4 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[4]) ||
+      "",
+
+    // ДЛЯ Инвестиционный кредит
+    clientData.positive_decision_type === 5 && {
+      label: "Рассрочка/отсрочка",
+      key: "",
+      type: "title2",
+    },
+    (clientData.positive_decision_type === 5 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[4]) ||
+      "",
+
+    // Новый блок
+    clientData.positive_decision_type && {
+      label: "Вид предостовляемого обеспечения",
+      key: "",
+      type: "title2",
+    },
+    // ДЛЯ МС
+    (clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[8]) ||
+      "",
+    (clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[9]) ||
+      "",
+    (clientData.positive_decision_type === 1 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[10]) ||
+      "",
+
+    // ДЛЯ Рассрочка
+    (clientData.positive_decision_type === 2 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[5]) ||
+      "",
+    (clientData.positive_decision_type === 2 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[6]) ||
+      "",
+    (clientData.positive_decision_type === 2 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[7]) ||
+      "",
+
+    // Для Отлагательные меры нет
+
+    // ДЛЯ Отсрочка
+    (clientData.positive_decision_type === 4 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[5]) ||
+      "",
+    (clientData.positive_decision_type === 4 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[6]) ||
+      "",
+    (clientData.positive_decision_type === 4 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[7]) ||
+      "",
+
+    // ДЛЯ Инвестиционный кредит
+    (clientData.positive_decision_type === 5 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[5]) ||
+      "",
+    (clientData.positive_decision_type === 5 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[6]) ||
+      "",
+    (clientData.positive_decision_type === 5 &&
+      fieldsOfPosDec.length > 0 &&
+      fieldsOfPosDec[7]) ||
+      "",
+
     {
       label: "Вид отрицаетльного решения",
       key: "negative_decision_type",
@@ -842,6 +1275,7 @@ const NewClientPage = () => {
       disabled: clientData.positive_decision_type,
       options: negative,
     },
+
     {
       label: "5. Ключевые показатели эффективности (KPI)",
       key: "",
@@ -866,110 +1300,113 @@ const NewClientPage = () => {
       type: "text",
       inputType: "number",
     },
-    ///////////////////////////////////////////////////////////////////////////////////
-    { label: "Следующие поля пока не работают!!!", key: "", type: "title" }, ///////// delete later
 
-    { label: "Отлагательные меры", key: "", type: "title2" },
+    ///////////////////////////////////////////////////////////////////////////////////
+    // { label: "Отлагательные меры", key: "", type: "title2" },
+
+    // {
+    //   label: "Контрактные обязательства (тыс руб)",
+    //   key: "",
+    //   type: "text",
+    //   inputType: "number",
+    // },
     {
-      label: "Ближайший срок исполнения обязательств",
-      key: "",
-      type: "date",
-    },
-    { label: "Рассрочка/отсрочка", key: "", type: "title2" },
-    {
-      label: "Не вступило в силу рассрочка/отсрочка ",
-      key: "",
-      type: "text",
-    },
-    { label: "Мировое соглашение", key: "", type: "title2" },
-    {
-      label: "Номер дела",
-      key: "",
-      type: "text",
-    },
-    {
-      label: "Дата утверждения МС судом",
-      key: "",
-      type: "date",
-    },
-    { label: "Дата окончания МС", key: "", type: "date" },
-    {
-      label: "Сумма треований, вошедших в МС (тыс руб)",
-      key: "",
-      type: "text",
-    },
-    {
-      label: "Сумма исполненных обязательств (тыс руб)",
-      key: "",
-      type: "text",
-    },
-    { label: "6. Вид предостовляемого обеспечения", key: "", type: "title" },
-    { label: "Залог имущества (тыс руб)", key: "", type: "text" },
-    { label: "Поручительство (тыс руб)", key: "", type: "text" },
-    { label: "Банковская гарантия (тыс руб)", key: "", type: "text" },
-    {
-      label: "7. Проводимая работа в случае не исполнения предоставления меры",
+      label: "6. Проводимая работа в случае не исполнения предоставления меры",
       key: "",
       type: "title",
     },
-    { label: "Дата направления уведомления ДОЛЖНИКУ", key: "", type: "date" },
-    { label: "Дата направления уведомления ПОРУЧИТЕЛЮ", key: "", type: "date" },
     {
-      label: "Дата направления уведомления ЗАЛОГОДАТЕЛЮ",
-      key: "",
+      label: "Дата направления уведомления ДОЛЖНИКУ",
+      key: "notice_debitor_date",
       type: "date",
     },
-    { label: "8. Постконтроль", key: "", type: "title" },
+    {
+      label: "Дата направления уведомления ПОРУЧИТЕЛЮ",
+      key: "notice_guarantor_date",
+      type: "date",
+    },
+    {
+      label: "Дата направления уведомления ЗАЛОГОДАТЕЛЮ",
+      key: "notice_pledgetor_date",
+      type: "date",
+    },
+    { label: "7. Постконтроль по состоянию на", key: "", type: "title" },
     // { label: "Подгрузить информацию через ИНН", key: "", type: "title2" },
     {
       label: "Выручка за прошедший отчетный период текущего года",
-      key: "",
+      key: "revenue_knd_1151006_2023year",
       type: "text",
+      inputType: "number",
     },
-    { label: "Выручка за предыдущий год", key: "", type: "text" },
+    {
+      label: "Выручка за предыдущий год",
+      key: "revenue_knd_0710099_2022year",
+      inputType: "number",
+    },
     {
       label: "Среднесписочная численность персонала за предыдущее полугодие",
-      key: "",
+      key: "ssch_knd_1151111",
       type: "text",
+      inputType: "number",
     },
-    { label: "Активы за предыдущий год", key: "", type: "text" },
+    { label: "Активы за предыдущий год", key: "assets_2022year", type: "text" },
     {
       label:
         'Сумма уплаченных налогов за текущий год согласно ИР "Расчет с бюджетом"',
-      key: "",
+      key: "taxes_paid_2023year",
+      type: "text",
+      inputType: "number",
+    },
+    {
+      label: "Стадия в процедуре банкротства",
+      key: "bankruptcy_proceedings_stage",
       type: "text",
     },
-    { label: "Стадия в процедуре банкротства", key: "", type: "text" },
     {
       label: 'Сумма долга ЕНС согласно ИР "Расчет с бюджетом"',
-      key: "",
+      key: "debt_amount_unified_tax_service",
       type: "text",
+      inputType: "number",
     },
-    { label: "Сумма ФОТ за предыдущее полугодие", key: "", type: "text" },
-    { label: "Прибыль за предыдущее полугодие", key: "", type: "text" },
+    {
+      label: "Сумма ФОТ за предыдущее полугодие",
+      key: "fot_knd_1151111",
+      type: "text",
+      inputType: "number",
+    },
+    {
+      label: "Прибыль за предыдущее полугодие",
+      key: "profit_knd_1151006",
+      type: "text",
+      inputType: "number",
+    },
     {
       label: "Результаты скоринга платежеспособность (не передается на бек)",
-      key: "",
-      type: "select",
-      options: solvencyRisk,
+      key: "solvency_scoring_results",
+      type: "text",
+      // options: solvencyRisk,
     },
     {
       label: "Из выписки СКУАД  - Текущая стоимость бизнеса",
-      key: "",
+      key: "skuad_current_business_value",
       type: "text",
     },
     {
       label: "Из выписки СКУАД  - Ликвидационная стоимость бизнеса",
-      key: "",
+      key: "skuad_liquidation_business_value",
       type: "text",
     },
-    { label: "Из выписки СКУАД - Возвратность средств", key: "", type: "text" },
+    {
+      label: "Из выписки СКУАД - Возвратность средств",
+      key: "skuad_refund_funds",
+      type: "text",
+    },
     {
       label: "Из выписки СКУАД - Потребность в оборотных средствах",
-      key: "",
+      key: "skuad_working_capital",
       type: "text",
     },
-    { label: "Ранг платежеспособности", key: "", type: "text" },
+    { label: "Ранг платежеспособности", key: "solvency_rank", type: "text" },
   ]
 
   return (
@@ -982,8 +1419,8 @@ const NewClientPage = () => {
                 <h3 className="text-center mt-2">Данные клиента</h3>
                 <Divider />
               </div>
+              {/* {console.log("Вывод элемента ", inputsData)}{" "} */}
               {inputsData.map((el, ind) => {
-                // console.log(el)
                 if (el.type === "text") {
                   return (
                     <TextField
@@ -1032,6 +1469,7 @@ const NewClientPage = () => {
                         <input
                           type="date"
                           onChange={(date) => handleChange(date)}
+                          value={clientData[el.key]}
                           data-name={el.key}
                           data-positive={el?.isPositive}
                         />
@@ -1058,7 +1496,6 @@ const NewClientPage = () => {
                   )
                 }
               })}
-
               <div className="row row-centered  colored">
                 <button
                   type="submit"

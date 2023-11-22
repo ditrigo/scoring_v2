@@ -13,7 +13,7 @@ const ContentRows = ({ clients }) => {
     if (value === "Средний риск") return "text-warning"
     if (value === "Высокий риск") return "text-danger"
   }
-  console.log(clients)
+  // console.log(clients)
 
   const getPositiveDecisions = async () => {
     try {

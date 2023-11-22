@@ -39,7 +39,7 @@ const CrmPage = () => {
     // Добавил проверку через тернарный оператор, чтоб не падал в ошибку от пустых clients
     filtredClients = clients
       ? clients.filter((el) => {
-          // console.log(el)
+          // console.log("manager", el.manager?.second_name)
           if (Number.isInteger(+searchValue)) {
             return String(el.inn).includes(searchValue)
           } else {
@@ -52,6 +52,12 @@ const CrmPage = () => {
   } catch (e) {
     console.log(e)
   }
+  let obj = {
+    asklgja: [2, 2, 3, ""],
+  }
+
+  console.log("🚀 ~ file: CrmPage.jsx:60 ~ CrmPage ~ obj.asklgja:", obj.asklgja)
+  console.log(filtredClients)
 
   async function downLoadCrmDatas() {
     axios({
