@@ -81,16 +81,16 @@ def InsertValuesToCountedAttributes(imported_attributes_list):
     def calculate_counted_attributes(imported_attributes):
         inn = imported_attributes.inn
         # print(inn)
-        other_property = imported_attributes.s_1150_4 - imported_attributes.pru_cad_cost_amt - imported_attributes.lru_cad_cost_amt - imported_attributes.lru_cad_cost_amt_6monthago if imported_attributes.s_1150_4 - \
-            imported_attributes.pru_cad_cost_amt - imported_attributes.lru_cad_cost_amt - imported_attributes.lru_cad_cost_amt_6monthago > 0 else 0
+        other_property = imported_attributes.s_1150_4 - imported_attributes.pru_cad_cost_amt - imported_attributes.lru_cad_cost_amt - imported_attributes.ts_cad_cost_amt if imported_attributes.s_1150_4 - \
+            imported_attributes.pru_cad_cost_amt - imported_attributes.lru_cad_cost_amt - imported_attributes.ts_cad_cost_amt > 0 else 0
         # print(other_property)
-        clr = imported_attributes.s_1500_4 - \
-            imported_attributes.s_1530_4 if imported_attributes.s_1500_4 - \
+        clr = imported_attributes.s_1200_4/(imported_attributes.s_1500_4 - \
+            imported_attributes.s_1530_4) if imported_attributes.s_1500_4 - \
             imported_attributes.s_1530_4 != 0 else 0
         # print(clr)
-        solvency_ratio = imported_attributes.s_1200_4 / \
+        solvency_ratio = imported_attributes.s_1600_4 / \
             (imported_attributes.s_1500_4 + imported_attributes.s_1400_4) if imported_attributes.s_1500_4 + \
-            imported_attributes.s_1400_4 != 0 else 0
+            imported_attributes.s_1400_4 != 0 else 1
         # print(solvency_ratio)
         autonomy_ratio = imported_attributes.s_1300_4 / \
             imported_attributes.s_1600_4 if imported_attributes.s_1600_4 != 0 else 0
@@ -102,7 +102,7 @@ def InsertValuesToCountedAttributes(imported_attributes_list):
             imported_attributes.s_1600_4 if imported_attributes.s_1600_4 != 0 else 0
         # print(assets_return)
         dolg_in_balance = imported_attributes.dolg / \
-            imported_attributes.s_1600_4 if imported_attributes.s_1600_4 != 0 else 0
+            imported_attributes.s_1600_4 if imported_attributes.s_1600_4 != 0 else 0 if imported_attributes.dolg ==0 else 1
         # print(dolg_in_balance)
         return_on_equity = imported_attributes.s_2400_4 / ((imported_attributes.s_1300_4 + imported_attributes.s_1300_5) / 2) * \
             100 if imported_attributes.s_1300_4 + imported_attributes.s_1300_5 != 0 else 0
@@ -133,7 +133,7 @@ def InsertValuesToCountedAttributes(imported_attributes_list):
             imported_attributes.s_1210_4 if imported_attributes.s_1210_4 != 0 else 0
         # print(stock_avail_ration)
         quick_liquid_ratio = (imported_attributes.s_1230_4 + imported_attributes.s_1240_4 + imported_attributes.s_1250_4) / \
-            imported_attributes.s_1210_4 if imported_attributes.s_1500_4 != 0 else 0
+            imported_attributes.s_1210_4 if imported_attributes.s_1210_4 != 0 else 0
         # print(quick_liquid_ratio)
         asset_dinam_1 = imported_attributes.s_1600_4 - imported_attributes.s_1600_5
         # print(asset_dinam_1)
@@ -143,9 +143,9 @@ def InsertValuesToCountedAttributes(imported_attributes_list):
         # print("asset_dinam_3", asset_dinam_3)
         profit_dinam_1 = imported_attributes.s_2400_4 - imported_attributes.s_2400_5
         # print(profit_dinam_1)
-        profit_dinam_2 = imported_attributes.s_2400_5 - imported_attributes.s_2400_4
+        profit_dinam_2 = imported_attributes.s_2400_5 - imported_attributes.s_2400_4_2yearago
         # print(profit_dinam_2)
-        profit_dinam_3 = imported_attributes.s_2400_4 - imported_attributes.s_2400_5_2yearago
+        profit_dinam_3 = imported_attributes.s_2400_4_2yearago - imported_attributes.s_2400_5_2yearago
         # print(profit_dinam_3)
         k_5_154 = imported_attributes.s_1200_4 / \
             imported_attributes.s_1500_4 if imported_attributes.s_1500_4 != 0 else 0
@@ -178,9 +178,9 @@ def InsertValuesToCountedAttributes(imported_attributes_list):
             100 / imported_attributes.s_2110_4 - 100 if imported_attributes.s_2110_4 != 0 else 0
         # print("k_3_163", k_3_163)
         k_4_164 = 100 if (imported_attributes.s_1510_4 + imported_attributes.s_1410_4) == 0 and imported_attributes.cad_cost_amt_inpledge > 0 else (
-            imported_attributes.cad_cost_amt_inpledge * 100 / (imported_attributes.s_1510_4 + imported_attributes.s_1410_4) - 100)
+            imported_attributes.cad_cost_amt_inpledge * 100 / (imported_attributes.s_1510_4 + imported_attributes.s_1410_4 + 1) - 100)
         # print("k_4_164", k_4_164)
-        revenue_dinam = 100 if imported_attributes.npo_2_020_thisyear > 0 and imported_attributes.npo_2_020_lastyear != 0 else (
+        revenue_dinam = 100 if imported_attributes.npo_2_020_thisyear > 0 and imported_attributes.npo_2_020_lastyear == 0 else (
             (imported_attributes.npo_2_020_thisyear - imported_attributes.npo_2_020_lastyear) * 100 / imported_attributes.npo_2_020_lastyear - 100) if imported_attributes.npo_2_020_lastyear != 0 else 0
         # print("revenue_dinam ", revenue_dinam)
         # print(f"""account_balance_SKUAD {imported_attributes.account_balance_SKUAD}\nproperty_sum{property_sum}\ns_1230_4{imported_attributes.s_1230_4}
@@ -206,12 +206,23 @@ def InsertValuesToCountedAttributes(imported_attributes_list):
         repay_fund_lender = ((imported_attributes.account_balance_SKUAD + (imported_attributes.pru_cad_cost_amt + imported_attributes.lru_cad_cost_amt + imported_attributes.ts_cad_cost_amt) * 0.2 + imported_attributes.s_1230_4 * 0.0861 +
                               other_property * 0.2) * 100) / (imported_attributes.s_1500_4 + imported_attributes.s_1400_4 + imported_attributes.dolg) if (imported_attributes.s_1500_4 + imported_attributes.s_1400_4 + imported_attributes.dolg) != 0 else 0
         # print(repay_fund_lender)
-        need_capital = ((imported_attributes.s_1300_5 / imported_attributes.s_1300_4) / 1000000 - imported_attributes.s_1300_4 / 1000000) if imported_attributes.s_1300_4 != 0 and (
-            (imported_attributes.s_1300_5 / imported_attributes.s_1300_4) < 0 or (imported_attributes.s_1300_5 / imported_attributes.s_1300_4) > 3) else 0
-        # print(need_capital)
-        need_capital_dp = ((imported_attributes.s_1410_4 / imported_attributes.s_1300_4) / 1000000 - imported_attributes.s_1300_4 / 1000000) if imported_attributes.s_1300_4 != 0 and (
-            (imported_attributes.s_1410_4 / imported_attributes.s_1300_4) < 0 or (imported_attributes.s_1410_4 / imported_attributes.s_1300_4) > 3) else 0
+        # need_capital = ((imported_attributes.s_1300_5 / imported_attributes.s_1300_4) / 1000000 - imported_attributes.s_1300_4 / 1000000) if imported_attributes.s_1300_4 != 0 and (
+        #     (imported_attributes.s_1300_5 / imported_attributes.s_1300_4) < 0 or (imported_attributes.s_1300_5 / imported_attributes.s_1300_4) > 3) else 0
+        # # print(need_capital)
+        # need_capital_dp = ((imported_attributes.s_1410_4 / imported_attributes.s_1300_4) / 1000000 - imported_attributes.s_1300_4 / 1000000) if imported_attributes.s_1300_4 != 0 and (
+        #     (imported_attributes.s_1410_4 / imported_attributes.s_1300_4) < 0 or (imported_attributes.s_1410_4 / imported_attributes.s_1300_4) > 3) else 0
         # print(need_capital_dp)
+        need_capital = 0 if (imported_attributes.npo_2_010_year + imported_attributes.npo_2_020_year - imported_attributes.npo_2_030_year- imported_attributes.npo_2_040_year) == 0 \
+            else (imported_attributes.s_1520_4 + imported_attributes.s_1450_4 + imported_attributes.s_1550_4) / 3 - (imported_attributes.npo_2_010_year + imported_attributes.npo_2_020_year - \
+                                                                                                                     imported_attributes.npo_2_030_year - imported_attributes.npo_2_040_year) \
+                                                                                                                        if (imported_attributes.s_1520_4+ imported_attributes.s_1450_4+ imported_attributes.s_1550_4) / 3 - \
+                                                                                                                            ( imported_attributes.npo_2_010_year + imported_attributes.npo_2_020_year - imported_attributes.npo_2_030_year - \
+                                                                                                                             imported_attributes.npo_2_040_year) > 0 else 0
+        need_capital_dp = 0 if (imported_attributes.npo_2_010_year + imported_attributes.npo_2_020_year - imported_attributes.npo_2_030_year - imported_attributes.npo_2_040_year) == 0 \
+            else (imported_attributes.s_1410_4 + imported_attributes.s_1450_4 + imported_attributes.s_1510_4 + imported_attributes.s_1520_4) / 3 - \
+        (imported_attributes.npo_2_010_year+ imported_attributes.npo_2_020_year- imported_attributes.npo_2_030_year- imported_attributes.npo_2_040_year) \
+            if (imported_attributes.s_1410_4 + imported_attributes.s_1450_4+ imported_attributes.s_1510_4+ imported_attributes. s_1520_4) / 3 - \
+                ( imported_attributes.npo_2_010_year+ imported_attributes.npo_2_020_year- imported_attributes.npo_2_030_year- imported_attributes.npo_2_040_year) > 0 else 0
         ebitda = imported_attributes.npo_2_010_year + imported_attributes.npo_2_020_year - \
             imported_attributes.npo_2_030_year - imported_attributes.npo_2_040_year
         # print(ebitda)
@@ -2167,6 +2178,7 @@ def import_db_to_file(request):
             sheet.merge_range('AK2:AO2', 'Мировое соглашение (+)', cell_format_header)
 
             sheet.merge_range('A2:A3', 'п/п', cell_format_header)
+            
             for i in range(0, len(columns[:-1])):
                 if i in column_merg_ind:
                     sim = column_merge[column_merg_ind.index(i)]
@@ -2182,27 +2194,27 @@ def import_db_to_file(request):
             # sheet.write('AQ3:AQ3', 'Поручительство (в тыс. руб.)', cell_format_header)
             # sheet.write('AR3:AR3', 'Банковская гарантия (в тыс. руб.)', cell_format_header)
             sheet.merge_range('AS1:AS3', 'Стадия рассмотрения', cell_format_header)
-            sheet.set_column('AS1:AS3', 25)
+            sheet.set_column('AS1:AS3', 26)
             sheet.merge_range('AT1:AV2', 'Проводимая работа в случае не исполнения предоставленной меры', cell_format_header)
             sheet.merge_range('AW1:BK1', 'Постконтроль по состоянию на  ________', cell_format_header)
-            sheet.write('AT3:AT3', 'дата направления ДОЛЖНИКУ уведомления (претензии)', cell_format_header)
-            sheet.write('AU3:AU3', 'дата направления ПОРУЧИТЕЛЮ уведомления (претензии)', cell_format_header)
-            sheet.write('AV3:AV3', 'дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)', cell_format_header)
-            sheet.merge_range('AW2:AW3', 'выручка (КНД 1151006, год 2023, код периода-31, 40, стр.2_1_010 )', cell_format_header)
-            sheet.merge_range('AX2:AX3', 'выручка (КНД 0710099, год 2022, стр.2110_4)', cell_format_header)
-            sheet.merge_range('AY2:AY3', 'ССЧ ( КНД 1151111 , код периода -31 год 2023, стр.П023)', cell_format_header)
-            sheet.merge_range('AZ2:AZ3', 'активы 2022 г. (КНД 0710099, год 2022, стр.1600_4 )', cell_format_header)
-            sheet.merge_range('BA2:BA3', 'уплачено налогов 2023 г.( ИР РСБ)', cell_format_header)
-            sheet.merge_range('BB2:BB3', 'стадия в процедуре банкротства ', cell_format_header)
-            sheet.merge_range('BC2:BC3', 'сумма долга ЕНС ( ИР РСБ)', cell_format_header)
-            sheet.merge_range('BD2:BD3', 'ФОТ (КНД 1151111, год 2023, код периода-31, стр. П716)', cell_format_header)
-            sheet.merge_range('BE2:BE3', 'прибыль (КНД 1151006, год 2023,код периода-31, 40  стр.2_060)', cell_format_header)
-            sheet.merge_range('BF2:BF3', 'Результаты скоринга платежеспособности ', cell_format_header)
-            sheet.merge_range('BG2:BG3', 'из выписки СКУАД - текущая стоимость бизнеса', cell_format_header)
-            sheet.merge_range('BH2:BH3', 'из выписки СКУАД -, ликвидационная стоимость бизнеса', cell_format_header)
-            sheet.merge_range('BI2:BI3', 'из выписки СКУАД -  возвратность средств', cell_format_header)
-            sheet.merge_range('BJ2:BJ3', 'из выписки СКУАД - потребность в оборотных средствах', cell_format_header)
-            sheet.merge_range('BK2:BK3', 'ранг платёжеспособности', cell_format_header)
+            # sheet.write('AT3:AT3', 'дата направления ДОЛЖНИКУ уведомления (претензии)', cell_format_header)
+            # sheet.write('AU3:AU3', 'дата направления ПОРУЧИТЕЛЮ уведомления (претензии)', cell_format_header)
+            # sheet.write('AV3:AV3', 'дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)', cell_format_header)
+            # sheet.merge_range('AW2:AW3', 'выручка (КНД 1151006, год 2023, код периода-31, 40, стр.2_1_010 )', cell_format_header)
+            # sheet.merge_range('AX2:AX3', 'выручка (КНД 0710099, год 2022, стр.2110_4)', cell_format_header)
+            # sheet.merge_range('AY2:AY3', 'ССЧ ( КНД 1151111 , код периода -31 год 2023, стр.П023)', cell_format_header)
+            # sheet.merge_range('AZ2:AZ3', 'активы 2022 г. (КНД 0710099, год 2022, стр.1600_4 )', cell_format_header)
+            # sheet.merge_range('BA2:BA3', 'уплачено налогов 2023 г.( ИР РСБ)', cell_format_header)
+            # sheet.merge_range('BB2:BB3', 'стадия в процедуре банкротства ', cell_format_header)
+            # sheet.merge_range('BC2:BC3', 'сумма долга ЕНС ( ИР РСБ)', cell_format_header)
+            # sheet.merge_range('BD2:BD3', 'ФОТ (КНД 1151111, год 2023, код периода-31, стр. П716)', cell_format_header)
+            # sheet.merge_range('BE2:BE3', 'прибыль (КНД 1151006, год 2023,код периода-31, 40  стр.2_060)', cell_format_header)
+            # sheet.merge_range('BF2:BF3', 'Результаты скоринга платежеспособности ', cell_format_header)
+            # sheet.merge_range('BG2:BG3', 'из выписки СКУАД - текущая стоимость бизнеса', cell_format_header)
+            # sheet.merge_range('BH2:BH3', 'из выписки СКУАД -, ликвидационная стоимость бизнеса', cell_format_header)
+            # sheet.merge_range('BI2:BI3', 'из выписки СКУАД -  возвратность средств', cell_format_header)
+            # sheet.merge_range('BJ2:BJ3', 'из выписки СКУАД - потребность в оборотных средствах', cell_format_header)
+            # sheet.merge_range('BK2:BK3', 'ранг платёжеспособности', cell_format_header)
 
         #Создадим ответ из файла
         response = FileResponse(open(filename, 'rb'), status=status.HTTP_200_OK)
@@ -2239,7 +2251,7 @@ def get_columns_to_query():
         "ДАТА положительного решения",
         "На сколько предоставлена мера, в месяцах",
         "Основания и методика рассмотрения гл. 9 НК РФ",
-        "От кого ходатайство ОИВ (для МС)",
+        # "От кого ходатайство ОИВ (для МС)",
         "Вид отрицательного решения (из списка)",
         "Сумма урегулированной задолженности, тыс. руб.",
         "Сумма поступившая в бюджет, тыс. руб.",
@@ -2255,7 +2267,26 @@ def get_columns_to_query():
         "Залог имущества (в тыс. руб.)",
         "Поручительство (в тыс. руб.)",
         "Банковская гарантия (в тыс. руб.)",
-        "Стадия рассмотрения"  
+        "Стадия рассмотрения"  ,
+
+        "дата направления ДОЛЖНИКУ уведомления (претензии)",
+        "дата направления ПОРУЧИТЕЛЮ уведомления (претензии)",
+        "дата направления ЗАЛОГОДАТЕЛЮ уведомления (претензии)",
+        "выручка (КНД 1151006, год 2023, код периода-31, 40, стр.2_1_010 )",
+        "выручка (КНД 0710099, год 2022, стр.2110_4)",
+        "ССЧ ( КНД 1151111 , код периода -31 год 2023, стр.П023)",
+        "активы 2022 г. (КНД 0710099, год 2022, стр.1600_4 )",
+        "уплачено налогов 2023 г.( ИР РСБ)",
+        "стадия в процедуре банкротства",
+        "сумма долга ЕНС ( ИР РСБ)",
+        "ФОТ (КНД 1151111, год 2023, код периода-31, стр. П716)",
+        "прибыль (КНД 1151006, год 2023,код периода-31, 40  стр.2_060)",
+        "Результаты скоринга платежеспособности", 
+        "из выписки СКУАД - текущая стоимость бизнеса",
+        "из выписки СКУАД -, ликвидационная стоимость бизнеса",
+        "из выписки СКУАД -  возвратность средств",
+        "из выписки СКУАД - потребность в оборотных средствах",
+        "ранг платёжеспособности"
     ]
 
 
@@ -2300,7 +2331,7 @@ SELECT
     strftime('%d.%m.%Y',t_kpi.positive_decision_date) as positive_decision_date,
     t_kpi.measure_provided_duration as measure_provided_duration,
     '' as merodic,
-    t_kpi.oiv_request_sender as oiv_request_sender,
+    --t_kpi.oiv_request_sender as oiv_request_sender,
     t_neg_decision.negative_decision as negative_decision,
     t_kpi.settled_debt_amount as settled_debt_amount,
     
@@ -2323,7 +2354,26 @@ SELECT
     '' as pole2,
     '' as pole3,
     --'123' as stage
-    t_review_stage.stage as stage
+    t_review_stage.stage as stage,
+
+    t_client.notice_debitor_date as notice_debitor_date,
+	t_client.notice_guarantor_date as notice_guarantor_date,
+	t_client.notice_pledgetor_date as notice_pledgetor_date,
+	t_client.revenue_knd_1151006_2023year as revenue_knd_1151006_2023year,
+	t_client.revenue_knd_0710099_2022year as revenue_knd_0710099_2022year,
+	t_client.ssch_knd_1151111 as ssch_knd_1151111,
+	t_client.assets_2022year as assets_2022year,
+	t_client.taxes_paid_2023year as taxes_paid_2023year,
+	t_client.bankruptcy_proceedings_stage as bankruptcy_proceedings_stage,
+	t_client.debt_amount_unified_tax_service as debt_amount_unified_tax_service,
+	t_client.fot_knd_1151111 as fot_knd_1151111,
+	t_client.profit_knd_1151006 as profit_knd_1151006,
+	t_client.solvency_scoring_results as solvency_scoring_results,
+	t_client.skuad_current_business_value as skuad_current_business_value,
+	t_client.skuad_liquidation_business_value as skuad_liquidation_business_value,
+	t_client.skuad_refund_funds as skuad_refund_funds,
+	t_client.skuad_working_capital as skuad_working_capital,
+	t_client.solvency_rank as solvency_rank 
 
   FROM client as t_client
   LEFT JOIN manager as t_manager
