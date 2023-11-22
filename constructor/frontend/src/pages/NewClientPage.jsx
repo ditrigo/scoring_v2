@@ -857,22 +857,28 @@ const NewClientPage = () => {
       type: "text",
       inputType: "number",
     },
-    {
-      label: "Сумма урегулированной задолженности (тыс руб)",
-      key: "settled_debt_amount",
+    clientData.positive_decision_type === 1 && {
+      label: "От кого ходатайство ОИВ",
+      key: "oiv_request_sender",
       type: "text",
-      inputType: "number",
     },
-    {
+    clientData.positive_decision_type === 2 && {
+      label: "Основания и методика рассмотрения гл. 9НК РФ",
+      key: "reasons",
+      type: "select",
+      options: reasonsConsideration,
+    },
+    clientData.positive_decision_type === 4 && {
       label: "Основания и методика рассмотрения гл. 9НК РФ",
       key: "reasons",
       type: "select",
       options: reasonsConsideration,
     },
     {
-      label: "От кого ходатайство ОИВ (для МС)",
-      key: "oiv_request_sender",
+      label: "Сумма урегулированной задолженности (тыс руб)",
+      key: "settled_debt_amount",
       type: "text",
+      inputType: "number",
     },
     {
       label: "Вид отрицаетльного решения",
@@ -893,7 +899,25 @@ const NewClientPage = () => {
       type: "text",
       inputType: "number",
     },
+    { label: "Просроченная задолженность", key: "", type: "title2" },
+    {
+      label: "Сумма просроченной задолженности",
+      key: "overdue_debt_amount",
+      type: "text",
+      inputType: "number",
+    },
+    {
+      label: "Сумма технической просроченной задолженности",
+      key: "technical_overdue_debt_amount",
+      type: "text",
+      inputType: "number",
+    },
     // Для MC
+    clientData.positive_decision_type === 1 && {
+      label: "Мировое соглашение",
+      key: "",
+      type: "title2",
+    },
     clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length &&
       fieldsOfPosDec[0],
@@ -911,6 +935,11 @@ const NewClientPage = () => {
       fieldsOfPosDec[4],
 
     // ДЛЯ Рассрочка
+    clientData.positive_decision_type === 2 && {
+      label: "Рассрочка/отсрочка",
+      key: "",
+      type: "title2",
+    },
     clientData.positive_decision_type === 2 &&
       fieldsOfPosDec.length &&
       fieldsOfPosDec[0],
@@ -921,25 +950,17 @@ const NewClientPage = () => {
       fieldsOfPosDec[0],
 
     // ДЛЯ Отсрочка
+    clientData.positive_decision_type === 4 && {
+      label: "Рассрочка/отсрочка",
+      key: "",
+      type: "title2",
+    },
     clientData.positive_decision_type === 4 &&
       fieldsOfPosDec.length &&
       fieldsOfPosDec[0],
 
     // ДЛЯ Инвестиционный кредит нет
 
-    { label: "Просроченная задолженность", key: "", type: "title2" },
-    {
-      label: "Сумма просроченной задолженности",
-      key: "overdue_debt_amount",
-      type: "text",
-      inputType: "number",
-    },
-    {
-      label: "Сумма технической просроченной задолженности",
-      key: "technical_overdue_debt_amount",
-      type: "text",
-      inputType: "number",
-    },
     ///////////////////////////////////////////////////////////////////////////////////
     // { label: "Отлагательные меры", key: "", type: "title2" },
 
@@ -1026,12 +1047,12 @@ const NewClientPage = () => {
     // { label: "Залог имущества (тыс руб)", key: "", type: "number" },
     // { label: "Поручительство (тыс руб)", key: "", type: "number" },
     // { label: "Банковская гарантия (тыс руб)", key: "", type: "number" },
-    {
-      label: "Контрактные обязательства (тыс руб)",
-      key: "",
-      type: "text",
-      inputType: "number",
-    }, // New
+    // {
+    //   label: "Контрактные обязательства (тыс руб)",
+    //   key: "",
+    //   type: "text",
+    //   inputType: "number",
+    // },
     {
       label: "7. Проводимая работа в случае не исполнения предоставления меры",
       key: "",
