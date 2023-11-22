@@ -81,16 +81,16 @@ def InsertValuesToCountedAttributes(imported_attributes_list):
     def calculate_counted_attributes(imported_attributes):
         inn = imported_attributes.inn
         # print(inn)
-        other_property = imported_attributes.s_1150_4 - imported_attributes.pru_cad_cost_amt - imported_attributes.lru_cad_cost_amt - imported_attributes.lru_cad_cost_amt_6monthago if imported_attributes.s_1150_4 - \
-            imported_attributes.pru_cad_cost_amt - imported_attributes.lru_cad_cost_amt - imported_attributes.lru_cad_cost_amt_6monthago > 0 else 0
+        other_property = imported_attributes.s_1150_4 - imported_attributes.pru_cad_cost_amt - imported_attributes.lru_cad_cost_amt - imported_attributes.ts_cad_cost_amt if imported_attributes.s_1150_4 - \
+            imported_attributes.pru_cad_cost_amt - imported_attributes.lru_cad_cost_amt - imported_attributes.ts_cad_cost_amt > 0 else 0
         # print(other_property)
-        clr = imported_attributes.s_1500_4 - \
-            imported_attributes.s_1530_4 if imported_attributes.s_1500_4 - \
+        clr = imported_attributes.s_1200_4/(imported_attributes.s_1500_4 - \
+            imported_attributes.s_1530_4) if imported_attributes.s_1500_4 - \
             imported_attributes.s_1530_4 != 0 else 0
         # print(clr)
-        solvency_ratio = imported_attributes.s_1200_4 / \
+        solvency_ratio = imported_attributes.s_1600_4 / \
             (imported_attributes.s_1500_4 + imported_attributes.s_1400_4) if imported_attributes.s_1500_4 + \
-            imported_attributes.s_1400_4 != 0 else 0
+            imported_attributes.s_1400_4 != 0 else 1
         # print(solvency_ratio)
         autonomy_ratio = imported_attributes.s_1300_4 / \
             imported_attributes.s_1600_4 if imported_attributes.s_1600_4 != 0 else 0
@@ -102,7 +102,7 @@ def InsertValuesToCountedAttributes(imported_attributes_list):
             imported_attributes.s_1600_4 if imported_attributes.s_1600_4 != 0 else 0
         # print(assets_return)
         dolg_in_balance = imported_attributes.dolg / \
-            imported_attributes.s_1600_4 if imported_attributes.s_1600_4 != 0 else 0
+            imported_attributes.s_1600_4 if imported_attributes.s_1600_4 != 0 else 0 if imported_attributes.dolg ==0 else 1
         # print(dolg_in_balance)
         return_on_equity = imported_attributes.s_2400_4 / ((imported_attributes.s_1300_4 + imported_attributes.s_1300_5) / 2) * \
             100 if imported_attributes.s_1300_4 + imported_attributes.s_1300_5 != 0 else 0
@@ -133,7 +133,7 @@ def InsertValuesToCountedAttributes(imported_attributes_list):
             imported_attributes.s_1210_4 if imported_attributes.s_1210_4 != 0 else 0
         # print(stock_avail_ration)
         quick_liquid_ratio = (imported_attributes.s_1230_4 + imported_attributes.s_1240_4 + imported_attributes.s_1250_4) / \
-            imported_attributes.s_1210_4 if imported_attributes.s_1500_4 != 0 else 0
+            imported_attributes.s_1210_4 if imported_attributes.s_1210_4 != 0 else 0
         # print(quick_liquid_ratio)
         asset_dinam_1 = imported_attributes.s_1600_4 - imported_attributes.s_1600_5
         # print(asset_dinam_1)
@@ -143,9 +143,9 @@ def InsertValuesToCountedAttributes(imported_attributes_list):
         # print("asset_dinam_3", asset_dinam_3)
         profit_dinam_1 = imported_attributes.s_2400_4 - imported_attributes.s_2400_5
         # print(profit_dinam_1)
-        profit_dinam_2 = imported_attributes.s_2400_5 - imported_attributes.s_2400_4
+        profit_dinam_2 = imported_attributes.s_2400_5 - imported_attributes.s_2400_4_2yearago
         # print(profit_dinam_2)
-        profit_dinam_3 = imported_attributes.s_2400_4 - imported_attributes.s_2400_5_2yearago
+        profit_dinam_3 = imported_attributes.s_2400_4_2yearago - imported_attributes.s_2400_5_2yearago
         # print(profit_dinam_3)
         k_5_154 = imported_attributes.s_1200_4 / \
             imported_attributes.s_1500_4 if imported_attributes.s_1500_4 != 0 else 0
@@ -178,9 +178,9 @@ def InsertValuesToCountedAttributes(imported_attributes_list):
             100 / imported_attributes.s_2110_4 - 100 if imported_attributes.s_2110_4 != 0 else 0
         # print("k_3_163", k_3_163)
         k_4_164 = 100 if (imported_attributes.s_1510_4 + imported_attributes.s_1410_4) == 0 and imported_attributes.cad_cost_amt_inpledge > 0 else (
-            imported_attributes.cad_cost_amt_inpledge * 100 / (imported_attributes.s_1510_4 + imported_attributes.s_1410_4) - 100)
+            imported_attributes.cad_cost_amt_inpledge * 100 / (imported_attributes.s_1510_4 + imported_attributes.s_1410_4 + 1) - 100)
         # print("k_4_164", k_4_164)
-        revenue_dinam = 100 if imported_attributes.npo_2_020_thisyear > 0 and imported_attributes.npo_2_020_lastyear != 0 else (
+        revenue_dinam = 100 if imported_attributes.npo_2_020_thisyear > 0 and imported_attributes.npo_2_020_lastyear == 0 else (
             (imported_attributes.npo_2_020_thisyear - imported_attributes.npo_2_020_lastyear) * 100 / imported_attributes.npo_2_020_lastyear - 100) if imported_attributes.npo_2_020_lastyear != 0 else 0
         # print("revenue_dinam ", revenue_dinam)
         # print(f"""account_balance_SKUAD {imported_attributes.account_balance_SKUAD}\nproperty_sum{property_sum}\ns_1230_4{imported_attributes.s_1230_4}
@@ -206,12 +206,23 @@ def InsertValuesToCountedAttributes(imported_attributes_list):
         repay_fund_lender = ((imported_attributes.account_balance_SKUAD + (imported_attributes.pru_cad_cost_amt + imported_attributes.lru_cad_cost_amt + imported_attributes.ts_cad_cost_amt) * 0.2 + imported_attributes.s_1230_4 * 0.0861 +
                               other_property * 0.2) * 100) / (imported_attributes.s_1500_4 + imported_attributes.s_1400_4 + imported_attributes.dolg) if (imported_attributes.s_1500_4 + imported_attributes.s_1400_4 + imported_attributes.dolg) != 0 else 0
         # print(repay_fund_lender)
-        need_capital = ((imported_attributes.s_1300_5 / imported_attributes.s_1300_4) / 1000000 - imported_attributes.s_1300_4 / 1000000) if imported_attributes.s_1300_4 != 0 and (
-            (imported_attributes.s_1300_5 / imported_attributes.s_1300_4) < 0 or (imported_attributes.s_1300_5 / imported_attributes.s_1300_4) > 3) else 0
-        # print(need_capital)
-        need_capital_dp = ((imported_attributes.s_1410_4 / imported_attributes.s_1300_4) / 1000000 - imported_attributes.s_1300_4 / 1000000) if imported_attributes.s_1300_4 != 0 and (
-            (imported_attributes.s_1410_4 / imported_attributes.s_1300_4) < 0 or (imported_attributes.s_1410_4 / imported_attributes.s_1300_4) > 3) else 0
+        # need_capital = ((imported_attributes.s_1300_5 / imported_attributes.s_1300_4) / 1000000 - imported_attributes.s_1300_4 / 1000000) if imported_attributes.s_1300_4 != 0 and (
+        #     (imported_attributes.s_1300_5 / imported_attributes.s_1300_4) < 0 or (imported_attributes.s_1300_5 / imported_attributes.s_1300_4) > 3) else 0
+        # # print(need_capital)
+        # need_capital_dp = ((imported_attributes.s_1410_4 / imported_attributes.s_1300_4) / 1000000 - imported_attributes.s_1300_4 / 1000000) if imported_attributes.s_1300_4 != 0 and (
+        #     (imported_attributes.s_1410_4 / imported_attributes.s_1300_4) < 0 or (imported_attributes.s_1410_4 / imported_attributes.s_1300_4) > 3) else 0
         # print(need_capital_dp)
+        need_capital = 0 if (imported_attributes.npo_2_010_year + imported_attributes.npo_2_020_year - imported_attributes.npo_2_030_year- imported_attributes.npo_2_040_year) == 0 \
+            else (imported_attributes.s_1520_4 + imported_attributes.s_1450_4 + imported_attributes.s_1550_4) / 3 - (imported_attributes.npo_2_010_year + imported_attributes.npo_2_020_year - \
+                                                                                                                     imported_attributes.npo_2_030_year - imported_attributes.npo_2_040_year) \
+                                                                                                                        if (imported_attributes.s_1520_4+ imported_attributes.s_1450_4+ imported_attributes.s_1550_4) / 3 - \
+                                                                                                                            ( imported_attributes.npo_2_010_year + imported_attributes.npo_2_020_year - imported_attributes.npo_2_030_year - \
+                                                                                                                             imported_attributes.npo_2_040_year) > 0 else 0
+        need_capital_dp = 0 if (imported_attributes.npo_2_010_year + imported_attributes.npo_2_020_year - imported_attributes.npo_2_030_year - imported_attributes.npo_2_040_year) == 0 \
+            else (imported_attributes.s_1410_4 + imported_attributes.s_1450_4 + imported_attributes.s_1510_4 + imported_attributes.s_1520_4) / 3 - \
+        (imported_attributes.npo_2_010_year+ imported_attributes.npo_2_020_year- imported_attributes.npo_2_030_year- imported_attributes.npo_2_040_year) \
+            if (imported_attributes.s_1410_4 + imported_attributes.s_1450_4+ imported_attributes.s_1510_4+ imported_attributes. s_1520_4) / 3 - \
+                ( imported_attributes.npo_2_010_year+ imported_attributes.npo_2_020_year- imported_attributes.npo_2_030_year- imported_attributes.npo_2_040_year) > 0 else 0
         ebitda = imported_attributes.npo_2_010_year + imported_attributes.npo_2_020_year - \
             imported_attributes.npo_2_030_year - imported_attributes.npo_2_040_year
         # print(ebitda)
