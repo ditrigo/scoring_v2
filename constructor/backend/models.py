@@ -726,7 +726,7 @@ class KPI(models.Model): # KPI вид решения
     positive_decision_type = models.ForeignKey(PositiveDecision, on_delete=models.CASCADE, null=True, blank=True)  # Вид положительного решения
     positive_decision_date = models.DateField(blank=True, null=True)  # Дата положительного решения
     measure_provided_duration = models.IntegerField(blank=True, null=True)  # На сколько предоставлена мера
-    oiv_request_sender = models.CharField(max_length=255, blank=True, null=True)  # От кого ходатайство ОИВ (для МС)
+    # oiv_request_sender = models.CharField(max_length=255, blank=True, null=True)  # От кого ходатайство ОИВ (для МС) !!!ДИНАМИКА БУДЕТ!!!
     negative_decision_type = models.ForeignKey(NegativeDecision, on_delete=models.CASCADE, null=True, blank=True)  # Вид отрицательного решения
     settled_debt_amount = models.IntegerField(blank=True, null=True)  # Сумма урегулированной задолженности
     
@@ -756,6 +756,7 @@ class FieldsOfPositiveDecisions(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True) # Название в реальности
     positive_decision = models.ForeignKey(PositiveDecision, on_delete=models.CASCADE, blank=True, null=True) # К какому решению пренадлежат поля
     type_of_fields = models.CharField(max_length=255, blank=True, null=True) # значения 0 - string 1 - datetime, 2 - int, 3 - float, 4 - boolean
+    required = models.BooleanField(blank=True, null=True)
 
     class Meta:
         db_table ='positive_decision_fields'
@@ -803,7 +804,7 @@ class Client(models.Model):
     first_meeting_date = models.DateField(blank=True, null=True) # Дата первой встречи
     event_date = models.DateField(blank=True, null=True) # Дата наступления события
     event_description = models.TextField(blank=True, null=True) # Описание события
-    reasons = models.ForeignKey(ReasonsForConsideration, on_delete=models.CASCADE, blank=True, null=True) # Основания и методика рассмотрения
+    # reasons = models.ForeignKey(ReasonsForConsideration, on_delete=models.CASCADE, blank=True, null=True) # Основания и методика рассмотрения !!!ДИНАМИКА БУДЕТ!!!
     kpi = models.ForeignKey(KPI, on_delete=models.CASCADE, blank=True, null=True) # KPI
     
     # Проводимая работа в случае не исполнения предоставленной меры
