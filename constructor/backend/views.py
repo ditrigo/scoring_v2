@@ -2569,7 +2569,7 @@ def get_query_to_import_new():
 SELECT 
 --Общие сведения
     t_prd_catalog.catalog_prd as prd,
-    t_manager.second_name || ' ' || t_manager.first_name || ' ' || t_manager.patronymic as manager,
+    ifnull(t_manager.second_name, '') || ' ' || t_manager.first_name || ' ' || ifnull(t_manager.patronymic, '') as manager,
     t_client.first_name  as client,
     cast(t_client.inn as text) as inn,
     --t_inn.inn as inn,
@@ -2581,7 +2581,7 @@ SELECT
     strftime('%d.%m.%Y',t_inf_sours.info_source_date) as info_source_date,
     t_inf_sours.info_source_number as info_source_number,
 -- Представители клиента
-    t_repr_client.representative_second_name || ' ' || t_repr_client.representative_first_name || ' ' || t_repr_client.representative_patronymic as fio_repr_client,
+    ifnull(t_repr_client.representative_second_name, '') || ' ' || t_repr_client.representative_first_name || ' ' || ifnull(t_repr_client.representative_patronymic, '') as fio_repr_client,
     t_repr_client.representative_position as repr_position,
     t_repr_client.representative_phone as repr_phone,
     t_repr_client.representative_email as repr_email,
