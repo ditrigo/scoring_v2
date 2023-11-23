@@ -1575,6 +1575,10 @@ def CreateRelationClient(request):
                 #     reasons = ReasonsForConsideration.objects.get(id=request.data.get('reasons'))  # string, "" -ok
                 # else:
                 #     reasons = None
+                # if request.data.get('reasons') != "":
+                #     reasons = ReasonsForConsideration.objects.get(id=request.data.get('reasons'))  # string, "" -ok
+                # else:
+                #     reasons = None
 
                 if request.data.get('manager_id') != "":
                     manager = Manager.objects.get(id=request.data.get('manager_id'))

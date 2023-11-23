@@ -15,6 +15,7 @@ const CrmPage = () => {
   const [searchValue, setSearchValue] = useState("")
   const FileDownload = require("js-file-download")
   let filtredClients = []
+  console.log(clients)
 
   const getClients = async () => {
     try {
