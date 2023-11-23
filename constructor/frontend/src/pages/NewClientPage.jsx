@@ -743,7 +743,7 @@ const NewClientPage = () => {
             setClientData((prevState) => ({
               ...prevState,
               [dec.fields_of_pos_decision]:
-                dec.fields_of_pos_decision === 15 || 27 || 35
+                dec.fields_of_pos_decision === 15 
                   ? +dec.value
                   : dec.value,
             }))
