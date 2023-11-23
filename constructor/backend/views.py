@@ -2781,7 +2781,7 @@ SELECT
   AND t_positive_decision_fields_13.origin = 'surety'
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_13
   ON t_kpi.id = t_kpi_positive_decision_fields_13.kpi_id
-  AND t_kpi_positive_decision_fields_13.fields_of_pos_decision_id = t_positive_decision_fields_12.id
+  AND t_kpi_positive_decision_fields_13.fields_of_pos_decision_id = t_positive_decision_fields_13.id
   
   LEFT JOIN positive_decision_fields as t_positive_decision_fields_14
   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_14.positive_decision_id
