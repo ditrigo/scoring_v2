@@ -1571,10 +1571,10 @@ def CreateRelationClient(request):
                 region = Region.objects.get(id=request.data.get('region_id')) # Required
                 # reasons = ReasonsForConsiderationSerializer.objects.get(id=request.data.get('reasons')) 
 
-                if request.data.get('reasons') != "":
-                    reasons = ReasonsForConsideration.objects.get(id=request.data.get('reasons'))  # string, "" -ok
-                else:
-                    reasons = None
+                # if request.data.get('reasons') != "":
+                #     reasons = ReasonsForConsideration.objects.get(id=request.data.get('reasons'))  # string, "" -ok
+                # else:
+                #     reasons = None
 
                 if request.data.get('manager_id') != "":
                     manager = Manager.objects.get(id=request.data.get('manager_id'))
@@ -1766,78 +1766,78 @@ def CreateRelationClient(request):
                     first_meeting_date = None
                 
                 # TODO Раскомментировать после доработки
-                # if request.data.get('notice_debitor_date') != "":
-                #     notice_debitor_date = request.data.get('notice_debitor_date')
-                # else:
-                #     notice_debitor_date = None
-                # if request.data.get('notice_guarantor_date') != "":
-                #     notice_guarantor_date = request.data.get('notice_guarantor_date')
-                # else:
-                #     notice_guarantor_date = None
-                # if request.data.get('notice_pledgetor_date') != "":
-                #     notice_pledgetor_date = request.data.get('notice_pledgetor_date')
-                # else:
-                #     notice_pledgetor_date = None
-                # if request.data.get('revenue_knd_1151006_2023year') != "":
-                #     revenue_knd_1151006_2023year = request.data.get('revenue_knd_1151006_2023year')
-                # else:
-                #     revenue_knd_1151006_2023year = None
-                # if request.data.get('revenue_knd_0710099_2022year') != "":
-                #     revenue_knd_0710099_2022year = request.data.get('revenue_knd_0710099_2022year')
-                # else:
-                #     revenue_knd_0710099_2022year = None
-                # if request.data.get('ssch_knd_1151111') != "":
-                #     ssch_knd_1151111 = request.data.get('ssch_knd_1151111')
-                # else:
-                #     ssch_knd_1151111 = None
-                # if request.data.get('assets_2022year') != "":
-                #     assets_2022year = request.data.get('assets_2022year')
-                # else:
-                #     assets_2022year = None
-                # if request.data.get('taxes_paid_2023year') != "":
-                #     taxes_paid_2023year = request.data.get('taxes_paid_2023year')
-                # else:
-                #     taxes_paid_2023year = None
-                # if request.data.get('bankruptcy_proceedings_stage') != "":
-                #     bankruptcy_proceedings_stage = request.data.get('bankruptcy_proceedings_stage')
-                # else:
-                #     bankruptcy_proceedings_stage = None
-                # if request.data.get('debt_amount_unified_tax_service') != "":
-                #     debt_amount_unified_tax_service = request.data.get('debt_amount_unified_tax_service')
-                # else:
-                #     debt_amount_unified_tax_service = None
-                # if request.data.get('fot_knd_1151111') != "":
-                #     fot_knd_1151111 = request.data.get('fot_knd_1151111')
-                # else:
-                #     fot_knd_1151111 = None
-                # if request.data.get('profit_knd_1151006') != "":
-                #     profit_knd_1151006 = request.data.get('profit_knd_1151006')
-                # else:
-                #     profit_knd_1151006 = None
-                # if request.data.get('solvency_scoring_results') != "":
-                #     solvency_scoring_results = request.data.get('solvency_scoring_results')
-                # else:
-                #     solvency_scoring_results = None
-                # if request.data.get('skuad_current_business_value') != "":
-                #     skuad_current_business_value = request.data.get('skuad_current_business_value')
-                # else:
-                #     skuad_current_business_value = None
-                # if request.data.get('skuad_liquidation_business_value') != "":
-                #     skuad_liquidation_business_value = request.data.get('skuad_liquidation_business_value')
-                # else:
-                #     skuad_liquidation_business_value = None
-                # if request.data.get('skuad_refund_funds') != "":
-                #     skuad_refund_funds = request.data.get('skuad_refund_funds')
-                # else:
-                #     skuad_refund_funds = None
-                # if request.data.get('skuad_working_capital') != "":
-                #     skuad_working_capital = request.data.get('skuad_working_capital')
-                # else:
-                #     skuad_working_capital = None
-                # if request.data.get('solvency_rank') != "":
-                #     solvency_rank = request.data.get('solvency_rank')
-                # else:
-                #     solvency_rank = None
+                if request.data.get('notice_debitor_date') != "":
+                    notice_debitor_date = request.data.get('notice_debitor_date')
+                else:
+                    notice_debitor_date = None
+                if request.data.get('notice_guarantor_date') != "":
+                    notice_guarantor_date = request.data.get('notice_guarantor_date')
+                else:
+                    notice_guarantor_date = None
+                if request.data.get('notice_pledgetor_date') != "":
+                    notice_pledgetor_date = request.data.get('notice_pledgetor_date')
+                else:
+                    notice_pledgetor_date = None
+                if request.data.get('revenue_knd_1151006_2023year') != "":
+                    revenue_knd_1151006_2023year = request.data.get('revenue_knd_1151006_2023year')
+                else:
+                    revenue_knd_1151006_2023year = None
+                if request.data.get('revenue_knd_0710099_2022year') != "":
+                    revenue_knd_0710099_2022year = request.data.get('revenue_knd_0710099_2022year')
+                else:
+                    revenue_knd_0710099_2022year = None
+                if request.data.get('ssch_knd_1151111') != "":
+                    ssch_knd_1151111 = request.data.get('ssch_knd_1151111')
+                else:
+                    ssch_knd_1151111 = None
+                if request.data.get('assets_2022year') != "":
+                    assets_2022year = request.data.get('assets_2022year')
+                else:
+                    assets_2022year = None
+                if request.data.get('taxes_paid_2023year') != "":
+                    taxes_paid_2023year = request.data.get('taxes_paid_2023year')
+                else:
+                    taxes_paid_2023year = None
+                if request.data.get('bankruptcy_proceedings_stage') != "":
+                    bankruptcy_proceedings_stage = request.data.get('bankruptcy_proceedings_stage')
+                else:
+                    bankruptcy_proceedings_stage = None
+                if request.data.get('debt_amount_unified_tax_service') != "":
+                    debt_amount_unified_tax_service = request.data.get('debt_amount_unified_tax_service')
+                else:
+                    debt_amount_unified_tax_service = None
+                if request.data.get('fot_knd_1151111') != "":
+                    fot_knd_1151111 = request.data.get('fot_knd_1151111')
+                else:
+                    fot_knd_1151111 = None
+                if request.data.get('profit_knd_1151006') != "":
+                    profit_knd_1151006 = request.data.get('profit_knd_1151006')
+                else:
+                    profit_knd_1151006 = None
+                if request.data.get('solvency_scoring_results') != "":
+                    solvency_scoring_results = request.data.get('solvency_scoring_results')
+                else:
+                    solvency_scoring_results = None
+                if request.data.get('skuad_current_business_value') != "":
+                    skuad_current_business_value = request.data.get('skuad_current_business_value')
+                else:
+                    skuad_current_business_value = None
+                if request.data.get('skuad_liquidation_business_value') != "":
+                    skuad_liquidation_business_value = request.data.get('skuad_liquidation_business_value')
+                else:
+                    skuad_liquidation_business_value = None
+                if request.data.get('skuad_refund_funds') != "":
+                    skuad_refund_funds = request.data.get('skuad_refund_funds')
+                else:
+                    skuad_refund_funds = None
+                if request.data.get('skuad_working_capital') != "":
+                    skuad_working_capital = request.data.get('skuad_working_capital')
+                else:
+                    skuad_working_capital = None
+                if request.data.get('solvency_rank') != "":
+                    solvency_rank = request.data.get('solvency_rank')
+                else:
+                    solvency_rank = None
 
                 Client.objects.create(
                     first_name = request.data.get('first_name'), # string, "" -ok
@@ -1859,24 +1859,24 @@ def CreateRelationClient(request):
                     # reasons = reasons,
 
                     # TODO Раскомментировать после доработки
-                    # notice_debitor_date = notice_debitor_date,
-                    # notice_guarantor_date = notice_guarantor_date,
-                    # notice_pledgetor_date = notice_pledgetor_date,
-                    # revenue_knd_1151006_2023year = revenue_knd_1151006_2023year,
-                    # revenue_knd_0710099_2022year = revenue_knd_0710099_2022year,
-                    # ssch_knd_1151111 = ssch_knd_1151111, 
-                    # assets_2022year = assets_2022year,
-                    # taxes_paid_2023year = taxes_paid_2023year,
-                    # bankruptcy_proceedings_stage = bankruptcy_proceedings_stage,
-                    # debt_amount_unified_tax_service = debt_amount_unified_tax_service,
-                    # fot_knd_1151111 = fot_knd_1151111,
-                    # profit_knd_1151006 = profit_knd_1151006,
-                    # solvency_scoring_results = solvency_scoring_results,
-                    # skuad_current_business_value = skuad_current_business_value,
-                    # skuad_liquidation_business_value = skuad_liquidation_business_value,
-                    # skuad_refund_funds = skuad_refund_funds,
-                    # skuad_working_capital = skuad_working_capital,
-                    # solvency_rank = solvency_rank,
+                    notice_debitor_date = notice_debitor_date,
+                    notice_guarantor_date = notice_guarantor_date,
+                    notice_pledgetor_date = notice_pledgetor_date,
+                    revenue_knd_1151006_2023year = revenue_knd_1151006_2023year,
+                    revenue_knd_0710099_2022year = revenue_knd_0710099_2022year,
+                    ssch_knd_1151111 = ssch_knd_1151111, 
+                    assets_2022year = assets_2022year,
+                    taxes_paid_2023year = taxes_paid_2023year,
+                    bankruptcy_proceedings_stage = bankruptcy_proceedings_stage,
+                    debt_amount_unified_tax_service = debt_amount_unified_tax_service,
+                    fot_knd_1151111 = fot_knd_1151111,
+                    profit_knd_1151006 = profit_knd_1151006,
+                    solvency_scoring_results = solvency_scoring_results,
+                    skuad_current_business_value = skuad_current_business_value,
+                    skuad_liquidation_business_value = skuad_liquidation_business_value,
+                    skuad_refund_funds = skuad_refund_funds,
+                    skuad_working_capital = skuad_working_capital,
+                    solvency_rank = solvency_rank,
                 )
             except Exception as e:
                 return Response({'message': 'Некорректный ввод данных!', 'error': f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
@@ -1927,10 +1927,10 @@ def UpdateRelationClient(request, pk):
                 else:
                     stage_review = None
                 
-                if request.data.get('reasons') != "":
-                    reasons = ReasonsForConsideration.objects.get(id=request.data.get('reasons'))  # string, "" -ok
-                else:
-                    reasons = None
+                # if request.data.get('reasons') != "":
+                #     reasons = ReasonsForConsideration.objects.get(id=request.data.get('reasons'))  # string, "" -ok
+                # else:
+                #     reasons = None
 
                 prd_catalog = CatalogPRD.objects.get(id=request.data.get('prd_catalog_id')) # Required
 
@@ -2099,6 +2099,79 @@ def UpdateRelationClient(request, pk):
                 else:
                     first_meeting_date = None
                 
+                if request.data.get('notice_debitor_date') != "":
+                    notice_debitor_date = request.data.get('notice_debitor_date')
+                else:
+                    notice_debitor_date = None
+                if request.data.get('notice_guarantor_date') != "":
+                    notice_guarantor_date = request.data.get('notice_guarantor_date')
+                else:
+                    notice_guarantor_date = None
+                if request.data.get('notice_pledgetor_date') != "":
+                    notice_pledgetor_date = request.data.get('notice_pledgetor_date')
+                else:
+                    notice_pledgetor_date = None
+                if request.data.get('revenue_knd_1151006_2023year') != "":
+                    revenue_knd_1151006_2023year = request.data.get('revenue_knd_1151006_2023year')
+                else:
+                    revenue_knd_1151006_2023year = None
+                if request.data.get('revenue_knd_0710099_2022year') != "":
+                    revenue_knd_0710099_2022year = request.data.get('revenue_knd_0710099_2022year')
+                else:
+                    revenue_knd_0710099_2022year = None
+                if request.data.get('ssch_knd_1151111') != "":
+                    ssch_knd_1151111 = request.data.get('ssch_knd_1151111')
+                else:
+                    ssch_knd_1151111 = None
+                if request.data.get('assets_2022year') != "":
+                    assets_2022year = request.data.get('assets_2022year')
+                else:
+                    assets_2022year = None
+                if request.data.get('taxes_paid_2023year') != "":
+                    taxes_paid_2023year = request.data.get('taxes_paid_2023year')
+                else:
+                    taxes_paid_2023year = None
+                if request.data.get('bankruptcy_proceedings_stage') != "":
+                    bankruptcy_proceedings_stage = request.data.get('bankruptcy_proceedings_stage')
+                else:
+                    bankruptcy_proceedings_stage = None
+                if request.data.get('debt_amount_unified_tax_service') != "":
+                    debt_amount_unified_tax_service = request.data.get('debt_amount_unified_tax_service')
+                else:
+                    debt_amount_unified_tax_service = None
+                if request.data.get('fot_knd_1151111') != "":
+                    fot_knd_1151111 = request.data.get('fot_knd_1151111')
+                else:
+                    fot_knd_1151111 = None
+                if request.data.get('profit_knd_1151006') != "":
+                    profit_knd_1151006 = request.data.get('profit_knd_1151006')
+                else:
+                    profit_knd_1151006 = None
+                if request.data.get('solvency_scoring_results') != "":
+                    solvency_scoring_results = request.data.get('solvency_scoring_results')
+                else:
+                    solvency_scoring_results = None
+                if request.data.get('skuad_current_business_value') != "":
+                    skuad_current_business_value = request.data.get('skuad_current_business_value')
+                else:
+                    skuad_current_business_value = None
+                if request.data.get('skuad_liquidation_business_value') != "":
+                    skuad_liquidation_business_value = request.data.get('skuad_liquidation_business_value')
+                else:
+                    skuad_liquidation_business_value = None
+                if request.data.get('skuad_refund_funds') != "":
+                    skuad_refund_funds = request.data.get('skuad_refund_funds')
+                else:
+                    skuad_refund_funds = None
+                if request.data.get('skuad_working_capital') != "":
+                    skuad_working_capital = request.data.get('skuad_working_capital')
+                else:
+                    skuad_working_capital = None
+                if request.data.get('solvency_rank') != "":
+                    solvency_rank = request.data.get('solvency_rank')
+                else:
+                    solvency_rank = None
+                
                 Client.objects.filter(id=pk).update(
                     first_name = request.data.get('first_name'), # string, "" -ok
                     second_name = request.data.get('second_name'), # string, "" -ok
@@ -2119,24 +2192,24 @@ def UpdateRelationClient(request, pk):
                     # reasons = reasons,                    
                     
                     # TODO Раскомментировать после доработки
-                    # notice_debitor_date = notice_debitor_date,
-                    # notice_guarantor_date = notice_guarantor_date,
-                    # notice_pledgetor_date = notice_pledgetor_date,
-                    # revenue_knd_1151006_2023year = revenue_knd_1151006_2023year,
-                    # revenue_knd_0710099_2022year = revenue_knd_0710099_2022year,
-                    # ssch_knd_1151111 = ssch_knd_1151111, 
-                    # assets_2022year = assets_2022year,
-                    # taxes_paid_2023year = taxes_paid_2023year,
-                    # bankruptcy_proceedings_stage = bankruptcy_proceedings_stage,
-                    # debt_amount_unified_tax_service = debt_amount_unified_tax_service,
-                    # fot_knd_1151111 = fot_knd_1151111,
-                    # profit_knd_1151006 = profit_knd_1151006,
-                    # solvency_scoring_results = solvency_scoring_results,
-                    # skuad_current_business_value = skuad_current_business_value,
-                    # skuad_liquidation_business_value = skuad_liquidation_business_value,
-                    # skuad_refund_funds = skuad_refund_funds,
-                    # skuad_working_capital = skuad_working_capital,
-                    # solvency_rank = solvency_rank,
+                    notice_debitor_date = notice_debitor_date,
+                    notice_guarantor_date = notice_guarantor_date,
+                    notice_pledgetor_date = notice_pledgetor_date,
+                    revenue_knd_1151006_2023year = revenue_knd_1151006_2023year,
+                    revenue_knd_0710099_2022year = revenue_knd_0710099_2022year,
+                    ssch_knd_1151111 = ssch_knd_1151111, 
+                    assets_2022year = assets_2022year,
+                    taxes_paid_2023year = taxes_paid_2023year,
+                    bankruptcy_proceedings_stage = bankruptcy_proceedings_stage,
+                    debt_amount_unified_tax_service = debt_amount_unified_tax_service,
+                    fot_knd_1151111 = fot_knd_1151111,
+                    profit_knd_1151006 = profit_knd_1151006,
+                    solvency_scoring_results = solvency_scoring_results,
+                    skuad_current_business_value = skuad_current_business_value,
+                    skuad_liquidation_business_value = skuad_liquidation_business_value,
+                    skuad_refund_funds = skuad_refund_funds,
+                    skuad_working_capital = skuad_working_capital,
+                    solvency_rank = solvency_rank,
                 )
             except Exception as e: 
                 return Response({'message': 'Некорректный ввод данных!',
@@ -2548,26 +2621,29 @@ SELECT
     t_kpi.technical_overdue_debt_amount as technical_overdue_debt_amount,
     
 -- Отлагательные меры
-    t_kpi_positive_decision_fields_1.value as nearest_deadline,
+    strftime('%d.%m.%Y',t_kpi_positive_decision_fields_1.value) as nearest_deadline,
 -- Изменения сроков уплаты
     t_kpi_positive_decision_fields_2.value as installment_plan,
 -- Мировое соглашение (+)			
     t_kpi_positive_decision_fields_3.value as case_number, -- Номер дела
-    t_kpi_positive_decision_fields_4.value as date_of_approvall, -- Дата утверждения МС судом
+    strftime('%d.%m.%Y',date(t_kpi_positive_decision_fields_4.value)) as date_of_approvall, -- Дата утверждения МС судом
     t_kpi_positive_decision_fields_5.value as sum_of_the_claims, -- Сумма требований вошедших в МС, тыс. руб.
-    t_kpi_positive_decision_fields_6.value as end_date, -- Дата окончания МС
+    strftime('%d.%m.%Y',date(t_kpi_positive_decision_fields_6.value)) as end_date, -- Дата окончания МС
     t_kpi_positive_decision_fields_7.value as amount_of_fulfilled, -- Сумма исполненных обязательств, тыс. руб.
 
 
-    '' as pole1,
-    '' as pole2,
-    '' as pole3,
+--    '' as pole1,
+    t_kpi_positive_decision_fields_12.value as property_pledge,
+--    '' as pole2,
+    t_kpi_positive_decision_fields_13.value as surety,
+--    '' as pole3,
+    t_kpi_positive_decision_fields_14.value as guarantee,
     --'123' as stage
     t_review_stage.stage as stage,
 
-    t_client.notice_debitor_date as notice_debitor_date,
-	t_client.notice_guarantor_date as notice_guarantor_date,
-	t_client.notice_pledgetor_date as notice_pledgetor_date,
+    strftime('%d.%m.%Y',t_client.notice_debitor_date) as notice_debitor_date,
+	strftime('%d.%m.%Y', t_client.notice_guarantor_date) as notice_guarantor_date,
+	strftime('%d.%m.%Y', t_client.notice_pledgetor_date) as notice_pledgetor_date,
 	t_client.revenue_knd_1151006_2023year as revenue_knd_1151006_2023year,
 	t_client.revenue_knd_0710099_2022year as revenue_knd_0710099_2022year,
 	t_client.ssch_knd_1151111 as ssch_knd_1151111,
@@ -2690,6 +2766,27 @@ SELECT
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_11
   ON t_kpi.id = t_kpi_positive_decision_fields_11.kpi_id
   AND t_kpi_positive_decision_fields_11.fields_of_pos_decision_id = t_positive_decision_fields_11.id
+
+  LEFT JOIN positive_decision_fields as t_positive_decision_fields_12
+  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_12.positive_decision_id
+  AND t_positive_decision_fields_12.origin = 'property_pledge'
+  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_12
+  ON t_kpi.id = t_kpi_positive_decision_fields_12.kpi_id
+  AND t_kpi_positive_decision_fields_12.fields_of_pos_decision_id = t_positive_decision_fields_12.id
+  
+  LEFT JOIN positive_decision_fields as t_positive_decision_fields_13
+  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_13.positive_decision_id
+  AND t_positive_decision_fields_13.origin = 'surety'
+  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_13
+  ON t_kpi.id = t_kpi_positive_decision_fields_13.kpi_id
+  AND t_kpi_positive_decision_fields_13.fields_of_pos_decision_id = t_positive_decision_fields_12.id
+  
+  LEFT JOIN positive_decision_fields as t_positive_decision_fields_14
+  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_14.positive_decision_id
+  AND t_positive_decision_fields_14.origin = 'guarantee'
+  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_14
+  ON t_kpi.id = t_kpi_positive_decision_fields_14.kpi_id
+  AND t_kpi_positive_decision_fields_14.fields_of_pos_decision_id = t_positive_decision_fields_14.id
 
   --ПРД каталог
  LEFT JOIN prd_catalog as t_prd_catalog

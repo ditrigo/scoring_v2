@@ -72,6 +72,7 @@ const NewClientPage = () => {
     prd_catalog_id: "",
     reasons: "",
     // New fields
+    // New fields
     notice_debitor_date: "",
     notice_guarantor_date: "",
     notice_pledgetor_date: "",
@@ -79,13 +80,13 @@ const NewClientPage = () => {
     revenue_knd_0710099_2022year: "",
     ssch_knd_1151111: "",
     assets_2022year: "",
-    reastaxes_paid_2023yearns: "",
-    reasobankruptcy_proceedings_stagens: "",
+    taxes_paid_2023year: "",
+    bankruptcy_proceedings_stage: "",
     debt_amount_unified_tax_service: "",
     fot_knd_1151111: "",
     profit_knd_1151006: "",
     solvency_scoring_results: "",
-    reaskuad_current_business_valuesons: "",
+    skuad_current_business_value: "",
     skuad_liquidation_business_value: "",
     skuad_refund_funds: "",
     skuad_working_capital: "",
@@ -346,6 +347,28 @@ const NewClientPage = () => {
         stage_review: clientData.stage_review,
         reasons: clientData.reasons || "",
 
+         // New
+         notice_debitor_date: clientData.notice_debitor_date,
+         notice_guarantor_date: clientData.notice_guarantor_date,
+         notice_pledgetor_date: clientData.notice_pledgetor_date,
+         revenue_knd_1151006_2023year: clientData.revenue_knd_1151006_2023year,
+         revenue_knd_0710099_2022year: clientData.revenue_knd_0710099_2022year,
+         ssch_knd_1151111: clientData.ssch_knd_1151111,
+         assets_2022year: clientData.assets_2022year,
+         taxes_paid_2023year: clientData.taxes_paid_2023year,
+         bankruptcy_proceedings_stage: clientData.bankruptcy_proceedings_stage,
+         debt_amount_unified_tax_service:
+           clientData.debt_amount_unified_tax_service,
+         fot_knd_1151111: clientData.fot_knd_1151111,
+         profit_knd_1151006: clientData.profit_knd_1151006,
+         solvency_scoring_results: clientData.solvency_scoring_results,
+         skuad_current_business_value: clientData.skuad_current_business_value,
+         skuad_liquidation_business_value:
+           clientData.skuad_liquidation_business_value,
+         skuad_refund_funds: clientData.skuad_refund_funds,
+         skuad_working_capital: clientData.skuad_working_capital,
+         solvency_rank: clientData.solvency_rank,
+
         fields_of_positive_decision: [...Object.values(dataOfFieldsDec)],
       }
       console.log("🚀jsonForUpdate: ", jsonForUpdate)
@@ -374,8 +397,7 @@ const NewClientPage = () => {
           },
           representitive_client_id: {
             representative_first_name: clientData.representative_first_name,
-            // representative_second_name: clientData.representative_second_name,
-            // representative_patronymic: clientData.representative_patronymic,
+
             representative_position: clientData.representative_position,
             representative_phone: clientData.representative_phone,
             representative_email: clientData.representative_email,
@@ -392,7 +414,7 @@ const NewClientPage = () => {
           kpi_id: {
             positive_decision_date: clientData.positive_decision_date,
             measure_provided_duration: clientData.measure_provided_duration,
-            // oiv_request_sender: clientData.oiv_request_sender,
+            oiv_request_sender: clientData.oiv_request_sender,
             settled_debt_amount: clientData.settled_debt_amount,
             received_amount_budget: clientData.received_amount_budget,
             overdue_debt_amount: clientData.overdue_debt_amount,
@@ -402,8 +424,7 @@ const NewClientPage = () => {
             negative_decision_type: clientData.negative_decision_type,
           },
           first_name: clientData.first_name,
-          // second_name: "",
-          // patronymic: "",
+
           inn: clientData.inn,
           first_meeting_date: clientData.first_meeting_date,
           event_date: clientData.event_date,
@@ -411,7 +432,30 @@ const NewClientPage = () => {
           // DENIS
           prd_catalog_id: clientData.prd_catalog_id,
           stage_review: clientData.stage_review,
-          reasons: clientData.reasons,
+          // reasons: clientData.reasons,
+          // New
+          notice_debitor_date: clientData.notice_debitor_date,
+          notice_guarantor_date: clientData.notice_guarantor_date,
+          notice_pledgetor_date: clientData.notice_pledgetor_date,
+          revenue_knd_1151006_2023year: clientData.revenue_knd_1151006_2023year,
+          revenue_knd_0710099_2022year: clientData.revenue_knd_0710099_2022year,
+          ssch_knd_1151111: clientData.ssch_knd_1151111,
+          assets_2022year: clientData.assets_2022year,
+          taxes_paid_2023year: clientData.taxes_paid_2023year,
+          bankruptcy_proceedings_stage:
+            clientData.bankruptcy_proceedings_stage,
+          debt_amount_unified_tax_service:
+            clientData.debt_amount_unified_tax_service,
+          fot_knd_1151111: clientData.fot_knd_1151111,
+          profit_knd_1151006: clientData.profit_knd_1151006,
+          solvency_scoring_results: clientData.solvency_scoring_results,
+          skuad_current_business_value:
+            clientData.skuad_current_business_value,
+          skuad_liquidation_business_value:
+            clientData.skuad_liquidation_business_value,
+          skuad_refund_funds: clientData.skuad_refund_funds,
+          skuad_working_capital: clientData.skuad_working_capital,
+          solvency_rank: clientData.solvency_rank,
 
           fields_of_positive_decision: [...Object.values(dataOfFieldsDec)],
         }
@@ -540,24 +584,26 @@ const NewClientPage = () => {
         reasons: client.reasons?.id,
         fields_of_positive_decision: client.fields_of_positive_decision,
         // New fields
-        notice_debitor_date: "",
-        notice_guarantor_date: "",
-        notice_pledgetor_date: "",
-        revenue_knd_1151006_2023year: "",
-        revenue_knd_0710099_2022year: "",
-        ssch_knd_1151111: "",
-        assets_2022year: "",
-        reastaxes_paid_2023yearns: "",
-        reasobankruptcy_proceedings_stagens: "",
-        debt_amount_unified_tax_service: "",
-        fot_knd_1151111: "",
-        profit_knd_1151006: "",
-        solvency_scoring_results: "",
-        reaskuad_current_business_valuesons: "",
-        skuad_liquidation_business_value: "",
-        skuad_refund_funds: "",
-        skuad_working_capital: "",
-        solvency_rank: "",
+        notice_debitor_date: client.notice_debitor_date || "",
+        notice_guarantor_date: client.notice_guarantor_date || "",
+        notice_pledgetor_date: client.notice_pledgetor_date || "",
+        revenue_knd_1151006_2023year: client.revenue_knd_1151006_2023year || "",
+        revenue_knd_0710099_2022year: client.revenue_knd_0710099_2022year || "",
+        ssch_knd_1151111: client.ssch_knd_1151111 || "",
+        assets_2022year: client.assets_2022year || "",
+        taxes_paid_2023year: client.taxes_paid_2023year || "",
+        bankruptcy_proceedings_stage: client.bankruptcy_proceedings_stage || "",
+        debt_amount_unified_tax_service:
+          client.debt_amount_unified_tax_service || "",
+        fot_knd_1151111: client.fot_knd_1151111 || "",
+        profit_knd_1151006: client.profit_knd_1151006 || "",
+        solvency_scoring_results: client.solvency_scoring_results || "",
+        skuad_current_business_value: client.skuad_current_business_value || "",
+        skuad_liquidation_business_value:
+          client.skuad_liquidation_business_value || "",
+        skuad_refund_funds: client.skuad_refund_funds || "",
+        skuad_working_capital: client.skuad_working_capital || "",
+        solvency_rank: client.solvency_rank || "",
       })
 
       client.fields_of_positive_decision.map((el) => {
@@ -899,18 +945,18 @@ const NewClientPage = () => {
 
         return el.origin === "reasons_for_consideration"
           ? {
-              label: el.description,
-              key: el.id,
-              type: "select",
-              options: transformDynamicOptionsData(reasonsConsideration, el.id),
-            }
+            label: el.description,
+            key: el.id,
+            type: "select",
+            options: transformDynamicOptionsData(reasonsConsideration, el.id),
+          }
           : {
-              label: el.description,
-              key: el.id,
-              type: el.type_of_fields === "datetime" ? "date" : "text",
-              inputType: el.type_of_fields === "integer" ? "number" : "text",
-              isPositive: true,
-            }
+            label: el.description,
+            key: el.id,
+            type: el.type_of_fields === "datetime" ? "date" : "text",
+            inputType: el.type_of_fields === "integer" ? "number" : "text",
+            isPositive: true,
+          }
       })
 
       setfieldsOfPosDec(res)
@@ -1066,71 +1112,71 @@ const NewClientPage = () => {
 
     // // Для МС (поля смотреть из консоли)
     clientData.positive_decision_type === 1 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[0],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[0],
     clientData.positive_decision_type === 1 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[1],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[1],
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[11]) ||
-      "",
+    "",
     clientData.positive_decision_type === 1 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[2],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[2],
 
     // ДЛЯ Рассрочка
     clientData.positive_decision_type === 2 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[0],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[0],
     clientData.positive_decision_type === 2 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[1],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[1],
     clientData.positive_decision_type === 2 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[2],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[2],
     clientData.positive_decision_type === 2 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[3],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[3],
 
     // ДЛЯ Отлагательные меры
     clientData.positive_decision_type === 3 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[0],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[0],
     clientData.positive_decision_type === 3 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[1],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[1],
     clientData.positive_decision_type === 3 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[2],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[2],
 
     // ДЛЯ Отсрочка
     clientData.positive_decision_type === 4 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[0],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[0],
     clientData.positive_decision_type === 4 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[1],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[1],
     clientData.positive_decision_type === 4 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[2],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[2],
     clientData.positive_decision_type === 4 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[3],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[3],
 
     // ДЛЯ Инвестиционный кредит
     clientData.positive_decision_type === 5 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[0],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[0],
     clientData.positive_decision_type === 5 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[1],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[1],
     clientData.positive_decision_type === 5 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[2],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[2],
     clientData.positive_decision_type === 5 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[3],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[3],
 
     //Новая серия полей
 
@@ -1141,24 +1187,24 @@ const NewClientPage = () => {
       type: "title2",
     },
     clientData.positive_decision_type === 1 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[3],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[3],
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[4]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[6]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[5]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[7]) ||
-      "",
+    "",
 
     // ДЛЯ Рассрочка
     clientData.positive_decision_type === 2 && {
@@ -1169,7 +1215,7 @@ const NewClientPage = () => {
     (clientData.positive_decision_type === 2 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[4]) ||
-      "",
+    "",
 
     // ДЛЯ Отлагательные меры
     clientData.positive_decision_type === 3 && {
@@ -1180,7 +1226,7 @@ const NewClientPage = () => {
     (clientData.positive_decision_type === 3 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[3]) ||
-      "",
+    "",
 
     // ДЛЯ Отсрочка
     clientData.positive_decision_type === 4 && {
@@ -1191,7 +1237,7 @@ const NewClientPage = () => {
     (clientData.positive_decision_type === 4 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[4]) ||
-      "",
+    "",
 
     // ДЛЯ Инвестиционный кредит
     clientData.positive_decision_type === 5 && {
@@ -1202,7 +1248,7 @@ const NewClientPage = () => {
     (clientData.positive_decision_type === 5 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[4]) ||
-      "",
+    "",
 
     // Новый блок
     clientData.positive_decision_type && {
@@ -1214,29 +1260,29 @@ const NewClientPage = () => {
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[8]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[9]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[10]) ||
-      "",
+    "",
 
     // ДЛЯ Рассрочка
     (clientData.positive_decision_type === 2 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[5]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 2 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[6]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 2 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[7]) ||
-      "",
+    "",
 
     // Для Отлагательные меры нет
 
@@ -1244,29 +1290,29 @@ const NewClientPage = () => {
     (clientData.positive_decision_type === 4 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[5]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 4 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[6]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 4 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[7]) ||
-      "",
+    "",
 
     // ДЛЯ Инвестиционный кредит
     (clientData.positive_decision_type === 5 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[5]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 5 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[6]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 5 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[7]) ||
-      "",
+    "",
 
     {
       label: "Вид отрицаетльного решения",
@@ -1444,8 +1490,8 @@ const NewClientPage = () => {
                       placeholder={
                         params.id && client
                           ? el?.options.filter(
-                              (opt) => opt.id === clientData[el.key]
-                            )[0]?.label
+                            (opt) => opt.id === clientData[el.key]
+                          )[0]?.label
                           : el.label
                       }
                       onChange={handleChange}
