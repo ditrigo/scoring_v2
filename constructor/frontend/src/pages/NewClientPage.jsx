@@ -91,7 +91,10 @@ const NewClientPage = () => {
     skuad_working_capital: "",
     solvency_rank: "",
   })
-  const [validatorConfig, setValidatorCOnfig] = useState({
+  const isRequired = {
+    message: "Это поле обязательно для заполнения",
+  }
+  const validatorConfig = {
     prd_catalog_id: {
       isRequired: {
         message: "Это поле обязательно для заполнения",
@@ -206,7 +209,194 @@ const NewClientPage = () => {
         value: 36,
       },
     },
-  })
+    1: {
+      ...(clientData.positive_decision_type === 1 && { isRequired }),
+    },
+    2: {
+      ...(clientData.positive_decision_type === 1 && { isRequired }),
+      max: {
+        message: "Не более 36",
+        value: 36,
+      },
+    },
+
+    3: {
+      ...(clientData.positive_decision_type === 1 && { isRequired }),
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    9: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    10: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    11: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    13: {
+      ...(clientData.positive_decision_type === 2 && { isRequired }),
+    },
+    14: {
+      ...(clientData.positive_decision_type === 2 && { isRequired }),
+
+      max: {
+        message: "Не более 36",
+        value: 36,
+      },
+    },
+    15: {
+      ...(clientData.positive_decision_type === 2 && { isRequired }),
+    },
+    16: {
+      ...(clientData.positive_decision_type === 1 && { isRequired }),
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    17: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    18: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    19: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    20: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    21: {
+      ...(clientData.positive_decision_type === 3 && { isRequired }),
+    },
+    22: {
+      ...(clientData.positive_decision_type === 3 && { isRequired }),
+
+      max: {
+        message: "Не более 36",
+        value: 36,
+      },
+    },
+    23: {
+      ...(clientData.positive_decision_type === 3 && { isRequired }),
+
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    25: {
+      ...(clientData.positive_decision_type === 4 && { isRequired }),
+    },
+    26: {
+      ...(clientData.positive_decision_type === 4 && { isRequired }),
+
+      max: {
+        message: "Не более 36",
+        value: 36,
+      },
+    },
+    27: {
+      ...(clientData.positive_decision_type === 4 && { isRequired }),
+    },
+    28: {
+      ...(clientData.positive_decision_type === 4 && { isRequired }),
+
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    30: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    31: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    32: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    33: {
+      ...(clientData.positive_decision_type === 5 && { isRequired }),
+    },
+    34: {
+      ...(clientData.positive_decision_type === 5 && { isRequired }),
+
+      max: {
+        message: "Не более 36",
+        value: 36,
+      },
+    },
+    35: {
+      ...(clientData.positive_decision_type === 5 && { isRequired }),
+    },
+    36: {
+      ...(clientData.positive_decision_type === 5 && { isRequired }),
+
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    37: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    38: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    39: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+    40: {
+      maxCount: {
+        message: "Не больше 6 знаков",
+        value: 6,
+      },
+    },
+  }
+  const [, setValidatorCOnfig] = useState({})
 
   const isValid = Object.keys(errors).length === 0
 
@@ -330,10 +520,10 @@ const NewClientPage = () => {
         event_description: clientData.event_description,
         kpi_id: {
           id: client.kpi?.id || "",
-          positive_decision_date: clientData.positive_decision_date,
-          measure_provided_duration: clientData.measure_provided_duration,
+          // positive_decision_date: clientData.positive_decision_date,
+          // measure_provided_duration: clientData.measure_provided_duration,
           // oiv_request_sender: clientData.oiv_request_sender,
-          settled_debt_amount: clientData.settled_debt_amount,
+          // settled_debt_amount: clientData.settled_debt_amount,
           received_amount_budget: clientData.received_amount_budget,
           overdue_debt_amount: clientData.overdue_debt_amount,
           technical_overdue_debt_amount:
@@ -390,10 +580,10 @@ const NewClientPage = () => {
             support_duration: clientData.support_duration,
           },
           kpi_id: {
-            positive_decision_date: clientData.positive_decision_date,
-            measure_provided_duration: clientData.measure_provided_duration,
+            // positive_decision_date: clientData.positive_decision_date,
+            // measure_provided_duration: clientData.measure_provided_duration,
             // oiv_request_sender: clientData.oiv_request_sender,
-            settled_debt_amount: clientData.settled_debt_amount,
+            // settled_debt_amount: clientData.settled_debt_amount,
             received_amount_budget: clientData.received_amount_budget,
             overdue_debt_amount: clientData.overdue_debt_amount,
             technical_overdue_debt_amount:
@@ -411,7 +601,7 @@ const NewClientPage = () => {
           // DENIS
           prd_catalog_id: clientData.prd_catalog_id,
           stage_review: clientData.stage_review,
-          reasons: clientData.reasons,
+          // reasons: clientData.reasons,
 
           fields_of_positive_decision: [...Object.values(dataOfFieldsDec)],
         }
@@ -526,10 +716,10 @@ const NewClientPage = () => {
         event_description: client.event_description,
         positive_decision_type: client.kpi?.positive_decision_type || "",
         negative_decision_type: client.kpi?.negative_decision_type || "",
-        positive_decision_date: client.kpi?.positive_decision_date || "",
-        measure_provided_duration: client.kpi?.measure_provided_duration || "",
-        oiv_request_sender: client.kpi?.oiv_request_sender || "",
-        settled_debt_amount: client.kpi?.settled_debt_amount || "",
+        // positive_decision_date: client.kpi?.positive_decision_date || "",
+        // measure_provided_duration: client.kpi?.measure_provided_duration || "",
+        // oiv_request_sender: client.kpi?.oiv_request_sender || "",
+        // settled_debt_amount: client.kpi?.settled_debt_amount || "",
         received_amount_budget: client.kpi?.received_amount_budget || "",
         overdue_debt_amount: client.kpi?.overdue_debt_amount || "",
         technical_overdue_debt_amount:
@@ -537,7 +727,7 @@ const NewClientPage = () => {
         // DENIS
         prd_catalog_id: client.prd_catalog.id,
         stage_review: client.stage_review.id,
-        reasons: client.reasons?.id,
+        // reasons: client.reasons?.id,
         fields_of_positive_decision: client.fields_of_positive_decision,
         // New fields
         notice_debitor_date: "",
@@ -571,267 +761,6 @@ const NewClientPage = () => {
   }, [client])
 
   useEffect(() => {
-    setValidatorCOnfig({
-      prd_catalog_id: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-      },
-      manager_id: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-      },
-      first_name: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-      },
-      inn: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-        count: {
-          message: "ИНН должен содержать от 10 символов.",
-          value: 10,
-        },
-        maxCount: {
-          message: "Не больше 12 знаков",
-          value: 12,
-        },
-        not11: {
-          message: "Не может содержать 11 знаков",
-          value: 11,
-        },
-      },
-      stage_review: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-      },
-      region_id: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-      },
-      applicant_status: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-      },
-      control_point: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-      },
-      debt_amount: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      debt_type: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-      },
-      category: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-      },
-      support_measure: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-      },
-      event_date: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-      },
-      event_description: {
-        isRequired: {
-          message: "Это поле обязательно для заполнения",
-        },
-        maxCount: {
-          message: "Не больше 200 знаков",
-          value: 200,
-        },
-      },
-      received_amount_budget: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      overdue_debt_amount: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      technical_overdue_debt_amount: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      support_duration: {
-        max: {
-          message: "Не более 36",
-          value: 36,
-        },
-      },
-      2: {
-        max: {
-          message: "Не более 36",
-          value: 36,
-        },
-      },
-      3: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      9: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      10: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      11: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      14: {
-        max: {
-          message: "Не более 36",
-          value: 36,
-        },
-      },
-      16: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      17: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      18: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      19: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      20: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      22: {
-        max: {
-          message: "Не более 36",
-          value: 36,
-        },
-      },
-      23: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      26: {
-        max: {
-          message: "Не более 36",
-          value: 36,
-        },
-      },
-      28: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      30: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      31: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      32: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      34: {
-        max: {
-          message: "Не более 36",
-          value: 36,
-        },
-      },
-      36: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      37: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      38: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      39: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-      40: {
-        maxCount: {
-          message: "Не больше 6 знаков",
-          value: 6,
-        },
-      },
-    })
-    setErrors({})
     validate()
 
     if (params.id && client) {
@@ -871,8 +800,7 @@ const NewClientPage = () => {
       console.log(data.data)
 
       const res = data.data.map((el) => {
-        if (client) {
-          console.log("здесь должна быть подгрузка в стейт пустых значений")
+        if (!client) {
           setClientData((prevState) => ({
             ...prevState,
             [el.id]: "",
@@ -883,19 +811,17 @@ const NewClientPage = () => {
           flag: "",
         })) // Нужно изменить стейт для того, чтоб подгрузить значения в fieldsOfPosDec при редактировании. Здесь все сложно...
 
-        if (el.required) {
-          console.log("Required")
-          setValidatorCOnfig((prevState) => ({
-            ...prevState,
-            [el.id]: {
-              ...el.id,
-              isRequired: {
-                message: "Это поле обязательно для заполнения",
-              },
-            },
-          }))
-        }
-        // console.log(validatorConfig)
+        // if (el.required) {
+        //   console.log("Required")
+        //   setValidatorCOnfig((prevState) => ({
+        //     ...prevState,
+        //     [el.id]: {
+        //       isRequired: {
+        //         message: "Это поле обязательно для заполнения",
+        //       },
+        //     },
+        //   }))
+        // }
 
         return el.origin === "reasons_for_consideration"
           ? {
