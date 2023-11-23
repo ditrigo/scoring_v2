@@ -721,6 +721,10 @@ const NewClientPage = () => {
   }, [clientData])
 
   const [marker, setMarker] = useState(true)
+
+  const transformValue = (value) => {
+    return +value
+  }
   const getfieldsOfPositivDecision = async (id) => {
     // console.log("Вызов функции получения...")
     setDataOfFieldsDec([])
@@ -742,10 +746,16 @@ const NewClientPage = () => {
             console.log(dec)
             setClientData((prevState) => ({
               ...prevState,
-              [dec.fields_of_pos_decision]:
-                dec.fields_of_pos_decision === 15 || 27 || 35
-                  ? +dec.value
-                  : dec.value,
+              [dec.fields_of_pos_decision]: dec.value,
+              ...(dec.fields_of_pos_decision === 15 && {
+                [dec.fields_of_pos_decision]: transformValue(dec.value),
+              }),
+              ...(dec.fields_of_pos_decision === 27 && {
+                [dec.fields_of_pos_decision]: transformValue(dec.value),
+              }),
+              ...(dec.fields_of_pos_decision === 35 && {
+                [dec.fields_of_pos_decision]: transformValue(dec.value),
+              }),
             }))
             setDataOfFieldsDec((prevState) => ({
               ...prevState,
