@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import TextField from "../components/CrmPage/Form/textField"
 import Divider from "../components/CrmPage/Form/Divider"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
 import { validator } from "../components/utils/validator"
 import SelectSearchField from "../components/CrmPage/Form/SelectSearchField"
@@ -70,7 +70,7 @@ const NewClientPage = () => {
     // DENIS
     stage_review: "",
     prd_catalog_id: "",
-    reasons: "",
+    // reasons: "",
     // New fields
     notice_debitor_date: "",
     notice_guarantor_date: "",
@@ -79,13 +79,13 @@ const NewClientPage = () => {
     revenue_knd_0710099_2022year: "",
     ssch_knd_1151111: "",
     assets_2022year: "",
-    reastaxes_paid_2023yearns: "",
-    reasobankruptcy_proceedings_stagens: "",
+    taxes_paid_2023year: "",
+    bankruptcy_proceedings_stage: "",
     debt_amount_unified_tax_service: "",
     fot_knd_1151111: "",
     profit_knd_1151006: "",
     solvency_scoring_results: "",
-    reaskuad_current_business_valuesons: "",
+    skuad_current_business_value: "",
     skuad_liquidation_business_value: "",
     skuad_refund_funds: "",
     skuad_working_capital: "",
@@ -327,7 +327,7 @@ const NewClientPage = () => {
       ...(clientData.positive_decision_type === 5 && { maxCount: maxCount(6) }),
     },
   }
-  console.log("🚀 validatorConfig:", validatorConfig)
+  // console.log("🚀 validatorConfig:", validatorConfig)
   const isValid = Object.keys(errors).length === 0
 
   const validate = () => {
@@ -461,7 +461,28 @@ const NewClientPage = () => {
 
         prd_catalog_id: clientData.prd_catalog_id,
         stage_review: clientData.stage_review,
-        reasons: clientData.reasons || "",
+        // reasons: clientData.reasons || "",
+        // New
+        notice_debitor_date: clientData.notice_debitor_date,
+        notice_guarantor_date: clientData.notice_guarantor_date,
+        notice_pledgetor_date: clientData.notice_pledgetor_date,
+        revenue_knd_1151006_2023year: clientData.revenue_knd_1151006_2023year,
+        revenue_knd_0710099_2022year: clientData.revenue_knd_0710099_2022year,
+        ssch_knd_1151111: clientData.ssch_knd_1151111,
+        assets_2022year: clientData.assets_2022year,
+        taxes_paid_2023year: clientData.taxes_paid_2023year,
+        bankruptcy_proceedings_stage: clientData.bankruptcy_proceedings_stage,
+        debt_amount_unified_tax_service:
+          clientData.debt_amount_unified_tax_service,
+        fot_knd_1151111: clientData.fot_knd_1151111,
+        profit_knd_1151006: clientData.profit_knd_1151006,
+        solvency_scoring_results: clientData.solvency_scoring_results,
+        skuad_current_business_value: clientData.skuad_current_business_value,
+        skuad_liquidation_business_value:
+          clientData.skuad_liquidation_business_value,
+        skuad_refund_funds: clientData.skuad_refund_funds,
+        skuad_working_capital: clientData.skuad_working_capital,
+        solvency_rank: clientData.solvency_rank,
 
         fields_of_positive_decision: [...Object.values(dataOfFieldsDec)],
       }
@@ -491,8 +512,7 @@ const NewClientPage = () => {
           },
           representitive_client_id: {
             representative_first_name: clientData.representative_first_name,
-            // representative_second_name: clientData.representative_second_name,
-            // representative_patronymic: clientData.representative_patronymic,
+
             representative_position: clientData.representative_position,
             representative_phone: clientData.representative_phone,
             representative_email: clientData.representative_email,
@@ -519,8 +539,7 @@ const NewClientPage = () => {
             negative_decision_type: clientData.negative_decision_type,
           },
           first_name: clientData.first_name,
-          // second_name: "",
-          // patronymic: "",
+
           inn: clientData.inn,
           first_meeting_date: clientData.first_meeting_date,
           event_date: clientData.event_date,
@@ -528,7 +547,28 @@ const NewClientPage = () => {
           // DENIS
           prd_catalog_id: clientData.prd_catalog_id,
           stage_review: clientData.stage_review,
-          reasons: clientData.reasons,
+          // reasons: clientData.reasons,
+          // New
+          notice_debitor_date: clientData.notice_debitor_date,
+          notice_guarantor_date: clientData.notice_guarantor_date,
+          notice_pledgetor_date: clientData.notice_pledgetor_date,
+          revenue_knd_1151006_2023year: clientData.revenue_knd_1151006_2023year,
+          revenue_knd_0710099_2022year: clientData.revenue_knd_0710099_2022year,
+          ssch_knd_1151111: clientData.ssch_knd_1151111,
+          assets_2022year: clientData.assets_2022year,
+          taxes_paid_2023year: clientData.taxes_paid_2023year,
+          bankruptcy_proceedings_stage: clientData.bankruptcy_proceedings_stage,
+          debt_amount_unified_tax_service:
+            clientData.debt_amount_unified_tax_service,
+          fot_knd_1151111: clientData.fot_knd_1151111,
+          profit_knd_1151006: clientData.profit_knd_1151006,
+          solvency_scoring_results: clientData.solvency_scoring_results,
+          skuad_current_business_value: clientData.skuad_current_business_value,
+          skuad_liquidation_business_value:
+            clientData.skuad_liquidation_business_value,
+          skuad_refund_funds: clientData.skuad_refund_funds,
+          skuad_working_capital: clientData.skuad_working_capital,
+          solvency_rank: clientData.solvency_rank,
 
           fields_of_positive_decision: [...Object.values(dataOfFieldsDec)],
         }
@@ -620,10 +660,6 @@ const NewClientPage = () => {
         info_source_number: client.information_source?.info_source_number || "",
         representative_first_name:
           client.representitive_client.representative_first_name || "",
-        // representative_second_name:
-        //   client.representitive_client.representative_second_name,
-        // representative_patronymic:
-        //   client.representitive_client.representative_patronymic,
         representative_position:
           client.representitive_client.representative_position || "",
         representative_phone:
@@ -656,33 +692,27 @@ const NewClientPage = () => {
         // reasons: client.reasons?.id,
         fields_of_positive_decision: client.fields_of_positive_decision,
         // New fields
-        notice_debitor_date: "",
-        notice_guarantor_date: "",
-        notice_pledgetor_date: "",
-        revenue_knd_1151006_2023year: "",
-        revenue_knd_0710099_2022year: "",
-        ssch_knd_1151111: "",
-        assets_2022year: "",
-        reastaxes_paid_2023yearns: "",
-        reasobankruptcy_proceedings_stagens: "",
-        debt_amount_unified_tax_service: "",
-        fot_knd_1151111: "",
-        profit_knd_1151006: "",
-        solvency_scoring_results: "",
-        reaskuad_current_business_valuesons: "",
-        skuad_liquidation_business_value: "",
-        skuad_refund_funds: "",
-        skuad_working_capital: "",
-        solvency_rank: "",
+        notice_debitor_date: client.notice_debitor_date || "",
+        notice_guarantor_date: client.notice_guarantor_date || "",
+        notice_pledgetor_date: client.notice_pledgetor_date || "",
+        revenue_knd_1151006_2023year: client.revenue_knd_1151006_2023year || "",
+        revenue_knd_0710099_2022year: client.revenue_knd_0710099_2022year || "",
+        ssch_knd_1151111: client.ssch_knd_1151111 || "",
+        assets_2022year: client.assets_2022year || "",
+        taxes_paid_2023year: client.taxes_paid_2023year || "",
+        bankruptcy_proceedings_stage: client.bankruptcy_proceedings_stage || "",
+        debt_amount_unified_tax_service:
+          client.debt_amount_unified_tax_service || "",
+        fot_knd_1151111: client.fot_knd_1151111 || "",
+        profit_knd_1151006: client.profit_knd_1151006 || "",
+        solvency_scoring_results: client.solvency_scoring_results || "",
+        skuad_current_business_value: client.skuad_current_business_value || "",
+        skuad_liquidation_business_value:
+          client.skuad_liquidation_business_value || "",
+        skuad_refund_funds: client.skuad_refund_funds || "",
+        skuad_working_capital: client.skuad_working_capital || "",
+        solvency_rank: client.solvency_rank || "",
       })
-
-      // client.fields_of_positive_decision.map((el) => {
-      //   console.log("подгрузка полей")
-      //   setClientData((prevState) => ({
-      //     ...prevState,
-      //     [el.fields_of_pos_decision]: el.value,
-      //   }))
-      // })
     }
   }, [client])
 
@@ -712,7 +742,10 @@ const NewClientPage = () => {
             console.log(dec)
             setClientData((prevState) => ({
               ...prevState,
-              [dec.fields_of_pos_decision]: dec.value,
+              [dec.fields_of_pos_decision]:
+                dec.fields_of_pos_decision === 15 || 27 || 35
+                  ? +dec.value
+                  : dec.value,
             }))
             setDataOfFieldsDec((prevState) => ({
               ...prevState,
@@ -1038,11 +1071,12 @@ const NewClientPage = () => {
       "",
 
     // Новый блок
-    clientData.positive_decision_type && {
-      label: "Вид предоставляемого обеспечения",
-      key: "",
-      type: "title2",
-    },
+    clientData.positive_decision_type &&
+      clientData.positive_decision_type !== 3 && {
+        label: "Вид предоставляемого обеспечения",
+        key: "",
+        type: "title2",
+      },
     // ДЛЯ МС
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
@@ -1109,11 +1143,11 @@ const NewClientPage = () => {
       options: negative,
     },
 
-    {
-      label: "5. Ключевые показатели эффективности (KPI)",
-      key: "",
-      type: "title",
-    },
+    // {
+    //   label: "5. Ключевые показатели эффективности (KPI)",
+    //   key: "",
+    //   type: "title",
+    // },
     {
       label: "Сумма, поступившая в бюджет (тыс руб)",
       key: "received_amount_budget",
@@ -1174,6 +1208,7 @@ const NewClientPage = () => {
     {
       label: "Выручка за предыдущий год",
       key: "revenue_knd_0710099_2022year",
+      type: "text",
       inputType: "number",
     },
     {
@@ -1214,7 +1249,7 @@ const NewClientPage = () => {
       inputType: "number",
     },
     {
-      label: "Результаты скоринга платежеспособность (не передается на бек)",
+      label: "Результаты скоринга платежеспособности",
       key: "solvency_scoring_results",
       type: "text",
       // options: solvencyRisk,
@@ -1223,11 +1258,13 @@ const NewClientPage = () => {
       label: "Из выписки СКУАД  - Текущая стоимость бизнеса",
       key: "skuad_current_business_value",
       type: "text",
+      inputType: "number",
     },
     {
       label: "Из выписки СКУАД  - Ликвидационная стоимость бизнеса",
       key: "skuad_liquidation_business_value",
       type: "text",
+      inputType: "number",
     },
     {
       label: "Из выписки СКУАД - Возвратность средств",
