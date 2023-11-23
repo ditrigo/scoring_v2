@@ -2608,7 +2608,9 @@ SELECT
     t_kpi_positive_decision_fields_10.value as measure_provided_duration, -- На сколько предоставлена мера, в месяцах
     
 --    t_kpi.measure_provided_duration as measure_provided_duration, -- На сколько предоставлена мера, в месяцах - динамика
-    '' as merodic,
+    -- '' as merodic,
+    t_reasons_for_consideration.reasons as reasons, 
+
     -- t_kpi_positive_decision_fields_8.value as oiv_request_sender, -- !!!ДИНАМИКА БУДЕТ!!!
     t_kpi_positive_decision_fields_8.value as oiv_petition, -- От кого ходатайство ОИВ (для МС)
     t_neg_decision.negative_decision as negative_decision, -- негативное решение знавение
@@ -2787,6 +2789,15 @@ SELECT
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_14
   ON t_kpi.id = t_kpi_positive_decision_fields_14.kpi_id
   AND t_kpi_positive_decision_fields_14.fields_of_pos_decision_id = t_positive_decision_fields_14.id
+  
+  LEFT JOIN positive_decision_fields as t_positive_decision_fields_15
+  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_15.positive_decision_id
+  AND t_positive_decision_fields_15.origin = 'reasons_for_consideration'
+  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_15
+  ON t_kpi.id = t_kpi_positive_decision_fields_15.kpi_id
+  AND t_kpi_positive_decision_fields_15.fields_of_pos_decision_id = t_positive_decision_fields_15.id
+  LEFT join reasons_for_consideration as t_reasons_for_consideration 
+  on t_kpi_positive_decision_fields_15.value = t_reasons_for_consideration.id
 
   --ПРД каталог
  LEFT JOIN prd_catalog as t_prd_catalog
