@@ -1,11 +1,22 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import _ from "lodash"
 import Moment from "moment"
 import localization from "moment/locale/ru"
 import MyInput from "./UI/MyInput/MyInput"
+import Pagination from "./common/pagination"
+import { paginate } from "./utils/paginate"
+import MyButton from "./UI/MyButton/MyButton"
+import axios from "axios"
 // import 'https://momentjs.com/downloads/moment-with-locales.min.js';
 
-const Table = ({ attributes, columns, setColumns }) => {
+const Table = ({
+  attributes,
+  columns,
+  setColumns,
+  handleChangeForward,
+  handleChangeBack,
+  pages,
+}) => {
   const [sortType, setSortType] = useState({ path: "name", order: "asc" })
   const [searchValue, setSearchValue] = useState("")
 
@@ -75,6 +86,22 @@ const Table = ({ attributes, columns, setColumns }) => {
     setColumns(tableChange)
   }
 
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const itemsCount = searchedAttributes.length
+  const pageSize = 3
+  const handlePageChange = (pageIndex) => {
+    setCurrentPage(pageIndex)
+    console.log("page: ", pageIndex)
+  }
+
+  const itemsCrop = paginate(searchedAttributes, currentPage, pageSize)
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchValue])
+
   return (
     <>
       {/* <h3>Управление отображаемыми полями</h3> */}
@@ -112,6 +139,7 @@ const Table = ({ attributes, columns, setColumns }) => {
         <MyInput
           type="text"
           placeholder="Введите ИНН или дату отчета"
+          className="form-control "
           // className="form-group search__input mr-5"
           onChange={(event) => setSearchValue(event.target.value)}
         />
@@ -139,7 +167,7 @@ const Table = ({ attributes, columns, setColumns }) => {
         </thead>
 
         <tbody>
-          {searchedAttributes.map((file) => (
+          {itemsCrop.map((file) => (
             <tr key={file.id}>
               {columns[0].isVisible && (
                 <td className="d-flex justify-content-center align-items-center">
@@ -175,47 +203,24 @@ const Table = ({ attributes, columns, setColumns }) => {
         </tbody>
       </table>
 
-      {/* <table className="table text-left table-bordered mt-5">
-        <thead>
-          <tr>
-            {columns
-              ?.filter((e) => e.isVisible)
-              ?.map((column) => (
-                <th
-                  key={column.id}
-                  scope="col"
-                  onClick={
-                    column.name ? () => handleSort(column.path) : undefined
-                  }
-                  {...{ role: column.path && "button" }}
-                >
-                  <span className="d-flex justify-content-center align-items-center">
-                    {column.name} {renderSortArrow(sortType, column.name)}
-                  </span>
-                </th>
-              ))}
-          </tr>
-        </thead>
+      <Pagination
+        itemsCount={itemsCount}
+        pageSize={pageSize}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
 
-        <tbody>
-          {sortedAttributes.map((file) => (
-            <tr key={file.id}>
-              <td>{file.id}</td>
-              <td>
-                {Moment(file.created_date)
-                  .locale("rus", localization)
-                  .format("LLL")}
-              </td>{" "}
-              <td>{file.inn}</td>
-              <td>
-                {Moment(file.report_date)
-                  .locale("rus", localization)
-                  .format("LLL")}
-              </td>{" "}
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
+      {/* {pages > 1 && (
+        <div className="row m-0 p-0 mt-3">
+          <div className="col-md-auto p-0 ">
+            <MyButton onClick={handleChangeBack}>Назад</MyButton>
+          </div>
+
+          <div className="col-md-auto">
+            <MyButton onClick={handleChangeForward}>Вперед</MyButton>
+          </div>
+        </div>
+      )} */}
     </>
   )
 }

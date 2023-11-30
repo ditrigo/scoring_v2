@@ -12,6 +12,8 @@ const ResultTable = ({ getLinkMarkers }) => {
   // const [results, setResults] = useState([])
   const [models, setModels] = useState()
   const [searchValue, setSearchValue] = useState("")
+  const [searchModelName, setSearchModelName] = useState("")
+  const [searchAuthor, setSearchAuthor] = useState("")
   const FileDownload = require("js-file-download")
   let searchedModels = []
 
@@ -45,31 +47,31 @@ const ResultTable = ({ getLinkMarkers }) => {
 
   searchedModels = models
     ? models.filter((el) => {
+        return el.model_name
+          .toLowerCase()
+          .includes(searchModelName.toLowerCase())
+      })
+    : models
+
+  let searchedModels2 = searchedModels
+    ? searchedModels.filter((el) => {
+        return el.author_id.toLowerCase().includes(searchAuthor.toLowerCase())
+      })
+    : searchedModels
+
+  let searchedModels3 = searchedModels2
+    ? searchedModels2.filter((el) => {
         // console.log("el",el)
         return el.inns.some((inn) => {
           // console.log("inn",inn)
           // console.log("searchedModels inside map", searchedModels)
           return Moment(inn.created_date)
             .locale("rus", localization)
-            .format("LLL")
+            .format("L")
             .includes(searchValue)
         })
       })
-    : models
-  // console.log("searchedModels", searchedModels)
-
-  // searchedModels = models
-  //   ? models.filter((el) => {
-  //       // console.log(el)
-  //       return el.inns.some((inn) => {
-  //         // console.log(inn)
-  //         return Moment(inn.created_date)
-  //           .locale("rus", localization)
-  //           .format("LLL")
-  //           .includes(searchValue)
-  //       })
-  //     })
-  //   : models
+    : searchedModels2
 
   // async function downLoadResults() {
   //   axios({
@@ -136,29 +138,50 @@ const ResultTable = ({ getLinkMarkers }) => {
             </MyButton>
           </div>
         </div>
-        <div className="mt-4">
+        {/* <div className="mt-4">
           <MyInput
             type="text"
             placeholder="Введите дату выдачи результатов для выгрузки"
-            // className="form-group search__input mr-5"
-            onChange={(event) =>
-              // console.log("VALUE", event.target.value)
-              setSearchValue(event.target.value)
-            }
+            onChange={(event) => setSearchValue(event.target.value)}
           />
-        </div>
+        </div> */}
         <table className="text-center table  table-bordered table-responsive">
           <thead>
             <tr>
-              <th scope="col">Название модели</th>
-              <th scope="col">Автор</th>
-              <th scope="col">Дата создания</th>
+              <th scope="col">
+                Название модели <br />
+                <MyInput
+                  type="text"
+                  placeholder="Введите название модели"
+                  onChange={(event) => setSearchModelName(event.target.value)}
+                  className="form-control  mt-2"
+                />
+              </th>
+              <th scope="col">
+                Автор
+                <br />
+                <MyInput
+                  type="text"
+                  placeholder="Введите автора"
+                  onChange={(event) => setSearchAuthor(event.target.value)}
+                  className="form-control  mt-2"
+                />
+              </th>
+              <th scope="col">
+                Дата выдачи результата <br />{" "}
+                <MyInput
+                  type="text"
+                  placeholder="Введите дату выдачи результата"
+                  onChange={(event) => setSearchValue(event.target.value)}
+                  className="form-control mt-2"
+                />
+              </th>
               <th scope="col">ИНН и результат</th>
             </tr>
           </thead>
           <tbody>
             {models &&
-              searchedModels.map((el, index) => {
+              searchedModels3.map((el, index) => {
                 return (
                   el.inns.length !== 0 && (
                     <tr key={index}>
@@ -178,12 +201,12 @@ const ResultTable = ({ getLinkMarkers }) => {
                           return (
                             Moment(el.created_date)
                               .locale("rus", localization)
-                              .format("LLL")
+                              .format("L")
                               .includes(searchValue) && (
                               <p className="text-center" key={index}>
                                 {Moment(el.created_date)
                                   .locale("rus", localization)
-                                  .format("LLL")}
+                                  .format("L")}
                               </p>
                             )
                           )
@@ -194,7 +217,7 @@ const ResultTable = ({ getLinkMarkers }) => {
                           return (
                             Moment(el.created_date)
                               .locale("rus", localization)
-                              .format("LLL")
+                              .format("L")
                               .includes(searchValue) && (
                               <p className="text-center" key={index}>
                                 ИНН{" "}

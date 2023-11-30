@@ -10,6 +10,7 @@ import configFile from "../../../config.json"
 const ContentGroup = () => {
   const [view, setView] = useState("log")
   const [attributes, setAttributes] = useState([])
+  // const [allAttributesData, setAllattributesData] = useState([])
   const [logAttributs, setLogAttributs] = useState()
 
   const [uploadColumns, setUploadColumns] = useState([
@@ -49,6 +50,8 @@ const ContentGroup = () => {
       .get(`${configFile.apiEndPoint}/attributes/`)
       .then((res) => {
         setAttributes(res.data.data)
+        // setAllattributesData(res.data)
+        console.log("attr", res.data)
       })
       .catch((e) => {
         console.log(e)
@@ -58,6 +61,33 @@ const ContentGroup = () => {
   useEffect(() => {
     getfiles()
   }, [])
+
+  // pagination from back
+  // const handleChangeBack = async () => {
+  //   try {
+  //     const { data } = await axios.get(
+  //       `${configFile.apiEndPoint}/${allAttributesData.prevlink}`
+  //     )
+  //     console.log(data)
+  //     setAllattributesData(data)
+  //     setAttributes(data.data)
+  //   } catch (error) {
+  //     console.log("🚀 ~ file: Table.jsx:99 ~ handleChangeBack ~ error:", error)
+  //   }
+  // }
+
+  // const handleChangeForward = async () => {
+  //   try {
+  //     const { data } = await axios.get(
+  //       `${configFile.apiEndPoint}/${allAttributesData.nextlink}`
+  //     )
+  //     console.log(data)
+  //     setAllattributesData(data)
+  //     setAttributes(data.data)
+  //   } catch (error) {
+  //     console.log("🚀 ~ file: Table.jsx:99 ~ handleChangeBack ~ error:", error)
+  //   }
+  // }
 
   return (
     <div
@@ -101,6 +131,9 @@ const ContentGroup = () => {
                 attributes={attributes}
                 columns={uploadColumns}
                 setColumns={setUploadColumns}
+                // handleChangeForward={handleChangeForward}
+                // handleChangeBack={handleChangeBack}
+                // pages={allAttributesData.numpages}
               />
             </div>
           </>

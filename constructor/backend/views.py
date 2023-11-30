@@ -388,8 +388,8 @@ def ImportedAttributesListViewSet(request):  # (viewsets.ModelViewSet):
         return Response({'data': serializer.data,
                         #  'count': paginator.count,
                         #  'numpages': paginator.num_pages,
-                        #  'nextlink': '/api/attributes/?page=' + str(nextPage),
-                        #  'prevlink': '/api/attributes/?page=' + str(previousPage)
+                        #  'nextlink': 'attributes/?page=' + str(nextPage),
+                        #  'prevlink': 'attributes/?page=' + str(previousPage)
                          })
     elif request.method == 'POST':
         filename = request.FILES["filename"]
