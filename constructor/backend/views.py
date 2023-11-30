@@ -952,28 +952,8 @@ def StartScoringViewSet(request):
 @api_view(['POST'])
 def StartTestScoringViewSet(request):
     if request.method == 'POST':
-        # data = json.loads(request.body.decode('utf-8'))
 
         rank = 0.0 
-        # inn_list, marker_formula_list = [], []
-        # for key, value in data["model"].items():
-        #     if key == "inns":
-        #         for val in value:
-        #             # print(val)
-        #             for k, v in val.items():
-        #                 # print("inns.keys", k ,"inns.values", v)
-        #                 if k == "inn":
-        #                     inn_list.append(v)
-        #     elif key == "marker_id":
-        #         for val in value:
-        #             # print(val)
-        #             for k, v in val.items():
-        #                 # print("marker_id.keys", k ,"marker_id.values", v)
-        #                 if k == "py_query":
-        #                     marker_formula_list.append(v)
-
-
-        # print(request.data)
         inn_list, marker_formula_list = [], []
         for inn in request.data.get("model")["inns"]:
             inn_list.append(inn["inn"])
@@ -2335,184 +2315,184 @@ def get_columns_to_query():
     ]
 
 
-def get_query_to_import():
+# def get_query_to_import():
 
-    return """
-SELECT 
---Общие сведения
-    t_prd_catalog.catalog_prd as prd,
-    t_manager.second_name || ' ' || t_manager.first_name || ' ' || t_manager.patronymic as manager,
-    t_client.first_name  as client,
-    cast(t_client.inn as text) as inn,
-    --t_inn.inn as inn,
--- Первичные учетные данные
-    t_region.region as region,
-    t_status.status as status,
--- Источник информации
-    t_inf_type.type as info_type,
-    strftime('%d.%m.%Y',t_inf_sours.info_source_date) as info_source_date,
-    t_inf_sours.info_source_number as info_source_number,
--- Представители клиента
-    t_repr_client.representative_second_name || ' ' || t_repr_client.representative_first_name || ' ' || t_repr_client.representative_patronymic as fio_repr_client,
-    t_repr_client.representative_position as repr_position,
-    t_repr_client.representative_phone as repr_phone,
-    t_repr_client.representative_email as repr_email,
--- Контрольная точка
-    strftime('%d.%m.%Y',t_repr_client.control_point) as repr_control_point,
--- Критерии соответствия клиентским требованиям (маркеры) (+)					
-    t_criteria.debt_amount as debt_amount,
-    t_debt_type.type as debt_type,
-    t_category.type as category,
-    t_supp_measure.category_type as category_type,
-    t_criteria.note as note,
-    t_criteria.support_duration as support_duration,
--- Согласительные мероприятия (+)
-    strftime('%d.%m.%Y',t_client.first_meeting_date) as first_meeting_date,
-    strftime('%d.%m.%Y',t_client.event_date) as event_date,
-    t_client.event_description as event_description,
--- Ключевые показатели эффективности (KPI) (+)															
--- Принятое решение
-    t_pos_decision.positive_decision as positive_decision,
-    strftime('%d.%m.%Y',t_kpi.positive_decision_date) as positive_decision_date,
-    t_kpi.measure_provided_duration as measure_provided_duration,
-    '' as merodic,
-    t_kpi_positive_decision_fields_8.value as oiv_request_sender,
-    t_neg_decision.negative_decision as negative_decision,
-    t_kpi.settled_debt_amount as settled_debt_amount,
+#     return """
+# SELECT 
+# --Общие сведения
+#     t_prd_catalog.catalog_prd as prd,
+#     t_manager.second_name || ' ' || t_manager.first_name || ' ' || t_manager.patronymic as manager,
+#     t_client.first_name  as client,
+#     cast(t_client.inn as text) as inn,
+#     --t_inn.inn as inn,
+# -- Первичные учетные данные
+#     t_region.region as region,
+#     t_status.status as status,
+# -- Источник информации
+#     t_inf_type.type as info_type,
+#     strftime('%d.%m.%Y',t_inf_sours.info_source_date) as info_source_date,
+#     t_inf_sours.info_source_number as info_source_number,
+# -- Представители клиента
+#     t_repr_client.representative_second_name || ' ' || t_repr_client.representative_first_name || ' ' || t_repr_client.representative_patronymic as fio_repr_client,
+#     t_repr_client.representative_position as repr_position,
+#     t_repr_client.representative_phone as repr_phone,
+#     t_repr_client.representative_email as repr_email,
+# -- Контрольная точка
+#     strftime('%d.%m.%Y',t_repr_client.control_point) as repr_control_point,
+# -- Критерии соответствия клиентским требованиям (маркеры) (+)					
+#     t_criteria.debt_amount as debt_amount,
+#     t_debt_type.type as debt_type,
+#     t_category.type as category,
+#     t_supp_measure.category_type as category_type,
+#     t_criteria.note as note,
+#     t_criteria.support_duration as support_duration,
+# -- Согласительные мероприятия (+)
+#     strftime('%d.%m.%Y',t_client.first_meeting_date) as first_meeting_date,
+#     strftime('%d.%m.%Y',t_client.event_date) as event_date,
+#     t_client.event_description as event_description,
+# -- Ключевые показатели эффективности (KPI) (+)															
+# -- Принятое решение
+#     t_pos_decision.positive_decision as positive_decision,
+#     strftime('%d.%m.%Y',t_kpi.positive_decision_date) as positive_decision_date,
+#     t_kpi.measure_provided_duration as measure_provided_duration,
+#     '' as merodic,
+#     t_kpi_positive_decision_fields_8.value as oiv_request_sender,
+#     t_neg_decision.negative_decision as negative_decision,
+#     t_kpi.settled_debt_amount as settled_debt_amount,
     
-    t_kpi.received_amount_budget as received_amount_budget,
--- Просроченная задолженность	
-    t_kpi.overdue_debt_amount as overdue_debt_amount,
-    t_kpi.technical_overdue_debt_amount as technical_overdue_debt_amount,
--- Отлагательные меры
-    t_kpi_positive_decision_fields_1.value as nearest_deadline,
--- Изменения сроков уплаты
-    t_kpi_positive_decision_fields_2.value as installment_plan,
--- Мировое соглашение (+)			
-    t_kpi_positive_decision_fields_3.value as case_number,
-    t_kpi_positive_decision_fields_4.value as date_of_approvall,
-    t_kpi_positive_decision_fields_5.value as sum_of_the_claims,
-    t_kpi_positive_decision_fields_6.value as end_date,
-    t_kpi_positive_decision_fields_7.value as amount_of_fulfilled,  
+#     t_kpi.received_amount_budget as received_amount_budget,
+# -- Просроченная задолженность	
+#     t_kpi.overdue_debt_amount as overdue_debt_amount,
+#     t_kpi.technical_overdue_debt_amount as technical_overdue_debt_amount,
+# -- Отлагательные меры
+#     t_kpi_positive_decision_fields_1.value as nearest_deadline,
+# -- Изменения сроков уплаты
+#     t_kpi_positive_decision_fields_2.value as installment_plan,
+# -- Мировое соглашение (+)			
+#     t_kpi_positive_decision_fields_3.value as case_number,
+#     t_kpi_positive_decision_fields_4.value as date_of_approvall,
+#     t_kpi_positive_decision_fields_5.value as sum_of_the_claims,
+#     t_kpi_positive_decision_fields_6.value as end_date,
+#     t_kpi_positive_decision_fields_7.value as amount_of_fulfilled,  
 
-    '' as pole1,
-    '' as pole2,
-    '' as pole3,
-    --'123' as stage
-    t_review_stage.stage as stage,
+#     '' as pole1,
+#     '' as pole2,
+#     '' as pole3,
+#     --'123' as stage
+#     t_review_stage.stage as stage,
 
-    t_client.notice_debitor_date as notice_debitor_date,
-	t_client.notice_guarantor_date as notice_guarantor_date,
-	t_client.notice_pledgetor_date as notice_pledgetor_date,
-	t_client.revenue_knd_1151006_2023year as revenue_knd_1151006_2023year,
-	t_client.revenue_knd_0710099_2022year as revenue_knd_0710099_2022year,
-	t_client.ssch_knd_1151111 as ssch_knd_1151111,
-	t_client.assets_2022year as assets_2022year,
-	t_client.taxes_paid_2023year as taxes_paid_2023year,
-	t_client.bankruptcy_proceedings_stage as bankruptcy_proceedings_stage,
-	t_client.debt_amount_unified_tax_service as debt_amount_unified_tax_service,
-	t_client.fot_knd_1151111 as fot_knd_1151111,
-	t_client.profit_knd_1151006 as profit_knd_1151006,
-	t_client.solvency_scoring_results as solvency_scoring_results,
-	t_client.skuad_current_business_value as skuad_current_business_value,
-	t_client.skuad_liquidation_business_value as skuad_liquidation_business_value,
-	t_client.skuad_refund_funds as skuad_refund_funds,
-	t_client.skuad_working_capital as skuad_working_capital,
-	t_client.solvency_rank as solvency_rank 
+#     t_client.notice_debitor_date as notice_debitor_date,
+# 	t_client.notice_guarantor_date as notice_guarantor_date,
+# 	t_client.notice_pledgetor_date as notice_pledgetor_date,
+# 	t_client.revenue_knd_1151006_2023year as revenue_knd_1151006_2023year,
+# 	t_client.revenue_knd_0710099_2022year as revenue_knd_0710099_2022year,
+# 	t_client.ssch_knd_1151111 as ssch_knd_1151111,
+# 	t_client.assets_2022year as assets_2022year,
+# 	t_client.taxes_paid_2023year as taxes_paid_2023year,
+# 	t_client.bankruptcy_proceedings_stage as bankruptcy_proceedings_stage,
+# 	t_client.debt_amount_unified_tax_service as debt_amount_unified_tax_service,
+# 	t_client.fot_knd_1151111 as fot_knd_1151111,
+# 	t_client.profit_knd_1151006 as profit_knd_1151006,
+# 	t_client.solvency_scoring_results as solvency_scoring_results,
+# 	t_client.skuad_current_business_value as skuad_current_business_value,
+# 	t_client.skuad_liquidation_business_value as skuad_liquidation_business_value,
+# 	t_client.skuad_refund_funds as skuad_refund_funds,
+# 	t_client.skuad_working_capital as skuad_working_capital,
+# 	t_client.solvency_rank as solvency_rank 
 
-  FROM client as t_client
-  LEFT JOIN manager as t_manager
-  ON t_client.manager_id = t_manager.id
-  LEFT JOIN inn_res as t_inn
-  ON t_client.inn = t_inn.id
-  LEFT JOIN region as t_region
-  ON t_client.region_id = t_region.id
-  LEFT JOIN appl_status as t_status
-  ON t_client.applicant_status_id = t_status.id
-  LEFT JOIN inform_source as t_inf_sours
-  ON t_client.information_source_id = t_inf_sours.id
-  LEFT JOIN inform_source_type as t_inf_type    
-  ON t_inf_sours.info_source_type_id = t_inf_type.id
-  LEFT JOIN client_representative as t_repr_client
-  ON t_client.representitive_client_id = t_repr_client.id
-  LEFT JOIN compliance_criteria as t_criteria
-  ON t_client.compliance_criteria_id = t_criteria.id
-  LEFT JOIN debt_type as t_debt_type
-  ON t_criteria.debt_type_id = t_debt_type.id
-  LEFT JOIN category as t_category
-  ON t_criteria.category_id = t_category.id
-  LEFT JOIN supp_measure as t_supp_measure
-  ON t_criteria.support_measure_id = t_supp_measure.id
-  LEFT JOIN kpi as t_kpi
-  ON t_client.kpi_id = t_kpi.id
-  LEFT JOIN pos_decision as t_pos_decision
-  ON t_kpi.positive_decision_type_id = t_pos_decision.id
-  LEFT JOIN neg_decision as t_neg_decision
-  ON t_kpi.negative_decision_type_id = t_neg_decision.id
-  -- Отлагательные меры
-  LEFT JOIN positive_decision_fields as t_positive_decision_fields_1
-  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_1.positive_decision_id
-  AND t_positive_decision_fields_1.origin = 'nearest_date_obligation'
-  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_1
-  ON t_kpi.id = t_kpi_positive_decision_fields_1.kpi_id
-  AND t_kpi_positive_decision_fields_1.fields_of_pos_decision_id = t_positive_decision_fields_1.id
- -- Изменения сроков уплаты
- LEFT JOIN positive_decision_fields as t_positive_decision_fields_2
-  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_2.positive_decision_id
-  AND t_positive_decision_fields_2.origin = 'not_in_force'
-  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_2
-  ON t_kpi.id = t_kpi_positive_decision_fields_2.kpi_id
-  AND t_kpi_positive_decision_fields_2.fields_of_pos_decision_id = t_positive_decision_fields_2.id
- -- Мировое соглашение (+)				
- LEFT JOIN positive_decision_fields as t_positive_decision_fields_3
-  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_3.positive_decision_id
-  AND t_positive_decision_fields_3.origin = 'case_number'
-  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_3
-  ON t_kpi.id = t_kpi_positive_decision_fields_3.kpi_id
-  AND t_kpi_positive_decision_fields_3.fields_of_pos_decision_id = t_positive_decision_fields_3.id
+#   FROM client as t_client
+#   LEFT JOIN manager as t_manager
+#   ON t_client.manager_id = t_manager.id
+#   LEFT JOIN inn_res as t_inn
+#   ON t_client.inn = t_inn.id
+#   LEFT JOIN region as t_region
+#   ON t_client.region_id = t_region.id
+#   LEFT JOIN appl_status as t_status
+#   ON t_client.applicant_status_id = t_status.id
+#   LEFT JOIN inform_source as t_inf_sours
+#   ON t_client.information_source_id = t_inf_sours.id
+#   LEFT JOIN inform_source_type as t_inf_type    
+#   ON t_inf_sours.info_source_type_id = t_inf_type.id
+#   LEFT JOIN client_representative as t_repr_client
+#   ON t_client.representitive_client_id = t_repr_client.id
+#   LEFT JOIN compliance_criteria as t_criteria
+#   ON t_client.compliance_criteria_id = t_criteria.id
+#   LEFT JOIN debt_type as t_debt_type
+#   ON t_criteria.debt_type_id = t_debt_type.id
+#   LEFT JOIN category as t_category
+#   ON t_criteria.category_id = t_category.id
+#   LEFT JOIN supp_measure as t_supp_measure
+#   ON t_criteria.support_measure_id = t_supp_measure.id
+#   LEFT JOIN kpi as t_kpi
+#   ON t_client.kpi_id = t_kpi.id
+#   LEFT JOIN pos_decision as t_pos_decision
+#   ON t_kpi.positive_decision_type_id = t_pos_decision.id
+#   LEFT JOIN neg_decision as t_neg_decision
+#   ON t_kpi.negative_decision_type_id = t_neg_decision.id
+#   -- Отлагательные меры
+#   LEFT JOIN positive_decision_fields as t_positive_decision_fields_1
+#   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_1.positive_decision_id
+#   AND t_positive_decision_fields_1.origin = 'nearest_date_obligation'
+#   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_1
+#   ON t_kpi.id = t_kpi_positive_decision_fields_1.kpi_id
+#   AND t_kpi_positive_decision_fields_1.fields_of_pos_decision_id = t_positive_decision_fields_1.id
+#  -- Изменения сроков уплаты
+#  LEFT JOIN positive_decision_fields as t_positive_decision_fields_2
+#   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_2.positive_decision_id
+#   AND t_positive_decision_fields_2.origin = 'not_in_force'
+#   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_2
+#   ON t_kpi.id = t_kpi_positive_decision_fields_2.kpi_id
+#   AND t_kpi_positive_decision_fields_2.fields_of_pos_decision_id = t_positive_decision_fields_2.id
+#  -- Мировое соглашение (+)				
+#  LEFT JOIN positive_decision_fields as t_positive_decision_fields_3
+#   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_3.positive_decision_id
+#   AND t_positive_decision_fields_3.origin = 'case_number'
+#   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_3
+#   ON t_kpi.id = t_kpi_positive_decision_fields_3.kpi_id
+#   AND t_kpi_positive_decision_fields_3.fields_of_pos_decision_id = t_positive_decision_fields_3.id
   
- LEFT JOIN positive_decision_fields as t_positive_decision_fields_4
-  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_4.positive_decision_id
-  AND t_positive_decision_fields_4.origin = 'accept_date'
-  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_4
-  ON t_kpi.id = t_kpi_positive_decision_fields_4.kpi_id
-  AND t_kpi_positive_decision_fields_4.fields_of_pos_decision_id = t_positive_decision_fields_4.id
+#  LEFT JOIN positive_decision_fields as t_positive_decision_fields_4
+#   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_4.positive_decision_id
+#   AND t_positive_decision_fields_4.origin = 'accept_date'
+#   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_4
+#   ON t_kpi.id = t_kpi_positive_decision_fields_4.kpi_id
+#   AND t_kpi_positive_decision_fields_4.fields_of_pos_decision_id = t_positive_decision_fields_4.id
   
- LEFT JOIN positive_decision_fields as t_positive_decision_fields_5
-  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_5.positive_decision_id
-  AND t_positive_decision_fields_5.origin = 'claims_amount'
-  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_5
-  ON t_kpi.id = t_kpi_positive_decision_fields_5.kpi_id
-  AND t_kpi_positive_decision_fields_5.fields_of_pos_decision_id = t_positive_decision_fields_5.id
+#  LEFT JOIN positive_decision_fields as t_positive_decision_fields_5
+#   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_5.positive_decision_id
+#   AND t_positive_decision_fields_5.origin = 'claims_amount'
+#   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_5
+#   ON t_kpi.id = t_kpi_positive_decision_fields_5.kpi_id
+#   AND t_kpi_positive_decision_fields_5.fields_of_pos_decision_id = t_positive_decision_fields_5.id
   
- LEFT JOIN positive_decision_fields as t_positive_decision_fields_6
-  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_6.positive_decision_id
-  AND t_positive_decision_fields_6.origin = 'expiration_date'
-  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_6
-  ON t_kpi.id = t_kpi_positive_decision_fields_6.kpi_id
-  AND t_kpi_positive_decision_fields_6.fields_of_pos_decision_id = t_positive_decision_fields_6.id
+#  LEFT JOIN positive_decision_fields as t_positive_decision_fields_6
+#   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_6.positive_decision_id
+#   AND t_positive_decision_fields_6.origin = 'expiration_date'
+#   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_6
+#   ON t_kpi.id = t_kpi_positive_decision_fields_6.kpi_id
+#   AND t_kpi_positive_decision_fields_6.fields_of_pos_decision_id = t_positive_decision_fields_6.id
   
- LEFT JOIN positive_decision_fields as t_positive_decision_fields_7
-  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_7.positive_decision_id
-  AND t_positive_decision_fields_7.origin = 'fulfilled_obligations_amount'
-  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_7
-  ON t_kpi.id = t_kpi_positive_decision_fields_7.kpi_id
-  AND t_kpi_positive_decision_fields_7.fields_of_pos_decision_id = t_positive_decision_fields_7.id
+#  LEFT JOIN positive_decision_fields as t_positive_decision_fields_7
+#   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_7.positive_decision_id
+#   AND t_positive_decision_fields_7.origin = 'fulfilled_obligations_amount'
+#   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_7
+#   ON t_kpi.id = t_kpi_positive_decision_fields_7.kpi_id
+#   AND t_kpi_positive_decision_fields_7.fields_of_pos_decision_id = t_positive_decision_fields_7.id
 
- LEFT JOIN positive_decision_fields as t_positive_decision_fields_8
-  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_8.positive_decision_id
-  AND t_positive_decision_fields_8.origin = 'oiv_petition'
-  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_8
-  ON t_kpi.id = t_kpi_positive_decision_fields_8.kpi_id
-  AND t_kpi_positive_decision_fields_8.fields_of_pos_decision_id = t_positive_decision_fields_8.id
+#  LEFT JOIN positive_decision_fields as t_positive_decision_fields_8
+#   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_8.positive_decision_id
+#   AND t_positive_decision_fields_8.origin = 'oiv_petition'
+#   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_8
+#   ON t_kpi.id = t_kpi_positive_decision_fields_8.kpi_id
+#   AND t_kpi_positive_decision_fields_8.fields_of_pos_decision_id = t_positive_decision_fields_8.id
 
-  --ПРД каталог
- LEFT JOIN prd_catalog as t_prd_catalog
- ON t_client.prd_catalog_id = t_prd_catalog.id
+#   --ПРД каталог
+#  LEFT JOIN prd_catalog as t_prd_catalog
+#  ON t_client.prd_catalog_id = t_prd_catalog.id
 
- LEFT JOIN review_stage as t_review_stage
- ON t_client.stage_review_id = t_review_stage.id
-"""
+#  LEFT JOIN review_stage as t_review_stage
+#  ON t_client.stage_review_id = t_review_stage.id
+# """
 
 
 def get_query_to_import_new():
