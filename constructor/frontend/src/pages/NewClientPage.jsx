@@ -775,18 +775,18 @@ const NewClientPage = () => {
 
         return el.origin === "reasons_for_consideration"
           ? {
-              label: el.description,
-              key: el.id,
-              type: "select",
-              options: transformDynamicOptionsData(reasonsConsideration, el.id),
-            }
+            label: el.description,
+            key: el.id,
+            type: "select",
+            options: transformDynamicOptionsData(reasonsConsideration, el.id),
+          }
           : {
-              label: el.description,
-              key: el.id,
-              type: el.type_of_fields === "datetime" ? "date" : "text",
-              inputType: el.type_of_fields === "integer" ? "number" : "text",
-              isPositive: true,
-            }
+            label: el.description,
+            key: el.id,
+            type: el.type_of_fields === "datetime" ? "date" : "text",
+            inputType: el.type_of_fields === "integer" ? "number" : "text",
+            isPositive: true,
+          }
       })
 
       setfieldsOfPosDec(res)
@@ -942,71 +942,71 @@ const NewClientPage = () => {
 
     // // Для МС (поля смотреть из консоли)
     clientData.positive_decision_type === 1 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[0],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[0],
     clientData.positive_decision_type === 1 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[1],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[1],
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[11]) ||
-      "",
+    "",
     clientData.positive_decision_type === 1 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[2],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[2],
 
     // ДЛЯ Рассрочка
     clientData.positive_decision_type === 2 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[0],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[0],
     clientData.positive_decision_type === 2 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[1],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[1],
     clientData.positive_decision_type === 2 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[2],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[2],
     clientData.positive_decision_type === 2 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[3],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[3],
 
     // ДЛЯ Отлагательные меры
     clientData.positive_decision_type === 3 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[0],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[0],
     clientData.positive_decision_type === 3 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[1],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[1],
     clientData.positive_decision_type === 3 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[2],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[2],
 
     // ДЛЯ Отсрочка
     clientData.positive_decision_type === 4 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[0],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[0],
     clientData.positive_decision_type === 4 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[1],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[1],
     clientData.positive_decision_type === 4 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[2],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[2],
     clientData.positive_decision_type === 4 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[3],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[3],
 
     // ДЛЯ Инвестиционный кредит
     clientData.positive_decision_type === 5 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[0],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[0],
     clientData.positive_decision_type === 5 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[1],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[1],
     clientData.positive_decision_type === 5 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[2],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[2],
     clientData.positive_decision_type === 5 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[3],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[3],
 
     //Новая серия полей
 
@@ -1017,24 +1017,24 @@ const NewClientPage = () => {
       type: "title2",
     },
     clientData.positive_decision_type === 1 &&
-      fieldsOfPosDec.length > 0 &&
-      fieldsOfPosDec[3],
+    fieldsOfPosDec.length > 0 &&
+    fieldsOfPosDec[3],
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[4]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[6]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[5]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[7]) ||
-      "",
+    "",
 
     // ДЛЯ Рассрочка
     clientData.positive_decision_type === 2 && {
@@ -1045,7 +1045,7 @@ const NewClientPage = () => {
     (clientData.positive_decision_type === 2 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[4]) ||
-      "",
+    "",
 
     // ДЛЯ Отлагательные меры
     clientData.positive_decision_type === 3 && {
@@ -1056,7 +1056,7 @@ const NewClientPage = () => {
     (clientData.positive_decision_type === 3 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[3]) ||
-      "",
+    "",
 
     // ДЛЯ Отсрочка
     clientData.positive_decision_type === 4 && {
@@ -1067,7 +1067,7 @@ const NewClientPage = () => {
     (clientData.positive_decision_type === 4 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[4]) ||
-      "",
+    "",
 
     // ДЛЯ Инвестиционный кредит
     clientData.positive_decision_type === 5 && {
@@ -1078,7 +1078,7 @@ const NewClientPage = () => {
     (clientData.positive_decision_type === 5 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[4]) ||
-      "",
+    "",
 
     // Новый блок
     clientData.positive_decision_type &&
@@ -1091,29 +1091,29 @@ const NewClientPage = () => {
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[8]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[9]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 1 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[10]) ||
-      "",
+    "",
 
     // ДЛЯ Рассрочка
     (clientData.positive_decision_type === 2 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[5]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 2 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[6]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 2 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[7]) ||
-      "",
+    "",
 
     // Для Отлагательные меры нет
 
@@ -1121,29 +1121,29 @@ const NewClientPage = () => {
     (clientData.positive_decision_type === 4 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[5]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 4 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[6]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 4 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[7]) ||
-      "",
+    "",
 
     // ДЛЯ Инвестиционный кредит
     (clientData.positive_decision_type === 5 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[5]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 5 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[6]) ||
-      "",
+    "",
     (clientData.positive_decision_type === 5 &&
       fieldsOfPosDec.length > 0 &&
       fieldsOfPosDec[7]) ||
-      "",
+    "",
 
     {
       label: "Вид отрицаетльного решения",
@@ -1324,8 +1324,8 @@ const NewClientPage = () => {
                       placeholder={
                         params.id && client
                           ? el?.options.filter(
-                              (opt) => opt.id === clientData[el.key]
-                            )[0]?.label
+                            (opt) => opt.id === clientData[el.key]
+                          )[0]?.label
                           : el.label
                       }
                       onChange={handleChange}

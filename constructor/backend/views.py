@@ -239,54 +239,104 @@ def InsertValuesToCountedAttributes(imported_attributes_list):
                                * 0.2 + imported_attributes.s_1230_4 * 0.0861 + other_property * 0.2) / 1000
         # print(need_capital_dp_rub)
 
-        CountedAttributesNew.objects.create(
-            inn=inn,
-            other_property=other_property,
-            clr=clr,
-            solvency_ratio=solvency_ratio,
-            autonomy_ratio=autonomy_ratio,
-            perc_coverage_ratio=perc_coverage_ratio,
-            assets_return=assets_return,
-            dolg_in_balance=dolg_in_balance,
-            return_on_equity=return_on_equity,
-            fin_leverage=fin_leverage,
-            dolg_ebit=dolg_ebit,
-            turnover=turnover,
-            turnover_in_credit=turnover_in_credit,
-            repay_fund=repay_fund,
-            invest_coverage_ratio=invest_coverage_ratio,
-            equity_capital_ratio=equity_capital_ratio,
-            stock_avail_ration=stock_avail_ration,
-            quick_liquid_ratio=quick_liquid_ratio,
-            asset_dinam_1=asset_dinam_1,
-            asset_dinam_2=asset_dinam_2,
-            asset_dinam_3=asset_dinam_3,
-            profit_dinam_1=profit_dinam_1,
-            profit_dinam_2=profit_dinam_2,
-            profit_dinam_3=profit_dinam_3,
-            k_5_154=k_5_154,
-            k_6_155=k_6_155,
-            k_7_156=k_7_156,
-            k_8_157=k_8_157,
-            k_9_158=k_9_158,
-            k_10_159=k_10_159,
-            property_sum=property_sum,
-            k_1_161=k_1_161,
-            k_2_162=k_2_162,
-            k_3_163=k_3_163,
-            k_4_164=k_4_164,
-            revenue_dinam=revenue_dinam,
-            current_business_value=current_business_value,
-            liquid_business_value=liquid_business_value,
-            repay_fund_lender=repay_fund_lender,
-            need_capital=need_capital,
-            need_capital_dp=need_capital_dp,
-            ebitda=ebitda,
-            dolg_score=dolg_score,
-            dolg_dp=dolg_dp,
-            need_capital_rub=need_capital_rub,
-            need_capital_dp_rub=need_capital_dp_rub
-        )
+        if CountedAttributesNew.objects.filter(inn=inn).exists():
+            CountedAttributesNew.objects.filter(inn=inn).update(
+                inn=inn,
+                other_property=other_property,
+                clr=clr,
+                solvency_ratio=solvency_ratio,
+                autonomy_ratio=autonomy_ratio,
+                perc_coverage_ratio=perc_coverage_ratio,
+                assets_return=assets_return,
+                dolg_in_balance=dolg_in_balance,
+                return_on_equity=return_on_equity,
+                fin_leverage=fin_leverage,
+                dolg_ebit=dolg_ebit,
+                turnover=turnover,
+                turnover_in_credit=turnover_in_credit,
+                repay_fund=repay_fund,
+                invest_coverage_ratio=invest_coverage_ratio,
+                equity_capital_ratio=equity_capital_ratio,
+                stock_avail_ration=stock_avail_ration,
+                quick_liquid_ratio=quick_liquid_ratio,
+                asset_dinam_1=asset_dinam_1,
+                asset_dinam_2=asset_dinam_2,
+                asset_dinam_3=asset_dinam_3,
+                profit_dinam_1=profit_dinam_1,
+                profit_dinam_2=profit_dinam_2,
+                profit_dinam_3=profit_dinam_3,
+                k_5_154=k_5_154,
+                k_6_155=k_6_155,
+                k_7_156=k_7_156,
+                k_8_157=k_8_157,
+                k_9_158=k_9_158,
+                k_10_159=k_10_159,
+                property_sum=property_sum,
+                k_1_161=k_1_161,
+                k_2_162=k_2_162,
+                k_3_163=k_3_163,
+                k_4_164=k_4_164,
+                revenue_dinam=revenue_dinam,
+                current_business_value=current_business_value,
+                liquid_business_value=liquid_business_value,
+                repay_fund_lender=repay_fund_lender,
+                need_capital=need_capital,
+                need_capital_dp=need_capital_dp,
+                ebitda=ebitda,
+                dolg_score=dolg_score,
+                dolg_dp=dolg_dp,
+                need_capital_rub=need_capital_rub,
+                need_capital_dp_rub=need_capital_dp_rub
+            )
+        else:
+            CountedAttributesNew.objects.create(
+                inn=inn,
+                other_property=other_property,
+                clr=clr,
+                solvency_ratio=solvency_ratio,
+                autonomy_ratio=autonomy_ratio,
+                perc_coverage_ratio=perc_coverage_ratio,
+                assets_return=assets_return,
+                dolg_in_balance=dolg_in_balance,
+                return_on_equity=return_on_equity,
+                fin_leverage=fin_leverage,
+                dolg_ebit=dolg_ebit,
+                turnover=turnover,
+                turnover_in_credit=turnover_in_credit,
+                repay_fund=repay_fund,
+                invest_coverage_ratio=invest_coverage_ratio,
+                equity_capital_ratio=equity_capital_ratio,
+                stock_avail_ration=stock_avail_ration,
+                quick_liquid_ratio=quick_liquid_ratio,
+                asset_dinam_1=asset_dinam_1,
+                asset_dinam_2=asset_dinam_2,
+                asset_dinam_3=asset_dinam_3,
+                profit_dinam_1=profit_dinam_1,
+                profit_dinam_2=profit_dinam_2,
+                profit_dinam_3=profit_dinam_3,
+                k_5_154=k_5_154,
+                k_6_155=k_6_155,
+                k_7_156=k_7_156,
+                k_8_157=k_8_157,
+                k_9_158=k_9_158,
+                k_10_159=k_10_159,
+                property_sum=property_sum,
+                k_1_161=k_1_161,
+                k_2_162=k_2_162,
+                k_3_163=k_3_163,
+                k_4_164=k_4_164,
+                revenue_dinam=revenue_dinam,
+                current_business_value=current_business_value,
+                liquid_business_value=liquid_business_value,
+                repay_fund_lender=repay_fund_lender,
+                need_capital=need_capital,
+                need_capital_dp=need_capital_dp,
+                ebitda=ebitda,
+                dolg_score=dolg_score,
+                dolg_dp=dolg_dp,
+                need_capital_rub=need_capital_rub,
+                need_capital_dp_rub=need_capital_dp_rub
+            )
 
 
     # imported_attributes_list = ImportedAttributes.objects.filter(created_date__contains=datetime.date.today())
@@ -820,74 +870,6 @@ def InnAndResultsDetailViewSet(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
-# @api_view(['POST'])
-# def StartScoringViewSet(request):
-#     if request.method == 'POST':
-#         data = json.loads(request.body.decode('utf-8'))
-        
-#         rank = 0.0 
-#         inn_list, marker_formula_list = [], []
-#         for key, value in data["model"].items():
-#             # print("key -", key,"\nvalue - ", value)
-#             # print('\n')
-#             if key == "inns":
-#                 for val in value:
-#                     # print(val)
-#                     for k, v in val.items():
-#                         # print("inns.keys", k ,"inns.values", v)
-#                         if k == "inn":
-#                             inn_list.append(v)
-#             elif key == "marker_id":
-#                 for val in value:
-#                     # print(val)
-#                     for k, v in val.items():
-#                         # print("marker_id.keys", k ,"marker_id.values", v)
-#                         if k == "py_query":
-#                             marker_formula_list.append(v)
-        
-#         # print(inn_list)
-#         print(marker_formula_list)
-#         # print(CsvAttributes.objects.get(inn=inn_list[0]).np_name)
-
-#         dict_markers = {}
-#         list_markers = []
-#         for inn in inn_list:
-#             for formula in marker_formula_list:
-#                 try:
-#                     imported_attributes = ImportedAttributes.objects.get(inn=inn)
-#                     counted_attributes = CountedAttributesNew.objects.get(inn=inn)
-#                 except ImportedAttributes.DoesNotExist or CountedAttributesNew.DoesNotExist:
-#                     continue
-#                 print("VALUE",value)
-#                 value = eval(formula)
-#                 ####################
-#                 # TODO Добавить парсер для получения значения в формуле 
-
-
-
-#                 ####################
-#                 list_markers.append({'formula': formula, "value": value})
-                
-#                 rank += value
-#                 print(value)
-#                 # inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
-#                 # inn_res.save()
-
-#             total_json = {
-#                 "markers_and_values": list_markers,
-#                 "total_rank": rank
-#             }
-#             dict_markers.update(total_json)
-#             print(dict_markers)
-#             InnRes.objects.filter(inn=inn).update(result_score=dict_markers) 
-#             # InnRes.objects.create(markers_json=dict_markers)
-#             dict_markers = {}
-
-#         return JsonResponse({'message': 'Results were updated '}, status=200)
-
-#     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
-
-
 @api_view(['POST'])
 def StartScoringViewSet(request):
     if request.method == 'POST':
@@ -948,40 +930,6 @@ def StartScoringViewSet(request):
                             "error": f"{e}",
                             })
                         rank += 0
-
-
-            # for formula in marker_formula_list:
-            #     # print("\nformula IN FOR",formula)
-            #     # print("\nimported_attributes.dolg", imported_attributes.dolg)
-            #     # print("imported_attributes.s_1600_4", imported_attributes.s_1600_4)
-
-            #     if formula.startswith("Error"):
-            #          list_markers.append({
-            #              "formula": formula, 
-            #              "value": 0,
-            #              "error": formula,
-            #              })
-            #          rank += 0
-            #     else:
-            #         try:
-            #             counting_rank = eval(formula)
-            #             list_markers.append({
-            #                     "formula": formula, 
-            #                     "value": counting_rank,
-            #                     "error": "",
-            #                     }) 
-            #             rank += counting_rank
-            #         except Exception as e:
-            #             list_markers.append({
-            #                     "formula": formula, 
-            #                     "value": 0, 
-            #                     "error": f"{e}",
-            #                     })
-            #             rank += 0
-
-            #     # print("\nRANK", rank)
-            #     # inn_res = InnRes.objects.filter(inn=inn).update(result_score=rank) 
-            #     # inn_res.save()
             
             total_json = {
                 "markers_and_values": list_markers,
@@ -1571,6 +1519,10 @@ def CreateRelationClient(request):
                 region = Region.objects.get(id=request.data.get('region_id')) # Required
                 # reasons = ReasonsForConsiderationSerializer.objects.get(id=request.data.get('reasons')) 
 
+                # if request.data.get('reasons') != "":
+                #     reasons = ReasonsForConsideration.objects.get(id=request.data.get('reasons'))  # string, "" -ok
+                # else:
+                #     reasons = None
                 # if request.data.get('reasons') != "":
                 #     reasons = ReasonsForConsideration.objects.get(id=request.data.get('reasons'))  # string, "" -ok
                 # else:
@@ -2569,7 +2521,7 @@ def get_query_to_import_new():
 SELECT 
 --Общие сведения
     t_prd_catalog.catalog_prd as prd,
-    t_manager.second_name || ' ' || t_manager.first_name || ' ' || t_manager.patronymic as manager,
+    ifnull(t_manager.second_name, '') || ' ' || t_manager.first_name || ' ' || ifnull(t_manager.patronymic, '') as manager,
     t_client.first_name  as client,
     cast(t_client.inn as text) as inn,
     --t_inn.inn as inn,
@@ -2581,7 +2533,7 @@ SELECT
     strftime('%d.%m.%Y',t_inf_sours.info_source_date) as info_source_date,
     t_inf_sours.info_source_number as info_source_number,
 -- Представители клиента
-    t_repr_client.representative_second_name || ' ' || t_repr_client.representative_first_name || ' ' || t_repr_client.representative_patronymic as fio_repr_client,
+    ifnull(t_repr_client.representative_second_name, '') || ' ' || t_repr_client.representative_first_name || ' ' || ifnull(t_repr_client.representative_patronymic, '') as fio_repr_client,
     t_repr_client.representative_position as repr_position,
     t_repr_client.representative_phone as repr_phone,
     t_repr_client.representative_email as repr_email,
@@ -2608,7 +2560,9 @@ SELECT
     t_kpi_positive_decision_fields_10.value as measure_provided_duration, -- На сколько предоставлена мера, в месяцах
     
 --    t_kpi.measure_provided_duration as measure_provided_duration, -- На сколько предоставлена мера, в месяцах - динамика
-    '' as merodic,
+    -- '' as merodic,
+    t_reasons_for_consideration.reasons as reasons, 
+
     -- t_kpi_positive_decision_fields_8.value as oiv_request_sender, -- !!!ДИНАМИКА БУДЕТ!!!
     t_kpi_positive_decision_fields_8.value as oiv_petition, -- От кого ходатайство ОИВ (для МС)
     t_neg_decision.negative_decision as negative_decision, -- негативное решение знавение
@@ -2779,7 +2733,7 @@ SELECT
   AND t_positive_decision_fields_13.origin = 'surety'
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_13
   ON t_kpi.id = t_kpi_positive_decision_fields_13.kpi_id
-  AND t_kpi_positive_decision_fields_13.fields_of_pos_decision_id = t_positive_decision_fields_12.id
+  AND t_kpi_positive_decision_fields_13.fields_of_pos_decision_id = t_positive_decision_fields_13.id
   
   LEFT JOIN positive_decision_fields as t_positive_decision_fields_14
   ON t_kpi.positive_decision_type_id = t_positive_decision_fields_14.positive_decision_id
@@ -2787,6 +2741,15 @@ SELECT
   LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_14
   ON t_kpi.id = t_kpi_positive_decision_fields_14.kpi_id
   AND t_kpi_positive_decision_fields_14.fields_of_pos_decision_id = t_positive_decision_fields_14.id
+  
+  LEFT JOIN positive_decision_fields as t_positive_decision_fields_15
+  ON t_kpi.positive_decision_type_id = t_positive_decision_fields_15.positive_decision_id
+  AND t_positive_decision_fields_15.origin = 'reasons_for_consideration'
+  LEFT JOIN kpi_positive_decision_fields as t_kpi_positive_decision_fields_15
+  ON t_kpi.id = t_kpi_positive_decision_fields_15.kpi_id
+  AND t_kpi_positive_decision_fields_15.fields_of_pos_decision_id = t_positive_decision_fields_15.id
+  LEFT join reasons_for_consideration as t_reasons_for_consideration 
+  on t_kpi_positive_decision_fields_15.value = t_reasons_for_consideration.id
 
   --ПРД каталог
  LEFT JOIN prd_catalog as t_prd_catalog
