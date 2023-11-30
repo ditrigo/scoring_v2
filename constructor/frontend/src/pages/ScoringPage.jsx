@@ -11,6 +11,8 @@ import localization from "moment/locale/ru"
 import modelService from "../services/model.service"
 import markerSrvice from "../services/marker.service"
 import MyInput from "../components/UI/MyInput/MyInput"
+import { paginate } from "../components/utils/paginate"
+import Pagination from "../components/common/pagination"
 
 const ScoringPage = () => {
   const [models, setModels] = useState([])
@@ -18,10 +20,20 @@ const ScoringPage = () => {
 
   const [markers, setMarkers] = useState([])
   const [modalMarker, setModalMarker] = useState(false)
-  const [linkMarkers, setLinkMarkers] = useState([])
+  const [linkMarkers] = useState([])
   const [searchValue, setSearchValue] = useState("")
+  const [currentMarkersPage, setCurrentMarkersPage] = useState(1)
 
   // const [modelIdForLink, setModelIdForLink] = useState(0)
+  // const getFiltredMarkers = () => {
+  //   // setCurrentMarkersPage(1)
+  //   return markers.filter((el) => {
+  //     return el.name_marker_attr
+  //       .toLowerCase()
+  //       .includes(searchValue.toLowerCase())
+  //   })
+  // }
+  // let filtredMarkers = markers ? getFiltredMarkers() : markers
 
   let filtredMarkers = markers
     ? markers.filter((el) => {
@@ -29,7 +41,7 @@ const ScoringPage = () => {
           .toLowerCase()
           .includes(searchValue.toLowerCase())
       })
-    : null
+    : markers
 
   const getModelStatus = (status) => {
     return status === "AP" ? "Утвержден" : "Черновик"
@@ -150,6 +162,30 @@ const ScoringPage = () => {
     getMarkers()
   }, [])
 
+  // pagination
+
+  const pageSize = 3
+
+  const [currentModelsPage, setCurrentModelsPage] = useState(1)
+  const modelsCount = models.length
+  const handleModelsPageChange = (pageIndex) => {
+    setCurrentModelsPage(pageIndex)
+    // console.log("page: ", pageIndex)
+  }
+  const modelsCrop = paginate(models, currentModelsPage, pageSize)
+
+  const MarkersCount = filtredMarkers.length
+  const handleMarkersPageChange = (pageIndex) => {
+    setCurrentMarkersPage(pageIndex)
+    // console.log("page: ", pageIndex)
+  }
+
+  useEffect(() => {
+    setCurrentMarkersPage(1)
+  }, [searchValue])
+
+  const markersCrop = paginate(filtredMarkers, currentMarkersPage, pageSize)
+
   return (
     <div className="container mt-3 mb-4">
       {/* <div className="container mt-2"> */}
@@ -182,7 +218,7 @@ const ScoringPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {models.map((model, index) => {
+                  {modelsCrop.map((model, index) => {
                     return (
                       <tr key={index}>
                         {/* <td>{attribute.id}</td> */}
@@ -223,6 +259,12 @@ const ScoringPage = () => {
                   })}
                 </tbody>
               </table>
+              <Pagination
+                itemsCount={modelsCount}
+                pageSize={pageSize}
+                currentPage={currentModelsPage}
+                onPageChange={handleModelsPageChange}
+              />
             </div>
           </div>
         </div>
@@ -268,7 +310,7 @@ const ScoringPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filtredMarkers.map((marker) => {
+                  {markersCrop.map((marker) => {
                     return (
                       <tr key={marker.id}>
                         <td>{marker.name_marker_attr}</td>
@@ -302,6 +344,12 @@ const ScoringPage = () => {
                   })}
                 </tbody>
               </table>
+              <Pagination
+                itemsCount={MarkersCount}
+                pageSize={pageSize}
+                currentPage={currentMarkersPage}
+                onPageChange={handleMarkersPageChange}
+              />
             </div>
           </div>
         </div>

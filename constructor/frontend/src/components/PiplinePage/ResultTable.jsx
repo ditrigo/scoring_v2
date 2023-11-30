@@ -67,7 +67,7 @@ const ResultTable = ({ getLinkMarkers }) => {
           // console.log("searchedModels inside map", searchedModels)
           return Moment(inn.created_date)
             .locale("rus", localization)
-            .format("LLL")
+            .format("L")
             .includes(searchValue)
         })
       })
@@ -201,12 +201,12 @@ const ResultTable = ({ getLinkMarkers }) => {
                           return (
                             Moment(el.created_date)
                               .locale("rus", localization)
-                              .format("LLL")
+                              .format("L")
                               .includes(searchValue) && (
                               <p className="text-center" key={index}>
                                 {Moment(el.created_date)
                                   .locale("rus", localization)
-                                  .format("LLL")}
+                                  .format("L")}
                               </p>
                             )
                           )
@@ -217,7 +217,7 @@ const ResultTable = ({ getLinkMarkers }) => {
                           return (
                             Moment(el.created_date)
                               .locale("rus", localization)
-                              .format("LLL")
+                              .format("L")
                               .includes(searchValue) && (
                               <p className="text-center" key={index}>
                                 ИНН{" "}

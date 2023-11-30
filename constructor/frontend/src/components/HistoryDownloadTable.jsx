@@ -2,6 +2,8 @@ import React, { useState } from "react"
 import _ from "lodash"
 import Moment from "moment"
 import localization from "moment/locale/ru"
+import { paginate } from "./utils/paginate"
+import Pagination from "./common/pagination"
 // import 'https://momentjs.com/downloads/moment-with-locales.min.js';
 
 const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
@@ -71,6 +73,18 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
   }
 
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const itemsCount = sortedAttributes.length
+  const pageSize = 10
+  const handlePageChange = (pageIndex) => {
+    setCurrentPage(pageIndex)
+    console.log("page: ", pageIndex)
+  }
+
+  const itemsCrop = paginate(sortedAttributes, currentPage, pageSize)
+
   return (
     <>
       {/* <h3>Управление отображаемыми полями</h3> */}
@@ -128,7 +142,7 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
         </thead>
 
         <tbody>
-          {sortedAttributes.map((file) => (
+          {itemsCrop.map((file) => (
             <tr key={file.id}>
               {columns[0].isVisible && (
                 <td
@@ -165,6 +179,13 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
           ))}
         </tbody>
       </table>
+
+      <Pagination
+        itemsCount={itemsCount}
+        pageSize={pageSize}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </>
   )
 }
