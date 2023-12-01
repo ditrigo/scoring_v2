@@ -68,7 +68,7 @@ const ResultTable = ({ getLinkMarkers }) => {
           return Moment(inn.created_date)
             .locale("rus", localization)
             .format("L")
-            .includes(searchValue)
+            .includes(searchValue) 
         })
       })
     : searchedModels2
@@ -206,7 +206,9 @@ const ResultTable = ({ getLinkMarkers }) => {
                               <p className="text-center" key={index}>
                                 {Moment(el.created_date)
                                   .locale("rus", localization)
-                                  .format("L")}
+                                  .format("L") + ' ' + Moment(el.created_date)
+                                  .locale("rus", localization)
+                                  .format("LT")}
                               </p>
                             )
                           )
