@@ -1,7 +1,13 @@
 import React from "react"
-import PropTypes from "prop-types"
 import _ from "lodash"
-const Pagination = ({ itemsCount, pageSize, onPageChange, currentPage }) => {
+const Pagination = ({
+  itemsCount,
+  pageSize,
+  onPageChange,
+  currentPage,
+  onPageForward,
+  onPageBack,
+}) => {
   const pagesCount = Math.ceil(itemsCount / pageSize)
   if (pagesCount === 1) return null
   const pages = _.range(1, pagesCount + 1)
@@ -9,21 +15,46 @@ const Pagination = ({ itemsCount, pageSize, onPageChange, currentPage }) => {
   return (
     <nav>
       <ul className="pagination">
-        {pages.map((page) => (
-          <li
-            className={"page-item " + (page === currentPage ? "active" : "")}
-            key={"page_" + page}
+        <li className="page-item">
+          <button
+            className="page-link"
+            aria-label="Previous"
+            onClick={onPageBack}
           >
-            <button
-              className="page-link"
-              onClick={() => {
-                onPageChange(page)
-              }}
-            >
-              {page}
-            </button>
-          </li>
-        ))}
+            <span aria-hidden="true">&laquo;</span>
+            <span className="sr-only">Назад</span>
+          </button>
+        </li>
+        {pages.map((page, ind) => {
+          if (ind > currentPage - 10 && ind < currentPage + 9)
+            return (
+              <li
+                className={
+                  "page-item " + (page === currentPage ? "active" : "")
+                }
+                key={"page_" + page}
+              >
+                <button
+                  className="page-link"
+                  onClick={() => {
+                    onPageChange(page)
+                  }}
+                >
+                  {page}
+                </button>
+              </li>
+            )
+        })}
+        <li className="page-item">
+          <button
+            className="page-link"
+            aria-label="Next"
+            onClick={onPageForward}
+          >
+            <span aria-hidden="true">&raquo;</span>
+            <span className="sr-only">Вперед</span>
+          </button>
+        </li>
       </ul>
     </nav>
   )
