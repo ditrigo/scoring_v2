@@ -75,9 +75,9 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1)
-
+  const [pageSize, setPageSize] = useState(5)
   const itemsCount = sortedAttributes.length
-  const pageSize = 3
+  // const pageSize = 3
   const pagesCount = Math.ceil(itemsCount / pageSize)
 
   const handlePageChange = (pageIndex) => {
@@ -92,6 +92,14 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
   const handlePageBack = () => {
     if (currentPage === 1) return
     setCurrentPage((prevState) => prevState - 1)
+  }
+
+  const handleIncrPageSize = () => {
+    setPageSize((prevState) => prevState + 5)
+  }
+  const handleDecrPageSize = () => {
+    if (pageSize === 5) return
+    setPageSize((prevState) => prevState - 5)
   }
 
   const itemsCrop = paginate(sortedAttributes, currentPage, pageSize)
@@ -198,6 +206,8 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
         onPageChange={handlePageChange}
         onPageForward={handlePageForward}
         onPageBack={handlePageBack}
+        OnIncrPageSize={handleIncrPageSize}
+        OnDecrPageSize={handleDecrPageSize}
       />
     </>
   )

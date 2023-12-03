@@ -153,12 +153,13 @@ const ScoringPage = () => {
   }, [])
 
   // pagination
-  const pageSize = 5
+  // const pageSize = 5
 
+  const [modelsPageSize, setModelsPageSize] = useState(5)
   const [currentModelsPage, setCurrentModelsPage] = useState(1)
   const modelsCount = models.length
-  const modelsPagesCount = Math.ceil(modelsCount / pageSize)
-  const modelsCrop = paginate(models, currentModelsPage, pageSize)
+  const modelsPagesCount = Math.ceil(modelsCount / modelsPageSize)
+  const modelsCrop = paginate(models, currentModelsPage, modelsPageSize)
 
   const handleModelsPageChange = (pageIndex) => {
     setCurrentModelsPage(pageIndex)
@@ -172,11 +173,24 @@ const ScoringPage = () => {
     setCurrentModelsPage((prevState) => prevState - 1)
   }
 
+  const handleIncrModelsPageSize = () => {
+    setModelsPageSize((prevState) => prevState + 5)
+  }
+  const handleDecrModelsPageSize = () => {
+    if (modelsPageSize === 5) return
+    setModelsPageSize((prevState) => prevState - 5)
+  }
+
+  const [markersPageSize, setMarkersPageSize] = useState(5)
   const [currentMarkersPage, setCurrentMarkersPage] = useState(1)
   const MarkersCount = filtredMarkers.length
-  const markersPagesCount = Math.ceil(MarkersCount / pageSize)
+  const markersPagesCount = Math.ceil(MarkersCount / markersPageSize)
 
-  const markersCrop = paginate(filtredMarkers, currentMarkersPage, pageSize)
+  const markersCrop = paginate(
+    filtredMarkers,
+    currentMarkersPage,
+    markersPageSize
+  )
 
   const handleMarkersPageChange = (pageIndex) => {
     setCurrentMarkersPage(pageIndex)
@@ -188,6 +202,13 @@ const ScoringPage = () => {
   const handleMarkersPageBack = () => {
     if (currentMarkersPage === 1) return
     setCurrentMarkersPage((prevState) => prevState - 1)
+  }
+  const handleIncrMarkersPageSize = () => {
+    setMarkersPageSize((prevState) => prevState + 5)
+  }
+  const handleDecrMarkersPageSize = () => {
+    if (markersPageSize === 5) return
+    setMarkersPageSize((prevState) => prevState - 5)
   }
 
   useEffect(() => {
@@ -269,11 +290,13 @@ const ScoringPage = () => {
               </table>
               <Pagination
                 itemsCount={modelsCount}
-                pageSize={pageSize}
+                pageSize={modelsPageSize}
                 currentPage={currentModelsPage}
                 onPageChange={handleModelsPageChange}
                 onPageForward={handleModelsPageForward}
                 onPageBack={handleModelsPageBack}
+                OnIncrPageSize={handleIncrModelsPageSize}
+                OnDecrPageSize={handleDecrModelsPageSize}
               />
             </div>
           </div>
@@ -356,11 +379,13 @@ const ScoringPage = () => {
               </table>
               <Pagination
                 itemsCount={MarkersCount}
-                pageSize={pageSize}
+                pageSize={markersPageSize}
                 currentPage={currentMarkersPage}
                 onPageChange={handleMarkersPageChange}
                 onPageForward={handleMarkersPageForward}
                 onPageBack={handleMarkersPageBack}
+                OnIncrPageSize={handleIncrMarkersPageSize}
+                OnDecrPageSize={handleDecrMarkersPageSize}
               />
             </div>
           </div>

@@ -78,9 +78,10 @@ const Table = ({ attributes, columns, setColumns }) => {
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(5)
 
   const itemsCount = searchedAttributes.length
-  const pageSize = 5
+  // const pageSize = 5
   const pagesCount = Math.ceil(itemsCount / pageSize)
 
   const handlePageChange = (pageIndex) => {
@@ -95,6 +96,14 @@ const Table = ({ attributes, columns, setColumns }) => {
   const handlePageBack = () => {
     if (currentPage === 1) return
     setCurrentPage((prevState) => prevState - 1)
+  }
+
+  const handleIncrPageSize = () => {
+    setPageSize((prevState) => prevState + 5)
+  }
+  const handleDecrPageSize = () => {
+    if (pageSize === 5) return
+    setPageSize((prevState) => prevState - 5)
   }
 
   const itemsCrop = paginate(searchedAttributes, currentPage, pageSize)
@@ -211,6 +220,8 @@ const Table = ({ attributes, columns, setColumns }) => {
         onPageChange={handlePageChange}
         onPageForward={handlePageForward}
         onPageBack={handlePageBack}
+        OnIncrPageSize={handleIncrPageSize}
+        OnDecrPageSize={handleDecrPageSize}
       />
 
       {/* {pages > 1 && (
