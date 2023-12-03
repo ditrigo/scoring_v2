@@ -195,15 +195,16 @@ const ResultTable = ({ getLinkMarkers }) => {
 
                       <td>
                         {el.inns.map((el, index) => {
-                          return (
+                          const date =
                             Moment(el.created_date)
                               .locale("rus", localization)
                               .format("L") +
-                              " " +
-                              Moment(el.created_date)
-                                .locale("rus", localization)
-                                .format("LT")
-                                .includes(searchValue) && (
+                            " " +
+                            Moment(el.created_date)
+                              .locale("rus", localization)
+                              .format("LT")
+                          return (
+                            date.includes(searchValue) && (
                               <p className="text-center" key={index}>
                                 {Moment(el.created_date)
                                   .locale("rus", localization)
@@ -219,15 +220,16 @@ const ResultTable = ({ getLinkMarkers }) => {
                       </td>
                       <td>
                         {el.inns.map((el, index) => {
-                          return (
+                          const date =
                             Moment(el.created_date)
                               .locale("rus", localization)
                               .format("L") +
-                              " " +
-                              Moment(el.created_date)
-                                .locale("rus", localization)
-                                .format("LT")
-                                .includes(searchValue) && (
+                            " " +
+                            Moment(el.created_date)
+                              .locale("rus", localization)
+                              .format("LT")
+                          return (
+                            date.includes(searchValue) && (
                               <p className="text-center" key={index}>
                                 ИНН{" "}
                                 {el.result_score ? (
