@@ -39,8 +39,9 @@ urlpatterns = [
 
     re_path(r"^download/$", DownloadTryViewSet, name="download"),
     
-    # Test
-    re_path(r"^for_journal/$", ForJournalViewSet, name="for_journal"),
+    # re_path(r"^for_journal/$", ForJournalViewSet, name="for_journal"),
+    re_path(r"^get_res_by_model_inn/(?P<pk_model>[0-9]+)/(?P<pk_inn>[0-9]+)$", InnResUsingScoringModelId, name="get_res_by_model_inn"),
+    
     re_path(r"^data_for_journal/$", DownloadJournalData, name="data_for_journal"),
 
     ### CRM URLS ###########################################################################################
