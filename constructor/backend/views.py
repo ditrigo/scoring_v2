@@ -808,7 +808,6 @@ def DownloadTryViewSet(request):
     return response
 
 
-# TODO Доделать API и расскоментить 
 @api_view(['GET'])
 def InnResUsingScoringModelId(request, pk_model, pk_inn):
     if request.method == "GET":
@@ -1158,8 +1157,8 @@ def DownloadJournalData(request):
 
     date_time = request.GET.get('date') # "2023-11-11 15:15"
     user_id = request.GET.get('user')
-    model_id = request.GET.get('model')
-
+    model = str(request.GET.get('model'))
+    
     where_data = ""
     if not date_time is None:
         # where_data = f"AND date(ir.created_date) = {date_time}"
@@ -1170,7 +1169,8 @@ def DownloadJournalData(request):
         where_user_id = f"AND sm.author_id = {user_id}"
 
     where_model_id = ""
-    if not model_id is None:
+    if not model is None:
+        model_id = ScoringModel.objects.all().get(model_name__contains=request.GET['model'].replace('"', '')).id
         where_model_id = f"AND smi.scoringmodel_id = {model_id}"
 
     guid = 'file_db_import_' + uuid.uuid4().hex
