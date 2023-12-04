@@ -65,11 +65,9 @@
   border-radius: 7.5px;
 }
 
-.App {
-  display: flex;
-  flex-direction: column;
-  /* height: 100%; */
-  height: 200%;
+.container {
+  margin: 0;
+  padding: 0;
 }
 
 .card-header-name {

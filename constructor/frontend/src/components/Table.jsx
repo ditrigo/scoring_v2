@@ -5,18 +5,8 @@ import localization from "moment/locale/ru"
 import MyInput from "./UI/MyInput/MyInput"
 import Pagination from "./common/pagination"
 import { paginate } from "./utils/paginate"
-import MyButton from "./UI/MyButton/MyButton"
-import axios from "axios"
-// import 'https://momentjs.com/downloads/moment-with-locales.min.js';
 
-const Table = ({
-  attributes,
-  columns,
-  setColumns,
-  handleChangeForward,
-  handleChangeBack,
-  pages,
-}) => {
+const Table = ({ attributes, columns, setColumns }) => {
   const [sortType, setSortType] = useState({ path: "name", order: "asc" })
   const [searchValue, setSearchValue] = useState("")
 
@@ -88,12 +78,32 @@ const Table = ({
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(5)
 
   const itemsCount = searchedAttributes.length
-  const pageSize = 3
+  // const pageSize = 5
+  const pagesCount = Math.ceil(itemsCount / pageSize)
+
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex)
-    console.log("page: ", pageIndex)
+  }
+
+  const handlePageForward = () => {
+    if (currentPage === pagesCount) return
+    setCurrentPage((prevState) => prevState + 1)
+  }
+
+  const handlePageBack = () => {
+    if (currentPage === 1) return
+    setCurrentPage((prevState) => prevState - 1)
+  }
+
+  const handleIncrPageSize = () => {
+    setPageSize((prevState) => prevState + 5)
+  }
+  const handleDecrPageSize = () => {
+    if (pageSize === 5) return
+    setPageSize((prevState) => prevState - 5)
   }
 
   const itemsCrop = paginate(searchedAttributes, currentPage, pageSize)
@@ -208,6 +218,10 @@ const Table = ({
         pageSize={pageSize}
         currentPage={currentPage}
         onPageChange={handlePageChange}
+        onPageForward={handlePageForward}
+        onPageBack={handlePageBack}
+        OnIncrPageSize={handleIncrPageSize}
+        OnDecrPageSize={handleDecrPageSize}
       />
 
       {/* {pages > 1 && (

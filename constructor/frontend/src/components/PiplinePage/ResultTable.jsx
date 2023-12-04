@@ -63,12 +63,13 @@ const ResultTable = ({ getLinkMarkers }) => {
     ? searchedModels2.filter((el) => {
         // console.log("el",el)
         return el.inns.some((inn) => {
-          // console.log("inn",inn)
-          // console.log("searchedModels inside map", searchedModels)
-          return Moment(inn.created_date)
-            .locale("rus", localization)
-            .format("L")
-            .includes(searchValue) 
+          let date =
+            Moment(inn.created_date).locale("rus", localization).format("L") +
+            " " +
+            Moment(inn.created_date).locale("rus", localization).format("LT")
+
+          // console.log(date, date.includes(searchValue))
+          return date.includes(searchValue)
         })
       })
     : searchedModels2
@@ -90,10 +91,14 @@ const ResultTable = ({ getLinkMarkers }) => {
   // }
 
   async function downLoadResultsNEW() {
+    console.log(
+      `${configFile.apiEndPoint}/data_for_journal/?date="${searchValue}"&user="${searchAuthor}"&model="${searchModelName}"`
+    )
     axios({
-      url: searchValue
-        ? `${configFile.apiEndPoint}/data_for_journal/?date="${searchValue}"`
-        : `${configFile.apiEndPoint}/data_for_journal/`,
+      url:
+        searchValue && searchModelName && searchAuthor
+          ? `${configFile.apiEndPoint}/data_for_journal/?date="${searchValue}"&user="${searchAuthor}"&model="${searchModelName}"`
+          : `${configFile.apiEndPoint}/data_for_journal/`,
       method: "GET",
       responseType: "blob",
     })
@@ -185,30 +190,29 @@ const ResultTable = ({ getLinkMarkers }) => {
                 return (
                   el.inns.length !== 0 && (
                     <tr key={index}>
-                      <td>
-                        {/* <Link to={"/results/" + el.model_name}> */}
-                        {"Тестовое имя" && el.model_name}
-                        {/* </Link> */}
-                      </td>
+                      <td>{"Тестовое имя" && el.model_name}</td>
                       <td>{"Тестовый пользователь" && el.author_id}</td>
+
                       <td>
-                        {/* дата модели -
-                        {Moment(el.created_date)
-                          .locale("rus", localization)
-                          .format("LLL")}{" "}
-                        - дата модели */}
                         {el.inns.map((el, index) => {
-                          return (
+                          const date =
                             Moment(el.created_date)
                               .locale("rus", localization)
-                              .format("L")
-                              .includes(searchValue) && (
+                              .format("L") +
+                            " " +
+                            Moment(el.created_date)
+                              .locale("rus", localization)
+                              .format("LT")
+                          return (
+                            date.includes(searchValue) && (
                               <p className="text-center" key={index}>
                                 {Moment(el.created_date)
                                   .locale("rus", localization)
-                                  .format("L") + ' ' + Moment(el.created_date)
-                                  .locale("rus", localization)
-                                  .format("LT")}
+                                  .format("L") +
+                                  " " +
+                                  Moment(el.created_date)
+                                    .locale("rus", localization)
+                                    .format("LT")}
                               </p>
                             )
                           )
@@ -216,11 +220,16 @@ const ResultTable = ({ getLinkMarkers }) => {
                       </td>
                       <td>
                         {el.inns.map((el, index) => {
-                          return (
+                          const date =
                             Moment(el.created_date)
                               .locale("rus", localization)
-                              .format("L")
-                              .includes(searchValue) && (
+                              .format("L") +
+                            " " +
+                            Moment(el.created_date)
+                              .locale("rus", localization)
+                              .format("LT")
+                          return (
+                            date.includes(searchValue) && (
                               <p className="text-center" key={index}>
                                 ИНН{" "}
                                 {el.result_score ? (
@@ -238,20 +247,48 @@ const ResultTable = ({ getLinkMarkers }) => {
                                 </span>
                               </p>
                             )
-                            // <p className="text-center" key={index}>
-                            //   ИНН{" "}
-                            //   {el.result_score ? (
-                            //     <Link to={"/results/" + el.inn}>{el.inn}</Link>
-                            //   ) : (
-                            //     el.inn
-                            //   )}{" "}
-                            //   с общим результатом{" "}
-                            //   <span className="text-success">
-                            //     {el.result_score
-                            //       ? el?.result_score?.total_rank
-                            //       : "-"}
-                            //   </span>
-                            // </p>
+
+                            //   {el.inns.map((el, index) => {
+                            //     return (
+                            //       Moment(el.created_date)
+                            //         .locale("rus", localization)
+                            //         .format("L")
+                            //         .includes(searchValue) && (
+                            //         <p className="text-center" key={index}>
+                            //           {Moment(el.created_date)
+                            //             .locale("rus", localization)
+                            //             .format("L") + ' ' + Moment(el.created_date)
+                            //             .locale("rus", localization)
+                            //             .format("LT")}
+                            //         </p>
+                            //       )
+                            //     )
+                            //   })}
+                            // </td>
+                            // <td>
+                            //   {el.inns.map((el, index) => {
+                            //     return (
+                            //       Moment(el.created_date)
+                            //         .locale("rus", localization)
+                            //         .format("L")
+                            //         .includes(searchValue) && (
+                            //         <p className="text-center" key={index}>
+                            //           ИНН{" "}
+                            //           {el.result_score ? (
+                            //             <Link to={"/results/" + el.inn}>
+                            //               {el.inn}
+                            //             </Link>
+                            //           ) : (
+                            //             el.inn
+                            //           )}{" "}
+                            //           с общим результатом{" "}
+                            //           <span className="text-success">
+                            //             {el.result_score
+                            //               ? el?.result_score?.total_rank
+                            //               : "-"}
+                            //           </span>
+                            //         </p>
+                            //       )
                           )
                         })}
                       </td>

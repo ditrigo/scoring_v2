@@ -22,18 +22,8 @@ const ScoringPage = () => {
   const [modalMarker, setModalMarker] = useState(false)
   const [linkMarkers] = useState([])
   const [searchValue, setSearchValue] = useState("")
-  const [currentMarkersPage, setCurrentMarkersPage] = useState(1)
 
   // const [modelIdForLink, setModelIdForLink] = useState(0)
-  // const getFiltredMarkers = () => {
-  //   // setCurrentMarkersPage(1)
-  //   return markers.filter((el) => {
-  //     return el.name_marker_attr
-  //       .toLowerCase()
-  //       .includes(searchValue.toLowerCase())
-  //   })
-  // }
-  // let filtredMarkers = markers ? getFiltredMarkers() : markers
 
   let filtredMarkers = markers
     ? markers.filter((el) => {
@@ -163,28 +153,67 @@ const ScoringPage = () => {
   }, [])
 
   // pagination
+  // const pageSize = 5
 
-  const pageSize = 3
-
+  const [modelsPageSize, setModelsPageSize] = useState(5)
   const [currentModelsPage, setCurrentModelsPage] = useState(1)
   const modelsCount = models.length
+  const modelsPagesCount = Math.ceil(modelsCount / modelsPageSize)
+  const modelsCrop = paginate(models, currentModelsPage, modelsPageSize)
+
   const handleModelsPageChange = (pageIndex) => {
     setCurrentModelsPage(pageIndex)
-    // console.log("page: ", pageIndex)
   }
-  const modelsCrop = paginate(models, currentModelsPage, pageSize)
+  const handleModelsPageForward = () => {
+    if (currentModelsPage === modelsPagesCount) return
+    setCurrentModelsPage((prevState) => prevState + 1)
+  }
+  const handleModelsPageBack = () => {
+    if (currentModelsPage === 1) return
+    setCurrentModelsPage((prevState) => prevState - 1)
+  }
 
+  const handleIncrModelsPageSize = () => {
+    setModelsPageSize((prevState) => prevState + 5)
+  }
+  const handleDecrModelsPageSize = () => {
+    if (modelsPageSize === 5) return
+    setModelsPageSize((prevState) => prevState - 5)
+  }
+
+  const [markersPageSize, setMarkersPageSize] = useState(5)
+  const [currentMarkersPage, setCurrentMarkersPage] = useState(1)
   const MarkersCount = filtredMarkers.length
+  const markersPagesCount = Math.ceil(MarkersCount / markersPageSize)
+
+  const markersCrop = paginate(
+    filtredMarkers,
+    currentMarkersPage,
+    markersPageSize
+  )
+
   const handleMarkersPageChange = (pageIndex) => {
     setCurrentMarkersPage(pageIndex)
-    // console.log("page: ", pageIndex)
+  }
+  const handleMarkersPageForward = () => {
+    if (currentMarkersPage === markersPagesCount) return
+    setCurrentMarkersPage((prevState) => prevState + 1)
+  }
+  const handleMarkersPageBack = () => {
+    if (currentMarkersPage === 1) return
+    setCurrentMarkersPage((prevState) => prevState - 1)
+  }
+  const handleIncrMarkersPageSize = () => {
+    setMarkersPageSize((prevState) => prevState + 5)
+  }
+  const handleDecrMarkersPageSize = () => {
+    if (markersPageSize === 5) return
+    setMarkersPageSize((prevState) => prevState - 5)
   }
 
   useEffect(() => {
     setCurrentMarkersPage(1)
   }, [searchValue])
-
-  const markersCrop = paginate(filtredMarkers, currentMarkersPage, pageSize)
 
   return (
     <div className="container mt-3 mb-4">
@@ -261,9 +290,13 @@ const ScoringPage = () => {
               </table>
               <Pagination
                 itemsCount={modelsCount}
-                pageSize={pageSize}
+                pageSize={modelsPageSize}
                 currentPage={currentModelsPage}
                 onPageChange={handleModelsPageChange}
+                onPageForward={handleModelsPageForward}
+                onPageBack={handleModelsPageBack}
+                OnIncrPageSize={handleIncrModelsPageSize}
+                OnDecrPageSize={handleDecrModelsPageSize}
               />
             </div>
           </div>
@@ -346,9 +379,13 @@ const ScoringPage = () => {
               </table>
               <Pagination
                 itemsCount={MarkersCount}
-                pageSize={pageSize}
+                pageSize={markersPageSize}
                 currentPage={currentMarkersPage}
                 onPageChange={handleMarkersPageChange}
+                onPageForward={handleMarkersPageForward}
+                onPageBack={handleMarkersPageBack}
+                OnIncrPageSize={handleIncrMarkersPageSize}
+                OnDecrPageSize={handleDecrMarkersPageSize}
               />
             </div>
           </div>
