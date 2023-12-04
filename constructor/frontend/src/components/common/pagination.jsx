@@ -28,7 +28,7 @@ const Pagination = ({
           </button>
         </li>
         {pages.map((page, ind) => {
-          if (ind > currentPage - 10 && ind < currentPage + 9)
+          if (ind > currentPage - 5 && ind < currentPage + 4)
             return (
               <li
                 className={
