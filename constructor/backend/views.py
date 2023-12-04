@@ -808,35 +808,58 @@ def DownloadTryViewSet(request):
     return response
 
 
+@api_view(['GET'])
+def InnResUsingScoringModelId(request, pk_model, pk_inn):
+    if request.method == "GET":
+        try:
+            scoring_model = ScoringModel.objects.get(id=pk_model)
+        except ScoringModel.DoesNotExist:
+            return Response({'message': "Model is not exist"}, status=status.HTTP_400_BAD_REQUEST)  
+        try:
+            ImportedAttributes.objects.get(inn=pk_inn)
+        except ImportedAttributes.DoesNotExist:
+            return Response({'message': "Inn is not exist"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response({"response": scoring_model.inns.get(inn=pk_inn).result_score}, 
+                        status=status.HTTP_200_OK)
+
+    return Response({'message': "Something went wrong"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['GET', 'POST'])
 def InnAndResultsListViewSet(request):
     permission_classes = (IsAuthenticated,)
     if request.method == 'GET':
-        data = []
-        nextPage = 1
-        previousPage = 1
+        # data = []
+        # nextPage = 1
+        # previousPage = 1
         fields = InnRes.objects.all().order_by('id')
-        page = request.GET.get('page', 1)
-        paginator = Paginator(fields, 20)
-        try:
-            data = paginator.page(page)
-        except PageNotAnInteger:
-            data = paginator.page(1)
-        except EmptyPage:
-            data = paginator.page(paginator.num_pages)
+        # page = request.GET.get('page', 1)
+        # paginator = Paginator(fields, 20)
+        # try:
+        #     data = paginator.page(page)
+        # except PageNotAnInteger:
+        #     data = paginator.page(1)
+        # except EmptyPage:
+        #     data = paginator.page(paginator.num_pages)
 
         serializer = InnResSerialiser(
-            data, context={'request': request}, many=True)
-        if data.has_next():
-            nextPage = data.next_page_number()
-        if data.has_previous():
-            previousPage = data.previous_page_number()
+            # data,
+            fields, 
+            context={'request': request}, 
+            many=True)
+        # if data.has_next():
+        #     nextPage = data.next_page_number()
+        # if data.has_previous():
+        #     previousPage = data.previous_page_number()
 
         return Response({'data': serializer.data,
-                         'count': paginator.count,
-                         'numpages': paginator.num_pages,
-                         'nextlink': '/api/inn_res/?page=' + str(nextPage),
-                         'prevlink': '/api/inn_res/?page=' + str(previousPage)})
+                        #  'count': paginator.count,
+                        #  'numpages': paginator.num_pages,
+                        #  'nextlink': '/api/inn_res/?page=' + str(nextPage),
+                        #  'prevlink': '/api/inn_res/?page=' + str(previousPage)
+                         }
+                         )
     elif request.method == 'POST':
         serializer = InnResSerialiser(data=request.data)
         if serializer.is_valid():
@@ -1065,68 +1088,68 @@ def StartTestScoringViewSet(request):
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
-def ForJournalViewSet(request):
+# @api_view(['GET'])
+# def ForJournalViewSet(request):
 
-    columns = ["scoring_model_id", "model_name", "model_author", "inn_id", "created_date", "inn", "result_score"]
-    with connection.cursor() as cursor:
+#     columns = ["scoring_model_id", "model_name", "model_author", "inn_id", "created_date", "inn", "result_score"]
+#     with connection.cursor() as cursor:
     
-        text_query = """
-            select 
-                smi.scoringmodel_id
-                , sm.model_name 
-                , sm.author_id
-                , smi.innres_id 
-                , ir.created_date 
-                , ir.inn
-                , ir.result_score
-            from scoring_model sm 
-            join scoring_model_inns smi 
-            on sm.id = smi.scoringmodel_id 
-            join inn_res ir on ir.id = smi.innres_id 
-            order by smi.scoringmodel_id
-            ;
-            """
-        cursor.execute(text_query)
-        data = cursor.fetchall()
-        test_dict = {}
-        df = pd.DataFrame(data, columns=columns).fillna('')
+#         text_query = """
+#             select 
+#                 smi.scoringmodel_id
+#                 , sm.model_name 
+#                 , sm.author_id
+#                 , smi.innres_id 
+#                 , ir.created_date 
+#                 , ir.inn
+#                 , ir.result_score
+#             from scoring_model sm 
+#             join scoring_model_inns smi 
+#             on sm.id = smi.scoringmodel_id 
+#             join inn_res ir on ir.id = smi.innres_id 
+#             order by smi.scoringmodel_id
+#             ;
+#             """
+#         cursor.execute(text_query)
+#         data = cursor.fetchall()
+#         test_dict = {}
+#         df = pd.DataFrame(data, columns=columns).fillna('')
         
-        begin_date = df.iloc[0]["created_date"].date()
-        begin_scoring_model_id = df.iloc[0]["scoring_model_id"]
-        scoring_data_same_date, total_array_with_date = [], []
-        row = 0
-        while row < len(df):
-            print(row)
-            if df.iloc[row]["scoring_model_id"] == begin_scoring_model_id:
-                if df.iloc[row]["created_date"].date() == begin_date:
-                    # print(df.iloc[row])
-                    scoring_data_same_date.append(df[["inn_id", 
-                                                      "created_date", 
-                                                      "inn", 
-                                                    #   "result_score"
-                                                      ]] \
-                                                  .iloc[row] \
-                                                  .to_dict())
-                else:
-                    print("ELSE", row)
-                    begin_date = df.iloc[row]["created_date"].date()
-                    print(begin_date)
-                    total_array_with_date.append(scoring_data_same_date)
-                    # row -= 1
-                    print(row)
-            else:
-                #TODO Начать новый массив данных 
-                #TODO Где-то предусмотреть обновление  begin_date и begin_scoring_model_id
-                pass
-            row += 1
+#         begin_date = df.iloc[0]["created_date"].date()
+#         begin_scoring_model_id = df.iloc[0]["scoring_model_id"]
+#         scoring_data_same_date, total_array_with_date = [], []
+#         row = 0
+#         while row < len(df):
+#             print(row)
+#             if df.iloc[row]["scoring_model_id"] == begin_scoring_model_id:
+#                 if df.iloc[row]["created_date"].date() == begin_date:
+#                     # print(df.iloc[row])
+#                     scoring_data_same_date.append(df[["inn_id", 
+#                                                       "created_date", 
+#                                                       "inn", 
+#                                                     #   "result_score"
+#                                                       ]] \
+#                                                   .iloc[row] \
+#                                                   .to_dict())
+#                 else:
+#                     print("ELSE", row)
+#                     begin_date = df.iloc[row]["created_date"].date()
+#                     print(begin_date)
+#                     total_array_with_date.append(scoring_data_same_date)
+#                     # row -= 1
+#                     print(row)
+#             else:
+#                 #TODO Начать новый массив данных 
+#                 #TODO Где-то предусмотреть обновление  begin_date и begin_scoring_model_id
+#                 pass
+#             row += 1
 
-            # print("test_dict",df.iloc[row].to_dict())
-        # print(scoring_data_same_date)
-        print("\ntotal_array_with_date", total_array_with_date)
-    return Response({'message': 'Results', 
-                     "response":json.loads(df.to_json(orient="records")) }, 
-                     status=status.HTTP_200_OK)
+#             # print("test_dict",df.iloc[row].to_dict())
+#         # print(scoring_data_same_date)
+#         print("\ntotal_array_with_date", total_array_with_date)
+#     return Response({'message': 'Results', 
+#                      "response":json.loads(df.to_json(orient="records")) }, 
+#                      status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -1134,8 +1157,8 @@ def DownloadJournalData(request):
 
     date_time = request.GET.get('date') # "2023-11-11 15:15"
     user_id = request.GET.get('user')
-    model_id = request.GET.get('model')
-
+    model = str(request.GET.get('model'))
+    
     where_data = ""
     if not date_time is None:
         # where_data = f"AND date(ir.created_date) = {date_time}"
@@ -1146,7 +1169,8 @@ def DownloadJournalData(request):
         where_user_id = f"AND sm.author_id = {user_id}"
 
     where_model_id = ""
-    if not model_id is None:
+    if not model is None:
+        model_id = ScoringModel.objects.all().get(model_name__contains=request.GET['model'].replace('"', '')).id
         where_model_id = f"AND smi.scoringmodel_id = {model_id}"
 
     guid = 'file_db_import_' + uuid.uuid4().hex

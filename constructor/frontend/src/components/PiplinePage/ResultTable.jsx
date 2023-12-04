@@ -92,12 +92,12 @@ const ResultTable = ({ getLinkMarkers }) => {
 
   async function downLoadResultsNEW() {
     console.log(
-      `${configFile.apiEndPoint}/data_for_journal/?date="${searchValue}"&user="${searchAuthor}"&model="${searchModelName}"`
+      `${configFile.apiEndPoint}/data_for_journal/?date="${searchValue}"&user="${searchAuthor}"&model="${encodeURI(searchModelName)}"`
     )
     axios({
       url:
         searchValue && searchModelName && searchAuthor
-          ? `${configFile.apiEndPoint}/data_for_journal/?date="${searchValue}"&user="${searchAuthor}"&model="${searchModelName}"`
+          ? `${configFile.apiEndPoint}/data_for_journal/?date="${searchValue}"&user="${searchAuthor}"&model=${encodeURI(searchModelName)}`
           : `${configFile.apiEndPoint}/data_for_journal/`,
       method: "GET",
       responseType: "blob",
