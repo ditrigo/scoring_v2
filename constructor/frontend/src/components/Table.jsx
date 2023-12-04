@@ -99,6 +99,11 @@ const Table = ({ attributes, columns, setColumns }) => {
   }
 
   const handleIncrPageSize = () => {
+    if (currentPage >= pagesCount) setCurrentPage(pagesCount - 1)
+    console.log("eckj;")
+    console.log("currentPage", currentPage)
+    console.log("count", pagesCount)
+
     setPageSize((prevState) => prevState + 5)
   }
   const handleDecrPageSize = () => {

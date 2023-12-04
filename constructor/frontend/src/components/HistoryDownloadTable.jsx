@@ -95,6 +95,8 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
   }
 
   const handleIncrPageSize = () => {
+    if (currentPage >= pagesCount) setCurrentPage(pagesCount - 1)
+
     setPageSize((prevState) => prevState + 5)
   }
   const handleDecrPageSize = () => {

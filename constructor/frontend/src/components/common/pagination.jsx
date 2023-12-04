@@ -16,47 +16,50 @@ const Pagination = ({
 
   return (
     <nav>
-      <ul className="pagination">
-        <li className="page-item">
-          <button
-            className="page-link"
-            aria-label="Previous"
-            onClick={onPageBack}
-          >
-            <span aria-hidden="true">&laquo;</span>
-            <span className="sr-only">Назад</span>
-          </button>
-        </li>
-        {pages.map((page, ind) => {
-          if (ind > currentPage - 5 && ind < currentPage + 4)
-            return (
-              <li
-                className={
-                  "page-item " + (page === currentPage ? "active" : "")
-                }
-                key={"page_" + page}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => {
-                    onPageChange(page)
-                  }}
+      <ul className="pagination d-flex justify-content-between">
+        <div className="pagination">
+          <li className="page-item">
+            <button
+              className="page-link"
+              aria-label="Previous"
+              onClick={onPageBack}
+            >
+              <span aria-hidden="true">&laquo;</span>
+              <span className="sr-only">Назад</span>
+            </button>
+          </li>
+          {pages.map((page, ind) => {
+            if (ind > currentPage - 4 && ind < currentPage + 2)
+              return (
+                <li
+                  className={
+                    "page-item " + (page === currentPage ? "active" : "")
+                  }
+                  key={"page_" + page}
                 >
-                  {page}
-                </button>
-              </li>
-            )
-        })}
-        <li className="page-item">
-          <button
-            className="page-link"
-            aria-label="Next"
-            onClick={onPageForward}
-          >
-            <span aria-hidden="true">&raquo;</span>
-            <span className="sr-only">Вперед</span>
-          </button>
-        </li>
+                  <button
+                    className="page-link"
+                    onClick={() => {
+                      onPageChange(page)
+                    }}
+                  >
+                    {page}
+                  </button>
+                </li>
+              )
+          })}
+          <li className="page-item">
+            <button
+              className="page-link"
+              aria-label="Next"
+              onClick={onPageForward}
+            >
+              <span aria-hidden="true">&raquo;</span>
+              <span className="sr-only">Вперед</span>
+            </button>
+          </li>
+        </div>
+
         <div className="mt-1 ms-4">
           <button
             type="button"

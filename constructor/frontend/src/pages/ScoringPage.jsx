@@ -174,6 +174,9 @@ const ScoringPage = () => {
   }
 
   const handleIncrModelsPageSize = () => {
+    if (currentModelsPage >= modelsPagesCount)
+      setCurrentModelsPage(modelsPagesCount - 1)
+
     setModelsPageSize((prevState) => prevState + 5)
   }
   const handleDecrModelsPageSize = () => {
@@ -204,6 +207,9 @@ const ScoringPage = () => {
     setCurrentMarkersPage((prevState) => prevState - 1)
   }
   const handleIncrMarkersPageSize = () => {
+    if (currentMarkersPage >= markersPagesCount)
+      setCurrentMarkersPage(markersPagesCount - 1)
+
     setMarkersPageSize((prevState) => prevState + 5)
   }
   const handleDecrMarkersPageSize = () => {

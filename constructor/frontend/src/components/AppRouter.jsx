@@ -23,8 +23,7 @@ const AppRouter = () => {
       <Route path="/pipeline" element={<PipelinePage />} />
       <Route path="/crm" element={<CrmPage />} />
       <Route path="/results" element={<ResultTable />} />
-      <Route path="/results/:inn?" element={<ResultMarkersView />} />
-      {/* <Route path="/results/:modelname?" element={<ResultMarkersView />} /> */}
+      <Route path="/results/:inn?/:modelId?" element={<ResultMarkersView />} />
       <Route path="/error" element={<Error />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/logout" element={<Logout />} />

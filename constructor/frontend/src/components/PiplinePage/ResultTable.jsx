@@ -91,14 +91,19 @@ const ResultTable = ({ getLinkMarkers }) => {
   // }
 
   async function downLoadResultsNEW() {
+    let URL = `${configFile.apiEndPoint}/data_for_journal/?`
+    if (searchValue) URL += `date="${searchValue}"&`
+    if (searchAuthor) URL += `user="${searchAuthor}"&`
+    if (searchModelName) URL += `model="${encodeURI(searchModelName)}"&`
+    URL = URL.replace(/&$/, "")
+
     console.log(
-      `${configFile.apiEndPoint}/data_for_journal/?date="${searchValue}"&user="${searchAuthor}"&model="${encodeURI(searchModelName)}"`
+      "🚀 ~ file: ResultTable.jsx:99 ~ downLoadResultsNEW ~ URL:",
+      URL
     )
+
     axios({
-      url:
-        searchValue && searchModelName && searchAuthor
-          ? `${configFile.apiEndPoint}/data_for_journal/?date="${searchValue}"&user="${searchAuthor}"&model=${encodeURI(searchModelName)}`
-          : `${configFile.apiEndPoint}/data_for_journal/`,
+      url: URL,
       method: "GET",
       responseType: "blob",
     })
@@ -206,43 +211,38 @@ const ResultTable = ({ getLinkMarkers }) => {
                           return (
                             date.includes(searchValue) && (
                               <p className="text-center" key={index}>
-                                {Moment(el.created_date)
-                                  .locale("rus", localization)
-                                  .format("L") +
-                                  " " +
-                                  Moment(el.created_date)
-                                    .locale("rus", localization)
-                                    .format("LT")}
+                                {date}
                               </p>
                             )
                           )
                         })}
                       </td>
                       <td>
-                        {el.inns.map((el, index) => {
+                        {el.inns.map((inn, index) => {
+                          console.log("elll", el)
                           const date =
-                            Moment(el.created_date)
+                            Moment(inn.created_date)
                               .locale("rus", localization)
                               .format("L") +
                             " " +
-                            Moment(el.created_date)
+                            Moment(inn.created_date)
                               .locale("rus", localization)
                               .format("LT")
                           return (
                             date.includes(searchValue) && (
                               <p className="text-center" key={index}>
                                 ИНН{" "}
-                                {el.result_score ? (
-                                  <Link to={"/results/" + el.inn}>
-                                    {el.inn}
+                                {inn.result_score ? (
+                                  <Link to={`/results/${inn.inn}/${el.id}`}>
+                                    {inn.inn}
                                   </Link>
                                 ) : (
-                                  el.inn
+                                  inn.inn
                                 )}{" "}
                                 с общим результатом{" "}
                                 <span className="text-success">
-                                  {el.result_score
-                                    ? el?.result_score?.total_rank
+                                  {inn.result_score
+                                    ? inn?.result_score?.total_rank
                                     : "-"}
                                 </span>
                               </p>
