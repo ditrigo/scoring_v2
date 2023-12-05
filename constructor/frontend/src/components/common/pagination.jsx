@@ -25,7 +25,7 @@ const Pagination = ({
               onClick={onPageBack}
             >
               <span aria-hidden="true">&laquo;</span>
-              <span className="sr-only">Назад</span>
+              {/* <span className="sr-only">Назад</span> */}
             </button>
           </li>
           {pages.map((page, ind) => {
@@ -55,7 +55,7 @@ const Pagination = ({
               onClick={onPageForward}
             >
               <span aria-hidden="true">&raquo;</span>
-              <span className="sr-only">Вперед</span>
+              {/* <span className="sr-only">Вперед</span> */}
             </button>
           </li>
         </div>

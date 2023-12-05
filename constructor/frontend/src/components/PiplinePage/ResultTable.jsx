@@ -17,18 +17,6 @@ const ResultTable = ({ getLinkMarkers }) => {
   const FileDownload = require("js-file-download")
   let searchedModels = []
 
-  // async function getResults() {
-  //   axios
-  //     .get(`${configFile.apiEndPoint}/inn_res/`)
-  //     .then((res) => {
-  //       // console.log("Результаты в таблице", res.data.data)
-  //       setResults(res.data.data)
-  //     })
-  //     .catch((e) => {
-  //       console.log(e)
-  //     })
-  // }
-
   const getModels = async () => {
     try {
       const { data } = await modelService.get()
@@ -74,22 +62,6 @@ const ResultTable = ({ getLinkMarkers }) => {
       })
     : searchedModels2
 
-  // async function downLoadResults() {
-  //   axios({
-  //     url: `${configFile.apiEndPoint}/download/`,
-  //     method: "GET",
-  //     responseType: "blob",
-  //   })
-  //     .then((res) => {
-  //       FileDownload(res.data, "ScotringResults.xlsx")
-  //       // console.log("Результаты в таблице", res.data.data)
-  //       // setResults(res.data.data)
-  //     })
-  //     .catch((e) => {
-  //       console.log(e)
-  //     })
-  // }
-
   async function downLoadResultsNEW() {
     let URL = `${configFile.apiEndPoint}/data_for_journal/?`
     if (searchValue) URL += `date="${searchValue}"&`
@@ -131,30 +103,15 @@ const ResultTable = ({ getLinkMarkers }) => {
               to="/pipeline"
               // className="mb-2"
             >
-              <MyButton
-                className="btn btn-outline-secondary"
-                // onClick={() => { }}
-              >
+              <MyButton className="btn btn-outline-secondary">
                 Модуль выдачи результатов
               </MyButton>
             </Link>
           </div>
           <div className="col-md-auto m-0">
-            <MyButton
-              // onClick={downLoadResults}
-              onClick={downLoadResultsNEW}
-            >
-              Выгрузить данные
-            </MyButton>
+            <MyButton onClick={downLoadResultsNEW}>Выгрузить данные</MyButton>
           </div>
         </div>
-        {/* <div className="mt-4">
-          <MyInput
-            type="text"
-            placeholder="Введите дату выдачи результатов для выгрузки"
-            onChange={(event) => setSearchValue(event.target.value)}
-          />
-        </div> */}
         <table className="text-center table  table-bordered table-responsive">
           <thead>
             <tr>
@@ -247,48 +204,6 @@ const ResultTable = ({ getLinkMarkers }) => {
                                 </span>
                               </p>
                             )
-
-                            //   {el.inns.map((el, index) => {
-                            //     return (
-                            //       Moment(el.created_date)
-                            //         .locale("rus", localization)
-                            //         .format("L")
-                            //         .includes(searchValue) && (
-                            //         <p className="text-center" key={index}>
-                            //           {Moment(el.created_date)
-                            //             .locale("rus", localization)
-                            //             .format("L") + ' ' + Moment(el.created_date)
-                            //             .locale("rus", localization)
-                            //             .format("LT")}
-                            //         </p>
-                            //       )
-                            //     )
-                            //   })}
-                            // </td>
-                            // <td>
-                            //   {el.inns.map((el, index) => {
-                            //     return (
-                            //       Moment(el.created_date)
-                            //         .locale("rus", localization)
-                            //         .format("L")
-                            //         .includes(searchValue) && (
-                            //         <p className="text-center" key={index}>
-                            //           ИНН{" "}
-                            //           {el.result_score ? (
-                            //             <Link to={"/results/" + el.inn}>
-                            //               {el.inn}
-                            //             </Link>
-                            //           ) : (
-                            //             el.inn
-                            //           )}{" "}
-                            //           с общим результатом{" "}
-                            //           <span className="text-success">
-                            //             {el.result_score
-                            //               ? el?.result_score?.total_rank
-                            //               : "-"}
-                            //           </span>
-                            //         </p>
-                            //       )
                           )
                         })}
                       </td>
@@ -296,32 +211,8 @@ const ResultTable = ({ getLinkMarkers }) => {
                   )
                 )
               })}
-
-            {/* {results &&
-              results.map((el, index) => {
-                const rank = el.result_score?.total_rank
-                return (
-                  <tr key={index}>
-                    <td>Тестовое имя модели</td>
-                    <td>{"Тестовый пользователь" || el.author_id}</td>
-                    <td>
-                      {Moment(el.created_date)
-                        .locale("rus", localization)
-                        .format("LLL")}
-                    </td>
-                    <td className="text-center">
-                      <Link to={"/results/" + el.inn}>{el.inn}</Link>
-                    </td>
-
-                    <td>{rank}</td>
-                  </tr>
-                )
-              })} */}
           </tbody>
         </table>
-        {/* <MyButton className="btn-outline-primary mt-2 mr-4" onClick={() => { }}>
-          Подтвердить
-        </MyButton> */}
       </div>
     </>
   )

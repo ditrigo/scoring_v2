@@ -17,7 +17,6 @@ import Pagination from "../components/common/pagination"
 const ScoringPage = () => {
   const [models, setModels] = useState([])
   const [modal, setModal] = useState(false)
-
   const [markers, setMarkers] = useState([])
   const [modalMarker, setModalMarker] = useState(false)
   const [linkMarkers] = useState([])
@@ -174,8 +173,8 @@ const ScoringPage = () => {
   }
 
   const handleIncrModelsPageSize = () => {
-    if (currentModelsPage >= modelsPagesCount)
-      setCurrentModelsPage(modelsPagesCount - 1)
+    // if (currentModelsPage >= modelsPagesCount)
+    setCurrentModelsPage(1)
 
     setModelsPageSize((prevState) => prevState + 5)
   }
@@ -207,8 +206,8 @@ const ScoringPage = () => {
     setCurrentMarkersPage((prevState) => prevState - 1)
   }
   const handleIncrMarkersPageSize = () => {
-    if (currentMarkersPage >= markersPagesCount)
-      setCurrentMarkersPage(markersPagesCount - 1)
+    // if (currentMarkersPage >= markersPagesCount)
+    setCurrentMarkersPage(1)
 
     setMarkersPageSize((prevState) => prevState + 5)
   }
