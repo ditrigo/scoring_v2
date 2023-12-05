@@ -173,15 +173,17 @@ const ScoringPage = () => {
   }
 
   const handleIncrModelsPageSize = () => {
-    // if (currentModelsPage >= modelsPagesCount)
-    setCurrentModelsPage(1)
-
     setModelsPageSize((prevState) => prevState + 5)
   }
   const handleDecrModelsPageSize = () => {
     if (modelsPageSize === 5) return
     setModelsPageSize((prevState) => prevState - 5)
   }
+
+  useEffect(() => {
+    if (modelsPageSize >= modelsPagesCount)
+      setCurrentModelsPage(modelsPagesCount)
+  }, [modelsPageSize, modelsPagesCount])
 
   const [markersPageSize, setMarkersPageSize] = useState(5)
   const [currentMarkersPage, setCurrentMarkersPage] = useState(1)
@@ -206,15 +208,17 @@ const ScoringPage = () => {
     setCurrentMarkersPage((prevState) => prevState - 1)
   }
   const handleIncrMarkersPageSize = () => {
-    // if (currentMarkersPage >= markersPagesCount)
-    setCurrentMarkersPage(1)
-
     setMarkersPageSize((prevState) => prevState + 5)
   }
   const handleDecrMarkersPageSize = () => {
     if (markersPageSize === 5) return
     setMarkersPageSize((prevState) => prevState - 5)
   }
+
+  useEffect(() => {
+    if (currentMarkersPage >= markersPagesCount)
+      setCurrentMarkersPage(markersPagesCount)
+  }, [currentMarkersPage, markersPagesCount])
 
   useEffect(() => {
     setCurrentMarkersPage(1)

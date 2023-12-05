@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import _ from "lodash"
 import Moment from "moment"
 import localization from "moment/locale/ru"
@@ -95,14 +95,21 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
   }
 
   const handleIncrPageSize = () => {
-    // if (currentPage >= pagesCount)
-    setCurrentPage(1)
+    // if (currentPage >= pagesCount) {
+    //   setCurrentPage(pagesCount - 1)
+    // } else {
+    //   setCurrentPage(1)
+    // }
     setPageSize((prevState) => prevState + 5)
   }
   const handleDecrPageSize = () => {
     if (pageSize === 5) return
     setPageSize((prevState) => prevState - 5)
   }
+
+  useEffect(() => {
+    if (currentPage >= pagesCount) setCurrentPage(pagesCount)
+  }, [currentPage, pagesCount])
 
   const itemsCrop = paginate(sortedAttributes, currentPage, pageSize)
 

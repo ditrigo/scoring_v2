@@ -100,9 +100,13 @@ const Table = ({ attributes, columns, setColumns }) => {
 
   const handleIncrPageSize = () => {
     setPageSize((prevState) => prevState + 5)
-    setCurrentPage(1)
     // console.log("curr", currentPage, "count pages", pagesCount)
-    // if (currentPage >= pagesCount) setCurrentPage(pagesCount - 1)
+    // if (currentPage >= pagesCount) {
+    //   setCurrentPage(pagesCount - 1)
+    // } else {
+    //   // setCurrentPage(1)
+    //   setCurrentPage(pagesCount - 1)
+    // }
   }
   const handleDecrPageSize = () => {
     if (pageSize === 5) return
@@ -114,6 +118,10 @@ const Table = ({ attributes, columns, setColumns }) => {
   useEffect(() => {
     setCurrentPage(1)
   }, [searchValue])
+
+  useEffect(() => {
+    if (currentPage >= pagesCount) setCurrentPage(pagesCount)
+  }, [currentPage, pagesCount])
 
   return (
     <>
