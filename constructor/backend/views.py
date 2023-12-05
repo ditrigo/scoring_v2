@@ -780,7 +780,7 @@ def CreateRelationInnAndScoringModelViewSet(request):
                 inn_res, created = InnRes.objects.get_or_create(inn=inn_id)
                 print(inn_res, created)
                 if created:
-                    print("created", created)
+                    # print("created", created)
                     scoring_model.inns.add(inn_res)
  
                 # try:

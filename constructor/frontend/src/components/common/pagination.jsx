@@ -53,7 +53,7 @@ const Pagination = ({
           </li>
 
           {pages.map((page, ind) => {
-            if (ind > currentPage - 4 && ind < currentPage + 2)
+            if (ind > currentPage - 3 && ind < currentPage + 3)
               return (
                 <li
                   className={
