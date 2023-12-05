@@ -1,5 +1,6 @@
 from datetime import datetime
 import re
+from sympy import sympify
 
 
 def parser_expression(expression):
@@ -117,6 +118,8 @@ def pre_replace(expression):
     expression = re.sub(r'(?<![<=>!])=(?!=)', '==', expression)
     expression = expression.replace("<>", "!=")
     expression = expression.replace(",", ".")
+    expression = expression.lower().replace(" and ", " and ")
+    expression = expression.lower().replace(" or ", " or ")
     expression = expression.replace("||", " or ")
     expression = expression.lower().replace("abs(", "abs(")
 
@@ -193,7 +196,41 @@ def pre_replace(expression):
             replacement = f'abs({args[0]} - {args[1]})'
             
         expression = expression[:start] + replacement + expression[end+2:]
-    
+
+    while "еслиошибка(" in expression.lower():
+        error_condition_start = expression.lower().find("еслиошибка(")
+        error_condition_end = error_condition_start + len("еслиошибка(")
+        count = 1
+
+        for i in range(error_condition_end, len(expression)):
+            if expression[i] == "(":
+                count += 1
+            elif expression[i] == ")":
+                count -= 1
+
+            if count == 0:
+                error_condition_end = i
+                break
+
+        error_condition_expression = expression[error_condition_start + 11:error_condition_end]
+        condition_check, expression_if_error = error_condition_expression.split(";")
+
+        denominators = [term.as_numer_denom()[1] for term in sympify(condition_check).as_ordered_terms()]
+        conditions_list = [f'{denominator}!=0' for denominator in denominators]
+        conditions_result = " and ".join(conditions_list)
+
+        replacement_expression = f'({condition_check} if {conditions_result} else {expression_if_error})'
+        expression = expression[:error_condition_start] + replacement_expression + expression[error_condition_end + 1:]
+
+
+    while "епусто(" in expression.lower():
+        empty_check_start = expression.lower().find("епусто(")
+        empty_check_end = expression.find(")", empty_check_start)
+        sub_expression = expression[empty_check_start + 7:empty_check_end]
+
+        replacement_expression = f'(True if {sub_expression} == "" or {sub_expression} is None else False)'
+        expression = expression[:empty_check_start] + replacement_expression + expression[empty_check_end + 1:]
+
     return expression
 
 
