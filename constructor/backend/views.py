@@ -777,21 +777,23 @@ def CreateRelationInnAndScoringModelViewSet(request):
                 # if scoring_model.inns.filter(inn=inn_id).exists():
                 #     continue
 
+                inn_res, created = InnRes.objects.get_or_create(inn=inn_id)
+                print(inn_res, created)
+                if created:
+                    print("created", created)
+                    scoring_model.inns.add(inn_res)
+ 
                 # try:
                 #     inn_res = InnRes.objects.get(inn=inn_id)
                 # except InnRes.DoesNotExist:
                 #     inn_res = InnRes.objects.create(inn=inn_id)
                 
-                # if not InnRes.objects.get(inn=inn_id):
-                #     inn_res = InnRes.objects.create(inn=inn_id)
-                # else:
-                #     inn_res = InnRes.objects.get(inn=inn_id)
+                # inn_res = InnRes.objects.create(inn=inn_id)
+                # scoring_model.inns.add(inn_res)
 
-                inn_res = InnRes.objects.create(inn=inn_id)
-                scoring_model.inns.add(inn_res)
-
-            serializer = InnResSerialiser(inn_res)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # serializer = InnResSerialiser(inn_res)
+            # return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({'data': "Relation is created"}, status=status.HTTP_201_CREATED)
 
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
 
