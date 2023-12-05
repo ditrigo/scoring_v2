@@ -12,6 +12,7 @@ from .views import *
 
 urlpatterns = [
     # re_path('', include(router.urls)),
+
     ### Constructor URLS ####################################################################################
     re_path(r"^files/$", FilesListViewSet, name='files'),
     re_path(r"^attributes/$", ImportedAttributesListViewSet, name='attributes'),
@@ -33,18 +34,14 @@ urlpatterns = [
     re_path(r"^inn_res/(?P<pk>[0-9]+)$", InnAndResultsDetailViewSet, name="inn_and_results_detail"),
 
     re_path(r"^start_scoring/$", StartScoringViewSet, name="start_scoring"),
-    # re_path(r"^start_2scoring/$", StartScoring2ViewSet, name="start_2scoring"),
     re_path(r"^start_test_scoring/$", StartTestScoringViewSet, name="start_test_scoring"),
-    # re_path(r"^get_formula_value/$", GetformulaValue, name="get_formula_value"), # тестовая апишка
-
-    re_path(r"^download/$", DownloadTryViewSet, name="download"),
     
-    # re_path(r"^for_journal/$", ForJournalViewSet, name="for_journal"),
     re_path(r"^get_res_by_model_inn/(?P<pk_model>[0-9]+)/(?P<pk_inn>[0-9]+)$", InnResUsingScoringModelId, name="get_res_by_model_inn"),
     
     re_path(r"^data_for_journal/$", DownloadJournalData, name="data_for_journal"),
 
     ### CRM URLS ###########################################################################################
+    
     #----------------
     # СПРАВОЧНИКИ
     re_path(r"^crm_managers/$", ManagerViewSet, name="crm_managers"),
@@ -60,12 +57,10 @@ urlpatterns = [
     re_path(r"^crm_fields_of_positiv_decision/(?P<pk>[-\w]+)$", FieldsOfPositiveDecisionsViewSet, name="crm_fields_of_positiv_decision"),
     re_path(r"^crm_prd_catalog/$", PrdCatalogFieldsViewSet, name="crm_prd_catalog"),
     re_path(r"^crm_reasons_consideration/$", ReasonsForConsiderationViewSet, name="crm_reasons_consideration"),
-
     #----------------
 
     #---------------------
     # MAIN
-
     re_path(r"^crm_client/$", ClientViewSet, name="crm_client"),
     re_path(r"^crm_create_client/$", CreateRelationClient, name="crm_create_client"),
     re_path(r"^crm_detail_relation_client/(?P<pk>[-\w]+)$", DetailRelationClient, name="crm_detail_relation_client"),

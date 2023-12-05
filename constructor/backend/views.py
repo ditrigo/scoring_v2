@@ -903,7 +903,6 @@ def StartScoringViewSet(request):
             inn_list.append((inn["inn"], 
                              inn["id"]))
         for marker_formula in request.data.get("model")["marker_id"]:
-            # marker_formula_list.append(marker_formula["py_query"])
             marker_formula_list.append((marker_formula["name_marker_attr"], 
                                         marker_formula["py_query"], 
                                         marker_formula["target_formula_value"]))
@@ -1086,70 +1085,6 @@ def StartTestScoringViewSet(request):
                          "response": total_json_array}, 
                          status=status.HTTP_200_OK)
     return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
-
-
-# @api_view(['GET'])
-# def ForJournalViewSet(request):
-
-#     columns = ["scoring_model_id", "model_name", "model_author", "inn_id", "created_date", "inn", "result_score"]
-#     with connection.cursor() as cursor:
-    
-#         text_query = """
-#             select 
-#                 smi.scoringmodel_id
-#                 , sm.model_name 
-#                 , sm.author_id
-#                 , smi.innres_id 
-#                 , ir.created_date 
-#                 , ir.inn
-#                 , ir.result_score
-#             from scoring_model sm 
-#             join scoring_model_inns smi 
-#             on sm.id = smi.scoringmodel_id 
-#             join inn_res ir on ir.id = smi.innres_id 
-#             order by smi.scoringmodel_id
-#             ;
-#             """
-#         cursor.execute(text_query)
-#         data = cursor.fetchall()
-#         test_dict = {}
-#         df = pd.DataFrame(data, columns=columns).fillna('')
-        
-#         begin_date = df.iloc[0]["created_date"].date()
-#         begin_scoring_model_id = df.iloc[0]["scoring_model_id"]
-#         scoring_data_same_date, total_array_with_date = [], []
-#         row = 0
-#         while row < len(df):
-#             print(row)
-#             if df.iloc[row]["scoring_model_id"] == begin_scoring_model_id:
-#                 if df.iloc[row]["created_date"].date() == begin_date:
-#                     # print(df.iloc[row])
-#                     scoring_data_same_date.append(df[["inn_id", 
-#                                                       "created_date", 
-#                                                       "inn", 
-#                                                     #   "result_score"
-#                                                       ]] \
-#                                                   .iloc[row] \
-#                                                   .to_dict())
-#                 else:
-#                     print("ELSE", row)
-#                     begin_date = df.iloc[row]["created_date"].date()
-#                     print(begin_date)
-#                     total_array_with_date.append(scoring_data_same_date)
-#                     # row -= 1
-#                     print(row)
-#             else:
-#                 #TODO Начать новый массив данных 
-#                 #TODO Где-то предусмотреть обновление  begin_date и begin_scoring_model_id
-#                 pass
-#             row += 1
-
-#             # print("test_dict",df.iloc[row].to_dict())
-#         # print(scoring_data_same_date)
-#         print("\ntotal_array_with_date", total_array_with_date)
-#     return Response({'message': 'Results', 
-#                      "response":json.loads(df.to_json(orient="records")) }, 
-#                      status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
