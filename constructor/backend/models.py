@@ -15,13 +15,13 @@ class FileAttributes(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default=uuid.uuid4,
                             editable=False,)
-    author_id = models.CharField(max_length=125,null=True, blank=True,)
-    created_date = models.DateTimeField(auto_now_add=True)
-    filename = models.FileField(upload_to='store/')
-    filesize = models.CharField(max_length=255,null=True, blank=True,)
-    import_new_rows = models.CharField(max_length=255,null=True, blank=True,)
-    import_update_rows = models.CharField(max_length=255,null=True, blank=True,)
-    import_total_rows = models.CharField(max_length=255,null=True, blank=True,)
+    author_id = models.CharField(max_length=125, null=True, blank=True,)
+    created_date = models.DateTimeField(auto_now_add=True,)
+    filename = models.FileField(upload_to='store/',)
+    filesize = models.CharField(max_length=255, null=True, blank=True,)
+    import_new_rows = models.CharField(max_length=255, null=True, blank=True,)
+    import_update_rows = models.CharField(max_length=255, null=True, blank=True,)
+    import_total_rows = models.CharField(max_length=255, null=True, blank=True,)
 
     class Meta:
         indexes = [
@@ -39,12 +39,12 @@ class ImportedAttributes(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4,
                             editable=False,)
     author_id = models.CharField(max_length=125,)
-    created_date = models.DateTimeField(auto_now_add=True)
-    inn = models.IntegerField(null=False)
-    np_name = models.CharField(max_length=125,)
+    created_date = models.DateTimeField(auto_now_add=True,)
+    inn = models.IntegerField(null=False,)
+    np_name = models.CharField(max_length=125, default="",)
     report_date = models.DateTimeField()
     on_uch_date = models.DateTimeField()
-    status_egrn = models.CharField(max_length=125,)
+    status_egrn = models.CharField(max_length=125, default="",)
     foreign_uchred = models.BooleanField(null=True, default=False)
     nedostov = models.IntegerField(null=True)
     sr_chis_thisyear = models.FloatField(null=True, blank=True,)
@@ -113,24 +113,24 @@ class ImportedAttributes(models.Model):
     s_3600_3 = models.FloatField(null=True, blank=True,)
     s_3600_5 = models.FloatField(null=True, blank=True,)
     s_3600_5 = models.FloatField(null=True, blank=True,)
-    disqual_uchred = models.BooleanField(null=True, default=False)
-    m_11 = models.BooleanField(null=True, default=False)
+    disqual_uchred = models.BooleanField(null=True, default=False,)
+    m_11 = models.BooleanField(null=True, default=False,)
     m_11_percent = models.FloatField(null=True, blank=True,)
-    m_2 = models.BooleanField(null=True, default=False)
-    start_ball = models.CharField(max_length=125,)
-    vnp_conduct = models.BooleanField(null=True, default=False)
+    m_2 = models.BooleanField(null=True, default=False,)
+    start_ball = models.CharField(max_length=125, default="",)
+    vnp_conduct = models.BooleanField(null=True, default=False,)
     high_risk_contr_sum = models.FloatField(null=True, blank=True,)
     razryv_1stlink_sum = models.FloatField(null=True, blank=True,)
-    subsidiary_risk = models.BooleanField(null=True, default=False)
-    challenge_risk = models.BooleanField(null=True, default=False)
+    subsidiary_risk = models.BooleanField(null=True, default=False,)
+    challenge_risk = models.BooleanField(null=True, default=False,)
     settle_3part_sum = models.FloatField(null=True, blank=True,)
-    efrsdul_lender = models.BooleanField(null=True, default=False)
-    efrsdul_deptor = models.BooleanField(null=True, default=False)
+    efrsdul_lender = models.BooleanField(null=True, default=False,)
+    efrsdul_deptor = models.BooleanField(null=True, default=False,)
     bankruptcy_procedure_bool = models.BooleanField(null=True, default=False)
-    bankruptcy_procedure = models.CharField(null=True, max_length=250)
-    bs_pay_bool = models.BooleanField(null=True, default=False)
-    stop_pay = models.BooleanField(null=True, default=False)
-    art46_over3month = models.BooleanField(null=True, default=False)
+    bankruptcy_procedure = models.CharField(null=True, max_length=250, default="",)
+    bs_pay_bool = models.BooleanField(null=True, default=False,)
+    stop_pay = models.BooleanField(null=True, default=False,)
+    art46_over3month = models.BooleanField(null=True, default=False,)
     enforce_ntfinish_sum = models.FloatField(null=True, blank=True,)
     enforce_ntfinish_sum_wthtax = models.FloatField(null=True, blank=True,)
     account_balance_SKUAD = models.FloatField(null=True, blank=True,)
@@ -147,7 +147,7 @@ class ImportedAttributes(models.Model):
     recovery_initiation = models.FloatField(null=True, default=False)
     lastdate_operation = models.DateTimeField(null=True)
     restruct_sum = models.FloatField(null=True, blank=True,)
-    early_term_restruct = models.BooleanField(null=True, default=False)
+    early_term_restruct = models.BooleanField(null=True, default=False,)
     nwp_russia = models.FloatField(null=True, blank=True,)
     bznaper_year = models.FloatField(null=True, blank=True,)
     sr_chis_year = models.FloatField(null=True, blank=True,)
@@ -155,16 +155,16 @@ class ImportedAttributes(models.Model):
     sr_chis_6month = models.FloatField(null=True, blank=True,)
     sr_chis_9month = models.FloatField(null=True, blank=True,)
     sr_chis_12month = models.FloatField(null=True, blank=True,)
-    address_change = models.BooleanField(null=True, default=False)
-    on_reestr_unscrup_post = models.BooleanField(null=True, default=False)
-    high_risk_contr_relation = models.BooleanField(null=True, default=False)
-    auto_chain = models.BooleanField(null=True, default=False)
-    transit_1day_contr = models.BooleanField(null=True, default=False)
+    address_change = models.BooleanField(null=True, default=False,)
+    on_reestr_unscrup_post = models.BooleanField(null=True, default=False,)
+    high_risk_contr_relation = models.BooleanField(null=True, default=False,)
+    auto_chain = models.BooleanField(null=True, default=False,)
+    transit_1day_contr = models.BooleanField(null=True, default=False,)
     export_lastyear = models.FloatField(null=True, blank=True,)
     export_thisyear = models.FloatField(null=True, blank=True,)
     nds_3_130_thisyear = models.FloatField(null=True, blank=True,)
     nds_3_130_lastyear = models.FloatField(null=True, blank=True,)
-    on_reestr_benef = models.BooleanField(null=True, default=False)
+    on_reestr_benef = models.BooleanField(null=True, default=False,)
     razryv_2stlink_sum = models.FloatField(null=True, blank=True,)
     challenge_risk_sum = models.FloatField(null=True, blank=True,)
     tax_burden = models.FloatField(null=True, blank=True,)
@@ -188,12 +188,12 @@ class MainCatalog(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default=uuid.uuid4,
                             editable=False,)
-    author_id = models.CharField(max_length=125, blank=True, null=True)
-    created_date = models.DateTimeField(auto_now_add=True)
-    date_from = models.DateTimeField(null=True)
-    origin_name = models.CharField(max_length=250, blank=True)
-    description = models.CharField(max_length=250, blank=True)
-    active = models.BooleanField(default=False)
+    author_id = models.CharField(max_length=125, blank=True, null=True,)
+    created_date = models.DateTimeField(auto_now_add=True,)
+    date_from = models.DateTimeField(null=True,)
+    origin_name = models.CharField(max_length=250, blank=True,)
+    description = models.CharField(max_length=250, blank=True,)
+    active = models.BooleanField(default=False,)
 
     class Meta:
         indexes = [
@@ -410,34 +410,6 @@ class CountedAttributesNew(models.Model):
     def __str__(self) -> str:
         return f"{self.author_id}"
 
-
-# class CountedAttrFormula(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     uuid = models.UUIDField(default = uuid.uuid4,
-#                             editable = False,)
-#     author_id = models.CharField(max_length=125)
-#     created_date = models.DateTimeField(auto_now_add=True)
-#     active = models.BooleanField(default=False)
-#     attr_formulas = models.CharField(max_length=250)
-#     description = models.CharField(max_length=250)
-#     cntd_attr_id = models.ForeignKey(CountedAttributes,
-#                                      on_delete=models.CASCADE)
-#     sql_query = models.TextField(blank=True, null=True)
-#     nested_level = models.IntegerField()
-
-#     class Meta:
-#         indexes = [
-#             models.Index(fields=["attr_formulas","created_date"])
-#         ]
-#         db_table  = "counted_attr_formula"
-#         verbose_name = "counted_attr_formula"
-
-#     def __str__(self) -> str:
-#         return f"{self.attr_formulas}"
-
-#     def save(self, *args, **kwargs):
-#         self.sql_query = parser(self.attr_formulas)
-#         super().save(*args, **kwargs)
 
 
 # class ScoringModelHistory(models.Model):
