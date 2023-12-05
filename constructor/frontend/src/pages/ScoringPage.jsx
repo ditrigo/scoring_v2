@@ -17,7 +17,6 @@ import Pagination from "../components/common/pagination"
 const ScoringPage = () => {
   const [models, setModels] = useState([])
   const [modal, setModal] = useState(false)
-
   const [markers, setMarkers] = useState([])
   const [modalMarker, setModalMarker] = useState(false)
   const [linkMarkers] = useState([])
@@ -172,17 +171,24 @@ const ScoringPage = () => {
     if (currentModelsPage === 1) return
     setCurrentModelsPage((prevState) => prevState - 1)
   }
-
+  const handleModelsGoToStart = () => {
+    setCurrentModelsPage(1)
+  }
+  const handleModelsGoToEnd = () => {
+    setCurrentModelsPage(modelsPagesCount)
+  }
   const handleIncrModelsPageSize = () => {
-    if (currentModelsPage >= modelsPagesCount)
-      setCurrentModelsPage(modelsPagesCount - 1)
-
     setModelsPageSize((prevState) => prevState + 5)
   }
   const handleDecrModelsPageSize = () => {
     if (modelsPageSize === 5) return
     setModelsPageSize((prevState) => prevState - 5)
   }
+
+  useEffect(() => {
+    if (modelsPageSize >= modelsPagesCount)
+      setCurrentModelsPage(modelsPagesCount)
+  }, [modelsPageSize, modelsPagesCount])
 
   const [markersPageSize, setMarkersPageSize] = useState(5)
   const [currentMarkersPage, setCurrentMarkersPage] = useState(1)
@@ -206,16 +212,24 @@ const ScoringPage = () => {
     if (currentMarkersPage === 1) return
     setCurrentMarkersPage((prevState) => prevState - 1)
   }
+  const handleMarkersGoToStart = () => {
+    setCurrentMarkersPage(1)
+  }
+  const handleMarkersGoToEnd = () => {
+    setCurrentMarkersPage(markersPagesCount)
+  }
   const handleIncrMarkersPageSize = () => {
-    if (currentMarkersPage >= markersPagesCount)
-      setCurrentMarkersPage(markersPagesCount - 1)
-
     setMarkersPageSize((prevState) => prevState + 5)
   }
   const handleDecrMarkersPageSize = () => {
     if (markersPageSize === 5) return
     setMarkersPageSize((prevState) => prevState - 5)
   }
+
+  useEffect(() => {
+    if (currentMarkersPage >= markersPagesCount)
+      setCurrentMarkersPage(markersPagesCount)
+  }, [currentMarkersPage, markersPagesCount])
 
   useEffect(() => {
     setCurrentMarkersPage(1)
@@ -301,6 +315,8 @@ const ScoringPage = () => {
                 onPageChange={handleModelsPageChange}
                 onPageForward={handleModelsPageForward}
                 onPageBack={handleModelsPageBack}
+                onGoToStart={handleModelsGoToStart}
+                onGoToEnd={handleModelsGoToEnd}
                 OnIncrPageSize={handleIncrModelsPageSize}
                 OnDecrPageSize={handleDecrModelsPageSize}
               />
@@ -390,6 +406,8 @@ const ScoringPage = () => {
                 onPageChange={handleMarkersPageChange}
                 onPageForward={handleMarkersPageForward}
                 onPageBack={handleMarkersPageBack}
+                onGoToStart={handleMarkersGoToStart}
+                onGoToEnd={handleMarkersGoToEnd}
                 OnIncrPageSize={handleIncrMarkersPageSize}
                 OnDecrPageSize={handleDecrMarkersPageSize}
               />

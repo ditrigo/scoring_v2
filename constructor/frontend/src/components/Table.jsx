@@ -98,12 +98,15 @@ const Table = ({ attributes, columns, setColumns }) => {
     setCurrentPage((prevState) => prevState - 1)
   }
 
-  const handleIncrPageSize = () => {
-    if (currentPage >= pagesCount) setCurrentPage(pagesCount - 1)
-    console.log("eckj;")
-    console.log("currentPage", currentPage)
-    console.log("count", pagesCount)
+  const handleGoToStart = () => {
+    setCurrentPage(1)
+  }
 
+  const handleGoToEnd = () => {
+    setCurrentPage(pagesCount)
+  }
+
+  const handleIncrPageSize = () => {
     setPageSize((prevState) => prevState + 5)
   }
   const handleDecrPageSize = () => {
@@ -116,6 +119,10 @@ const Table = ({ attributes, columns, setColumns }) => {
   useEffect(() => {
     setCurrentPage(1)
   }, [searchValue])
+
+  useEffect(() => {
+    if (currentPage >= pagesCount) setCurrentPage(pagesCount)
+  }, [currentPage, pagesCount])
 
   return (
     <>
@@ -225,6 +232,8 @@ const Table = ({ attributes, columns, setColumns }) => {
         onPageChange={handlePageChange}
         onPageForward={handlePageForward}
         onPageBack={handlePageBack}
+        onGoToStart={handleGoToStart}
+        onGoToEnd={handleGoToEnd}
         OnIncrPageSize={handleIncrPageSize}
         OnDecrPageSize={handleDecrPageSize}
       />
