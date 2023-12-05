@@ -98,15 +98,16 @@ const Table = ({ attributes, columns, setColumns }) => {
     setCurrentPage((prevState) => prevState - 1)
   }
 
+  const handleGoToStart = () => {
+    setCurrentPage(1)
+  }
+
+  const handleGoToEnd = () => {
+    setCurrentPage(pagesCount)
+  }
+
   const handleIncrPageSize = () => {
     setPageSize((prevState) => prevState + 5)
-    // console.log("curr", currentPage, "count pages", pagesCount)
-    // if (currentPage >= pagesCount) {
-    //   setCurrentPage(pagesCount - 1)
-    // } else {
-    //   // setCurrentPage(1)
-    //   setCurrentPage(pagesCount - 1)
-    // }
   }
   const handleDecrPageSize = () => {
     if (pageSize === 5) return
@@ -231,6 +232,8 @@ const Table = ({ attributes, columns, setColumns }) => {
         onPageChange={handlePageChange}
         onPageForward={handlePageForward}
         onPageBack={handlePageBack}
+        onGoToStart={handleGoToStart}
+        onGoToEnd={handleGoToEnd}
         OnIncrPageSize={handleIncrPageSize}
         OnDecrPageSize={handleDecrPageSize}
       />

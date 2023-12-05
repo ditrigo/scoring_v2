@@ -94,12 +94,13 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
     setCurrentPage((prevState) => prevState - 1)
   }
 
+  const handleGoToStart = () => {
+    setCurrentPage(1)
+  }
+  const handleGoToEnd = () => {
+    setCurrentPage(pagesCount)
+  }
   const handleIncrPageSize = () => {
-    // if (currentPage >= pagesCount) {
-    //   setCurrentPage(pagesCount - 1)
-    // } else {
-    //   setCurrentPage(1)
-    // }
     setPageSize((prevState) => prevState + 5)
   }
   const handleDecrPageSize = () => {
@@ -215,6 +216,8 @@ const HistoryDownloadTable = ({ attributes, columns, setColumns }) => {
         onPageChange={handlePageChange}
         onPageForward={handlePageForward}
         onPageBack={handlePageBack}
+        onGoToStart={handleGoToStart}
+        onGoToEnd={handleGoToEnd}
         OnIncrPageSize={handleIncrPageSize}
         OnDecrPageSize={handleDecrPageSize}
       />

@@ -171,7 +171,12 @@ const ScoringPage = () => {
     if (currentModelsPage === 1) return
     setCurrentModelsPage((prevState) => prevState - 1)
   }
-
+  const handleModelsGoToStart = () => {
+    setCurrentModelsPage(1)
+  }
+  const handleModelsGoToEnd = () => {
+    setCurrentModelsPage(modelsPagesCount)
+  }
   const handleIncrModelsPageSize = () => {
     setModelsPageSize((prevState) => prevState + 5)
   }
@@ -206,6 +211,12 @@ const ScoringPage = () => {
   const handleMarkersPageBack = () => {
     if (currentMarkersPage === 1) return
     setCurrentMarkersPage((prevState) => prevState - 1)
+  }
+  const handleMarkersGoToStart = () => {
+    setCurrentMarkersPage(1)
+  }
+  const handleMarkersGoToEnd = () => {
+    setCurrentMarkersPage(markersPagesCount)
   }
   const handleIncrMarkersPageSize = () => {
     setMarkersPageSize((prevState) => prevState + 5)
@@ -304,6 +315,8 @@ const ScoringPage = () => {
                 onPageChange={handleModelsPageChange}
                 onPageForward={handleModelsPageForward}
                 onPageBack={handleModelsPageBack}
+                onGoToStart={handleModelsGoToStart}
+                onGoToEnd={handleModelsGoToEnd}
                 OnIncrPageSize={handleIncrModelsPageSize}
                 OnDecrPageSize={handleDecrModelsPageSize}
               />
@@ -393,6 +406,8 @@ const ScoringPage = () => {
                 onPageChange={handleMarkersPageChange}
                 onPageForward={handleMarkersPageForward}
                 onPageBack={handleMarkersPageBack}
+                onGoToStart={handleMarkersGoToStart}
+                onGoToEnd={handleMarkersGoToEnd}
                 OnIncrPageSize={handleIncrMarkersPageSize}
                 OnDecrPageSize={handleDecrMarkersPageSize}
               />

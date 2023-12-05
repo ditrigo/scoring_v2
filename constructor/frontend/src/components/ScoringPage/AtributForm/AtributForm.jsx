@@ -43,10 +43,7 @@ const AtributForm = ({ create, setVisible }) => {
   }
 
   function isBalanced(string) {
-    console.log(
-      "🚀 ~ file: AtributForm.jsx:44 ~ isBalanced ~ isBalanced:",
-      isBalanced
-    )
+    console.log("🚀 isBalanced:", isBalanced)
     const start = "{[("
     const end = "}])"
     const queue = []
@@ -80,7 +77,7 @@ const AtributForm = ({ create, setVisible }) => {
         description: "Description",
         nested_level: 1,
         author_id: "Тестовый пользователь",
-        target_formula_value: targerFormulaValue
+        target_formula_value: targerFormulaValue,
       }
       create(newMarker)
 
@@ -203,7 +200,7 @@ const AtributForm = ({ create, setVisible }) => {
           {/* <div className="col"> */}
           <CopyToClipboard
             text={copiedValue.value}
-          // onCopy={() => this.setState({ copied: true })}
+            // onCopy={() => this.setState({ copied: true })}
           >
             <MyButton onClick={(e) => e.preventDefault()}>
               Cкопировать атрибут
